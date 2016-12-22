@@ -10,13 +10,16 @@ import com.xnjr.mall.ao.IStoreAO;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.ISmsOutBO;
 import com.xnjr.mall.bo.IStoreBO;
+import com.xnjr.mall.bo.IStoreTicketBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.common.DateUtil;
 import com.xnjr.mall.domain.Store;
+import com.xnjr.mall.domain.StoreTicket;
 import com.xnjr.mall.dto.req.XN805042Req;
 import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.EStoreStatus;
+import com.xnjr.mall.enums.EStoreTicketStatus;
 import com.xnjr.mall.enums.EUserKind;
 import com.xnjr.mall.exception.BizException;
 
@@ -36,6 +39,9 @@ public class StoreAOImpl implements IStoreAO {
     //
     // @Autowired
     // private IStorePurchaseBO storePurchaseBO;
+
+    @Autowired
+    private IStoreTicketBO storeTicketBO;
 
     @Autowired
     private IUserBO userBO;
@@ -256,6 +262,12 @@ public class StoreAOImpl implements IStoreAO {
     @Override
     public Store getStore(String code, String fromUser) {
         Store store = storeBO.getStore(code);
+
+        StoreTicket condition = new StoreTicket();
+        condition.setStoreCode(store.getCode());
+        condition.setStatus(EStoreTicketStatus.ONLINE.getCode());
+        store.setStoreTickets(storeTicketBO.queryStoreTicketList(condition));
+
         // if (StringUtils.isBlank(fromUser)) {
         // store.setIsDZ(false);
         // } else {
@@ -269,6 +281,16 @@ public class StoreAOImpl implements IStoreAO {
         return store;
     }
 
+    @Override
+    public Store getStore(String userId) {
+        Store condition = new Store();
+        condition.setOwner(userId);
+        List<Store> list = storeBO.queryStoreList(condition);
+        if (CollectionUtils.isEmpty(list)) {
+            throw new BizException("xn0000", "该用户未申请店铺");
+        }
+        return list.get(0);
+    }
     // @Override
     // public void doStoreShop(String fromUser, String toStore, Long amount,
     // Long cnyAmount, Long jfCashBack, Long cnyCashBack) {

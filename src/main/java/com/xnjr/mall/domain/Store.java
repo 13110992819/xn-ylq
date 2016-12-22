@@ -1,6 +1,7 @@
 package com.xnjr.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.xnjr.mall.dao.base.ABaseDO;
 
@@ -118,6 +119,9 @@ public class Store extends ABaseDO {
 
     // 当前用户是否对该商家点赞
     private Boolean isDZ;
+
+    // 可使用折扣券列表
+    private List<StoreTicket> storeTickets;
 
     public String getCode() {
         return code;
@@ -405,6 +409,14 @@ public class Store extends ABaseDO {
 
     public void setRate2(Double rate2) {
         this.rate2 = rate2;
+    }
+
+    public List<StoreTicket> getStoreTickets() {
+        return storeTickets;
+    }
+
+    public void setStoreTickets(List<StoreTicket> storeTickets) {
+        this.storeTickets = storeTickets;
     }
 
 }

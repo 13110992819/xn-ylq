@@ -69,4 +69,13 @@ public interface IStoreAO {
     public List<Store> queryStoreList(Store condition);
 
     public Store getStore(String code, String fromUser);
+
+    /**
+     * 我的店铺查询
+     * @param userId
+     * @return 
+     * @create: 2016年12月22日 下午6:31:04 haiqingzheng
+     * @history:
+     */
+    public Store getStore(String userId);
 }
