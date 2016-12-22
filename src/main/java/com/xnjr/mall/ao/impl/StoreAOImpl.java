@@ -282,14 +282,13 @@ public class StoreAOImpl implements IStoreAO {
     }
 
     @Override
-    public Store getStore(String userId) {
+    public List<Store> getStore(String userId) {
         Store condition = new Store();
         condition.setOwner(userId);
-        List<Store> list = storeBO.queryStoreList(condition);
-        if (CollectionUtils.isEmpty(list)) {
-            throw new BizException("xn0000", "该用户未申请店铺");
-        }
-        return list.get(0);
+        return storeBO.queryStoreList(condition);
+        // if (CollectionUtils.isEmpty(list)) {
+        // throw new BizException("xn0000", "该用户未申请店铺");
+        // }
     }
     // @Override
     // public void doStoreShop(String fromUser, String toStore, Long amount,
