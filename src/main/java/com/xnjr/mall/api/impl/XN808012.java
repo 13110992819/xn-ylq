@@ -66,7 +66,7 @@ public class XN808012 extends AProcessor {
         StringValidater.validateBlank(req.getCode(), req.getCategory(),
             req.getType(), req.getName(), req.getAdvTitle(), req.getAdvPic(),
             req.getPic1(), req.getDescription(), req.getCostPrice(),
-            req.getQuantity(), req.getUpdater());
+            req.getUpdater());
     }
 
 }

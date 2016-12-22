@@ -48,7 +48,7 @@ public class XN808010Req {
     // 进货价
     private String costPrice;
 
-    // 库存量进货价
+    // 库存量
     private String quantity;
 
     // 状态

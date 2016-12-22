@@ -61,7 +61,7 @@ public class Jewel extends ABaseDO {
     // 抽奖算法
     public String lotAlg;
 
-    // 状态（0 待审批，1 审批通过（募集中），2 审批不通过，3 到期，4 待发货，5 已发货）
+    // 状态（0 待审批，1 募集中，2 审批不通过，3 到期，4 待发货，5 已发货）
     public String status;
 
     // 系统编号

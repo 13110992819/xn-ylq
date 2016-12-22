@@ -15,8 +15,8 @@
   mv /home/std-mall.war .
   
   cd /home/wwwroot/zhpay/tomcat_std_mall/webapps
-  cp ./zhpay/WEB-INF/classes/application.properties .
-  cp ./zhpay/WEB-INF/classes/config.properties .
+  cp ./std-mall/WEB-INF/classes/application.properties .
+  cp ./std-mall/WEB-INF/classes/config.properties .
   rm -rf std-mall*
   mv /home/std-mall.war .
   

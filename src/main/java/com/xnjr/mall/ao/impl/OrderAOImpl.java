@@ -288,7 +288,8 @@ public class OrderAOImpl implements IOrderAO {
      */
     @Override
     public Order getOrder(String code) {
-        return orderBO.getOrder(code);
+        Order order = orderBO.getOrder(code);
+        return order;
     }
 
     @Override
