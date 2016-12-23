@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.xnjr.mall.ao.ISYSDictAO;
 import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.common.JsonUtil;
+import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.SYSDict;
 import com.xnjr.mall.dto.req.XN808906Req;
 import com.xnjr.mall.exception.BizException;
@@ -54,6 +55,6 @@ public class XN808906 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808906Req.class);
+        StringValidater.validateBlank(req.getSystemCode());
     }
-
 }

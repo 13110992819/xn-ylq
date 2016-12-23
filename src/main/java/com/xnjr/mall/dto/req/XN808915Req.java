@@ -15,6 +15,9 @@ public class XN808915Req extends APageReq {
 
     private String companyCode;
 
+    // 系统编号(必填)
+    private String systemCode;
+
     public String getCkey() {
         return ckey;
     }
@@ -37,5 +40,13 @@ public class XN808915Req extends APageReq {
 
     public void setCname(String cname) {
         this.cname = cname;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 }

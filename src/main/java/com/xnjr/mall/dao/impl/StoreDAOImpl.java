@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.xnjr.mall.common.DBPropertiesUtil;
+import com.xnjr.mall.common.PropertiesUtil;
 import com.xnjr.mall.dao.IStoreDAO;
 import com.xnjr.mall.dao.base.support.AMybatisTemplate;
 import com.xnjr.mall.domain.Store;
@@ -30,25 +30,25 @@ public class StoreDAOImpl extends AMybatisTemplate implements IStoreDAO {
 
     @Override
     public Store select(Store condition) {
-        condition.setUserDB(DBPropertiesUtil.Config.USER_DB);
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.select("select_store", condition, Store.class);
     }
 
     @Override
     public Long selectTotalCount(Store condition) {
-        condition.setUserDB(DBPropertiesUtil.Config.USER_DB);
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectTotalCount("select_store_count", condition);
     }
 
     @Override
     public List<Store> selectList(Store condition) {
-        // condition.setUserDB(DBPropertiesUtil.Config.USER_DB);
+        // condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList("select_store", condition, Store.class);
     }
 
     @Override
     public List<Store> selectList(Store condition, int start, int count) {
-        condition.setUserDB(DBPropertiesUtil.Config.USER_DB);
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList("select_store", start, count, condition,
             Store.class);
     }

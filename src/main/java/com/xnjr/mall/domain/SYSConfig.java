@@ -42,8 +42,19 @@ public class SYSConfig extends ABaseDO {
     // 所属公司编号
     private String companyCode;
 
+    // 所属系统
+    private String systemCode;
+
     // ************* 模糊查询 *****************
     private String ckeyForQuery;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public Long getId() {
         return id;

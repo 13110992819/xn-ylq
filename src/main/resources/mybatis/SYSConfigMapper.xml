@@ -10,6 +10,7 @@
 		<result column="remark" property="remark" />
 		<result column="belong" property="belong" />
 		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -28,6 +29,9 @@
 			<if test="cname != null and cname != '' ">
 				AND t.cname = #{cname}
 			</if>	
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_sysConfig" parameterType="sysConfig" resultMap="sysConfig_DB_Result">
@@ -39,6 +43,7 @@
 		,remark
 		,belong
 		,company_code
+		,system_code
 		FROM
 		tsys_config t 
 		<include refid="where_condition" />
@@ -62,6 +67,7 @@
 		,remark
 		,belong
 		,company_code
+		,system_code
 		)
 		VALUES(
 		#{cname}
@@ -70,6 +76,7 @@
 		,#{remark}
 		,#{belong}
 		,#{companyCode}
+		,#{systemCode}
 		)
 	</insert>
 	

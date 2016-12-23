@@ -40,10 +40,12 @@ public class SYSConfigAOImpl implements ISYSConfigAO {
     @Override
     public void editSYSConfig(SYSConfig data) {
         SYSConfig sysConfig = sysConfigBO.getConfig(data.getId());
-        if (0L == sysConfig.getBelong()) {
+        if (0L == sysConfig.getBelong()
+                && StringUtils.isNotBlank(data.getCompanyCode())) {
             data.setCname(sysConfig.getCname());
             data.setCkey(sysConfig.getCkey());
             data.setBelong(data.getId());
+            data.setSystemCode(sysConfig.getSystemCode());
             sysConfigBO.saveSYSConfig(data);
         } else {
             sysConfigBO.refreshSYSConfig(data);
@@ -62,8 +64,8 @@ public class SYSConfigAOImpl implements ISYSConfigAO {
     }
 
     @Override
-    public String getConfigValue(String companyCode, String key) {
+    public String getConfigValue(String systemCode, String companyCode,
+            String key) {
         return sysConfigBO.getConfigValue(companyCode, key);
     }
-
 }

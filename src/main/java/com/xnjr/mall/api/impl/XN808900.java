@@ -35,9 +35,9 @@ public class XN808900 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return new PKIdRes(
-            sysDictAO.addSYSDict(req.getType(), req.getParentKey(),
-                req.getDkey(), req.getDvalue(), req.getRemark()));
+        return new PKIdRes(sysDictAO.addSYSDict(req.getType(),
+            req.getParentKey(), req.getDkey(), req.getDvalue(),
+            req.getRemark(), req.getSystemCode()));
     }
 
     /** 
@@ -47,6 +47,6 @@ public class XN808900 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808900Req.class);
         StringValidater.validateBlank(req.getType(), req.getDkey(),
-            req.getDvalue());
+            req.getDvalue(), req.getSystemCode());
     }
 }

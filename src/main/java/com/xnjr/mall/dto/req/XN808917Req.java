@@ -19,6 +19,9 @@ public class XN808917Req {
 
     private String companyCode;
 
+    // 系统编号(必填)
+    private String systemCode;
+
     public String getKey() {
         return key;
     }
@@ -33,5 +36,13 @@ public class XN808917Req {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 }

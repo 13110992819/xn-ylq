@@ -46,11 +46,7 @@ public class ProductAOImpl implements IProductAO {
         if (!CollectionUtils.sizeIsEmpty(list)) {
             throw new BizException("jd00001", "产品名称已存在");
         }
-        String code = null;
-        if (product != null) {
-            code = productBO.saveProduct(product);
-        }
-        return code;
+        return productBO.saveProduct(product);
     }
 
     /** 
@@ -64,7 +60,7 @@ public class ProductAOImpl implements IProductAO {
             if (EProductStatus.TO_PUBLISH.getCode().equals(product.getStatus())) {
                 count = productBO.removeProduct(code);
             } else {
-                throw new BizException("xn000000", "产品已经上架过，不能删除");
+                throw new BizException("xn000000", "产品已有上架记录，不能删除");
             }
 
         }
@@ -86,9 +82,9 @@ public class ProductAOImpl implements IProductAO {
                 && !dbProduct.getName().equals(list.get(0).getName())) {
             throw new BizException("jd00001", "产品名称已存在");
         }
-        if (!EProductStatus.TO_PUBLISH.getCode().equals(product.getStatus())
+        if (!EProductStatus.TO_PUBLISH.getCode().equals(dbProduct.getStatus())
                 && !EProductStatus.PUBLISH_NO.getCode().equals(
-                    product.getStatus())) {
+                    dbProduct.getStatus())) {
             throw new BizException("xn000000", "该产品不是已提交或者已下架状态，无法修改");
         }
         int count = 0;
