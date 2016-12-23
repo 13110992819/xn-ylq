@@ -77,5 +77,5 @@ public interface IStoreAO {
      * @create: 2016年12月22日 下午6:31:04 haiqingzheng
      * @history:
      */
-    public Store getStore(String userId);
+    public List<Store> getStore(String userId);
 }
