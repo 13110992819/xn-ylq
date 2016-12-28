@@ -37,11 +37,15 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
     boolean isSYSConfigExist(Long Id);
 
     /**
-     * 根据key获取value
+     * 获取系统参数值
+     * @param systemCode
+     * @param type
+     * @param companyCode
      * @param ckey
      * @return 
-     * @create: 2016年4月20日 下午3:04:47 xieyj
+     * @create: 2016年12月27日 上午11:30:28 xieyj
      * @history:
      */
-    public String getConfigValue(String companyCode, String ckey);
+    public String getConfigValue(String systemCode, String type,
+            String companyCode, String ckey);
 }

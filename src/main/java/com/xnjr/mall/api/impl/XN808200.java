@@ -11,12 +11,10 @@ import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
 
-/** 
- * 平台代入驻
- * 1、创建USER并赋角色，账户
- * 2、再将店铺信息添加，该店铺状态直接为审核通过状态
- * @author: zuixian 
- * @since: 2016年9月20日 下午2:18:39 
+/**
+ * 商铺待入驻
+ * @author: xieyj 
+ * @since: 2016年12月27日 下午2:42:17 
  * @history:
  */
 public class XN808200 extends AProcessor {
@@ -33,6 +31,7 @@ public class XN808200 extends AProcessor {
         data.setName(req.getName());
         data.setType(req.getType());
         data.setLegalPersonName(req.getLegalPersonName());
+        data.setMobile(req.getMobile());
         data.setUserReferee(req.getUserReferee());
         data.setRate1(StringValidater.toDouble(req.getRate1()));
         data.setRate2(StringValidater.toDouble(req.getRate2()));
@@ -52,7 +51,7 @@ public class XN808200 extends AProcessor {
         data.setUpdater(req.getUpdater());
         data.setRemark(req.getRemark());
         data.setSystemCode(req.getSystemCode());
-        return new PKCodeRes(storeAO.addStore(data));
+        return new PKCodeRes(storeAO.addStoreOss(data));
     }
 
     /**
@@ -62,10 +61,10 @@ public class XN808200 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808200Req.class);
         StringValidater.validateBlank(req.getName(), req.getType(),
-            req.getLegalPersonName(), req.getUserReferee(), req.getRate1(),
-            req.getRate2(), req.getSlogan(), req.getAdPic(), req.getPic(),
-            req.getDescription(), req.getProvince(), req.getCity(),
-            req.getArea(), req.getAddress(), req.getLongitude(),
+            req.getLegalPersonName(), req.getMobile(), req.getUserReferee(),
+            req.getRate1(), req.getRate2(), req.getSlogan(), req.getAdPic(),
+            req.getPic(), req.getDescription(), req.getProvince(),
+            req.getCity(), req.getArea(), req.getAddress(), req.getLongitude(),
             req.getLatitude(), req.getBookMobile(), req.getUpdater(),
             req.getSystemCode());
     }

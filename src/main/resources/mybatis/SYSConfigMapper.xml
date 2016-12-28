@@ -4,6 +4,8 @@
 <mapper namespace="com.xnjr.mall.dao.ISYSConfigDAO">
 	<resultMap id="sysConfig_DB_Result" type="sysConfig">
 		<result column="id" property="id" />
+		<result column="category" property="category" />
+		<result column="type" property="type" />
 		<result column="cname" property="cname" />
 		<result column="ckey" property="ckey" />
 		<result column="cvalue" property="cvalue" />
@@ -17,6 +19,12 @@
 			<if test="id != null">
 				AND t.id = #{id}
 			</if>	
+			<if test="category != null and category != '' ">
+				AND t.category = #{category}
+			</if>	
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>	
 			<if test="ckey != null and ckey != '' ">
 				AND t.ckey = #{ckey}
 			</if>	
@@ -29,6 +37,9 @@
 			<if test="cname != null and cname != '' ">
 				AND t.cname = #{cname}
 			</if>	
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
@@ -37,6 +48,8 @@
 	<select id="select_sysConfig" parameterType="sysConfig" resultMap="sysConfig_DB_Result">
 		SELECT
 		id
+		,category
+		,type
 		,cname
 		,ckey
 		,cvalue
@@ -61,7 +74,9 @@
 	
 	<insert id="insert_sysConfig" parameterType="sysConfig" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO tsys_config(
-		cname
+		category
+		,type
+		,cname
 		,ckey
 		,cvalue
 		,remark
@@ -70,7 +85,9 @@
 		,system_code
 		)
 		VALUES(
-		#{cname}
+		#{category}
+		,#{type}
+		,#{cname}
 		,#{ckey}
 		,#{cvalue}
 		,#{remark}

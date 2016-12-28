@@ -82,21 +82,29 @@ public class OrderAOImpl implements IOrderAO {
     public String commitOrder(String productCode, Integer quantity, Order data) {
         // 计算订单总价
         Product product = productBO.getProduct(productCode);
-        if (product.getQuantity() != null
-                && (product.getQuantity() - quantity) < 0) {
-            throw new BizException("xn0000", "该商品库存量不足，无法购买");
+        if (product.getQuantity() != null) {
+            if ((product.getQuantity() - quantity) < 0) {
+                throw new BizException("xn0000", "该商品库存量不足，无法购买");
+            }
+            // 减去库存量
+            productBO.refreshProductQuantity(productCode, quantity);
         }
-        // 减去库存量
-        productBO.refreshProductQuantity(productCode, quantity);
-        Long amount1 = quantity * product.getPrice1();
-        data.setAmount1(amount1);
-        Long amount2 = quantity * product.getPrice2();
-        data.setAmount2(amount2);
-        Long amount3 = quantity * product.getPrice3();
-        data.setAmount3(amount3);
-        // 计算订单运费
-        Long yunfei = totalYunfei(product.getCompanyCode(), amount2);
-        data.setYunfei(yunfei);
+        if (null != product.getPrice1()) {
+            Long amount1 = quantity * product.getPrice1();
+            data.setAmount1(amount1);
+        }
+        if (null != product.getPrice2()) {
+            Long amount2 = quantity * product.getPrice2();
+            data.setAmount2(amount2);
+            // 计算订单运费
+            Long yunfei = totalYunfei(data.getSystemCode(),
+                product.getCompanyCode(), amount2);
+            data.setYunfei(yunfei);
+        }
+        if (null != product.getPrice3()) {
+            Long amount3 = quantity * product.getPrice3();
+            data.setAmount3(amount3);
+        }
         // 设置订单所属公司
         data.setCompanyCode(product.getCompanyCode());
         // 订单号生成
@@ -135,31 +143,35 @@ public class OrderAOImpl implements IOrderAO {
         for (String cartCode : cartCodeList) {
             Cart cart = cartBO.getCart(cartCode);
             Product product = productBO.getProduct(cart.getProductCode());
-            if (product.getQuantity() != null
-                    && (product.getQuantity() - cart.getQuantity()) < 0) {
-                throw new BizException("xn0000", "商品[" + product.getName()
-                        + "]库存量不足，无法购买");
+            if (product.getQuantity() != null) {
+                if ((product.getQuantity() - cart.getQuantity()) < 0) {
+                    throw new BizException("xn0000", "商品[" + product.getName()
+                            + "]库存量不足，无法购买");
+                }
+                // 减去库存量
+                productBO.refreshProductQuantity(product.getCode(),
+                    cart.getQuantity());
             }
-            // 减去库存量
-            productBO.refreshProductQuantity(product.getCode(),
-                product.getQuantity());
-
-            amount1 = amount1 + (cart.getQuantity() * product.getPrice1());
-            amount2 = amount2 + (cart.getQuantity() * product.getPrice2());
-            amount3 = amount3 + (cart.getQuantity() * product.getPrice3());
-
+            if (null != product.getPrice1()) {
+                amount1 = amount1 + (cart.getQuantity() * product.getPrice1());
+            }
+            if (null != product.getPrice2()) {
+                amount2 = amount2 + (cart.getQuantity() * product.getPrice2());
+            }
+            if (null != product.getPrice3()) {
+                amount3 = amount3 + (cart.getQuantity() * product.getPrice3());
+            }
             companyCode = product.getCompanyCode();
             productOrderBO.saveProductOrder(code, cart.getProductCode(),
                 cart.getQuantity(), product.getPrice1(), product.getPrice2(),
                 product.getPrice3(), product.getSystemCode());
         }
-
         data.setAmount1(amount1);
         data.setAmount2(amount2);
         data.setAmount3(amount3);
         data.setCompanyCode(companyCode);
         // 计算订单运费
-        Long yunfei = totalYunfei(companyCode, amount2);
+        Long yunfei = totalYunfei(data.getSystemCode(), companyCode, amount2);
         data.setYunfei(yunfei);
         // 保存订单
         orderBO.saveOrder(data);
@@ -170,13 +182,13 @@ public class OrderAOImpl implements IOrderAO {
         return code;
     }
 
-    private Long totalYunfei(String companyCode, Long amount) {
+    private Long totalYunfei(String systemCode, String companyCode, Long amount) {
         Long yunfei = 0L;
         Long byje = StringValidater.toLong(sysConfigBO.getConfigValue(
-            companyCode, SysConstants.BYJE)) * 1000;
+            systemCode, companyCode, null, SysConstants.BYJE)) * 1000;
         if (amount < byje) {
             yunfei = StringValidater.toLong(sysConfigBO.getConfigValue(
-                companyCode, SysConstants.YUNFEI)) * 1000;
+                systemCode, companyCode, null, SysConstants.YUNFEI)) * 1000;
         }
         return yunfei;
     }

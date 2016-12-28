@@ -7,6 +7,12 @@ public class XN808915Req extends APageReq {
      */
     private static final long serialVersionUID = 7955498610040656532L;
 
+    // 大类(选填)
+    private String category;
+
+    // 小类(选填)
+    private String type;
+
     // key值(选填)
     private String ckey;
 
@@ -17,6 +23,22 @@ public class XN808915Req extends APageReq {
 
     // 系统编号(必填)
     private String systemCode;
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getCkey() {
         return ckey;

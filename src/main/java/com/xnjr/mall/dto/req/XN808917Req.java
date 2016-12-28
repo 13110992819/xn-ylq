@@ -14,6 +14,9 @@ package com.xnjr.mall.dto.req;
  * @history:
  */
 public class XN808917Req {
+    // 类型
+    private String type;
+
     // 配置文件名
     private String key;
 
@@ -21,6 +24,14 @@ public class XN808917Req {
 
     // 系统编号(必填)
     private String systemCode;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getKey() {
         return key;

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xnjr.mall.ao.IStoreAO;
 import com.xnjr.mall.bo.IAccountBO;
@@ -13,7 +14,6 @@ import com.xnjr.mall.bo.IStoreBO;
 import com.xnjr.mall.bo.IStoreTicketBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
-import com.xnjr.mall.common.DateUtil;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StoreTicket;
 import com.xnjr.mall.dto.req.XN805042Req;
@@ -53,6 +53,7 @@ public class StoreAOImpl implements IStoreAO {
     private ISmsOutBO smsOutBO;
 
     @Override
+    @Transactional
     public String addStoreOss(Store data) {
         Store condition = new Store();
         condition.setName(data.getName());
@@ -60,20 +61,20 @@ public class StoreAOImpl implements IStoreAO {
         if (CollectionUtils.isNotEmpty(list)) {
             throw new BizException("xn000000", "该名称已存在");
         } else {
+            // 注册B端用户，无推荐人
             XN805042Req req = new XN805042Req();
-            String loginName = DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_3);
-            req.setLoginName(loginName);
-            req.setKind(EUserKind.Store.getCode());
+            req.setLoginName(data.getMobile());
+            req.setMobile(data.getMobile());
+            req.setKind(EUserKind.F2.getCode());
             req.setUpdater(data.getUpdater());
-            req.setUserReferee(data.getUserReferee());
             String userId = userBO.doSaveUser(req);
             data.setOwner(userId);
-            data.setLoginName(loginName);
             return storeBO.saveStore(data);
         }
     }
 
     @Override
+    @Transactional
     public String addStore(Store data) {
         Store condition = new Store();
         condition.setName(data.getName());

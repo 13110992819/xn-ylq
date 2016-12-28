@@ -23,7 +23,7 @@ public class Store extends ABaseDO {
     // 法人姓名
     private String legalPersonName;
 
-    // 推荐人
+    // 店铺推荐人
     private String userReferee;
 
     // 费率1 使用折扣券分成比例
@@ -114,6 +114,9 @@ public class Store extends ABaseDO {
     // 登录名
     private String loginName;
 
+    // B端登录用户手机号
+    private String mobile;
+
     // 当前操作的用户
     private String fromUser;
 
@@ -122,6 +125,14 @@ public class Store extends ABaseDO {
 
     // 可使用折扣券列表
     private List<StoreTicket> storeTickets;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public String getCode() {
         return code;

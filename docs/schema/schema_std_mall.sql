@@ -240,12 +240,15 @@ CREATE TABLE `to2o_user_ticket` (
 DROP TABLE IF EXISTS `tsys_config`;
 CREATE TABLE `tsys_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `category` varchar(32) DEFAULT NULL COMMENT '大类',
+  `type` varchar(32) DEFAULT NULL COMMENT '类型',
   `cname` varchar(255) DEFAULT NULL COMMENT '配置名',
   `ckey` varchar(32) DEFAULT NULL COMMENT 'key值',
   `cvalue` varchar(255) DEFAULT NULL COMMENT '值',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `belong` int(11) DEFAULT NULL COMMENT '属于谁',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

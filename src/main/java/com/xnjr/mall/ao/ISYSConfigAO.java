@@ -22,6 +22,6 @@ public interface ISYSConfigAO {
 
     public SYSConfig getSYSConfig(Long id);
 
-    public String getConfigValue(String systemCode, String companyCode,
-            String key);
+    public String getConfigValue(String systemCode, String type,
+            String companyCode, String key);
 }

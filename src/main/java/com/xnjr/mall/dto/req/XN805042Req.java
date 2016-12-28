@@ -4,7 +4,7 @@ public class XN805042Req {
     // 登录名（必填）
     private String loginName;
 
-    // 手机号（选填）
+    // 手机号（必填）
     private String mobile;
 
     // 证件类型（选填）

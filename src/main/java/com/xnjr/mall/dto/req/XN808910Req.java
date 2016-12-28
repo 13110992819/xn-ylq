@@ -4,6 +4,9 @@ public class XN808910Req {
     // 编号
     private String id;
 
+    // 类型
+    private String type;
+
     // 值（必填）
     private String cvalue;
 
@@ -12,6 +15,14 @@ public class XN808910Req {
 
     // 公司编号（必填）
     private String companyCode;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getId() {
         return id;

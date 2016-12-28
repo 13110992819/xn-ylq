@@ -1,9 +1,9 @@
 package com.xnjr.mall.dto.req;
 
-/** 
+/**
  * 商家入驻——平台代入驻
- * @author: zuixian 
- * @since: 2016年9月20日 下午2:12:59 
+ * @author: xieyj 
+ * @since: 2016年12月27日 下午8:14:09 
  * @history:
  */
 public class XN808200Req {
@@ -16,6 +16,9 @@ public class XN808200Req {
 
     // 法人姓名（必填）
     private String legalPersonName;
+
+    // B端用户手机号（必填）
+    private String mobile;
 
     // 推荐人（必填）
     private String userReferee;
@@ -76,6 +79,14 @@ public class XN808200Req {
 
     // 系统编号（必填）
     private String systemCode;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public String getName() {
         return name;
