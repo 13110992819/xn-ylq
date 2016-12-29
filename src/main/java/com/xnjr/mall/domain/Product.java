@@ -99,6 +99,18 @@ public class Product extends ABaseDO {
     // 名字模糊查询
     private String nameForQuery;
 
+    // ******************db properties ********************
+    // 商户手机号
+    private String mobile;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public String getCode() {
         return code;
     }

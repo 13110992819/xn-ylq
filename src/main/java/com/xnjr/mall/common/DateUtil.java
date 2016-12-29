@@ -29,9 +29,15 @@ public class DateUtil {
 
     public static final String TIME_END = " 23:59:59";
 
-    public static Date getEndDatetime(String inputRepayDate) {
-        Date repayDatetime = DateUtil.strToDate(inputRepayDate
-                + DateUtil.TIME_END, DateUtil.DATA_TIME_PATTERN_1);
+    public static Date getStartDatetime(String startDate) {
+        Date repayDatetime = DateUtil.strToDate(
+            startDate + DateUtil.TIME_BEGIN, DateUtil.DATA_TIME_PATTERN_1);
+        return repayDatetime;
+    }
+
+    public static Date getEndDatetime(String endDate) {
+        Date repayDatetime = DateUtil.strToDate(endDate + DateUtil.TIME_END,
+            DateUtil.DATA_TIME_PATTERN_1);
         return repayDatetime;
     }
 

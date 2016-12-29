@@ -363,7 +363,7 @@ public class OrderAOImpl implements IOrderAO {
         condition.setStatus(EOrderStatus.TO_PAY.getCode());
         // 前两小时还未支付的订单
         condition.setApplyDatetimeEnd(DateUtil.getRelativeDate(new Date(),
-            -(60 * 60 * 2 + 1)));
+            -(60 * 60 * 24 * 3 + 1)));
         List<Order> orderList = orderBO.queryOrderList(condition);
         if (CollectionUtils.isNotEmpty(orderList)) {
             for (Order order : orderList) {

@@ -44,10 +44,8 @@ public class XN808220 extends AProcessor {
         data.setDescription(req.getDescription());
         data.setPrice(StringValidater.toLong(req.getPrice()));
         data.setCurrency(req.getCurrency());
-        data.setValidateStart(DateUtil.strToDate(req.getValidateStart(),
-            DateUtil.DATA_TIME_PATTERN_1));
-        data.setValidateEnd(DateUtil.strToDate(req.getValidateEnd(),
-            DateUtil.DATA_TIME_PATTERN_1));
+        data.setValidateStart(DateUtil.getStartDatetime(req.getValidateStart()));
+        data.setValidateEnd(DateUtil.getEndDatetime(req.getValidateEnd()));
         if (EBoolean.NO.getCode().equals(req.getIsPutaway())) {
             data.setStatus(EStoreTicketStatus.NEW.getCode());
         } else {
