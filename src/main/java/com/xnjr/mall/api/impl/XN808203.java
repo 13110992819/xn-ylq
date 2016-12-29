@@ -37,7 +37,7 @@ public class XN808203 extends AProcessor {
         data.setName(req.getName());
         data.setType(req.getType());
         data.setLegalPersonName(req.getLegalPersonName());
-        data.setUserReferee(req.getUserReferee());
+        // data.setUserReferee(req.getUserReferee());
         data.setRate1(StringValidater.toDouble(req.getRate1()));
         data.setRate2(StringValidater.toDouble(req.getRate2()));
         data.setSlogan(req.getSlogan());
@@ -61,11 +61,12 @@ public class XN808203 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808203Req.class);
         StringValidater.validateBlank(req.getCode(), req.getName(),
-            req.getType(), req.getLegalPersonName(), req.getUserReferee(),
-            req.getRate1(), req.getRate2(), req.getSlogan(), req.getAdPic(),
-            req.getPic(), req.getDescription(), req.getProvince(),
-            req.getCity(), req.getArea(), req.getAddress(), req.getLongitude(),
+            req.getType(), req.getLegalPersonName(), req.getRate1(),
+            req.getRate2(), req.getSlogan(), req.getAdPic(), req.getPic(),
+            req.getDescription(), req.getProvince(), req.getCity(),
+            req.getArea(), req.getAddress(), req.getLongitude(),
             req.getLatitude(), req.getBookMobile());
+        // req.getUserReferee()
     }
 
 }

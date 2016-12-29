@@ -215,7 +215,6 @@
 		name = #{name}
 		,type = #{type}
 		,legal_person_name = #{legalPersonName}
-		,user_referee = #{userReferee}
 		,rate1 = #{rate1}
 		
 		,rate2 = #{rate2}
