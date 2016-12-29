@@ -37,7 +37,7 @@ public class XN808210 extends AProcessor {
     public Object doBusiness() throws BizException {
         return new PKCodeRes(storePurchaseAO.storePurchase(req.getUserId(),
             req.getStoreCode(), req.getTicketCode(),
-            StringValidater.toLong(req.getAmount())));
+            StringValidater.toLong(req.getAmount()), req.getPayType()));
     }
 
     /** 

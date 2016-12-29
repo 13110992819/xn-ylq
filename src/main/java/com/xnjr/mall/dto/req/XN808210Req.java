@@ -26,6 +26,17 @@ public class XN808210Req {
     // 消费金额
     private String amount;
 
+    // 支付类型
+    private String payType;
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
+
     public String getStoreCode() {
         return storeCode;
     }

@@ -1,18 +1,26 @@
 package com.xnjr.mall.bo.impl;
 
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.PaginableBOImpl;
 import com.xnjr.mall.domain.User;
 import com.xnjr.mall.dto.req.XN805042Req;
+import com.xnjr.mall.dto.req.XN805060Req;
 import com.xnjr.mall.dto.req.XN805300Req;
 import com.xnjr.mall.dto.req.XN805901Req;
 import com.xnjr.mall.dto.req.XN805902Req;
 import com.xnjr.mall.dto.req.XN805910Req;
 import com.xnjr.mall.dto.res.XN805042Res;
+import com.xnjr.mall.dto.res.XN805060Res;
 import com.xnjr.mall.dto.res.XN805901Res;
 import com.xnjr.mall.dto.res.XN805910Res;
+import com.xnjr.mall.enums.EUserKind;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.http.BizConnecter;
 import com.xnjr.mall.http.JsonUtils;
@@ -92,5 +100,29 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             userId = res.getUserId();
         }
         return userId;
+    }
+
+    /** 
+     * @see com.xnjr.mall.bo.IUserBO#getPartnerUserInfo(com.xnjr.mall.dto.req.XN805060Req)
+     */
+    @Override
+    public XN805060Res getPartnerUserInfo(String province, String city,
+            String area) {
+        XN805060Req req = new XN805060Req();
+        req.setProvince(province);
+        req.setCity(city);
+        req.setArea(area);
+        req.setKind(EUserKind.Partner.getCode());
+        XN805060Res result = null;
+        String jsonStr = BizConnecter.getBizData("805060",
+            JsonUtils.object2Json(req));
+        Gson gson = new Gson();
+        List<XN805060Res> list = gson.fromJson(jsonStr,
+            new TypeToken<List<XN805060Res>>() {
+            }.getType());
+        if (CollectionUtils.isNotEmpty(list)) {
+            result = list.get(0);
+        }
+        return result;
     }
 }

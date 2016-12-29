@@ -79,6 +79,4 @@
 		,system_code = #{systemCode}
 		WHERE code = #{code}
 	</update>
-
-
 </mapper>

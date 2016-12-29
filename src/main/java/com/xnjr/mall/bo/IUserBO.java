@@ -3,6 +3,7 @@ package com.xnjr.mall.bo;
 import com.xnjr.mall.bo.base.IPaginableBO;
 import com.xnjr.mall.domain.User;
 import com.xnjr.mall.dto.req.XN805042Req;
+import com.xnjr.mall.dto.res.XN805060Res;
 import com.xnjr.mall.dto.res.XN805901Res;
 
 /**
@@ -63,4 +64,16 @@ public interface IUserBO extends IPaginableBO<User> {
      * @history:
      */
     public String getUserId(String mobile, String kind, String systemCode);
+
+    /**
+     * 获取辖区合伙人详情
+     * @param province
+     * @param city
+     * @param area
+     * @return 
+     * @create: 2016年12月29日 下午6:13:28 xieyj
+     * @history:
+     */
+    public XN805060Res getPartnerUserInfo(String province, String city,
+            String area);
 }

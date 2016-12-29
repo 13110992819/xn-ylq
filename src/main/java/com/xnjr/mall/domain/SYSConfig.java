@@ -24,7 +24,7 @@ public class SYSConfig extends ABaseDO {
     // 编号（自增长）
     private Long id;
 
-    // 分类(A 商品运费，B 分销规则，C摇一摇规则，D虚拟币规则，E定位规则)
+    // 分类(A 商品，B 分销规则，C摇一摇规则，D虚拟币规则，E定位规则)
     private String category;
 
     // 类型(A1,A2,B1,B2,C1,C2,D1,D2,E1,E2)

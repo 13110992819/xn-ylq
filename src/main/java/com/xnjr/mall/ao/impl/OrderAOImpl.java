@@ -185,10 +185,10 @@ public class OrderAOImpl implements IOrderAO {
     private Long totalYunfei(String systemCode, String companyCode, Long amount) {
         Long yunfei = 0L;
         Long byje = StringValidater.toLong(sysConfigBO.getConfigValue(
-            systemCode, companyCode, null, SysConstants.BYJE)) * 1000;
+            systemCode, companyCode, null, SysConstants.SP_BYJE)) * 1000;
         if (amount < byje) {
             yunfei = StringValidater.toLong(sysConfigBO.getConfigValue(
-                systemCode, companyCode, null, SysConstants.YUNFEI)) * 1000;
+                systemCode, companyCode, null, SysConstants.SP_YUNFEI)) * 1000;
         }
         return yunfei;
     }
