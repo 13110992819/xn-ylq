@@ -28,6 +28,7 @@ public class SYSConfig extends ABaseDO {
     private String category;
 
     // 类型(A1,A2,B1,B2,C1,C2,D1,D2,E1,E2)
+    //
     private String type;
 
     // 配置名

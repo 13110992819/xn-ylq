@@ -51,6 +51,19 @@ public class StoreBOImpl extends PaginableBOImpl<Store> implements IStoreBO {
     }
 
     @Override
+    public String saveStore(Store data, String status) {
+        String code = null;
+        if (data != null) {
+            code = OrderNoGenerater.generateM("SJ");
+            data.setCode(code);
+            data.setStatus(status);
+            data.setUpdateDatetime(new Date());
+            storeDAO.insert(data);
+        }
+        return code;
+    }
+
+    @Override
     public int refreshStore(Store data) {
         int count = 0;
         if (data != null) {

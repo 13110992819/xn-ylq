@@ -3,6 +3,7 @@ package com.xnjr.mall.ao.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,15 +62,23 @@ public class StoreAOImpl implements IStoreAO {
         if (CollectionUtils.isNotEmpty(list)) {
             throw new BizException("xn000000", "该名称已存在");
         } else {
+            // 店铺推荐人传手机号过来，转化成用户编号
+            String userReferee = userBO.getUserId(data.getUserReferee(),
+                EUserKind.F1.getCode(), data.getSystemCode());
+            if (StringUtils.isBlank(userReferee)) {
+                throw new BizException("xn000000", "该推荐人不存在");
+            }
             // 注册B端用户，无推荐人
             XN805042Req req = new XN805042Req();
             req.setLoginName(data.getMobile());
             req.setMobile(data.getMobile());
             req.setKind(EUserKind.F2.getCode());
             req.setUpdater(data.getUpdater());
+            req.setSystemCode(data.getSystemCode());
             String userId = userBO.doSaveUser(req);
             data.setOwner(userId);
-            return storeBO.saveStore(data);
+            data.setUserReferee(userReferee);
+            return storeBO.saveStore(data, EStoreStatus.ONLINE_CLOSE.getCode());
         }
     }
 

@@ -1,14 +1,18 @@
 package com.xnjr.mall.bo.impl;
 
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xnjr.mall.bo.IAccountBO;
-import com.xnjr.mall.dto.req.XN802112Req;
-import com.xnjr.mall.dto.req.XN802310Req;
-import com.xnjr.mall.dto.res.XN802011Res;
-import com.xnjr.mall.dto.res.XN802112Res;
-import com.xnjr.mall.dto.res.XN802310Res;
+import com.xnjr.mall.dto.req.XN802503Req;
+import com.xnjr.mall.dto.req.XN802512Req;
+import com.xnjr.mall.dto.res.XN802503Res;
+import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.http.BizConnecter;
 import com.xnjr.mall.http.JsonUtils;
 
@@ -17,49 +21,45 @@ public class AccountBOImpl implements IAccountBO {
     static Logger logger = Logger.getLogger(AccountBOImpl.class);
 
     /** 
-     * @see com.xnjr.mall.bo.IAccountBO#doChargeOfflineWithdrawApp(java.lang.String, java.lang.Long, java.lang.String, java.lang.String)
-     */
-    @Override
-    public String doChargeOfflineWithoutApp(String accountNumber, Long amount,
-            String fromType, String fromCode, String pdf, String approveUser,
-            String approveNote, String refNo) {
-        XN802112Req req = new XN802112Req();
-        req.setAccountNumber(accountNumber);
-        req.setAmount(String.valueOf(amount));
-        req.setFromType(fromType);
-        req.setFromCode(fromCode);
-        req.setPdf(pdf);
-        req.setApproveUser(approveUser);
-        req.setApproveNote(approveNote);
-        req.setRefNo(refNo);
-        XN802112Res res = BizConnecter.getBizData("802112",
-            JsonUtils.object2Json(req), XN802112Res.class);
-        return res.getCqNo();
-    }
-
-    /** 
-     * @see com.xnjr.mall.bo.IAccountBO#doTransfer(java.lang.String, java.lang.String, java.lang.Long, java.lang.Long, java.lang.String)
-     */
-    @Override
-    public String doTransferOss(String accountNumber, String direction,
-            Long amount, Long fee, String remark) {
-        XN802310Req req = new XN802310Req();
-        req.setAccountNumber(accountNumber);
-        req.setDirection(direction);
-        req.setAmount(String.valueOf(amount));
-        req.setFee(String.valueOf(fee));
-        req.setRemark(remark);
-        XN802310Res res = BizConnecter.getBizData("802310",
-            JsonUtils.object2Json(req), XN802310Res.class);
-        return res.getCode();
-    }
-
-    /** 
      * @see com.xnjr.mall.bo.IAccountBO#getAccountByUserId(java.lang.String)
      */
     @Override
-    public XN802011Res getAccountByUserId(String userId) {
-        return BizConnecter.getBizData("802012",
-            JsonUtils.string2Json("userId", userId), XN802011Res.class);
+    public XN802503Res getAccountByUserId(String systemCode, String userId,
+            String currency) {
+        XN802503Res result = null;
+        XN802503Req req = new XN802503Req();
+        req.setSystemCode(systemCode);
+        req.setUserId(userId);
+        req.setCurrency(currency);
+        String jsonStr = BizConnecter.getBizData("802503",
+            JsonUtils.object2Json(req));
+        Gson gson = new Gson();
+        List<XN802503Res> list = gson.fromJson(jsonStr,
+            new TypeToken<List<XN802503Res>>() {
+            }.getType());
+        if (CollectionUtils.isNotEmpty(list)) {
+            result = list.get(0);
+        }
+        if (null == result) {
+            throw new BizException("xn000000", "用户[" + userId + "]账户不存在");
+        }
+        return result;
+    }
+
+    /** 
+     * @see com.xnjr.mall.bo.IAccountBO#doTransferAmount(java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.String, java.lang.String)
+     */
+    @Override
+    public void doTransferAmount(String systemCode, String fromAccountNumber,
+            String toAccountNumber, Long amount, String bizType, String bizNote) {
+        XN802512Req req = new XN802512Req();
+        req.setSystemCode(systemCode);
+        req.setFromAccountNumber(fromAccountNumber);
+        req.setToAccountNumber(toAccountNumber);
+        req.setTransAmount(String.valueOf(amount));
+        req.setBizType(bizType);
+        req.setBizNote(bizNote);
+        BizConnecter.getBizData("802512", JsonUtils.object2Json(req),
+            Object.class);
     }
 }

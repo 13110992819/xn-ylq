@@ -20,3 +20,5 @@ INSERT INTO `tmall_category` (`code`,`parent_code`,`type`,`name`,`pic`,`order_no
 INSERT INTO `tmall_category` (`code`,`parent_code`,`type`,`name`,`pic`,`order_no`,`belong`,`company_code`,`system_code`) VALUES ('FL201600000000000011','FL201600000000000003','1','小类4','',1,NULL,NULL,'CD-CZH000001');
 
 
+
+

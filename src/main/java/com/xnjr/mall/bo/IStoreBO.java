@@ -31,6 +31,16 @@ public interface IStoreBO extends IPaginableBO<Store> {
      */
     public String saveStore(Store data);
 
+    /**
+     * 保存商家信息，加状态
+     * @param data
+     * @param status
+     * @return 
+     * @create: 2016年12月28日 下午12:12:02 xieyj
+     * @history:
+     */
+    public String saveStore(Store data, String status);
+
     /** 
      * 更新商家信息
      * @param data

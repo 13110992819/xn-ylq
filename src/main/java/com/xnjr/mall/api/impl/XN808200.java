@@ -12,7 +12,7 @@ import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
 
 /**
- * 商铺待入驻
+ * 商铺代入驻
  * @author: xieyj 
  * @since: 2016年12月27日 下午2:42:17 
  * @history:

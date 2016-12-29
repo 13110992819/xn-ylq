@@ -23,10 +23,10 @@ public class StoreTicket extends ABaseDO {
     // 类型(1 满减 2 返现)
     private String type;
 
-    // key1
+    // key1(满多)
     private Long key1;
 
-    // key2
+    // key2(减少)，返现
     private Long key2;
 
     // 使用详情

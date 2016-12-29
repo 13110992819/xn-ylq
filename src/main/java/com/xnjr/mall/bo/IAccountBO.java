@@ -8,7 +8,7 @@
  */
 package com.xnjr.mall.bo;
 
-import com.xnjr.mall.dto.res.XN802011Res;
+import com.xnjr.mall.dto.res.XN802503Res;
 
 /** 
  * @author: miyb 
@@ -16,43 +16,31 @@ import com.xnjr.mall.dto.res.XN802011Res;
  * @history:
  */
 public interface IAccountBO {
-
     /**
-     * @param accountNumber
+     * 账户划转资金
+     * @param systemCode
+     * @param fromAccountNumber
+     * @param toAccountNumber
      * @param amount
-     * @param fromType
-     * @param fromCode
-     * @param pdf
-     * @param approveUser
-     * @param approveNote
-     * @param refNo
+     * @param bizType
+     * @param bizNote
      * @return 
-     * @create: 2016年6月15日 下午6:31:43 xieyj
+     * @create: 2016年12月28日 下午2:16:09 xieyj
      * @history:
      */
-    public String doChargeOfflineWithoutApp(String accountNumber, Long amount,
-            String fromType, String fromCode, String pdf, String approveUser,
-            String approveNote, String refNo);
+    public void doTransferAmount(String systemCode, String fromAccountNumber,
+            String toAccountNumber, Long amount, String bizType, String bizNote);
 
     /**
-     * @param accountNumber
-     * @param direction
-     * @param amount
-     * @param fee
-     * @param remark
-     * @return 
-     * @create: 2016年6月12日 下午8:05:07 xieyj
-     * @history:
-     */
-    public String doTransferOss(String accountNumber, String direction,
-            Long amount, Long fee, String remark);
-
-    /**
+     * 根据用户编号和币种获取账户
+     * @param systemCode
      * @param userId
+     * @param currency
      * @return 
-     * @create: 2016年6月12日 下午9:14:13 xieyj
+     * @create: 2016年12月28日 下午2:29:43 xieyj
      * @history:
      */
-    public XN802011Res getAccountByUserId(String userId);
+    public XN802503Res getAccountByUserId(String systemCode, String userId,
+            String currency);
 
 }

@@ -10,13 +10,16 @@ public interface IStorePurchaseAO {
 
     /**
      * 消费买单
-     * @param data
+     * @param userId
+     * @param storeCode
+     * @param ticketCode
+     * @param amount
      * @return 
-     * @create: 2016年12月19日 上午12:56:14 haiqingzheng
+     * @create: 2016年12月29日 上午11:03:25 xieyj
      * @history:
      */
     public String storePurchase(String userId, String storeCode,
-            String ticketCode, Long amount);
+            String ticketCode, Long amount, String payType);
 
     public int dropStorePurchase(String code);
 

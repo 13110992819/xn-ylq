@@ -53,4 +53,14 @@ public interface IUserBO extends IPaginableBO<User> {
      */
     public String doSaveUser(XN805042Req req);
 
+    /**
+     * 获取推荐人用户编号
+     * @param mobile
+     * @param kind
+     * @param systemCode
+     * @return 
+     * @create: 2016年12月28日 上午10:09:53 xieyj
+     * @history:
+     */
+    public String getUserId(String mobile, String kind, String systemCode);
 }

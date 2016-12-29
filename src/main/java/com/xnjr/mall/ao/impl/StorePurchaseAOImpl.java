@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import com.xnjr.mall.ao.IStorePurchaseAO;
 import com.xnjr.mall.bo.IStoreBO;
 import com.xnjr.mall.bo.IStorePurchaseBO;
+import com.xnjr.mall.bo.IUserTicketBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StorePurchase;
+import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.exception.BizException;
 
@@ -23,9 +25,16 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     @Autowired
     private IStoreBO storeBO;
 
+    @Autowired
+    private IUserTicketBO userTicketBO;
+
+    // 店铺消费业务逻辑：
+    // 1、店铺信息校验
+    // 2、产生消费订单，更新折扣券信息
+    // 3、划转各个账户金额，分销
     @Override
     public String storePurchase(String userId, String storeCode,
-            String ticketCode, Long amount) {
+            String ticketCode, Long amount, String payType) {
         Store store = storeBO.getStore(storeCode);
         if (!EStoreStatus.ONLINE_OPEN.getCode().equals(store.getStatus())) {
             throw new BizException("xn0000", "店铺不处于可消费状态");
@@ -36,6 +45,10 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         data.setAmount(amount);
         data.setSystemCode(store.getSystemCode());
         data.setRemark(store.getName() + " 消费 " + amount / 1000 + "元");
+        // 优先共享奖励，分润
+        if (EPayType.NBHZ.getCode().equals(payType)) {
+
+        }
         return storePurchaseBO.saveStorePurchase(data);
     }
 
