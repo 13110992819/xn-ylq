@@ -361,7 +361,7 @@ public class OrderAOImpl implements IOrderAO {
         logger.info("***************开始扫描未支付订单***************");
         Order condition = new Order();
         condition.setStatus(EOrderStatus.TO_PAY.getCode());
-        // 前两小时还未支付的订单
+        // 前3天还未支付的订单
         condition.setApplyDatetimeEnd(DateUtil.getRelativeDate(new Date(),
             -(60 * 60 * 24 * 3 + 1)));
         List<Order> orderList = orderBO.queryOrderList(condition);
