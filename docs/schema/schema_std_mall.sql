@@ -9,11 +9,161 @@
  Target Server Version : 50545
  File Encoding         : utf-8
 
- Date: 12/17/2016 16:15:46 PM
+ Date: 01/03/2017 18:27:43 PM
 */
 
 SET NAMES utf8;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+--  Table structure for `tact_hzb`
+-- ----------------------------
+DROP TABLE IF EXISTS `tact_hzb`;
+CREATE TABLE `tact_hzb` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `name` varchar(64) DEFAULT NULL COMMENT '名称',
+  `pic` varchar(255) DEFAULT NULL COMMENT '照片',
+  `description` text COMMENT '玩法描述',
+  `price` bigint(20) DEFAULT NULL COMMENT '价格',
+  `currency` varchar(4) DEFAULT NULL COMMENT '价格币种',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tact_hzb_hold`
+-- ----------------------------
+DROP TABLE IF EXISTS `tact_hzb_hold`;
+CREATE TABLE `tact_hzb_hold` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `hzb_code` varchar(32) DEFAULT NULL COMMENT '汇赚宝编号',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态（未激活，激活，下架）',
+  `price` bigint(20) DEFAULT NULL COMMENT '购买价格',
+  `currency` varchar(4) DEFAULT NULL COMMENT '价格币种',
+  `period_rock_num` int(11) DEFAULT NULL COMMENT '周期内被摇总次数',
+  `total_rock_num` int(11) DEFAULT NULL COMMENT '已摇总次数',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tact_jewel`
+-- ----------------------------
+DROP TABLE IF EXISTS `tact_jewel`;
+CREATE TABLE `tact_jewel` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `store_code` varchar(32) DEFAULT NULL COMMENT '商家编号',
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `slogan` varchar(255) DEFAULT NULL COMMENT '标语',
+  `adv_pic` text COMMENT '广告图',
+  `description` text COMMENT '图文描述',
+  `invest_num` int(11) DEFAULT NULL COMMENT '投资人数',
+  `invest_amount` bigint(20) DEFAULT NULL COMMENT '投资金额',
+  `total_num` int(11) DEFAULT NULL COMMENT '总投资人次',
+  `price` bigint(20) DEFAULT NULL COMMENT '单价',
+  `start_datetime` datetime DEFAULT NULL COMMENT '夺宝开始时间',
+  `raise_days` varchar(45) DEFAULT NULL COMMENT '募集天数',
+  `win_number` varchar(255) DEFAULT NULL COMMENT '中奖号码',
+  `win_user_id` varchar(255) DEFAULT NULL COMMENT '中奖人编号',
+  `lot_alg` varchar(255) DEFAULT NULL COMMENT '抽奖算法',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态（0 待审批，1 审批通过（募集中），2 审批不通过，3 到期，4 待发货，5 已发货）',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tact_jewel_interact`
+-- ----------------------------
+DROP TABLE IF EXISTS `tact_jewel_interact`;
+CREATE TABLE `tact_jewel_interact` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '序号',
+  `type` varchar(4) DEFAULT NULL COMMENT '类型（1 好评）',
+  `interacter` varchar(32) DEFAULT NULL COMMENT '互动人',
+  `interact_datetime` datetime DEFAULT NULL COMMENT '互动时间',
+  `jewel_code` varchar(32) DEFAULT NULL COMMENT '标的编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tact_jewel_record`
+-- ----------------------------
+DROP TABLE IF EXISTS `tact_jewel_record`;
+CREATE TABLE `tact_jewel_record` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `jewel_code` varchar(32) DEFAULT NULL COMMENT '宝贝编号',
+  `create_datetime` datetime DEFAULT NULL COMMENT '标语',
+  `times` int(11) DEFAULT NULL COMMENT '参与次数',
+  `pay_amount` bigint(20) DEFAULT NULL COMMENT '支付金额',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态(0待开奖，1已中奖，2未中奖)',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tact_jewel_record_number`
+-- ----------------------------
+DROP TABLE IF EXISTS `tact_jewel_record_number`;
+CREATE TABLE `tact_jewel_record_number` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '序号',
+  `record_code` varchar(32) DEFAULT NULL COMMENT '记录编号',
+  `number` varchar(32) DEFAULT NULL COMMENT '号码',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tact_stock`
+-- ----------------------------
+DROP TABLE IF EXISTS `tact_stock`;
+CREATE TABLE `tact_stock` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `name` varchar(64) DEFAULT NULL COMMENT '名称',
+  `pic` varchar(255) DEFAULT NULL COMMENT '图片',
+  `description` text COMMENT '玩法描述',
+  `capital` int(11) DEFAULT NULL COMMENT '股本',
+  `price` bigint(20) DEFAULT NULL COMMENT '价格',
+  `currency` varchar(4) DEFAULT NULL COMMENT '价格币种',
+  `back_interval` int(11) DEFAULT NULL COMMENT '返还间隔',
+  `back_count` int(11) DEFAULT NULL COMMENT '返还总次数',
+  `welfare1` bigint(20) DEFAULT NULL COMMENT '返还福利1',
+  `welfare2` bigint(20) DEFAULT NULL COMMENT '返还福利2',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态（1 使用中 0 假删除）',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tact_stock_back`
+-- ----------------------------
+DROP TABLE IF EXISTS `tact_stock_back`;
+CREATE TABLE `tact_stock_back` (
+  `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `stock_code` varchar(32) DEFAULT NULL COMMENT '股份编号',
+  `back_datetime` datetime DEFAULT NULL COMMENT '返还时间',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tact_stock_hold`
+-- ----------------------------
+DROP TABLE IF EXISTS `tact_stock_hold`;
+CREATE TABLE `tact_stock_hold` (
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `stock_code` varchar(32) DEFAULT NULL COMMENT '股份编号',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态（未清算/已清算）',
+  `back_num` int(11) DEFAULT NULL COMMENT '已经返还次数',
+  `back_welfare1` bigint(20) DEFAULT NULL COMMENT '已返福利1',
+  `back_welfare2` bigint(20) DEFAULT NULL COMMENT '已返福利2',
+  `next_back` datetime DEFAULT NULL COMMENT '下次返还时间',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `tmall_cart`
@@ -182,6 +332,7 @@ CREATE TABLE `to2o_store_action` (
   `action_user` varchar(32) DEFAULT NULL COMMENT '互动人',
   `action_datetime` datetime DEFAULT NULL COMMENT '互动时间',
   `store_code` varchar(32) DEFAULT NULL COMMENT '商户编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -197,6 +348,7 @@ CREATE TABLE `to2o_store_purchase` (
   `create_datetime` datetime DEFAULT NULL COMMENT '消费时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `store_code` varchar(32) DEFAULT NULL COMMENT '商家编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -218,6 +370,7 @@ CREATE TABLE `to2o_store_ticket` (
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `status` varchar(4) DEFAULT NULL COMMENT '状态（待上架，已上架，已下架，期满作废）',
   `store_code` varchar(32) DEFAULT NULL COMMENT '所属商家编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

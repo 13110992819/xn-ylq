@@ -82,6 +82,7 @@ public class OrderAOImpl implements IOrderAO {
     public String commitOrder(String productCode, Integer quantity, Order data) {
         // 计算订单总价
         Product product = productBO.getProduct(productCode);
+        data.setSystemCode(product.getSystemCode());
         if (product.getQuantity() != null) {
             if ((product.getQuantity() - quantity) < 0) {
                 throw new BizException("xn0000", "该商品库存量不足，无法购买");
@@ -111,7 +112,6 @@ public class OrderAOImpl implements IOrderAO {
         String code = OrderNoGenerater.generateM(EGeneratePrefix.ORDER
             .getCode());
         data.setCode(code);
-        data.setSystemCode(product.getSystemCode());
         orderBO.saveOrder(data);
         // 订单产品快照关联
         productOrderBO.saveProductOrder(code, productCode, quantity,
@@ -185,10 +185,10 @@ public class OrderAOImpl implements IOrderAO {
     private Long totalYunfei(String systemCode, String companyCode, Long amount) {
         Long yunfei = 0L;
         Long byje = StringValidater.toLong(sysConfigBO.getConfigValue(
-            systemCode, companyCode, null, SysConstants.SP_BYJE)) * 1000;
+            systemCode, null, companyCode, SysConstants.SP_BYJE)) * 1000;
         if (amount < byje) {
             yunfei = StringValidater.toLong(sysConfigBO.getConfigValue(
-                systemCode, companyCode, null, SysConstants.SP_YUNFEI)) * 1000;
+                systemCode, null, companyCode, SysConstants.SP_YUNFEI)) * 1000;
         }
         return yunfei;
     }
