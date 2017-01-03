@@ -1,5 +1,7 @@
 package com.xnjr.mall.api.impl;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import com.xnjr.mall.ao.IProductAO;
 import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.common.JsonUtil;
@@ -11,7 +13,7 @@ import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
 
 /**
- * 产品审核
+ * 多个产品审核
  * @author: xieyj 
  * @since: 2016年12月17日 下午1:33:51 
  * @history:
@@ -28,7 +30,7 @@ public class XN808015 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        productAO.approveProduct(req.getCode(), req.getApproveResult(),
+        productAO.approveMoreProduct(req.getCodeList(), req.getApproveResult(),
             req.getApprover(), req.getApproveNote());
         return new BooleanRes(true);
     }
@@ -39,7 +41,10 @@ public class XN808015 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808015Req.class);
-        StringValidater.validateBlank(req.getCode(), req.getApproveResult(),
+        StringValidater.validateBlank(req.getApproveResult(),
             req.getApprover(), req.getApproveNote());
+        if (CollectionUtils.isEmpty(req.getCodeList())) {
+            throw new BizException("xn000000", "商品编号列表不能为空");
+        }
     }
 }

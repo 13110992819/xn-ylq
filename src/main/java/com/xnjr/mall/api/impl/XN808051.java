@@ -51,7 +51,7 @@ public class XN808051 extends AProcessor {
         StringValidater.validateBlank(req.getApplyUser(), req.getReceiver(),
             req.getReMobile(), req.getReAddress());
         if (CollectionUtils.isEmpty(req.getCartCodeList())) {
-            throw new BizException("xn702000", "购物车中货物不能为空");
+            throw new BizException("xn702000", "请选择购物车中的货物");
         }
     }
 }

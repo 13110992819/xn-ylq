@@ -14,6 +14,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xnjr.mall.ao.IProductAO;
 import com.xnjr.mall.bo.IProductBO;
@@ -127,6 +128,15 @@ public class ProductAOImpl implements IProductAO {
             throw new BizException("xn000000", "该产品不是已提交状态");
         }
         productBO.approveProduct(code, approveResult, approver, approveNote);
+    }
+
+    @Override
+    @Transactional
+    public void approveMoreProduct(List<String> codeList, String approveResult,
+            String approver, String approveNote) {
+        for (String code : codeList) {
+            this.approveProduct(code, approveResult, approver, approveNote);
+        }
     }
 
     @Override

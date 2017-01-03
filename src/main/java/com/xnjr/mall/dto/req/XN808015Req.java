@@ -1,5 +1,7 @@
 package com.xnjr.mall.dto.req;
 
+import java.util.List;
+
 /**
  * @author: xieyj 
  * @since: 2016年12月17日 下午1:34:23 
@@ -7,7 +9,7 @@ package com.xnjr.mall.dto.req;
  */
 public class XN808015Req {
     // 产品编号(必填)
-    private String code;
+    private List<String> codeList;
 
     // 审核结果(必填)
     private String approveResult;
@@ -18,12 +20,12 @@ public class XN808015Req {
     // 审核备注(必填)
     private String approveNote;
 
-    public String getCode() {
-        return code;
+    public List<String> getCodeList() {
+        return codeList;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCodeList(List<String> codeList) {
+        this.codeList = codeList;
     }
 
     public String getApproveResult() {
