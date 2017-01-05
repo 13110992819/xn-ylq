@@ -16,21 +16,18 @@ import com.xnjr.mall.bo.IStoreTicketBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.IUserTicketBO;
 import com.xnjr.mall.bo.base.Paginable;
-import com.xnjr.mall.common.SysConstants;
+import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StorePurchase;
 import com.xnjr.mall.domain.UserTicket;
-import com.xnjr.mall.dto.res.XN802503Res;
-import com.xnjr.mall.dto.res.XN805060Res;
+import com.xnjr.mall.dto.req.XN802180Req;
+import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.enums.EBizType;
-import com.xnjr.mall.enums.ECategoryType;
-import com.xnjr.mall.enums.ECurrency;
-import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.EStoreTicketType;
-import com.xnjr.mall.enums.ESysAccount;
 import com.xnjr.mall.enums.EUserTicketStatus;
 import com.xnjr.mall.exception.BizException;
+import com.xnjr.mall.http.BizConnecter;
 
 @Service
 public class StorePurchaseAOImpl implements IStorePurchaseAO {
@@ -62,8 +59,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     // 3、划转各个账户金额，分销
     @Override
     @Transactional
-    public String storePurchase(String userId, String storeCode,
-            String ticketCode, Long amount, String payType) {
+    public XN802180Res storePurchase(String userId, String storeCode,
+            String ticketCode, Long amount, String payType, String ip) {
         Store store = storeBO.getStore(storeCode);
         String systemCode = store.getSystemCode();
         if (!EStoreStatus.ONLINE_OPEN.getCode().equals(store.getStatus())) {
@@ -94,86 +91,102 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             remark = remark + ",优惠后金额" + yhAmount / 1000 + "元，使用折扣券编号:["
                     + ticketCode + "]";
         }
-        StorePurchase data = new StorePurchase();
-        data.setUserId(userId);
-        data.setStoreCode(storeCode);
-        data.setAmount(amount);
-        data.setSystemCode(systemCode);
-        data.setRemark(remark);
-        // 消费1000块(优先共享奖励，分润)
-        // 1,用户C可以得到消费额35%的钱包币
-        // 2,用户B和A可以得到对应分润为X1和X2
-        // 3,业务员可以得到分润为X3
-        // 4,所在省市县可以得到对应分润为X4，X5和X6
-        // 5,最后到店铺手里的钱为1000-X1-X2-X3-X4-X5-X6
-        // 6,另外，35%的钱包币由平台发放
-        if (EPayType.NBHZ.getCode().equals(payType)) {
-            // 1,用户C可以得到消费额35%的钱包币,平台扣除钱包币
-            Double qbbRate = Double.valueOf(SysConstants.CUSERQBBRATE);
-            Long transAmount = Double.valueOf(yhAmount * qbbRate).longValue();
-            XN802503Res qbbAccount = accountBO.getAccountByUserId(
-                store.getSystemCode(), ESysAccount.SYS_ACCOUNT.getCode(),
-                ECurrency.QBB.getCode());
-            // 获取用户账户
-            XN802503Res userAccount = accountBO.getAccountByUserId(
-                store.getSystemCode(), userId, ECurrency.QBB.getCode());
-            accountBO.doTransferAmount(systemCode,
-                qbbAccount.getAccountNumber(), userAccount.getAccountNumber(),
-                transAmount, EBizType.AJ_DPXF.getCode(),
-                EBizType.AJ_DPXF.getValue());
-            // 用户A和用户B和用户C分润值，从哪里来?
-            Double o2oAUserRate = Double.valueOf(sysConfigBO.getConfigValue(
-                systemCode, ECategoryType.O2O.getCode(), null,
-                SysConstants.O2O_AUSER));
-            Double o2oBUserRate = Double.valueOf(sysConfigBO.getConfigValue(
-                systemCode, ECategoryType.O2O.getCode(), null,
-                SysConstants.O2O_BUSER));
-            Double o2oCUserRate = Double.valueOf(sysConfigBO.getConfigValue(
-                systemCode, ECategoryType.O2O.getCode(), null,
-                SysConstants.O2O_CUSER));
-            Long frAmountA = Double.valueOf(yhAmount * o2oAUserRate * fcRate)
-                .longValue();
-            Long frAmountB = Double.valueOf(yhAmount * o2oBUserRate * fcRate)
-                .longValue();
-            Long frAmountC = Double.valueOf(yhAmount * o2oCUserRate * fcRate)
-                .longValue();
-            // 辖区管理用户获取的分润
-            // 省合伙人
-            Long proAmount = 0L;
-            Long cityAmount = 0L;
-            Long areaAmount = 0L;
-            Double proRate = Double.valueOf(sysConfigBO.getConfigValue(
-                systemCode, ECategoryType.O2O.getCode(), null,
-                SysConstants.O2O_PROVINCE));
-            Double cityRate = Double.valueOf(sysConfigBO.getConfigValue(
-                systemCode, ECategoryType.O2O.getCode(), null,
-                SysConstants.O2O_CITY));
-            Double areaRate = Double.valueOf(sysConfigBO.getConfigValue(
-                systemCode, ECategoryType.O2O.getCode(), null,
-                SysConstants.O2O_AREA));
-            // 省合伙人
-            XN805060Res provinceRes = userBO.getPartnerUserInfo(
-                store.getProvince(), null, null);
-            if (provinceRes != null) {
-                proAmount = Double.valueOf(yhAmount * proRate * fcRate)
-                    .longValue();
-            }
-            // 市合伙人
-            XN805060Res cityRes = userBO.getPartnerUserInfo(
-                store.getProvince(), store.getCity(), null);
-            if (cityRes != null) {
-                cityAmount = Double.valueOf(yhAmount * cityRate * fcRate)
-                    .longValue();
-            }
-            // 县合伙人
-            XN805060Res areaRes = userBO.getPartnerUserInfo(
-                store.getProvince(), store.getCity(), store.getArea());
-            if (areaRes != null) {
-                areaAmount = Double.valueOf(yhAmount * areaRate * fcRate)
-                    .longValue();
-            }
-        }
-        return storePurchaseBO.saveStorePurchase(data);
+
+        // 获取微信APP支付信息
+        XN802180Req req = new XN802180Req();
+        req.setSystemCode(systemCode);
+        req.setCompanyCode(systemCode);
+        req.setUserId(userId);
+        req.setBizType(EBizType.AJ_GW.getCode());
+        req.setBizNote(store.getName() + "——消费买单");
+        req.setBody("正汇钱包—优店");
+        req.setTotalFee(String.valueOf(yhAmount));
+        req.setSpbillCreateIp(ip);
+
+        XN802180Res res = BizConnecter.getBizData("802180",
+            JsonUtil.Object2Json(req), XN802180Res.class);
+        return res;
+
+        // StorePurchase data = new StorePurchase();
+        // data.setUserId(userId);
+        // data.setStoreCode(storeCode);
+        // data.setAmount(amount);
+        // data.setSystemCode(systemCode);
+        // data.setRemark(remark);
+        // // 消费1000块(优先共享奖励，分润)
+        // // 1,用户C可以得到消费额35%的钱包币
+        // // 2,用户B和A可以得到对应分润为X1和X2
+        // // 3,业务员可以得到分润为X3
+        // // 4,所在省市县可以得到对应分润为X4，X5和X6
+        // // 5,最后到店铺手里的钱为1000-X1-X2-X3-X4-X5-X6
+        // // 6,另外，35%的钱包币由平台发放
+        // if (EPayType.NBHZ.getCode().equals(payType)) {
+        // // 1,用户C可以得到消费额35%的钱包币,平台扣除钱包币
+        // Double qbbRate = Double.valueOf(SysConstants.CUSERQBBRATE);
+        // Long transAmount = Double.valueOf(yhAmount * qbbRate).longValue();
+        // XN802503Res qbbAccount = accountBO.getAccountByUserId(
+        // store.getSystemCode(), ESysAccount.SYS_ACCOUNT.getCode(),
+        // ECurrency.QBB.getCode());
+        // // 获取用户账户
+        // XN802503Res userAccount = accountBO.getAccountByUserId(
+        // store.getSystemCode(), userId, ECurrency.QBB.getCode());
+        // accountBO.doTransferAmount(systemCode,
+        // qbbAccount.getAccountNumber(), userAccount.getAccountNumber(),
+        // transAmount, EBizType.AJ_DPXF.getCode(),
+        // EBizType.AJ_DPXF.getValue());
+        // // 用户A和用户B和用户C分润值，从哪里来?
+        // Double o2oAUserRate = Double.valueOf(sysConfigBO.getConfigValue(
+        // systemCode, ECategoryType.O2O.getCode(), null,
+        // SysConstants.O2O_AUSER));
+        // Double o2oBUserRate = Double.valueOf(sysConfigBO.getConfigValue(
+        // systemCode, ECategoryType.O2O.getCode(), null,
+        // SysConstants.O2O_BUSER));
+        // Double o2oCUserRate = Double.valueOf(sysConfigBO.getConfigValue(
+        // systemCode, ECategoryType.O2O.getCode(), null,
+        // SysConstants.O2O_CUSER));
+        // Long frAmountA = Double.valueOf(yhAmount * o2oAUserRate * fcRate)
+        // .longValue();
+        // Long frAmountB = Double.valueOf(yhAmount * o2oBUserRate * fcRate)
+        // .longValue();
+        // Long frAmountC = Double.valueOf(yhAmount * o2oCUserRate * fcRate)
+        // .longValue();
+        // // 辖区管理用户获取的分润
+        // // 省合伙人
+        // Long proAmount = 0L;
+        // Long cityAmount = 0L;
+        // Long areaAmount = 0L;
+        // Double proRate = Double.valueOf(sysConfigBO.getConfigValue(
+        // systemCode, ECategoryType.O2O.getCode(), null,
+        // SysConstants.O2O_PROVINCE));
+        // Double cityRate = Double.valueOf(sysConfigBO.getConfigValue(
+        // systemCode, ECategoryType.O2O.getCode(), null,
+        // SysConstants.O2O_CITY));
+        // Double areaRate = Double.valueOf(sysConfigBO.getConfigValue(
+        // systemCode, ECategoryType.O2O.getCode(), null,
+        // SysConstants.O2O_AREA));
+        // // 省合伙人
+        // XN805060Res provinceRes = userBO.getPartnerUserInfo(
+        // store.getProvince(), null, null);
+        // if (provinceRes != null) {
+        // proAmount = Double.valueOf(yhAmount * proRate * fcRate)
+        // .longValue();
+        // }
+        // // 市合伙人
+        // XN805060Res cityRes = userBO.getPartnerUserInfo(
+        // store.getProvince(), store.getCity(), null);
+        // if (cityRes != null) {
+        // cityAmount = Double.valueOf(yhAmount * cityRate * fcRate)
+        // .longValue();
+        // }
+        // // 县合伙人
+        // XN805060Res areaRes = userBO.getPartnerUserInfo(
+        // store.getProvince(), store.getCity(), store.getArea());
+        // if (areaRes != null) {
+        // areaAmount = Double.valueOf(yhAmount * areaRate * fcRate)
+        // .longValue();
+        // }
+        // }
+        // return storePurchaseBO.saveStorePurchase(data);
     }
 
     @Override

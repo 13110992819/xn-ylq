@@ -13,7 +13,6 @@ import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.dto.req.XN808210Req;
-import com.xnjr.mall.dto.res.PKCodeRes;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
@@ -35,9 +34,10 @@ public class XN808210 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(storePurchaseAO.storePurchase(req.getUserId(),
+        return storePurchaseAO.storePurchase(req.getUserId(),
             req.getStoreCode(), req.getTicketCode(),
-            StringValidater.toLong(req.getAmount()), req.getPayType()));
+            StringValidater.toLong(req.getAmount()), req.getPayType(),
+            req.getIp());
     }
 
     /** 
@@ -47,7 +47,7 @@ public class XN808210 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808210Req.class);
         StringValidater.validateBlank(req.getUserId(), req.getStoreCode(),
-            req.getAmount());
+            req.getAmount(), req.getIp());
     }
 
 }

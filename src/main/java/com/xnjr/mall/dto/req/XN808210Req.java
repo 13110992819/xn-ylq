@@ -29,6 +29,9 @@ public class XN808210Req {
     // 支付类型
     private String payType;
 
+    // IP
+    private String ip;
+
     public String getPayType() {
         return payType;
     }
@@ -67,6 +70,14 @@ public class XN808210Req {
 
     public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
 }
