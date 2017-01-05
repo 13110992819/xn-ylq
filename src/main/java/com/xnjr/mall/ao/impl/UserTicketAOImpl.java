@@ -41,7 +41,6 @@ public class UserTicketAOImpl implements IUserTicketAO {
     @Override
     @Transactional
     public String buyTicket(String code, String userId) {
-        String ticketCode = null;
         StoreTicket storeTicket = storeTicketBO.getStoreTicket(code);
         Store store = storeBO.getStore(storeTicket.getStoreCode());
         // 判断店铺是否已开店
@@ -56,7 +55,7 @@ public class UserTicketAOImpl implements IUserTicketAO {
         data.setTicketCode(code);
         data.setUserId(userId);
         data.setSystemCode(storeTicket.getSystemCode());
-        ticketCode = userTicketBO.saveUserTicket(data);
+        String ticketCode = userTicketBO.saveUserTicket(data);
         // 获取账户信息进行划账
         XN802503Res fromAccount = accountBO.getAccountByUserId(
             storeTicket.getSystemCode(), userId, ECurrency.QBB.getCode());
