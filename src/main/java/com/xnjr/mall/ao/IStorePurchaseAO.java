@@ -5,6 +5,7 @@ import java.util.List;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StorePurchase;
+import com.xnjr.mall.dto.res.XN802180Res;
 
 public interface IStorePurchaseAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
@@ -19,8 +20,8 @@ public interface IStorePurchaseAO {
      * @create: 2016年12月29日 上午11:03:25 xieyj
      * @history:
      */
-    public String storePurchase(String userId, String storeCode,
-            String ticketCode, Long amount, String payType);
+    public XN802180Res storePurchase(String userId, String storeCode,
+            String ticketCode, Long amount, String payType, String ip);
 
     /**
      * 购买成功

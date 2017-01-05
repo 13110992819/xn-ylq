@@ -20,6 +20,7 @@ import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StorePurchase;
 import com.xnjr.mall.domain.UserTicket;
+import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.dto.res.XN805060Res;
 import com.xnjr.mall.enums.EBizType;
@@ -62,8 +63,8 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     // 3、划转各个账户金额，分销
     @Override
     @Transactional
-    public String storePurchase(String userId, String storeCode,
-            String ticketCode, Long amount, String payType) {
+    public XN802180Res storePurchase(String userId, String storeCode,
+            String ticketCode, Long amount, String payType, String ip) {
         Store store = storeBO.getStore(storeCode);
         String systemCode = store.getSystemCode();
         if (!EStoreStatus.ONLINE_OPEN.getCode().equals(store.getStatus())) {
