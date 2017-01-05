@@ -2,18 +2,18 @@ package com.xnjr.mall.dto.req;
 
 /**
  * @author: xieyj 
- * @since: 2017年1月4日 下午10:10:02 
+ * @since: 2016年12月25日 下午3:25:44 
  * @history:
  */
-public class XN808500Req {
+public class XN802519Req {
     // 系统编号(必填)
     private String systemCode;
 
     // 流水编号(必填)
     private String code;
 
-    // 业务类型(必填)
-    private String bizType;
+    // 兑换费率(必填)
+    private String rate;
 
     // 审批结果
     private String approveResult;
@@ -40,12 +40,12 @@ public class XN808500Req {
         this.code = code;
     }
 
-    public String getBizType() {
-        return bizType;
+    public String getRate() {
+        return rate;
     }
 
-    public void setBizType(String bizType) {
-        this.bizType = bizType;
+    public void setRate(String rate) {
+        this.rate = rate;
     }
 
     public String getApproveResult() {

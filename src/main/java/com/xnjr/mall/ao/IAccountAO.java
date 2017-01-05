@@ -19,12 +19,13 @@ public interface IAccountAO {
      * 审批兑换记录
      * @param systemCode
      * @param code
+     * @param bizType
      * @param approveResult
      * @param approver
      * @param approveNote 
-     * @create: 2017年1月5日 上午11:47:04 xieyj
+     * @create: 2017年1月5日 下午2:26:01 xieyj
      * @history:
      */
-    void approveExchange(String systemCode, String code, String approveResult,
-            String approver, String approveNote);
+    void approveExchangeAmount(String systemCode, String code, String bizType,
+            String approveResult, String approver, String approveNote);
 }

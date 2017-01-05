@@ -32,20 +32,17 @@ public interface IAccountBO {
             String toAccountNumber, Long amount, String bizType, String bizNote);
 
     /**
-     * 兑换金额
+     * 兑换金额审批
      * @param systemCode
-     * @param fromAccountNumber
-     * @param toAccountNumber
-     * @param transAmount
-     * @param rate
-     * @param bizType
-     * @param bizNote 
-     * @create: 2017年1月4日 下午9:09:09 xieyj
+     * @param code
+     * @param approveResult
+     * @param approver
+     * @param approveNote 
+     * @create: 2017年1月5日 下午2:16:02 xieyj
      * @history:
      */
-    public void doExchangeAmount(String systemCode, String fromAccountNumber,
-            String toAccountNumber, Long transAmount, Double rate,
-            String bizType, String bizNote);
+    public void doExchangeAmount(String systemCode, String code, String rate,
+            String approveResult, String approver, String approveNote);
 
     /**
      * 根据用户编号和币种获取账户
@@ -58,5 +55,4 @@ public interface IAccountBO {
      */
     public XN802503Res getAccountByUserId(String systemCode, String userId,
             String currency);
-
 }
