@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.dto.req.XN802503Req;
 import com.xnjr.mall.dto.req.XN802512Req;
+import com.xnjr.mall.dto.req.XN802518Req;
 import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.http.BizConnecter;
@@ -61,5 +62,25 @@ public class AccountBOImpl implements IAccountBO {
         req.setBizNote(bizNote);
         BizConnecter.getBizData("802512", JsonUtils.object2Json(req),
             Object.class);
+    }
+
+    /** 
+     * @see com.xnjr.mall.bo.IAccountBO#doExchangeAmount(java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Double, java.lang.String, java.lang.String)
+     */
+    @Override
+    public void doExchangeAmount(String systemCode, String fromAccountNumber,
+            String toAccountNumber, Long transAmount, Double rate,
+            String bizType, String bizNote) {
+        XN802518Req req = new XN802518Req();
+        req.setSystemCode(systemCode);
+        req.setFromAccountNumber(fromAccountNumber);
+        req.setToAccountNumber(toAccountNumber);
+        req.setTransAmount(String.valueOf(transAmount));
+        req.setRate(String.valueOf(rate));
+        req.setBizType(bizType);
+        req.setBizNote(bizNote);
+        BizConnecter.getBizData("802518", JsonUtils.object2Json(req),
+            Object.class);
+
     }
 }

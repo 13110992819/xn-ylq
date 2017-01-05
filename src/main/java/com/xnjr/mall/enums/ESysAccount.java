@@ -17,7 +17,10 @@ import java.util.Map;
  * @history:
  */
 public enum ESysAccount {
-    SYS_ACCOUNT("SYS_ACCOUNT", "系统账户");
+    SYS_ACCOUNT("SYS_ACCOUNT", "系统账户"), CNY("A2016100000000000000", "人民币"), FRB(
+            "A2016100000000000001", "分润"), GXJL("A2016100000000000002", "贡献奖励"), QBB(
+            "A2016100000000000003", "钱包币"), GWB("A2016100000000000004", "购物币"), HBB(
+            "A2016100000000000005", "红包币"), HBYJ("A2016100000000000006", "红包业绩");
 
     public static Map<String, ESysAccount> getDirectionMap() {
         Map<String, ESysAccount> map = new HashMap<String, ESysAccount>();

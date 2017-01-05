@@ -28,13 +28,12 @@ public interface IOrderAO {
 
     /**
      * 批量提交订单
-     * @param userId
-     * @param data
-     * @return 
-     * @create: 2016年5月25日 上午10:16:02 xieyj
+     * @param cartCodeList
+     * @param data 
+     * @create: 2017年1月3日 下午8:16:11 xieyj
      * @history:
      */
-    public String commitOrder(List<String> cartCodeList, Order data);
+    public void commitOrder(List<String> cartCodeList, Order data);
 
     /**
      * 支付订单,待发货
@@ -44,6 +43,15 @@ public interface IOrderAO {
      * @history:
      */
     public void toPayOrder(String code, String channel);
+
+    /**
+     * 批量支付订单，待发货
+     * @param codeList
+     * @param channel 
+     * @create: 2017年1月4日 下午3:38:10 xieyj
+     * @history:
+     */
+    public void toPayOrderList(List<String> codeList, String channel);
 
     /**
      * 催货

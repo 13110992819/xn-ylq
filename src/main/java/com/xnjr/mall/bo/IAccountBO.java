@@ -32,6 +32,22 @@ public interface IAccountBO {
             String toAccountNumber, Long amount, String bizType, String bizNote);
 
     /**
+     * 兑换金额
+     * @param systemCode
+     * @param fromAccountNumber
+     * @param toAccountNumber
+     * @param transAmount
+     * @param rate
+     * @param bizType
+     * @param bizNote 
+     * @create: 2017年1月4日 下午9:09:09 xieyj
+     * @history:
+     */
+    public void doExchangeAmount(String systemCode, String fromAccountNumber,
+            String toAccountNumber, Long transAmount, Double rate,
+            String bizType, String bizNote);
+
+    /**
      * 根据用户编号和币种获取账户
      * @param systemCode
      * @param userId

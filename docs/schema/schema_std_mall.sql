@@ -379,6 +379,7 @@ CREATE TABLE `to2o_store_ticket` (
 -- ----------------------------
 DROP TABLE IF EXISTS `to2o_user_ticket`;
 CREATE TABLE `to2o_user_ticket` (
+  `code` varchar(32) DEFAULT NULL COMMENT '编号',
   `user_id` varchar(32) NOT NULL COMMENT '用户编号',
   `ticket_code` varchar(32) DEFAULT NULL COMMENT '折扣券编号',
   `create_datetime` datetime DEFAULT NULL COMMENT '购买时间',

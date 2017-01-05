@@ -8,10 +8,14 @@
  */
 package com.xnjr.mall.ao.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +86,6 @@ public class OrderAOImpl implements IOrderAO {
     public String commitOrder(String productCode, Integer quantity, Order data) {
         // 计算订单总价
         Product product = productBO.getProduct(productCode);
-        data.setSystemCode(product.getSystemCode());
         if (product.getQuantity() != null) {
             if ((product.getQuantity() - quantity) < 0) {
                 throw new BizException("xn0000", "该商品库存量不足，无法购买");
@@ -108,6 +111,7 @@ public class OrderAOImpl implements IOrderAO {
         }
         // 设置订单所属公司
         data.setCompanyCode(product.getCompanyCode());
+        data.setSystemCode(product.getSystemCode());
         // 订单号生成
         String code = OrderNoGenerater.generateM(EGeneratePrefix.ORDER
             .getCode());
@@ -125,24 +129,48 @@ public class OrderAOImpl implements IOrderAO {
      */
     @Override
     @Transactional
-    public String commitOrder(List<String> cartCodeList, Order data) {
-        // 获取购物车中的记录，形成订单产品关联表
-        if (CollectionUtils.isEmpty(cartCodeList)) {
-            throw new BizException("xn0000", "请选择购物车中的货物");
+    public void commitOrder(List<String> cartCodeList, Order data) {
+        // 按公司编号进行拆单
+        // 遍历获取公司编号列表
+        Map<String, String> companyMap = new HashMap<String, String>();
+        for (String cartCode : cartCodeList) {
+            Cart cart = cartBO.getCart(cartCode);
+            Product product = productBO.getProduct(cart.getProductCode());
+            String companyCode = product.getCompanyCode();
+            companyMap.put(companyCode, companyCode);
         }
-        // 订单号生成
-        String code = OrderNoGenerater.generateM(EGeneratePrefix.ORDER
+        // 遍历产品编号
+        for (String company : companyMap.keySet()) {
+            List<String> cartsCompany = new ArrayList<String>();
+            for (String cartCode : cartCodeList) {
+                Cart cart = cartBO.getCart(cartCode);
+                Product product = productBO.getProduct(cart.getProductCode());
+                String companyCode = product.getCompanyCode();
+                if (company.equals(companyCode)) {
+                    cartsCompany.add(cartCode);
+                }
+            }
+            commitOneOrder(cartsCompany, data);
+        }
+    }
+
+    private String commitOneOrder(List<String> cartCodeList, Order data) {
+        String code = OrderNoGenerater.generateME(EGeneratePrefix.ORDER
             .getCode());
         data.setCode(code);
-
         // 落地订单产品关联信息 计算订单总金额
         Long amount1 = 0L;
         Long amount2 = 0L;
         Long amount3 = 0L;
-        String companyCode = "";
+        String companyCode = null;
+        String systemCode = null;
         for (String cartCode : cartCodeList) {
             Cart cart = cartBO.getCart(cartCode);
             Product product = productBO.getProduct(cart.getProductCode());
+            if (StringUtils.isBlank(systemCode)) {
+                // 设置系统编号
+                systemCode = cart.getSystemCode();
+            }
             if (product.getQuantity() != null) {
                 if ((product.getQuantity() - cart.getQuantity()) < 0) {
                     throw new BizException("xn0000", "商品[" + product.getName()
@@ -170,8 +198,9 @@ public class OrderAOImpl implements IOrderAO {
         data.setAmount2(amount2);
         data.setAmount3(amount3);
         data.setCompanyCode(companyCode);
+        data.setSystemCode(systemCode);
         // 计算订单运费
-        Long yunfei = totalYunfei(data.getSystemCode(), companyCode, amount2);
+        Long yunfei = totalYunfei(systemCode, companyCode, amount2);
         data.setYunfei(yunfei);
         // 保存订单
         orderBO.saveOrder(data);
@@ -191,6 +220,13 @@ public class OrderAOImpl implements IOrderAO {
                 systemCode, null, companyCode, SysConstants.SP_YUNFEI)) * 1000;
         }
         return yunfei;
+    }
+
+    @Override
+    public void toPayOrderList(List<String> codeList, String channel) {
+        for (String orderCode : codeList) {
+            this.toPayOrder(orderCode, channel);
+        }
     }
 
     @Override
