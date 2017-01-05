@@ -14,8 +14,8 @@ package com.xnjr.mall.enums;
  * @history:
  */
 public enum EUserKind {
-    F1("f1", "C端用户"), F2("f2", "渠道商/B端用户"), Operator("01", "平台运营商"), Partner(
-            "11", "合伙人");
+    F1("f1", "C端用户"), F2("f2", "渠道商/B端用户"), FCB("ff3", "C/B端用户"), Operator(
+            "01", "平台运营商"), Partner("11", "合伙人");
 
     EUserKind(String code, String value) {
         this.code = code;

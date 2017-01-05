@@ -18,6 +18,7 @@ import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StoreTicket;
 import com.xnjr.mall.dto.req.XN805042Req;
+import com.xnjr.mall.dto.res.XN805901Res;
 import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.EStoreTicketStatus;
@@ -62,11 +63,13 @@ public class StoreAOImpl implements IStoreAO {
         if (CollectionUtils.isNotEmpty(list)) {
             throw new BizException("xn000000", "该名称已存在");
         } else {
-            // 店铺推荐人传手机号过来，转化成用户编号
-            String userReferee = userBO.getUserId(data.getUserReferee(),
-                EUserKind.F1.getCode(), data.getSystemCode());
-            if (StringUtils.isBlank(userReferee)) {
-                throw new BizException("xn000000", "该推荐人不存在");
+            if (StringUtils.isNotBlank(data.getUserReferee())) {
+                // 店铺推荐人传手机号过来，转化成用户编号，C端和B端
+                XN805901Res refereeRes = userBO.getRemoteUser(
+                    data.getUserReferee(), data.getUserReferee());
+                if (refereeRes == null) {
+                    throw new BizException("xn000000", "该推荐人不存在");
+                }
             }
             // 注册B端用户，无推荐人
             XN805042Req req = new XN805042Req();
@@ -77,7 +80,6 @@ public class StoreAOImpl implements IStoreAO {
             req.setSystemCode(data.getSystemCode());
             String userId = userBO.doSaveUser(req);
             data.setOwner(userId);
-            data.setUserReferee(userReferee);
             return storeBO.saveStore(data, EStoreStatus.ONLINE_CLOSE.getCode());
         }
     }

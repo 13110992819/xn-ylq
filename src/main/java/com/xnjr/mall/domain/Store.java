@@ -126,6 +126,39 @@ public class Store extends ABaseDO {
     // 可使用折扣券列表
     private List<StoreTicket> storeTickets;
 
+    // 用户经度（选填）
+    private String userLongitude;
+
+    // 用户纬度（选填）
+    private String userLatitude;
+
+    // 距离
+    private String distance;
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getUserLongitude() {
+        return userLongitude;
+    }
+
+    public void setUserLongitude(String userLongitude) {
+        this.userLongitude = userLongitude;
+    }
+
+    public String getUserLatitude() {
+        return userLatitude;
+    }
+
+    public void setUserLatitude(String userLatitude) {
+        this.userLatitude = userLatitude;
+    }
+
     public String getMobile() {
         return mobile;
     }

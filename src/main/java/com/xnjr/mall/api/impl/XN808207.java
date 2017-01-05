@@ -43,6 +43,8 @@ public class XN808207 extends AProcessor {
         condition.setArea(req.getArea());
         condition.setStatus(req.getStatus());
         condition.setSystemCode(req.getSystemCode());
+        condition.setUserLatitude(req.getUserLatitude());
+        condition.setUserLongitude(req.getUserLongitude());
 
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {

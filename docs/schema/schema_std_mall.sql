@@ -310,7 +310,7 @@ CREATE TABLE `to2o_store` (
   `ui_location` varchar(32) DEFAULT NULL COMMENT 'UI位置',
   `ui_order` int(11) DEFAULT NULL COMMENT 'UI序号',
   `status` char(1) DEFAULT NULL COMMENT '状态(1 上线，0 下线)',
-  `approver` datetime DEFAULT NULL COMMENT '审核人',
+  `approver` varchar(32) DEFAULT NULL COMMENT '审核人',
   `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
