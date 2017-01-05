@@ -2,13 +2,16 @@ package com.xnjr.mall.api.impl;
 
 import com.xnjr.mall.ao.IAccountAO;
 import com.xnjr.mall.api.AProcessor;
+import com.xnjr.mall.common.JsonUtil;
+import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.dto.req.XN808500Req;
+import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
 
 /**
- * 不同账户间兑换
+ * 不同币种间账户兑换审批
  * @author: xieyj 
  * @since: 2017年1月4日 下午9:06:32 
  * @history:
@@ -24,9 +27,10 @@ public class XN808500 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        // accountAO.exchangeAmount(systemCode, userId, type, transAmount,
-        // bizType, bizNote);
-        return null;
+        accountAO.approveExchangeAmount(req.getSystemCode(), req.getCode(),
+            req.getBizType(), req.getApproveResult(), req.getApprover(),
+            req.getApproveNote());
+        return new BooleanRes(true);
     }
 
     /** 
@@ -34,8 +38,9 @@ public class XN808500 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        // req = JsonUtil.json2Bean(inputparams, XN808459Req.class);
-        // StringValidater.validateBlank(req.getId());
+        req = JsonUtil.json2Bean(inputparams, XN808500Req.class);
+        StringValidater.validateBlank(req.getSystemCode(), req.getCode(),
+            req.getBizType(), req.getApproveResult(), req.getApprover(),
+            req.getApproveNote());
     }
-
 }
