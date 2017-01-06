@@ -23,6 +23,7 @@ import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StorePurchase;
 import com.xnjr.mall.domain.UserTicket;
 import com.xnjr.mall.dto.req.XN802180Req;
+import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.dto.res.XN805060Res;
@@ -78,7 +79,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         Double fcRate = 0.0d;
         // 优惠金额
         Long yhAmount = amount;
-        String remark = store.getName() + " 消费" + amount / 1000 + "元";
+        String remark = store.getName() + " 消费" + amount / 1000.00 + "元";
         if (StringUtils.isBlank(ticketCode)) {
             fcRate = store.getRate1();
         } else {
@@ -101,13 +102,66 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                     + ticketCode + "]";
         }
         if (EPayType.NBHZ.getCode().equals(payType)) {
-            // 查询贡献奖励余额
-            // 查询分润余额
+            // 余额支付业务规则：优先扣贡献奖励，其次扣分润
+            Long gxjlAmount = 0L;
+            Long frAmount = 0L;
+
+            // 查询用户贡献奖励账户
+            XN802503Res gxjlAccount = accountBO.getAccountByUserId(
+                store.getSystemCode(), userId, ECurrency.GXJL.getCode());
+            // 查询用户分润账户
+            XN802503Res frAccount = accountBO.getAccountByUserId(
+                store.getSystemCode(), userId, ECurrency.FRB.getCode());
             // 1、贡献奖励+分润<yhAmount 余额不足
+            if (gxjlAccount.getAmount() + frAccount.getAmount() < yhAmount) {
+                throw new BizException("xn0000", "余额不足");
+            }
             // 2、贡献奖励=0 直接扣分润
+            if (gxjlAccount.getAmount() <= 0L) {
+                frAmount = yhAmount;
+            }
             // 3、0<贡献奖励<yhAmount 先扣贡献奖励，再扣分润
+            if (gxjlAccount.getAmount() > 0L
+                    && gxjlAccount.getAmount() < yhAmount) {
+                gxjlAmount = gxjlAccount.getAmount();
+                frAmount = yhAmount - gxjlAmount;
+            }
             // 4、贡献奖励>=yhAmount 直接扣贡献奖励
-            this.purchaseSuccess(systemCode, store, yhAmount, userId, fcRate);
+            if (gxjlAccount.getAmount() >= yhAmount) {
+                gxjlAmount = yhAmount;
+            }
+
+            // 落地本地系统消费记录
+            StorePurchase data = new StorePurchase();
+            data.setUserId(userId);
+            data.setStoreCode(storeCode);
+            data.setPayType(EPayType.NBHZ.getCode());
+            data.setAmount2(gxjlAmount);
+            data.setAmount3(frAmount);
+            data.setStatus(EStorePurchaseStatus.PAYED.getCode());
+            data.setSystemCode(systemCode);
+            data.setRemark(remark);
+            storePurchaseBO.saveStorePurchase(data);
+
+            // 查询商家账户，加钱
+            XN802503Res sjAccount = accountBO.getAccountByUserId(systemCode,
+                store.getOwner(), ECurrency.CNY.getCode());
+            if (gxjlAmount > 0L) {
+                accountBO
+                    .doTransferAmount(systemCode,
+                        gxjlAccount.getAccountNumber(),
+                        sjAccount.getAccountNumber(), gxjlAmount,
+                        EBizType.AJ_DPXF.getCode(), "店铺" + store.getName()
+                                + "消费买单");
+            }
+            if (frAmount > 0L) {
+                accountBO.doTransferAmount(systemCode,
+                    frAccount.getAccountNumber(), sjAccount.getAccountNumber(),
+                    frAmount, EBizType.AJ_DPXF.getCode(),
+                    "店铺" + store.getName() + "消费买单");
+            }
+            return new BooleanRes(true);
+
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
             // 获取微信APP支付信息
             XN802180Req req = new XN802180Req();
