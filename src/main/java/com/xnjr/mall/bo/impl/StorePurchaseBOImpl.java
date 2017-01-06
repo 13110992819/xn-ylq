@@ -83,7 +83,7 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
             data.setCode(code);
             data.setStatus(status);
             data.setPayDatetime(new Date());
-            count = storePurchaseDAO.delete(data);
+            count = storePurchaseDAO.updateStatus(data);
         }
         return count;
     }

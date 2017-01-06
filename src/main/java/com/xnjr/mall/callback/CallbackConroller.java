@@ -73,6 +73,7 @@ public class CallbackConroller {
             // 处理业务开始
             // ------------------------------
             try {
+                logger.info("流水编号为：" + jourCode);
                 storePurchaseAO.paySuccess(jourCode);
             } catch (Exception e) {
                 logger.info("支付回调异常");
