@@ -96,6 +96,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                     + ticketCode + "]";
         }
         if (EPayType.NBHZ.getCode().equals(payType)) {
+            this.purchaseSuccess(systemCode, store, yhAmount, userId, fcRate);
         } else {
 
         }
@@ -104,7 +105,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     @Override
     public void purchaseSuccess(String systemCode, Store store, Long yhAmount,
-            String userId, Long fcRate) {
+            String userId, Double fcRate) {
         // 1,用户C可以得到消费额35%的钱包币,平台扣除钱包币
         Double qbbRate = Double.valueOf(SysConstants.CUSERQBBRATE);
         Long transAmount = Double.valueOf(yhAmount * qbbRate).longValue();

@@ -28,6 +28,9 @@
 			<if test="ticketCode != null and ticketCode != '' ">
 				AND t.ticket_code = #{ticketCode}
 			</if>
+			<if test="storeCode != null and storeCode != '' ">
+				AND st.store_code = #{storeCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_userTicket" parameterType="userTicket" resultMap="userTicket_DB_Result">
@@ -54,7 +57,7 @@
 
 	<select id="select_userTicket_count" parameterType="userTicket"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM to2o_user_ticket t
+		SELECT count(1) FROM to2o_user_ticket t left join to2o_store_ticket st on t.ticket_code = st.code
 		<include refid="where_condition" />
 	</select>
 

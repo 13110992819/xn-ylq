@@ -80,7 +80,7 @@ public class UserTicketBOImpl extends PaginableBOImpl<UserTicket> implements
             condition.setCode(code);
             data = userTicketDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "异常");
+                throw new BizException("xn0000", "折扣券不存在");
             }
         }
         return data;

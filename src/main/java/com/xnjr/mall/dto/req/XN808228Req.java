@@ -22,8 +22,19 @@ public class XN808228Req extends APageReq {
     // 用户ID（必填）
     private String userId;
 
+    // 店铺编号（选填）
+    private String storeCode;
+
     // 状态（选填）
     private String status;
+
+    public String getStoreCode() {
+        return storeCode;
+    }
+
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
+    }
 
     public String getUserId() {
         return userId;
