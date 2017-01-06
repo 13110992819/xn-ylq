@@ -107,10 +107,10 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             Long frAmount = 0L;
 
             Double gxjl2cnyRate = Double.valueOf(sysConfigBO.getConfigValue(
-                systemCode, ECategoryType.O2O.getCode(), null,
+                systemCode, ECategoryType.QBHL.getCode(), null,
                 SysConstants.GXJL2CNY));
             Double fr2cnyRate = Double.valueOf(sysConfigBO.getConfigValue(
-                systemCode, ECategoryType.O2O.getCode(), null,
+                systemCode, ECategoryType.QBHL.getCode(), null,
                 SysConstants.FR2CNY));
 
             // 查询用户贡献奖励账户
