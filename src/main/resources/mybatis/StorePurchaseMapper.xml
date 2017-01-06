@@ -5,17 +5,32 @@
 	<resultMap id="storePurchase_DB_Result" type="storePurchase">
 		<result column="code" property="code" />
 		<result column="user_id" property="userId" />
-		<result column="amount" property="amount" />
+		<result column="pay_type" property="payType" />
+		<result column="amount1" property="amount1" />
+		<result column="amount2" property="amount2" />
+		<result column="amount3" property="amount3" />
 		<result column="back_amount" property="backAmount" />
+		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />
+		<result column="pay_datetime" property="payDatetime" />
 		<result column="remark" property="remark" />
 		<result column="store_code" property="storeCode" />
 		<result column="system_code" property="systemCode" />
+		<result column="jour_code" property="jourCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="jourCode != null and jourCode != '' ">
+				AND t.jour_code = #{jourCode}
+			</if>
+			<if test="payType != null and payType != '' ">
+				AND t.pay_type = #{payType}
 			</if>
 		</trim>
 	</sql>
@@ -23,12 +38,18 @@
 		SELECT
 		t.code
 		,t.user_id
-		,t.amount
+		,t.pay_type
+		,t.amount1
+		,t.amount2
+		,t.amount3
 		,t.back_amount
+		,t.status
 		,t.create_datetime
+		,t.pay_datetime
 		,t.remark
 		,t.store_code
 		,t.system_code
+		,t.jour_code
 		FROM
 		to2o_store_purchase t
 		<include refid="where_condition" />
@@ -50,22 +71,32 @@
 		to2o_store_purchase(
 		code
 		,user_id
-		,amount
+		,pay_type
+		,amount1
+		,amount2
+		,amount3
 		,back_amount
+		,status
 		,create_datetime
 		,remark
 		,store_code
 		,system_code
+		,jour_code
 		)
 		VALUES(
 		#{code}
 		,#{userId}
-		,#{amount}
+		,#{payType}
+		,#{amount1}
+		,#{amount2}
+		,#{amount3}
 		,#{backAmount}
+		,#{status}
 		,#{createDatetime}
 		,#{remark}
 		,#{storeCode}
 		,#{systemCode}
+		,#{jourCode}
 		)
 	</insert>
 
@@ -79,6 +110,14 @@
 		,remark = #{remark}
 		,store_code = #{storeCode}
 		,system_code = #{systemCode}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_status" parameterType="storePurchase">
+		UPDATE to2o_store_purchase
+		SET
+		status = #{status}
+		,pay_datetime = #{payDatetime}
 		WHERE code = #{code}
 	</update>
 

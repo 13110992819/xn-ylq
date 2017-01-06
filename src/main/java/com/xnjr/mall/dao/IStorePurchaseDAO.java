@@ -5,5 +5,7 @@ import com.xnjr.mall.domain.StorePurchase;
 
 //dao层 
 public interface IStorePurchaseDAO extends IBaseDAO<StorePurchase> {
-	String NAMESPACE = IStorePurchaseDAO.class.getName().concat(".");
+    String NAMESPACE = IStorePurchaseDAO.class.getName().concat(".");
+
+    public int updateStatus(StorePurchase data);
 }

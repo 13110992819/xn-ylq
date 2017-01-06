@@ -17,4 +17,6 @@ public interface IStorePurchaseBO extends IPaginableBO<StorePurchase> {
 
     public StorePurchase getStorePurchase(String code);
 
+    public int refreshStatus(String code, String status);
+
 }

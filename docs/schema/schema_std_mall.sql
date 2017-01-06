@@ -339,18 +339,26 @@ CREATE TABLE `to2o_store_action` (
 -- ----------------------------
 --  Table structure for `to2o_store_purchase`
 -- ----------------------------
-DROP TABLE IF EXISTS `to2o_store_purchase`;
 CREATE TABLE `to2o_store_purchase` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
-  `amount` bigint(20) DEFAULT NULL COMMENT '积分数量',
+  `pay_type` varchar(4) DEFAULT NULL COMMENT '支付方式',
+  `amount1` bigint(20) DEFAULT NULL COMMENT '人民币',
+  `amount2` bigint(20) DEFAULT NULL COMMENT '虚拟币1',
+  `amount3` bigint(20) DEFAULT NULL COMMENT '虚拟币2',
   `back_amount` bigint(20) DEFAULT NULL COMMENT '返现金额',
-  `create_datetime` datetime DEFAULT NULL COMMENT '消费时间',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `create_datetime` datetime DEFAULT NULL COMMENT '消费提交时间',
+  `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `store_code` varchar(32) DEFAULT NULL COMMENT '商家编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  `jour_code` varchar(32) DEFAULT NULL COMMENT '橙账本对应流水编号',
+  `amount` bigint(20) DEFAULT NULL COMMENT '待删除',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 -- ----------------------------
 --  Table structure for `to2o_store_ticket`

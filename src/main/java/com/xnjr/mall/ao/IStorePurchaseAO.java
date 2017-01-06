@@ -5,7 +5,6 @@ import java.util.List;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StorePurchase;
-import com.xnjr.mall.dto.res.XN802180Res;
 
 public interface IStorePurchaseAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
@@ -20,7 +19,7 @@ public interface IStorePurchaseAO {
      * @create: 2016年12月29日 上午11:03:25 xieyj
      * @history:
      */
-    public XN802180Res storePurchase(String userId, String storeCode,
+    public Object storePurchase(String userId, String storeCode,
             String ticketCode, Long amount, String payType, String ip);
 
     /**
@@ -44,5 +43,14 @@ public interface IStorePurchaseAO {
     public List<StorePurchase> queryStorePurchaseList(StorePurchase condition);
 
     public StorePurchase getStorePurchase(String code);
+
+    /**
+     * 根据流水编号，找到对应消费记录，更新支付状态
+     * @param jourCode
+     * @return 
+     * @create: 2017年1月6日 下午1:02:30 haiqingzheng
+     * @history:
+     */
+    public int paySuccess(String jourCode);
 
 }

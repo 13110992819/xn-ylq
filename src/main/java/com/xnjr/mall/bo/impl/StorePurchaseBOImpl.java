@@ -74,4 +74,17 @@ public class StorePurchaseBOImpl extends PaginableBOImpl<StorePurchase>
         }
         return data;
     }
+
+    @Override
+    public int refreshStatus(String code, String status) {
+        int count = 0;
+        if (StringUtils.isNotBlank(status)) {
+            StorePurchase data = new StorePurchase();
+            data.setCode(code);
+            data.setStatus(status);
+            data.setPayDatetime(new Date());
+            count = storePurchaseDAO.delete(data);
+        }
+        return count;
+    }
 }

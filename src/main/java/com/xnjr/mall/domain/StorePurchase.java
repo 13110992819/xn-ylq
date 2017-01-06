@@ -20,14 +20,29 @@ public class StorePurchase extends ABaseDO {
     // 用户编号
     private String userId;
 
-    // 消费金额
-    private Long amount;
+    // 支付方式
+    private String payType;
+
+    // 人民币消费金额
+    private Long amount1;
+
+    // 虚拟币1消费金额
+    private Long amount2;
+
+    // 虚拟币2消费金额
+    private Long amount3;
 
     // 返现金额
     private Long backAmount;
 
+    // 状态
+    private String status;
+
     // 消费时间
     private Date createDatetime;
+
+    // 实际支付时间
+    private Date payDatetime;
 
     // 备注
     private String remark;
@@ -38,28 +53,47 @@ public class StorePurchase extends ABaseDO {
     // 系统编号
     private String systemCode;
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+    // 流水编号
+    private String jourCode;
 
     public String getCode() {
         return code;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getUserId() {
         return userId;
     }
 
-    public Long getAmount() {
-        return amount;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public Long getAmount1() {
+        return amount1;
+    }
+
+    public void setAmount1(Long amount1) {
+        this.amount1 = amount1;
+    }
+
+    public Long getAmount2() {
+        return amount2;
+    }
+
+    public void setAmount2(Long amount2) {
+        this.amount2 = amount2;
+    }
+
+    public Long getAmount3() {
+        return amount3;
+    }
+
+    public void setAmount3(Long amount3) {
+        this.amount3 = amount3;
     }
 
     public Long getBackAmount() {
@@ -70,6 +104,14 @@ public class StorePurchase extends ABaseDO {
         this.backAmount = backAmount;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Date getCreateDatetime() {
         return createDatetime;
     }
@@ -78,28 +120,52 @@ public class StorePurchase extends ABaseDO {
         this.createDatetime = createDatetime;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public Date getPayDatetime() {
+        return payDatetime;
+    }
+
+    public void setPayDatetime(Date payDatetime) {
+        this.payDatetime = payDatetime;
     }
 
     public String getRemark() {
         return remark;
     }
 
-    public void setStoreCode(String storeCode) {
-        this.storeCode = storeCode;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getStoreCode() {
         return storeCode;
     }
 
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
     }
 
     public String getSystemCode() {
         return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getJourCode() {
+        return jourCode;
+    }
+
+    public void setJourCode(String jourCode) {
+        this.jourCode = jourCode;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 
 }

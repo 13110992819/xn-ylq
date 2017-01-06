@@ -2,6 +2,7 @@ package com.xnjr.mall.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,12 @@ import com.xnjr.mall.bo.IStoreTicketBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.IUserTicketBO;
 import com.xnjr.mall.bo.base.Paginable;
+import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StorePurchase;
 import com.xnjr.mall.domain.UserTicket;
+import com.xnjr.mall.dto.req.XN802180Req;
 import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.dto.res.XN805060Res;
@@ -27,11 +30,13 @@ import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECategoryType;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EPayType;
+import com.xnjr.mall.enums.EStorePurchaseStatus;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.EStoreTicketType;
 import com.xnjr.mall.enums.ESysAccount;
 import com.xnjr.mall.enums.EUserTicketStatus;
 import com.xnjr.mall.exception.BizException;
+import com.xnjr.mall.http.BizConnecter;
 
 @Service
 public class StorePurchaseAOImpl implements IStorePurchaseAO {
@@ -63,7 +68,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     // 3、划转各个账户金额，分销
     @Override
     @Transactional
-    public XN802180Res storePurchase(String userId, String storeCode,
+    public Object storePurchase(String userId, String storeCode,
             String ticketCode, Long amount, String payType, String ip) {
         Store store = storeBO.getStore(storeCode);
         String systemCode = store.getSystemCode();
@@ -96,8 +101,40 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                     + ticketCode + "]";
         }
         if (EPayType.NBHZ.getCode().equals(payType)) {
-        } else {
+            // 查询贡献奖励余额
+            // 查询分润余额
+            // 1、贡献奖励+分润<yhAmount 余额不足
+            // 2、贡献奖励=0 直接扣分润
+            // 3、0<贡献奖励<yhAmount 先扣贡献奖励，再扣分润
+            // 4、贡献奖励>=yhAmount 直接扣贡献奖励
 
+        } else if (EPayType.WEIXIN.getCode().equals(payType)) {
+            // 获取微信APP支付信息
+            XN802180Req req = new XN802180Req();
+            req.setSystemCode(systemCode);
+            req.setCompanyCode(systemCode);
+            req.setUserId(userId);
+            req.setBizType(EBizType.AJ_GW.getCode());
+            req.setBizNote(store.getName() + "——消费买单");
+            req.setBody("正汇钱包—优店");
+            req.setTotalFee(String.valueOf(yhAmount));
+            req.setSpbillCreateIp(ip);
+            XN802180Res res = BizConnecter.getBizData("802180",
+                JsonUtil.Object2Json(req), XN802180Res.class);
+
+            // 落地本地系统消费记录，状态为未支付
+            StorePurchase data = new StorePurchase();
+            data.setUserId(userId);
+            data.setStoreCode(storeCode);
+            data.setPayType(EPayType.WEIXIN.getCode());
+            data.setAmount1(amount);
+            data.setStatus(EStorePurchaseStatus.NEW.getCode());
+            data.setSystemCode(systemCode);
+            data.setRemark(remark);
+            data.setJourCode(res.getJourCode());
+            storePurchaseBO.saveStorePurchase(data);
+
+            return res;
         }
         return null;
     }
@@ -203,5 +240,18 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     @Override
     public StorePurchase getStorePurchase(String code) {
         return storePurchaseBO.getStorePurchase(code);
+    }
+
+    @Override
+    public int paySuccess(String jourCode) {
+        StorePurchase condition = new StorePurchase();
+        condition.setJourCode(jourCode);
+        List<StorePurchase> result = storePurchaseBO
+            .queryStorePurchaseList(condition);
+        if (CollectionUtils.isEmpty(result)) {
+            throw new BizException("XN000000", "找不到对应的消费记录");
+        }
+        return storePurchaseBO.refreshStatus(result.get(0).getCode(),
+            EStorePurchaseStatus.PAYED.getCode());
     }
 }
