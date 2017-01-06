@@ -234,26 +234,33 @@ public class StoreAOImpl implements IStoreAO {
     public Paginable<Store> queryStorePage(int start, int limit, Store condition) {
         Paginable<Store> paginable = storeBO.getPaginable(start, limit,
             condition);
-        // List<Store> list = paginable.getList();
-        // String fromUser = condition.getFromUser();
-        // for (Store store : list) {
-        // if (StringUtils.isBlank(fromUser)) {
-        // store.setIsDZ(false);
-        // } else {
-        // if (null != storeActionBO.getStoreActionByUser(store.getCode(),
-        // EActionType.DZ, condition.getFromUser())) {
-        // store.setIsDZ(true);
-        // } else {
-        // store.setIsDZ(false);
-        // }
-        // }
-        // }
+        List<Store> storeList = paginable.getList();
+        if (CollectionUtils.isNotEmpty(storeList)) {
+            for (Store store : storeList) {
+                StoreTicket stCondition = new StoreTicket();
+                stCondition.setStoreCode(store.getCode());
+                stCondition.setStatus(EStoreTicketStatus.ONLINE.getCode());
+                List<StoreTicket> storeTickets = storeTicketBO
+                    .queryStoreTicketList(stCondition);
+                store.setStoreTickets(storeTickets);
+            }
+        }
         return paginable;
     }
 
     @Override
     public List<Store> queryStoreList(Store condition) {
         List<Store> list = storeBO.queryStoreList(condition);
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (Store store : list) {
+                StoreTicket stCondition = new StoreTicket();
+                stCondition.setStoreCode(store.getCode());
+                stCondition.setStatus(EStoreTicketStatus.ONLINE.getCode());
+                List<StoreTicket> storeTickets = storeTicketBO
+                    .queryStoreTicketList(stCondition);
+                store.setStoreTickets(storeTickets);
+            }
+        }
         // String fromUser = condition.getFromUser();
         // for (Store store : list) {
         // if (StringUtils.isBlank(fromUser)) {

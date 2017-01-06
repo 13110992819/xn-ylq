@@ -31,6 +31,17 @@ public class XN808224Req extends APageReq {
     // 商家编号（选填）
     private String storeCode;
 
+    // 用户编号(选填)
+    private String userId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getName() {
         return name;
     }

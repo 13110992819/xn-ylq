@@ -56,6 +56,29 @@ public class StoreTicket extends ABaseDO {
     // 系统编号
     private String systemCode;
 
+    // ***************db properties****************
+    // 用户编号
+    private String userId;
+
+    // 是否已有 1 是 0 否
+    private String isExist;
+
+    public String getIsExist() {
+        return isExist;
+    }
+
+    public void setIsExist(String isExist) {
+        this.isExist = isExist;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getCode() {
         return code;
     }

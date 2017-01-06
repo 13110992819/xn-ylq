@@ -19,6 +19,15 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="ticketCode != null and ticketCode != '' ">
+				AND t.ticket_code = #{ticketCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_userTicket" parameterType="userTicket" resultMap="userTicket_DB_Result">

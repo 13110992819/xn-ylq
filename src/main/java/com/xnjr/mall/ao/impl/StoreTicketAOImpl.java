@@ -2,14 +2,19 @@ package com.xnjr.mall.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xnjr.mall.ao.IStoreTicketAO;
 import com.xnjr.mall.bo.IStoreTicketBO;
+import com.xnjr.mall.bo.IUserTicketBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.StoreTicket;
+import com.xnjr.mall.domain.UserTicket;
+import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.EStoreTicketStatus;
+import com.xnjr.mall.enums.EUserTicketStatus;
 import com.xnjr.mall.exception.BizException;
 
 @Service
@@ -17,6 +22,9 @@ public class StoreTicketAOImpl implements IStoreTicketAO {
 
     @Autowired
     private IStoreTicketBO storeTicketBO;
+
+    @Autowired
+    private IUserTicketBO userTicketBO;
 
     @Override
     public String addStoreTicket(StoreTicket data) {
@@ -50,12 +58,44 @@ public class StoreTicketAOImpl implements IStoreTicketAO {
     @Override
     public Paginable<StoreTicket> queryStoreTicketPage(int start, int limit,
             StoreTicket condition) {
-        return storeTicketBO.getPaginable(start, limit, condition);
+        Paginable<StoreTicket> page = storeTicketBO.getPaginable(start, limit,
+            condition);
+        List<StoreTicket> list = page.getList();
+        for (StoreTicket storeTicket : list) {
+            String userId = condition.getUserId();
+            storeTicket.setIsExist(EBoolean.NO.getCode());
+            if (StringUtils.isNotBlank(userId)) {
+                UserTicket utCondition = new UserTicket();
+                utCondition.setUserId(userId);
+                utCondition.setTicketCode(storeTicket.getCode());
+                utCondition.setStatus(EUserTicketStatus.UNUSED.getCode());
+                long total = userTicketBO.getTotalCount(utCondition);
+                if (total > 0) {
+                    storeTicket.setIsExist(EBoolean.YES.getCode());
+                }
+            }
+        }
+        return page;
     }
 
     @Override
     public List<StoreTicket> queryStoreTicketList(StoreTicket condition) {
-        return storeTicketBO.queryStoreTicketList(condition);
+        List<StoreTicket> list = storeTicketBO.queryStoreTicketList(condition);
+        for (StoreTicket storeTicket : list) {
+            String userId = condition.getUserId();
+            storeTicket.setIsExist(EBoolean.NO.getCode());
+            if (StringUtils.isNotBlank(userId)) {
+                UserTicket utCondition = new UserTicket();
+                utCondition.setUserId(userId);
+                utCondition.setTicketCode(storeTicket.getCode());
+                utCondition.setStatus(EUserTicketStatus.UNUSED.getCode());
+                long total = userTicketBO.getTotalCount(utCondition);
+                if (total > 0) {
+                    storeTicket.setIsExist(EBoolean.YES.getCode());
+                }
+            }
+        }
+        return list;
     }
 
     @Override
