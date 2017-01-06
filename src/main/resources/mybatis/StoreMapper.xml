@@ -41,6 +41,7 @@
 		
 		<result column="total_jf_num" property="totalJfNum" />
 		<result column="total_dz_num" property="totalDzNum" />
+		<result column="distance" property="distance" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -122,13 +123,13 @@
 		
 		,t.total_jf_num
 		,t.system_code
-		
+		,ROUND(6378.138*2*ASIN(SQRT(POW(SIN((#{userLatitude}*PI()/180-t.latitude*PI()/180)/2),2)+COS(#{userLatitude}*PI()/180)*COS(t.latitude*PI()/180)*POW(SIN((#{userLongitude}*PI()/180-t.longitude*PI()/180)/2),2)))*1000) as distance
 		FROM
 		to2o_store t <!--  LEFT JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id  -->
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
-				${order}
+				distance asc,${order}
 			</if>
 		</trim>
 	</select>

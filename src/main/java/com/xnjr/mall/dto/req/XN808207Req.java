@@ -49,6 +49,32 @@ public class XN808207Req extends APageReq {
     // 系统编号（选填）
     private String systemCode;
 
+    // 用户经度（选填）
+    private String userLongitude;
+
+    // 用户纬度（选填）
+    private String userLatitude;
+
+    public String getUserLongitude() {
+        return userLongitude;
+    }
+
+    public void setUserLongitude(String userLongitude) {
+        this.userLongitude = userLongitude;
+    }
+
+    public String getUserLatitude() {
+        return userLatitude;
+    }
+
+    public void setUserLatitude(String userLatitude) {
+        this.userLatitude = userLatitude;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
     public String getName() {
         return name;
     }

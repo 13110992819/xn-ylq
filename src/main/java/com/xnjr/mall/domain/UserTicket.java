@@ -44,6 +44,18 @@ public class UserTicket extends ABaseDO {
     // 折扣券key2
     private Long ticketKey2;
 
+    // *************db properties************
+    // 店铺编号
+    private String storeCode;
+
+    public String getStoreCode() {
+        return storeCode;
+    }
+
+    public void setStoreCode(String storeCode) {
+        this.storeCode = storeCode;
+    }
+
     public String getCode() {
         return code;
     }

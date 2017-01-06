@@ -310,7 +310,7 @@ CREATE TABLE `to2o_store` (
   `ui_location` varchar(32) DEFAULT NULL COMMENT 'UI位置',
   `ui_order` int(11) DEFAULT NULL COMMENT 'UI序号',
   `status` char(1) DEFAULT NULL COMMENT '状态(1 上线，0 下线)',
-  `approver` datetime DEFAULT NULL COMMENT '审核人',
+  `approver` varchar(32) DEFAULT NULL COMMENT '审核人',
   `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
@@ -387,13 +387,13 @@ CREATE TABLE `to2o_store_ticket` (
 -- ----------------------------
 DROP TABLE IF EXISTS `to2o_user_ticket`;
 CREATE TABLE `to2o_user_ticket` (
-  `code` varchar(32) DEFAULT NULL COMMENT '编号',
-  `user_id` varchar(32) NOT NULL COMMENT '用户编号',
+  `code` varchar(32) NOT NULL DEFAULT '' COMMENT '编号',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `ticket_code` varchar(32) DEFAULT NULL COMMENT '折扣券编号',
   `create_datetime` datetime DEFAULT NULL COMMENT '购买时间',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

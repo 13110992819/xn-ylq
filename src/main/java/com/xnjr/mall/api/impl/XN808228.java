@@ -39,6 +39,8 @@ public class XN808228 extends AProcessor {
     public Object doBusiness() throws BizException {
         UserTicket condition = new UserTicket();
         condition.setUserId(req.getUserId());
+        condition.setStoreCode(req.getStoreCode());
+        condition.setStatus(req.getStatus());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IUserTicketAO.DEFAULT_ORDER_COLUMN;
@@ -58,5 +60,4 @@ public class XN808228 extends AProcessor {
         StringValidater.validateBlank(req.getUserId(), req.getStart(),
             req.getLimit());
     }
-
 }

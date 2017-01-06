@@ -107,7 +107,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             // 2、贡献奖励=0 直接扣分润
             // 3、0<贡献奖励<yhAmount 先扣贡献奖励，再扣分润
             // 4、贡献奖励>=yhAmount 直接扣贡献奖励
-
+            this.purchaseSuccess(systemCode, store, yhAmount, userId, fcRate);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
             // 获取微信APP支付信息
             XN802180Req req = new XN802180Req();
@@ -141,7 +141,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
 
     @Override
     public void purchaseSuccess(String systemCode, Store store, Long yhAmount,
-            String userId, Long fcRate) {
+            String userId, Double fcRate) {
         // 1,用户C可以得到消费额35%的钱包币,平台扣除钱包币
         Double qbbRate = Double.valueOf(SysConstants.CUSERQBBRATE);
         Long transAmount = Double.valueOf(yhAmount * qbbRate).longValue();

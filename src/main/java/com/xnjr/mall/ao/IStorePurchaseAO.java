@@ -33,7 +33,7 @@ public interface IStorePurchaseAO {
      * @history:
      */
     public void purchaseSuccess(String systemCode, Store store, Long yhAmount,
-            String userId, Long fcRate);
+            String userId, Double fcRate);
 
     public int dropStorePurchase(String code);
 
