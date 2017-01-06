@@ -98,7 +98,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                 // 扣减消费金额
                 yhAmount = amount - userTicket.getTicketKey2();
             }
-            remark = remark + ",优惠后金额" + yhAmount / 1000 + "元，使用折扣券编号:["
+            remark = remark + ",优惠后金额" + yhAmount / 1000.00 + "元，使用折扣券编号:["
                     + ticketCode + "]";
         }
         if (EPayType.NBHZ.getCode().equals(payType)) {
@@ -106,29 +106,41 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             Long gxjlAmount = 0L;
             Long frAmount = 0L;
 
+            Double gxjl2cnyRate = Double.valueOf(sysConfigBO.getConfigValue(
+                systemCode, ECategoryType.O2O.getCode(), null,
+                SysConstants.GXJL2CNY));
+            Double fr2cnyRate = Double.valueOf(sysConfigBO.getConfigValue(
+                systemCode, ECategoryType.O2O.getCode(), null,
+                SysConstants.FR2CNY));
+
             // 查询用户贡献奖励账户
             XN802503Res gxjlAccount = accountBO.getAccountByUserId(
                 store.getSystemCode(), userId, ECurrency.GXJL.getCode());
             // 查询用户分润账户
             XN802503Res frAccount = accountBO.getAccountByUserId(
                 store.getSystemCode(), userId, ECurrency.FRB.getCode());
+
             // 1、贡献奖励+分润<yhAmount 余额不足
-            if (gxjlAccount.getAmount() + frAccount.getAmount() < yhAmount) {
+            if (gxjlAccount.getAmount() / gxjl2cnyRate + frAccount.getAmount()
+                    / fr2cnyRate < yhAmount) {
                 throw new BizException("xn0000", "余额不足");
             }
             // 2、贡献奖励=0 直接扣分润
             if (gxjlAccount.getAmount() <= 0L) {
-                frAmount = yhAmount;
+                frAmount = Double.valueOf(yhAmount * fr2cnyRate).longValue();
             }
             // 3、0<贡献奖励<yhAmount 先扣贡献奖励，再扣分润
             if (gxjlAccount.getAmount() > 0L
-                    && gxjlAccount.getAmount() < yhAmount) {
+                    && gxjlAccount.getAmount() / gxjl2cnyRate < yhAmount) {
                 gxjlAmount = gxjlAccount.getAmount();
-                frAmount = yhAmount - gxjlAmount;
+                frAmount = Double.valueOf(
+                    (yhAmount - Double.valueOf(gxjlAmount / gxjl2cnyRate)
+                        .longValue()) * fr2cnyRate).longValue();
             }
             // 4、贡献奖励>=yhAmount 直接扣贡献奖励
-            if (gxjlAccount.getAmount() >= yhAmount) {
-                gxjlAmount = yhAmount;
+            if (gxjlAccount.getAmount() / gxjl2cnyRate >= yhAmount) {
+                gxjlAmount = Double.valueOf(yhAmount * gxjl2cnyRate)
+                    .longValue();
             }
 
             // 落地本地系统消费记录
@@ -148,17 +160,17 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                 store.getOwner(), ECurrency.CNY.getCode());
             if (gxjlAmount > 0L) {
                 accountBO
-                    .doTransferAmount(systemCode,
+                    .doTransferAmountOnRate(systemCode,
                         gxjlAccount.getAccountNumber(),
                         sjAccount.getAccountNumber(), gxjlAmount,
-                        EBizType.AJ_DPXF.getCode(), "店铺" + store.getName()
-                                + "消费买单");
+                        gxjl2cnyRate / 1, EBizType.AJ_DPXF.getCode(), "店铺"
+                                + store.getName() + "消费买单");
             }
             if (frAmount > 0L) {
-                accountBO.doTransferAmount(systemCode,
+                accountBO.doTransferAmountOnRate(systemCode,
                     frAccount.getAccountNumber(), sjAccount.getAccountNumber(),
-                    frAmount, EBizType.AJ_DPXF.getCode(),
-                    "店铺" + store.getName() + "消费买单");
+                    frAmount, fr2cnyRate / 1, EBizType.AJ_DPXF.getCode(), "店铺"
+                            + store.getName() + "消费买单");
             }
             return new BooleanRes(true);
 

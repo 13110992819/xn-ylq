@@ -32,6 +32,22 @@ public interface IAccountBO {
             String toAccountNumber, Long amount, String bizType, String bizNote);
 
     /**
+     * 不同币种账户之间划转资金
+     * @param systemCode
+     * @param fromAccountNumber
+     * @param toAccountNumber
+     * @param amount
+     * @param rate 划转比例
+     * @param bizType
+     * @param bizNote 
+     * @create: 2017年1月6日 下午5:22:31 haiqingzheng
+     * @history:
+     */
+    public void doTransferAmountOnRate(String systemCode,
+            String fromAccountNumber, String toAccountNumber, Long amount,
+            Double rate, String bizType, String bizNote);
+
+    /**
      * 兑换金额审批
      * @param systemCode
      * @param code

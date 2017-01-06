@@ -12,6 +12,7 @@ import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.dto.req.XN802503Req;
 import com.xnjr.mall.dto.req.XN802512Req;
 import com.xnjr.mall.dto.req.XN802519Req;
+import com.xnjr.mall.dto.req.XN802525Req;
 import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.http.BizConnecter;
@@ -65,6 +66,25 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     /**
+     * @see com.xnjr.mall.bo.IAccountBO#doTransferAmountOnRate(java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Double, java.lang.String, java.lang.String)
+     */
+    @Override
+    public void doTransferAmountOnRate(String systemCode,
+            String fromAccountNumber, String toAccountNumber, Long amount,
+            Double rate, String bizType, String bizNote) {
+        XN802525Req req = new XN802525Req();
+        req.setSystemCode(systemCode);
+        req.setFromAccountNumber(fromAccountNumber);
+        req.setToAccountNumber(toAccountNumber);
+        req.setTransAmount(String.valueOf(amount));
+        req.setRate(String.valueOf(rate));
+        req.setBizType(bizType);
+        req.setBizNote(bizNote);
+        BizConnecter.getBizData("802525", JsonUtils.object2Json(req),
+            Object.class);
+    }
+
+    /**
      * @see com.xnjr.mall.bo.IAccountBO#doExchangeAmount(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
@@ -80,4 +100,5 @@ public class AccountBOImpl implements IAccountBO {
         BizConnecter.getBizData("802519", JsonUtils.object2Json(req),
             Object.class);
     }
+
 }
