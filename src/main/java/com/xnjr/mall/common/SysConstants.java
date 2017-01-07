@@ -31,4 +31,26 @@ public class SysConstants {
     public static final String GXJL2CNY = "gxjl2Cny"; // 贡献奖励兑人民币
 
     public static final String CUSERQBBRATE = "0.35"; // C端用户得到消费钱包币的35%
+
+    public static final String ST_AREA = "stArea"; // 福利月卡辖区县
+
+    public static final String ST_CITY = "stCity"; // 福利月卡辖区市
+
+    public static final String ST_PROVINCE = "stProvince"; // 福利月卡辖区省
+
+    public static final String ST_AREA_NOTA1 = "stAreaNotA1"; // A1未买福利月卡辖区县
+
+    public static final String ST_CITY_NOTA1 = "stCityNotA1"; // A1未买福利月卡辖区市
+
+    public static final String ST_PROVINCE_NOTA1 = "stProvinceNotA1"; // A1未买福利月卡辖区省
+
+    public static final String ST_A10 = "stA10"; // A1未购买福利月卡
+
+    public static final String ST_A12000 = "stA12000"; // A1购买2000福利月卡
+
+    public static final String ST_A110000 = "stA110000"; // A1购买10000福利月卡
+
+    public static final String ST_A130000 = "stA130000"; // A1购买30000福利月卡
+
+    public static final String ST_A150000 = "stA150000"; // A1购买50000福利月卡
 }

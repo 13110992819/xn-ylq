@@ -7,6 +7,17 @@ public class XN802181Res {
     // 橙账本流水编号
     private String jourCode;
 
+    // 业务类型
+    private String bizType;
+
+    public String getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
+    }
+
     public String getJourCode() {
         return jourCode;
     }

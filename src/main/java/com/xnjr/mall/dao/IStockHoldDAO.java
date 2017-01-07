@@ -8,4 +8,6 @@ public interface IStockHoldDAO extends IBaseDAO<StockHold> {
     String NAMESPACE = IStockHoldDAO.class.getName().concat(".");
 
     public int update(StockHold data);
+
+    public int updateStatus(StockHold data);
 }

@@ -50,4 +50,12 @@ public class StockHoldDAOImpl extends AMybatisTemplate implements IStockHoldDAO 
         return super.update(NAMESPACE.concat("update_stockHold"), data);
     }
 
+    /** 
+     * @see com.xnjr.mall.dao.IStockHoldDAO#updateStatus(com.xnjr.mall.domain.StockHold)
+     */
+    @Override
+    public int updateStatus(StockHold data) {
+        return super.update(NAMESPACE.concat("update_stockHold_status"), data);
+    }
+
 }

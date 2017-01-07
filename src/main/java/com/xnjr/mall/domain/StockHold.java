@@ -23,7 +23,7 @@ public class StockHold extends ABaseDO {
     // 股份编号
     private String stockCode;
 
-    // 状态（未清算/已清算）
+    // 状态（待支付/未清算/已清算）
     private String status;
 
     // 已经返还次数
@@ -40,6 +40,17 @@ public class StockHold extends ABaseDO {
 
     // 系统编号
     private String systemCode;
+
+    // 支付编号
+    private String payCode;
+
+    public String getPayCode() {
+        return payCode;
+    }
+
+    public void setPayCode(String payCode) {
+        this.payCode = payCode;
+    }
 
     public Long getId() {
         return id;

@@ -2,6 +2,8 @@ package com.xnjr.mall.bo.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -74,5 +76,37 @@ public class StockHoldBOImpl extends PaginableBOImpl<StockHold> implements
             count = stockHoldDAO.update(data);
         }
         return count;
+    }
+
+    /** 
+     * @see com.xnjr.mall.bo.IStockHoldBO#refreshStatus(java.lang.Long, java.lang.String)
+     */
+    @Override
+    public int refreshStatus(Long id, String status) {
+        int count = 0;
+        if (id == null) {
+            StockHold data = new StockHold();
+            data.setId(id);
+            data.setStatus(status);
+            count = stockHoldDAO.update(data);
+        }
+        return count;
+    }
+
+    /** 
+     * @see com.xnjr.mall.bo.IStockHoldBO#getStockHoldByUser(java.lang.String)
+     */
+    @Override
+    public StockHold getStockHoldByUser(String userId) {
+        StockHold stockHold = null;
+        if (StringUtils.isNotBlank(userId)) {
+            StockHold condition = new StockHold();
+            condition.setUserId(userId);
+            List<StockHold> shList = this.queryStockHoldList(condition);
+            if (CollectionUtils.isNotEmpty(shList)) {
+                stockHold = shList.get(0);
+            }
+        }
+        return stockHold;
     }
 }

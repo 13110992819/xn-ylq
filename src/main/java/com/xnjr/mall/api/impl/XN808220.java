@@ -42,7 +42,8 @@ public class XN808220 extends AProcessor {
         data.setKey1(StringValidater.toLong(req.getKey1()));
         data.setKey2(StringValidater.toLong(req.getKey2()));
         data.setDescription(req.getDescription());
-        data.setPrice(StringValidater.toLong(req.getPrice()));
+        data.setPrice(data.getKey2());
+        // data.setPrice(StringValidater.toLong(req.getPrice()));
         data.setCurrency(req.getCurrency());
         data.setValidateStart(DateUtil.getStartDatetime(req.getValidateStart()));
         data.setValidateEnd(DateUtil.getEndDatetime(req.getValidateEnd()));

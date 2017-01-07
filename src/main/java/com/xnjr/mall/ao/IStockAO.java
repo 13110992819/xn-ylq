@@ -23,11 +23,12 @@ public interface IStockAO {
      * 股份购买
      * @param code
      * @param userId
-     * @return 
-     * @create: 2016年12月19日 下午5:48:48 haiqingzheng
+     * @param payType
+     * @param ip 
+     * @create: 2017年1月6日 下午6:24:20 xieyj
      * @history:
      */
-    public int buyStock(String code, String userId);
+    public Object buyStock(String code, String userId, String payType, String ip);
 
     /**
      * 股份返还
@@ -55,4 +56,13 @@ public interface IStockAO {
      * @history:
      */
     public StockHold myStock(String userId);
+
+    /**
+     * 支付回调
+     * @param payCode
+     * @return 
+     * @create: 2017年1月6日 下午9:25:22 xieyj
+     * @history:
+     */
+    public int paySuccess(String payCode);
 }

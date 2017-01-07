@@ -1,5 +1,11 @@
 package com.xnjr.mall.bo.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -86,5 +92,22 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
             result = sysConfig.getCvalue();
         }
         return result;
+    }
+
+    @Override
+    public Map<String, String> getConfigsMap(String systemCode,
+            String companyCode) {
+        Map<String, String> map = new HashMap<String, String>();
+        if (StringUtils.isNotBlank(systemCode)) {
+            SYSConfig condition = new SYSConfig();
+            condition.setSystemCode(systemCode);
+            List<SYSConfig> list = sysConfigDAO.selectList(condition);
+            if (CollectionUtils.isNotEmpty(list)) {
+                for (SYSConfig sysConfig : list) {
+                    map.put(sysConfig.getCkey(), sysConfig.getCvalue());
+                }
+            }
+        }
+        return map;
     }
 }

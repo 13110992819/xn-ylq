@@ -23,10 +23,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.xnjr.mall.ao.IStockAO;
 import com.xnjr.mall.ao.IStorePurchaseAO;
 import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.dto.req.XN802181Req;
 import com.xnjr.mall.dto.res.XN802181Res;
+import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.http.BizConnecter;
 
 /** 
@@ -42,10 +44,12 @@ public class CallbackConroller {
     @Autowired
     IStorePurchaseAO storePurchaseAO;
 
-    @RequestMapping("/storepurchase/wechat/app/callback")
-    public void doCallbackWechatH5(HttpServletRequest request,
+    @Autowired
+    IStockAO stockAO;
+
+    @RequestMapping("/zhpay/app/callback")
+    public void doCallbackZhpay(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
-        System.out.println("**** 进入优店买单，微信APP支付服务器回调 ****");
         PrintWriter out = response.getWriter();
         InputStream inStream = request.getInputStream();
         ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
@@ -63,7 +67,7 @@ public class CallbackConroller {
         XN802181Res res = BizConnecter.getBizData("802181",
             JsonUtil.Object2Json(req), XN802181Res.class);
         String jourCode = res.getJourCode();
-
+        String bizType = res.getBizType();
         // 支付成功，商户处理后同步返回给微信参数
         if (!res.getIsSuccess()) {
             logger.info("支付失败");
@@ -74,7 +78,15 @@ public class CallbackConroller {
             // ------------------------------
             try {
                 logger.info("流水编号为：" + jourCode);
-                storePurchaseAO.paySuccess(jourCode);
+                if (EBizType.AJ_GMFLYK.getCode().equals(bizType)) {
+                    System.out.println("**** 进入购买福利月卡，微信APP支付服务器回调 start****");
+                    stockAO.paySuccess(jourCode);
+                    System.out.println("**** 进入购买福利月卡，微信APP支付服务器回调 end****");
+                } else if (EBizType.AJ_DPXF.getCode().equals(bizType)) {
+                    System.out.println("**** 进入优店买单，微信APP支付服务器回调 start****");
+                    storePurchaseAO.paySuccess(jourCode);
+                    System.out.println("**** 进入优店买单，微信APP支付服务器回调 end****");
+                }
             } catch (Exception e) {
                 logger.info("支付回调异常");
             }

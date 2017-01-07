@@ -8,6 +8,8 @@
  */
 package com.xnjr.mall.bo;
 
+import java.util.Map;
+
 import com.xnjr.mall.bo.base.IPaginableBO;
 import com.xnjr.mall.domain.SYSConfig;
 
@@ -33,6 +35,9 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
     public int refreshSYSConfig(SYSConfig data);
 
     public SYSConfig getConfig(Long id);
+
+    public Map<String, String> getConfigsMap(String systemCode,
+            String companyCode);
 
     boolean isSYSConfigExist(Long Id);
 

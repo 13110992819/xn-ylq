@@ -263,6 +263,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 县合伙人
         XN805060Res areaRes = userBO.getPartnerUserInfo(store.getProvince(),
             store.getCity(), store.getArea());
+
         if (areaRes != null) {
             areaAmount = Double.valueOf(yhAmount * areaRate * fcRate)
                 .longValue();

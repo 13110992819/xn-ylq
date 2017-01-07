@@ -18,6 +18,9 @@ public class Stock extends ABaseDO {
     // 名称
     private String name;
 
+    // 类型(A A档 B B档 C C档 D D档)
+    private String type;
+
     // 图片
     private String pic;
 
@@ -50,6 +53,14 @@ public class Stock extends ABaseDO {
 
     // 系统编号
     private String systemCode;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getCode() {
         return code;

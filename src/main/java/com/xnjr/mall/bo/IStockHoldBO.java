@@ -19,4 +19,8 @@ public interface IStockHoldBO extends IPaginableBO<StockHold> {
 
     public StockHold getStockHold(Long id);
 
+    public StockHold getStockHoldByUser(String userId);
+
+    public int refreshStatus(Long id, String status);
+
 }

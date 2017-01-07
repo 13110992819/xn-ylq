@@ -5,7 +5,7 @@ import java.util.Map;
 
 public enum ECategoryType {
     // PRODUCT_CATEGORY("1", "产品类别"), CATEGORY_LOCATION("2", "产品位置");
-    O2O("B1", "O2O消费"), GQ("B2", "买股权分润"), HZB("B3", "买汇赚宝分润"), QBHL("D1",
+    O2O("B1", "O2O消费"), ST("B2", "买福利月卡分润"), HZB("B3", "买汇赚宝分润"), QBHL("D1",
             "钱币汇率规则");
 
     public static Map<String, ECategoryType> getBooleanResultMap() {

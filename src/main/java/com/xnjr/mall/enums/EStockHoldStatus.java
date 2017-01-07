@@ -14,7 +14,7 @@ package com.xnjr.mall.enums;
  * @history:
  */
 public enum EStockHoldStatus {
-    UNCLEARED("0", "未清算"), CLEARED("1", "已清算");
+    TO_PAY("0", "待支付"), UNCLEARED("1", "未清算"), CLEARED("2", "已清算");
 
     EStockHoldStatus(String code, String value) {
         this.code = code;

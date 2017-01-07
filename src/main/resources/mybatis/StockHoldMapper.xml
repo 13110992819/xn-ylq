@@ -11,6 +11,7 @@
 		<result column="back_welfare1" property="backWelfare1" />
 		<result column="back_welfare2" property="backWelfare2" />
 		<result column="next_back" property="nextBack" />
+		<result column="pay_code" property="payCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -24,6 +25,9 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="payCode != null and payCode != '' ">
+				AND t.pay_code = #{payCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_stockHold" parameterType="stockHold" resultMap="stockHold_DB_Result">
@@ -36,6 +40,7 @@
 		,t.back_welfare1
 		,t.back_welfare2
 		,t.next_back
+		,t.pay_code
 		,t.system_code
 		FROM
 		tact_stock_hold t
@@ -63,6 +68,7 @@
 		,back_welfare1
 		,back_welfare2
 		,next_back
+		,pay_code
 		,system_code
 		)
 		VALUES(
@@ -73,6 +79,7 @@
 		,#{backWelfare1}
 		,#{backWelfare2}
 		,#{nextBack}
+		,#{payCode}
 		,#{systemCode}
 		)
 	</insert>
@@ -87,6 +94,11 @@
 		,next_back = #{nextBack}
 		WHERE id = #{id}
 	</update>
-
-
+	
+	<update id="update_stockHold_status" parameterType="stockHold">
+		UPDATE tact_stock_hold
+		SET
+		status = #{status}
+		WHERE id = #{id}
+	</update>
 </mapper>

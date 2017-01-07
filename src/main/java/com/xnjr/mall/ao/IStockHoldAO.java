@@ -18,5 +18,4 @@ public interface IStockHoldAO {
     public List<StockHold> queryStockHoldList(StockHold condition);
 
     public StockHold getStockHold(Long id);
-
 }

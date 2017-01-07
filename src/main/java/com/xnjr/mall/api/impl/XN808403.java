@@ -34,7 +34,8 @@ public class XN808403 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        stockAO.buyStock(req.getCode(), req.getUserId());
+        stockAO.buyStock(req.getCode(), req.getUserId(), req.getPayType(),
+            req.getIp());
         return new BooleanRes(true);
     }
 
@@ -44,6 +45,7 @@ public class XN808403 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808403Req.class);
-        StringValidater.validateBlank(req.getCode(), req.getUserId());
+        StringValidater.validateBlank(req.getCode(), req.getUserId(),
+            req.getPayType());
     }
 }

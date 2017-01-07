@@ -5,6 +5,7 @@
 	<resultMap id="stock_DB_Result" type="stock">
 		<result column="code" property="code" />
 		<result column="name" property="name" />
+		<result column="type" property="type" />
 		<result column="pic" property="pic" />
 		<result column="description" property="description" />
 		<result column="capital" property="capital" />
@@ -31,6 +32,7 @@
 		SELECT
 		t.code
 		,t.name
+		,t.type
 		,t.pic
 		,t.description
 		,t.capital
@@ -63,6 +65,7 @@
 		tact_stock(
 		code
 		,name
+		,type
 		,pic
 		,description
 		,capital
@@ -78,6 +81,7 @@
 		VALUES(
 		#{code}
 		,#{name}
+		,#{type}
 		,#{pic}
 		,#{description}
 		,#{capital}
@@ -98,6 +102,4 @@
 		status = #{status}
 		WHERE code = #{code}
 	</update>
-
-
 </mapper>

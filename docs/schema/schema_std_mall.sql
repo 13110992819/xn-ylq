@@ -162,6 +162,7 @@ CREATE TABLE `tact_stock_hold` (
   `back_welfare2` bigint(20) DEFAULT NULL COMMENT '已返福利2',
   `next_back` datetime DEFAULT NULL COMMENT '下次返还时间',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  `pay_code` varchar(32) DEFAULT NULL COMMENT '第三方支付编号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
