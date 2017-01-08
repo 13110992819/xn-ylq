@@ -123,6 +123,9 @@ public class StockAOImpl implements IStockAO {
             throw new BizException("xn0000", "用户已经购买过福利月卡，不允许多次购买");
         }
         Stock stock = stockBO.getStock(code);
+        if (!EStockStatus.IN_USE.getCode().equals(stock.getStatus())) {
+            throw new BizException("xn0000", "该福利月卡不可用");
+        }
         String systemCode = stock.getSystemCode();
         if (EPayType.NBHZ.getCode().equals(payType)) {
             Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
@@ -191,7 +194,7 @@ public class StockAOImpl implements IStockAO {
             stockHold.setBackWelfare2(0L);
             stockHold.setBackNum(0);
             stockHold.setNextBack(DateUtil.getRelativeDate(new Date(),
-                stock.getBackInterval() * 24 * 60 * 60));
+                24 * 60 * 60));
             stockHold.setSystemCode(systemCode);
             distributeAmount(stockHold);
             return stockHoldBO.saveStockHold(stockHold);
@@ -229,8 +232,7 @@ public class StockAOImpl implements IStockAO {
 
     @Override
     @Transactional
-    public int returnStock(String userId) {
-        int count = 0;
+    public void returnStock(String userId) {
         StockHold condition = new StockHold();
         condition.setUserId(userId);
         condition.setStatus(EStockHoldStatus.UNCLEARED.getCode());
@@ -239,8 +241,13 @@ public class StockAOImpl implements IStockAO {
             throw new BizException("xn0000", "用户没有未清算的福利月卡，不允许返还操作");
         }
         StockHold stockHold = list.get(0);
-        if (DateUtil.daysBetween(new Date(), stockHold.getNextBack()) > 0) {
-            throw new BizException("xn0000", "未到返还时间，不允许返还");
+        if (DateUtil.daysBetween(DateUtil.getTodayStart(),
+            stockHold.getNextBack()) > 0) {
+            if (stockHold.getBackNum() == 0) {
+                throw new BizException("xn0000", "购买后首次领取时间为次日开始");
+            } else {
+                throw new BizException("xn0000", "未到返还时间，不允许返还");
+            }
         }
         // 更新返还金额
         Stock stock = stockBO.getStock(stockHold.getStockCode());
@@ -260,21 +267,21 @@ public class StockAOImpl implements IStockAO {
         stockHold.setBackWelfare2(backWelfare2);
         stockHold.setNextBack(nextBack);
         stockHoldBO.refreshStockHold(stockHold);
-
         // 落地返还记录
         StockBack stockBack = new StockBack();
         stockBack.setUserId(userId);
         stockBack.setStockCode(stockHold.getStockCode());
         stockBack.setBackDatetime(new Date());
         stockBack.setSystemCode(stockHold.getSystemCode());
-        count = stockBackBO.saveStockBack(stockBack);
-        return count;
+        stockBackBO.saveStockBack(stockBack);
+        // 发放贡献奖励和购物币
+        transStockAmount(stockHold.getSystemCode(), userId, backWelfare1,
+            backWelfare2, "用户[" + userId + "]福利月卡返还，已返第" + backNum + "期");
     }
 
     @Override
     @Transactional
-    public int clearStock(String userId) {
-        int count = 0;
+    public void clearStock(String userId) {
         StockHold condition = new StockHold();
         condition.setUserId(userId);
         condition.setStatus(EStockHoldStatus.UNCLEARED.getCode());
@@ -287,17 +294,16 @@ public class StockAOImpl implements IStockAO {
         Stock stock = stockBO.getStock(stockHold.getStockCode());
         String status = EStockHoldStatus.CLEARED.getCode();
         int backNum = stockHold.getBackNum() + 1;
-        Long backWelfare1 = stockHold.getBackWelfare1() + stock.getWelfare1()
+        Long backWelfare1 = stock.getWelfare1()
                 * (stock.getBackCount() - stockHold.getBackNum());
-        Long backWelfare2 = stockHold.getBackWelfare2() + stock.getWelfare2()
+        Long backWelfare2 = stock.getWelfare2()
                 * (stock.getBackCount() - stockHold.getBackNum());
-        Date nextBack = null;
 
         stockHold.setStatus(status);
         stockHold.setBackNum(backNum);
-        stockHold.setBackWelfare1(backWelfare1);
-        stockHold.setBackWelfare2(backWelfare2);
-        stockHold.setNextBack(nextBack);
+        stockHold.setBackWelfare1(stockHold.getBackWelfare1() + backWelfare1);
+        stockHold.setBackWelfare2(stockHold.getBackWelfare2() + backWelfare2);
+        stockHold.setNextBack(null);
         stockHoldBO.refreshStockHold(stockHold);
 
         // 落地返还记录
@@ -306,8 +312,22 @@ public class StockAOImpl implements IStockAO {
         stockBack.setStockCode(stockHold.getStockCode());
         stockBack.setBackDatetime(new Date());
         stockBack.setSystemCode(stockHold.getSystemCode());
-        count = stockBackBO.saveStockBack(stockBack);
-        return count;
+        stockBackBO.saveStockBack(stockBack);
+        // 发放贡献奖励和购物币
+        transStockAmount(stockHold.getSystemCode(), userId, backWelfare1,
+            backWelfare2, "用户[" + userId + "]福利月卡清算");
+    }
+
+    private void transStockAmount(String systemCode, String userId,
+            Long BackWelfare1, Long BackWelfare2, String bizNote) {
+        XN802503Res accountRes = accountBO.getAccountByUserId(systemCode,
+            userId, ECurrency.GXJL.getCode());
+        accountBO.doTransferAmount(systemCode, ESysAccount.GXJL.getCode(),
+            accountRes.getAccountNumber(), BackWelfare1,
+            EBizType.AJ_FLYKHH.getCode(), bizNote);
+        accountBO.doTransferAmount(systemCode, ESysAccount.GWB.getCode(),
+            accountRes.getAccountNumber(), BackWelfare2,
+            EBizType.AJ_FLYKHH.getCode(), bizNote);
     }
 
     @Override
@@ -426,32 +446,21 @@ public class StockAOImpl implements IStockAO {
             XN805060Res areaRes = null;
             XN805060Res cityRes = null;
             XN805060Res provinceRes = null;
-            if (StringUtils.isNotBlank(userExt.getProvince())
-                    && StringUtils.isNotBlank(userExt.getCity())
-                    && StringUtils.isNotBlank(userExt.getArea())) {
-                // 县合伙人
-                areaRes = userBO.getPartnerUserInfo(userExt.getProvince(),
-                    userExt.getCity(), userExt.getArea());
-                // 市合伙人
-                cityRes = userBO.getPartnerUserInfo(userExt.getProvince(),
-                    userExt.getCity(), null);
-                // 省合伙人
-                provinceRes = userBO.getPartnerUserInfo(userExt.getProvince(),
-                    null, null);
-            }
-            if (StringUtils.isNotBlank(userExt.getProvince())
-                    && StringUtils.isNotBlank(userExt.getCity())) {
-                // 市合伙人
-                cityRes = userBO.getPartnerUserInfo(userExt.getProvince(),
-                    userExt.getCity(), null);
-                // 省合伙人
-                provinceRes = userBO.getPartnerUserInfo(userExt.getProvince(),
-                    null, null);
-            }
             if (StringUtils.isNotBlank(userExt.getProvince())) {
                 // 省合伙人
                 provinceRes = userBO.getPartnerUserInfo(userExt.getProvince(),
                     null, null);
+                if (StringUtils.isNotBlank(userExt.getCity())) {
+                    // 市合伙人
+                    cityRes = userBO.getPartnerUserInfo(userExt.getProvince(),
+                        userExt.getCity(), null);
+                    if (StringUtils.isNotBlank(userExt.getArea())) {
+                        // 县合伙人
+                        areaRes = userBO.getPartnerUserInfo(
+                            userExt.getProvince(), userExt.getCity(),
+                            userExt.getArea());
+                    }
+                }
             }
             // a1分成
             if (a1Amount != null && a1Amount != 0L) {

@@ -37,7 +37,7 @@ public interface IStockAO {
      * @create: 2016年12月19日 下午7:49:25 haiqingzheng
      * @history:
      */
-    public int returnStock(String userId);
+    public void returnStock(String userId);
 
     /**
      * 股份清算回购
@@ -46,7 +46,7 @@ public interface IStockAO {
      * @create: 2016年12月19日 下午8:39:34 haiqingzheng
      * @history:
      */
-    public int clearStock(String userId);
+    public void clearStock(String userId);
 
     /**
      * 我的股份查询
