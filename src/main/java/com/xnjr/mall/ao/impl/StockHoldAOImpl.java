@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xnjr.mall.ao.IStockHoldAO;
+import com.xnjr.mall.bo.IStockBO;
 import com.xnjr.mall.bo.IStockHoldBO;
 import com.xnjr.mall.bo.base.Paginable;
+import com.xnjr.mall.domain.Stock;
 import com.xnjr.mall.domain.StockHold;
 import com.xnjr.mall.exception.BizException;
 
@@ -16,6 +18,9 @@ public class StockHoldAOImpl implements IStockHoldAO {
 
     @Autowired
     private IStockHoldBO stockHoldBO;
+
+    @Autowired
+    private IStockBO stockBO;
 
     @Override
     public int addStockHold(StockHold data) {
@@ -43,6 +48,9 @@ public class StockHoldAOImpl implements IStockHoldAO {
 
     @Override
     public StockHold getStockHold(Long id) {
-        return stockHoldBO.getStockHold(id);
+        StockHold stockHold = stockHoldBO.getStockHold(id);
+        Stock stock = stockBO.getStock(stockHold.getStockCode());
+        stockHold.setStock(stock);
+        return stockHold;
     }
 }

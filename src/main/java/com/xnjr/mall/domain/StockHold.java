@@ -44,6 +44,17 @@ public class StockHold extends ABaseDO {
     // 支付编号
     private String payCode;
 
+    // 福利月卡
+    private Stock stock;
+
+    public Stock getStock() {
+        return stock;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
+    }
+
     public String getPayCode() {
         return payCode;
     }

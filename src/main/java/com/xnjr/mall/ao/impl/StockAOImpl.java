@@ -331,14 +331,14 @@ public class StockAOImpl implements IStockAO {
 
     @Override
     public StockHold myStock(String userId) {
+        StockHold stockHold = null;
         StockHold condition = new StockHold();
         condition.setUserId(userId);
         List<StockHold> list = stockHoldBO.queryStockHoldList(condition);
-        if (CollectionUtils.isEmpty(list)) {
-            throw new BizException("xn0000", "用户没有购买过福利月卡");
+        if (CollectionUtils.isNotEmpty(list)) {
+            stockHold = list.get(0);
         }
-        StockHold stockHold = list.get(0);
-        return stockHoldBO.getStockHold(stockHold.getId());
+        return stockHold;
     }
 
     @Override

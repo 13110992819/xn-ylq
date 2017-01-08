@@ -25,8 +25,8 @@ INSERT INTO `tmall_category` (`code`,`parent_code`,`type`,`name`,`pic`,`order_no
 */
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('A','A1','包邮订单金额','byje','90','订单金额大于等于该配置，包邮',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('A','A1','运费','yunfei','120','默认订单运费',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B1','业务员','o2oYwy','0.1','消费分成10%',0,NULL,'CD-CZH000001');
 
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B1','业务员','o2oYwy','0.1','消费分成10%',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B1','县','o2oArea','0.1','消费分成10%',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B1','市','o2oCity','0.1','消费分成10%',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B1','省','o2oProvince','0.1','消费分成10%',0,NULL,'CD-CZH000001');
@@ -34,11 +34,9 @@ INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`b
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B1','B用户','o2oBUser','0.1','消费分成10%',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B1','A用户','o2oAUser','0.1','消费分成10%',0,NULL,'CD-CZH000001');
 
-
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','县(A1未买)','stAreaNotA1','0','A1未买福利月卡分成比例',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','市(A1未买)','stCityNotA1','0','A1未买福利月卡分成比例',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','省(A1未买)','stProvinceNotA1','0','A1未买福利月卡分成比例',0,NULL,'CD-CZH000001');
-
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','县(A1已买)','stArea','0.03','A1已买福利月卡分成比例',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','市(A1已买)','stCity','0','A1已买福利月卡分成比例',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','省(A1已买)','stProvince','0','A1已买福利月卡分成比例',0,NULL,'CD-CZH000001');
@@ -48,23 +46,34 @@ INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`b
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','A1','stA130000','0.06','A1买福利月卡3万时',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','A1','stA150000','0.08','A1买福利月卡5万时',0,NULL,'CD-CZH000001');
 
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('O','O1','福利月卡返现期数','stBackNum','10','福利月卡返现期数',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B3','县','hzbArea','0.1','汇赚宝消费分成10%',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B3','市','hzbCity','0.1','汇赚宝消费分成10%',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B3','省','hzbProvince','0.1','汇赚宝消费分成10%',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B3','C用户','o2oCUser','0.1','汇赚宝消费分成10%',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B3','B用户','o2oBUser','0.1','汇赚宝消费分成10%',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B3','A用户','o2oAUser','0.1','汇赚宝消费分成10%',0,NULL,'CD-CZH000001');
 
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('O','O1','福利月卡返现期数','stBackNum','10','福利月卡返现期数',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('D','D1','红包兑分润','hb2Fr','10','1红包=1分润',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('D','D1','红包业绩兑分润','hbyj2Fr','10','1红包业绩=2分润',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('D','D1','红包业绩兑贡献奖励','hbyj2Fr','10','1红包业绩=1贡献奖励',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('D','D1','分润兑人民币','fr2Cny','10','1分润=1人民币',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('D','D1','贡献奖励兑人民币','gxjl2Cny','10','1贡献奖励=1人民币',0,NULL,'CD-CZH000001');
 
+/*
+-- Query: SELECT * FROM std_mall.tact_hzb
+-- Date: 2017-01-08 19:32
+*/
+INSERT INTO `tact_hzb` (`code`,`name`,`pic`,`description`,`price`,`currency`,`system_code`) VALUES ('HZB001','汇赚宝','http://123.33.33.33/default.jpg','摇钱树玩法，摇一摇，摇出你的美',2000000,'CNY','CD-CZH000001');
 
 /*
 -- Query: SELECT * FROM std_mall.tact_stock
 -- Date: 2017-01-07 10:55
 */
-INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000001','股份两千','A',NULL,'股份2000',200,2000000,'CNY',30,10,200,200,'1','CD-CZH000001');
-INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000002','股份一万','B',NULL,'股份10000',1000,10000000,'CNY',30,10,1000,1000,'1','CD-CZH000001');
-INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000003','股份三万','C',NULL,'股份30000',3000,30000000,'CNY',30,10,3000,3000,'1','CD-CZH000001');
-INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000004','股份五万','D',NULL,'股份50000',5000,50000000,'CNY',30,10,5000,5000,'1','CD-CZH000001');
+INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000001','股份两千','A',NULL,'股份2000',200,2000000,'CNY',30,10,200000,20000,'1','CD-CZH000001');
+INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000002','股份一万','B',NULL,'股份10000',1000,10000000,'CNY',30,10,1000000,100000,'1','CD-CZH000001');
+INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000003','股份三万','C',NULL,'股份30000',3000,30000000,'CNY',30,10,3000000,300000,'1','CD-CZH000001');
+INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000004','股份五万','D',NULL,'股份50000',5000,50000000,'CNY',30,10,5000000,500000,'1','CD-CZH000001');
 
 
 
