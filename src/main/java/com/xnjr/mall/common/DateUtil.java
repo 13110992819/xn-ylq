@@ -52,11 +52,6 @@ public class DateUtil {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(DateUtil.strToDate("2015-01-01",
-            DateUtil.DATA_TIME_PATTERN_1));
-    }
-
     /** 
      * Date按格式pattern转String
      * @param date
@@ -214,5 +209,31 @@ public class DateUtil {
     public static int daysBetween(Date beginDate, Date endDate) {
         long times = endDate.getTime() - beginDate.getTime();
         return (int) (times / 60 / 60 / 1000 / 24);
+    }
+
+    /**
+     * 提供格式化时间，统计两个时间差之间返回的天数(即24小时算一天，少于24小时就为0，用这个的时候最好把小时、分钟等去掉)
+     * @param beginDate
+     * @param endDate
+     * @param format
+     * @return 
+     * @create: 2017年1月8日 下午5:07:50 xieyj
+     * @history:
+     */
+    public static int daysBetweenDate(Date beginDate, Date endDate) {
+        String beginStr = DateUtil.dateToStr(beginDate,
+            DateUtil.FRONT_DATE_FORMAT_STRING);
+        String endStr = DateUtil.dateToStr(endDate,
+            DateUtil.FRONT_DATE_FORMAT_STRING);
+        Date end = strToDate(endStr, DateUtil.FRONT_DATE_FORMAT_STRING);
+        Date begin = strToDate(beginStr, DateUtil.FRONT_DATE_FORMAT_STRING);
+        long times = end.getTime() - begin.getTime();
+        return (int) (times / 60 / 60 / 1000 / 24);
+    }
+
+    public static void main(String[] args) {
+        // int a = DateUtil.daysBetweenDate(new Date(),
+        // DateUtil.getTomorrowStart(new Date()));
+        // System.out.println(a);
     }
 }

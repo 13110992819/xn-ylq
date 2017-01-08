@@ -193,8 +193,8 @@ public class StockAOImpl implements IStockAO {
             stockHold.setBackWelfare1(0L);
             stockHold.setBackWelfare2(0L);
             stockHold.setBackNum(0);
-            stockHold.setNextBack(DateUtil.getRelativeDate(new Date(),
-                24 * 60 * 60));
+            stockHold.setNextBack(DateUtil.getRelativeDate(
+                DateUtil.getTodayStart(), 24 * 60 * 60));
             stockHold.setSystemCode(systemCode);
             distributeAmount(stockHold);
             return stockHoldBO.saveStockHold(stockHold);
@@ -219,8 +219,8 @@ public class StockAOImpl implements IStockAO {
             data.setBackWelfare1(0L);
             data.setBackWelfare2(0L);
             data.setBackNum(0);
-            data.setNextBack(DateUtil.getRelativeDate(new Date(),
-                stock.getBackInterval() * 24 * 60 * 60));
+            data.setNextBack(DateUtil.getRelativeDate(DateUtil.getTodayStart(),
+                24 * 60 * 60));
             // 橙账本流水号
             data.setPayCode(res.getJourCode());
             data.setSystemCode(systemCode);
@@ -241,8 +241,7 @@ public class StockAOImpl implements IStockAO {
             throw new BizException("xn0000", "用户没有未清算的福利月卡，不允许返还操作");
         }
         StockHold stockHold = list.get(0);
-        if (DateUtil.daysBetween(DateUtil.getTodayStart(),
-            stockHold.getNextBack()) > 0) {
+        if (DateUtil.daysBetweenDate(new Date(), stockHold.getNextBack()) > 0) {
             if (stockHold.getBackNum() == 0) {
                 throw new BizException("xn0000", "购买后首次领取时间为次日开始");
             } else {
@@ -255,7 +254,7 @@ public class StockAOImpl implements IStockAO {
         int backNum = stockHold.getBackNum() + 1;
         Long backWelfare1 = stockHold.getBackWelfare1() + stock.getWelfare1();
         Long backWelfare2 = stockHold.getBackWelfare2() + stock.getWelfare2();
-        Date nextBack = DateUtil.getRelativeDate(new Date(),
+        Date nextBack = DateUtil.getRelativeDate(DateUtil.getTodayStart(),
             stock.getBackInterval() * 24 * 60 * 60);
         if (backNum == stock.getBackCount()) {
             status = EStockHoldStatus.CLEARED.getCode();

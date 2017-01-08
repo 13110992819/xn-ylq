@@ -61,10 +61,10 @@ INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`b
 -- Query: SELECT * FROM std_mall.tact_stock
 -- Date: 2017-01-07 10:55
 */
-INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000001','股份两千','A',NULL,'股份2000',200,2000,'CNY',30,10,200,200,'1','CD-CZH000001');
-INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000002','股份一万','B',NULL,'股份10000',1000,10000,'CNY',30,10,1000,1000,'1','CD-CZH000001');
-INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000003','股份三万','C',NULL,'股份30000',3000,30000,'CNY',30,10,3000,3000,'1','CD-CZH000001');
-INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000004','股份五万','D',NULL,'股份50000',5000,50000,'CNY',30,10,5000,5000,'1','CD-CZH000001');
+INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000001','股份两千','A',NULL,'股份2000',200,2000000,'CNY',30,10,200,200,'1','CD-CZH000001');
+INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000002','股份一万','B',NULL,'股份10000',1000,10000000,'CNY',30,10,1000,1000,'1','CD-CZH000001');
+INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000003','股份三万','C',NULL,'股份30000',3000,30000000,'CNY',30,10,3000,3000,'1','CD-CZH000001');
+INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000004','股份五万','D',NULL,'股份50000',5000,50000000,'CNY',30,10,5000,5000,'1','CD-CZH000001');
 
 
 
