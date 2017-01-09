@@ -42,6 +42,40 @@ public class HzbHold extends ABaseDO {
     // 系统编号
     private String systemCode;
 
+    // **************db properties*******************
+    // 精度
+    private String userLatitude;
+
+    // 维度
+    private String userLongitude;
+
+    // 距离
+    private String distance;
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getUserLatitude() {
+        return userLatitude;
+    }
+
+    public void setUserLatitude(String userLatitude) {
+        this.userLatitude = userLatitude;
+    }
+
+    public String getUserLongitude() {
+        return userLongitude;
+    }
+
+    public void setUserLongitude(String userLongitude) {
+        this.userLongitude = userLongitude;
+    }
+
     public String getPayCode() {
         return payCode;
     }

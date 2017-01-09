@@ -11,8 +11,12 @@ public interface IHzbHoldAO {
     public Paginable<HzbHold> queryHzbHoldPage(int start, int limit,
             HzbHold condition);
 
+    public Paginable<HzbHold> queryDistanceHzbHoldPage(int start, int limit,
+            HzbHold condition);
+
     public List<HzbHold> queryHzbHoldList(HzbHold condition);
 
-    public HzbHold getHzbHold(Long id);
+    public List<HzbHold> queryDistanceHzbHoldList(HzbHold condition);
 
+    public HzbHold getHzbHold(Long id);
 }

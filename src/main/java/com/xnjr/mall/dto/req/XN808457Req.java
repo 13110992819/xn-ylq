@@ -14,12 +14,28 @@ package com.xnjr.mall.dto.req;
  * @since: 2016年12月21日 下午3:40:16 
  * @history:
  */
-public class XN808457Req {
-    // 经度
+public class XN808457Req extends APageReq {
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
+    private static final long serialVersionUID = 1L;
+
+    // 经度(必填)
     private String longitude;
 
-    // 纬度
+    // 纬度(必填)
     private String latitude;
+
+    // 距离(必填)
+    private String distance;
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
 
     public String getLongitude() {
         return longitude;
@@ -36,5 +52,4 @@ public class XN808457Req {
     public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
-
 }

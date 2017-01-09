@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.xnjr.mall.bo.IHzbHoldBO;
+import com.xnjr.mall.bo.base.Page;
+import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.bo.base.PaginableBOImpl;
 import com.xnjr.mall.dao.IHzbHoldDAO;
 import com.xnjr.mall.domain.HzbHold;
@@ -77,5 +79,24 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
             count = hzbHoldDAO.updateStatus(data);
         }
         return count;
+    }
+
+    /** 
+     * @see com.xnjr.mall.bo.IHzbHoldBO#queryDistanceHzbHoldList(com.xnjr.mall.domain.HzbHold)
+     */
+    @Override
+    public List<HzbHold> queryDistanceHzbHoldList(HzbHold condition) {
+        return hzbHoldDAO.selectDistanceList(condition);
+    }
+
+    @Override
+    public Paginable<HzbHold> queryDistancePaginable(int start, int pageSize,
+            HzbHold condition) {
+        long totalCount = hzbHoldDAO.selectDistanceTotalCount(condition);
+        Paginable<HzbHold> page = new Page<HzbHold>(start, pageSize, totalCount);
+        List<HzbHold> dataList = hzbHoldDAO.selectDistanceList(condition,
+            page.getStart(), page.getPageSize());
+        page.setList(dataList);
+        return page;
     }
 }

@@ -3,6 +3,7 @@ package com.xnjr.mall.bo;
 import java.util.List;
 
 import com.xnjr.mall.bo.base.IPaginableBO;
+import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.HzbHold;
 
 public interface IHzbHoldBO extends IPaginableBO<HzbHold> {
@@ -16,6 +17,11 @@ public interface IHzbHoldBO extends IPaginableBO<HzbHold> {
     public int refreshStatus(Long id, String status);
 
     public List<HzbHold> queryHzbHoldList(HzbHold condition);
+
+    public List<HzbHold> queryDistanceHzbHoldList(HzbHold condition);
+
+    public Paginable<HzbHold> queryDistancePaginable(int start, int pageSize,
+            HzbHold condition);
 
     public HzbHold getHzbHold(Long id);
 

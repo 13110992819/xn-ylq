@@ -58,6 +58,11 @@ public class HzbAOImpl implements IHzbAO {
     @Transactional
     public Object buyHzb(String userId, String hzbCode, String payType,
             String ip) {
+        // 判断用户是否实名认证
+        // XN805901Res userRes = userBO.getRemoteUser(userId, userId);
+        // if (!EBoolean.YES.getCode().equals(userRes.getIdentityFlag())) {
+        // throw new BizException("xn0000", "用户未实名认证，请先实名认证");
+        // }
         // 查询是否已经购买摇钱树
         HzbHold condition = new HzbHold();
         condition.setUserId(userId);
@@ -81,7 +86,7 @@ public class HzbAOImpl implements IHzbAO {
             hzbHold.setTotalRockNum(0);
             hzbHold.setSystemCode(hzb.getSystemCode());
             int count = hzbHoldBO.saveHzbHold(hzbHold);
-            //分销规则
+            // 分销规则
             distributeAmount(hzbHold);
             return count;
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
@@ -220,11 +225,14 @@ public class HzbAOImpl implements IHzbAO {
 
     @Override
     public HzbHold myHzb(String userId) {
+        HzbHold hzbHold = null;
         // 查询是否已经购买摇钱树
         HzbHold condition = new HzbHold();
         condition.setUserId(userId);
         List<HzbHold> list = hzbHoldBO.queryHzbHoldList(condition);
-        HzbHold hzbHold = list.get(0);
+        if (CollectionUtils.isNotEmpty(list)) {
+            hzbHold = list.get(0);
+        }
         return hzbHold;
     }
 

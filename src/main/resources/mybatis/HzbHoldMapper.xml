@@ -11,6 +11,7 @@
 		<result column="currency" property="currency" />
 		<result column="period_rock_num" property="periodRockNum" />
 		<result column="total_rock_num" property="totalRockNum" />
+		<result column="distance" property="distance" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -27,8 +28,12 @@
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
+			<if test="distance != null and distance != '' ">
+				<![CDATA[ having distance <= #{distance}]]>
+			</if>
 		</trim>
 	</sql>
+	
 	<select id="select_hzbHold" parameterType="hzbHold" resultMap="hzbHold_DB_Result">
 		SELECT
 		t.id
@@ -49,10 +54,38 @@
 			</if>
 		</trim>
 	</select>
-
+	
 	<select id="select_hzbHold_count" parameterType="hzbHold"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tact_hzb_hold t
+		<include refid="where_condition" />
+	</select>
+	
+	<select id="select_hzbHold_distance" parameterType="hzbHold" resultMap="hzbHold_DB_Result">
+		SELECT
+		t.id
+		,t.user_id
+		,t.hzb_code
+		,t.status
+		,t.price
+		,t.currency
+		,t.period_rock_num
+		,t.total_rock_num
+		,t.system_code
+		,ROUND(6378.138*2*ASIN(SQRT(POW(SIN((#{userLatitude}*PI()/180-tu.latitude*PI()/180)/2),2)+COS(#{userLatitude}*PI()/180)*COS(tu.latitude*PI()/180)*POW(SIN((#{userLongitude}*PI()/180-tu.longitude*PI()/180)/2),2)))*1000) as distance
+		FROM
+		tact_hzb_hold t INNER JOIN ${userDB}.tstd_user_ext tu ON t.user_id = tu.user_id 
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				distance asc,t.${order}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="select_hzbHold_distance_count" parameterType="hzbHold"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tact_hzb_hold t INNER JOIN ${userDB}.tstd_user_ext tu ON t.user_id = tu.user_id 
 		<include refid="where_condition" />
 	</select>
 

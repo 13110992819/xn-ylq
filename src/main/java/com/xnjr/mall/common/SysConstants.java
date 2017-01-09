@@ -65,4 +65,9 @@ public class SysConstants {
     public static final String HZB_BUSER = "hzbBUser"; // hzbB用户
 
     public static final String HZB_AUSER = "hzbAUser"; // hzbA用户
+
+    public static final String HZB_DISTANCE = "hzbDistance"; // 汇赚宝摇出距离
+
+    public static final String DEF_HZB_DISTANCE = "1000"; // 默认汇赚宝摇出距离
+
 }
