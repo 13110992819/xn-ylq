@@ -14,7 +14,7 @@ public enum EGeneratePrefix {
             "定单"), PRODUCT_ORDER("CD", "产品订单"), IEWEL("IW", "夺宝标的"), IEWEL_RECORD(
             "IR", "夺宝记录"), IEWEL_NUMBER("IN", "夺宝记录编号"), STORE_TICKET("ZKQ",
             "店铺折扣券"), USER_TICKET("UT", "用户折扣券"), STORE_ACTION("HD", "店铺互动"), STORE_PURCHASW(
-            "XF", "商家消费记录"), STOCK("GF", "股份");
+            "XF", "商家消费记录"), STOCK("GF", "股份"), SHAKE("YY", "摇一摇");
 
     public static Map<String, EGeneratePrefix> getOrderTypeMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

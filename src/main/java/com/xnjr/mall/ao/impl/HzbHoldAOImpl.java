@@ -13,7 +13,6 @@ import com.xnjr.mall.bo.ISYSConfigBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.domain.HzbHold;
-import com.xnjr.mall.enums.ECategoryConfig;
 
 @Service
 public class HzbHoldAOImpl implements IHzbHoldAO {
@@ -34,11 +33,11 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
     @Override
     public Paginable<HzbHold> queryDistanceHzbHoldPage(int start, int limit,
             HzbHold condition) {
-        String distance = sysConfigBO.getConfigValue(null,
-            ECategoryConfig.Other.getCode(), null, SysConstants.HZB_DISTANCE);
+        String distance = sysConfigBO.getConfigValue(null, null, null,
+            SysConstants.HZB_DISTANCE);
         if (StringUtils.isBlank(distance)) {
             // 默认1000米
-            distance = SysConstants.DEF_HZB_DISTANCE;
+            distance = SysConstants.HZB_DISTANCE_DEF;
         }
         condition.setDistance(distance);
         return hzbHoldBO.queryDistancePaginable(start, limit, condition);
@@ -50,7 +49,7 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
             SysConstants.HZB_DISTANCE);
         if (StringUtils.isBlank(distance)) {
             // 默认1000米
-            distance = SysConstants.DEF_HZB_DISTANCE;
+            distance = SysConstants.HZB_DISTANCE_DEF;
         }
         condition.setDistance(distance);
         List<HzbHold> list = hzbHoldBO.queryDistanceHzbHoldList(condition);

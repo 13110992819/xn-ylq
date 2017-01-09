@@ -21,7 +21,7 @@ public enum ECurrency {
             "贡献奖励"), QBB("QBB", "钱包币"), GWB("GWB", "购物币"), HBB("HBB", "红包币"), HBYJ(
             "HBYJ", "红包业绩");
 
-    public static Map<String, ECurrency> getCurrencyMap() {
+    public static Map<String, ECurrency> getResultMap() {
         Map<String, ECurrency> map = new HashMap<String, ECurrency>();
         for (ECurrency currency : ECurrency.values()) {
             map.put(currency.getCode(), currency);

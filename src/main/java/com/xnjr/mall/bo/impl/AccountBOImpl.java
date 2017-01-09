@@ -11,9 +11,11 @@ import com.google.gson.reflect.TypeToken;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.dto.req.XN802503Req;
 import com.xnjr.mall.dto.req.XN802512Req;
+import com.xnjr.mall.dto.req.XN802517Req;
 import com.xnjr.mall.dto.req.XN802519Req;
 import com.xnjr.mall.dto.req.XN802525Req;
 import com.xnjr.mall.dto.res.XN802503Res;
+import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.http.BizConnecter;
 import com.xnjr.mall.http.JsonUtils;
@@ -65,6 +67,35 @@ public class AccountBOImpl implements IAccountBO {
             Object.class);
     }
 
+    /** 
+     * @see com.xnjr.mall.bo.IAccountBO#doTransferAmountByUser(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.String, java.lang.String)
+     */
+    @Override
+    public void doTransferAmountByUser(String systemCode, String fromUserId,
+            String toUserId, String currency, Long amount, String bizType,
+            String bizNote) {
+        XN802517Req req = new XN802517Req();
+        req.setSystemCode(systemCode);
+        req.setFromUserId(fromUserId);
+        req.setToUserId(toUserId);
+        req.setCurrency(currency);
+        req.setTransAmount(String.valueOf(amount));
+        req.setBizType(bizType);
+        req.setBizNote(bizNote);
+        BizConnecter.getBizData("802517", JsonUtils.object2Json(req),
+            Object.class);
+    }
+
+    @Override
+    public void doTransferFcBySystem(String systemCode, String userId,
+            String currency, Long transAmount, String bizType, String bizNote) {
+        if (transAmount == null || transAmount == 0) {
+            return;
+        }
+        this.doTransferAmountByUser(systemCode, ESysUser.SYS_USER.getCode(),
+            userId, currency, transAmount, bizType, bizNote);
+    }
+
     /**
      * @see com.xnjr.mall.bo.IAccountBO#doTransferAmountOnRate(java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Double, java.lang.String, java.lang.String)
      */
@@ -100,5 +131,4 @@ public class AccountBOImpl implements IAccountBO {
         BizConnecter.getBizData("802519", JsonUtils.object2Json(req),
             Object.class);
     }
-
 }

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +36,6 @@ import com.xnjr.mall.http.BizConnecter;
 
 @Service
 public class HzbAOImpl implements IHzbAO {
-    private static Logger logger = Logger.getLogger(StockAOImpl.class);
-
     @Autowired
     private IHzbBO hzbBO;
 
@@ -58,7 +55,7 @@ public class HzbAOImpl implements IHzbAO {
     @Transactional
     public Object buyHzb(String userId, String hzbCode, String payType,
             String ip) {
-        // 判断用户是否实名认证
+        // // 判断用户是否实名认证
         // XN805901Res userRes = userBO.getRemoteUser(userId, userId);
         // if (!EBoolean.YES.getCode().equals(userRes.getIdentityFlag())) {
         // throw new BizException("xn0000", "用户未实名认证，请先实名认证");
@@ -294,43 +291,34 @@ public class HzbAOImpl implements IHzbAO {
         String systemCode = hzbHold.getSystemCode();
         String userId = hzbHold.getUserId();
         Long price = hzbHold.getPrice();
-        // 分销规则
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
-            null);
         XN805901Res dUser = userBO.getRemoteUser(userId, userId);
         // 用户分成
         String cUserId = dUser.getUserReferee();
         if (StringUtils.isNotBlank(cUserId)) {
             XN805901Res cUser = userBO.getRemoteUser(cUserId, cUserId);
-            // C用户分成
-            Double hzbCUserRate = Double.valueOf(rateMap
-                .get(SysConstants.HZB_CUSER));
-            Long hzbCUserAmount = Double.valueOf(hzbCUserRate * price)
-                .longValue();
-            if (hzbCUserAmount != null && hzbCUserAmount != 0) {
-                userFcAmount(systemCode, cUser, hzbCUserAmount);
+            boolean cHzbResult = hzbHoldBO.isHzbHoldExistByUser(cUserId);
+            if (cHzbResult) {
+                this.userFcAmount(systemCode, cUser, SysConstants.HZB_CUSER,
+                    price);
             }
             // B用户分成
             String bUserId = cUser.getUserReferee();
             if (StringUtils.isNotBlank(bUserId)) {
                 XN805901Res bUser = userBO.getRemoteUser(bUserId, bUserId);
-                Double hzbBUserRate = Double.valueOf(rateMap
-                    .get(SysConstants.HZB_BUSER));
-                Long hzbBUserAmount = Double.valueOf(hzbBUserRate * price)
-                    .longValue();
-                if (hzbBUserAmount != null && hzbBUserAmount != 0) {
-                    userFcAmount(systemCode, bUser, hzbBUserAmount);
+                boolean bHzbResult = hzbHoldBO.isHzbHoldExistByUser(bUserId);
+                if (bHzbResult) {
+                    this.userFcAmount(systemCode, bUser,
+                        SysConstants.HZB_BUSER, price);
                 }
                 // A用户分成
                 String aUserId = bUser.getUserReferee();
                 if (StringUtils.isNotBlank(aUserId)) {
                     XN805901Res aUser = userBO.getRemoteUser(aUserId, aUserId);
-                    Double hzbAUserRate = Double.valueOf(rateMap
-                        .get(SysConstants.HZB_AUSER));
-                    Long hzbAUserAmount = Double.valueOf(hzbAUserRate * price)
-                        .longValue();
-                    if (hzbAUserAmount != null && hzbAUserAmount != 0) {
-                        userFcAmount(systemCode, aUser, hzbAUserAmount);
+                    boolean aHzbResult = hzbHoldBO
+                        .isHzbHoldExistByUser(aUserId);
+                    if (aHzbResult) {
+                        this.userFcAmount(systemCode, aUser,
+                            SysConstants.HZB_AUSER, price);
                     }
                 }
             }
@@ -342,30 +330,21 @@ public class HzbAOImpl implements IHzbAO {
                 // 省合伙人
                 XN805060Res provinceRes = userBO.getPartnerUserInfo(
                     userExt.getProvince(), null, null);
-                Double provinceRate = Double.valueOf(rateMap
-                    .get(SysConstants.HZB_PROVINCE));
-                Long provinceFrAmount = Double.valueOf(price * provinceRate)
-                    .longValue();
-                areaFcAmount(systemCode, provinceRes, provinceFrAmount, "省");
+                areaFcAmount(systemCode, provinceRes,
+                    SysConstants.HZB_PROVINCE, price, "省");
                 if (StringUtils.isNotBlank(userExt.getCity())) {
                     // 市合伙人
                     XN805060Res cityRes = userBO.getPartnerUserInfo(
                         userExt.getProvince(), userExt.getCity(), null);
-                    Double cityRate = Double.valueOf(rateMap
-                        .get(SysConstants.HZB_CITY));
-                    Long cityFrAmount = Double.valueOf(price * cityRate)
-                        .longValue();
-                    areaFcAmount(systemCode, cityRes, cityFrAmount, "市");
+                    areaFcAmount(systemCode, cityRes, SysConstants.HZB_CITY,
+                        price, "市");
                     if (StringUtils.isNotBlank(userExt.getArea())) {
                         // 县合伙人
                         XN805060Res areaRes = userBO.getPartnerUserInfo(
                             userExt.getProvince(), userExt.getCity(),
                             userExt.getArea());
-                        Double areaRate = Double.valueOf(rateMap
-                            .get(SysConstants.HZB_AREA));
-                        Long areaFrAmount = Double.valueOf(price * areaRate)
-                            .longValue();
-                        areaFcAmount(systemCode, areaRes, areaFrAmount, "县");
+                        areaFcAmount(systemCode, areaRes,
+                            SysConstants.HZB_AREA, price, "县");
                     }
                 }
             }
@@ -373,24 +352,32 @@ public class HzbAOImpl implements IHzbAO {
     }
 
     private void userFcAmount(String systemCode, XN805901Res user,
-            Long transAmount) {
-        XN802503Res accountRes = accountBO.getAccountByUserId(systemCode,
-            user.getUserId(), ECurrency.FRB.getCode());
-        String bizNote = EBizType.AJ_GMHZBFC.getValue() + ",用户["
-                + user.getUserId() + "]分润分成";
-        accountBO.doTransferAmount(systemCode, ESysAccount.FRB.getCode(),
-            accountRes.getAccountNumber(), transAmount,
-            EBizType.AJ_GMHZBFC.getCode(), bizNote);
+            String sysConstants, Long price) {
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
+            null);
+        Double hzbUserRate = Double.valueOf(rateMap.get(sysConstants));
+        Long transAmount = Double.valueOf(hzbUserRate * price).longValue();
+        if (transAmount != null && transAmount != 0) {
+            String bizNote = EBizType.AJ_GMHZBFC.getValue() + ",用户["
+                    + user.getUserId() + "]分润分成";
+            accountBO.doTransferFcBySystem(systemCode, user.getUserId(),
+                ECurrency.FRB.getCode(), transAmount,
+                EBizType.AJ_GMHZBFC.getCode(), bizNote);
+        }
     }
 
     private void areaFcAmount(String systemCode, XN805060Res user,
-            Long transAmount, String remark) {
-        String bizNote = EBizType.AJ_GMHZBFC.getValue() + ",合伙人" + remark
-                + "用户[" + user.getUserId() + "]分润分成";
-        XN802503Res accountRes = accountBO.getAccountByUserId(systemCode,
-            user.getUserId(), ECurrency.FRB.getCode());
-        accountBO.doTransferAmount(systemCode, ESysAccount.FRB.getCode(),
-            accountRes.getAccountNumber(), transAmount,
-            EBizType.AJ_GMHZBFC.getCode(), bizNote);
+            String sysConstants, Long price, String remark) {
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
+            null);
+        Double rate = Double.valueOf(rateMap.get(sysConstants));
+        Long transAmount = Double.valueOf(price * rate).longValue();
+        if (transAmount != null && transAmount != 0) {
+            String bizNote = EBizType.AJ_GMHZBFC.getValue() + ",合伙人" + remark
+                    + "用户[" + user.getUserId() + "]分润分成";
+            accountBO.doTransferFcBySystem(systemCode, user.getUserId(),
+                ECurrency.FRB.getCode(), transAmount,
+                EBizType.AJ_GMHZBFC.getCode(), bizNote);
+        }
     }
 }

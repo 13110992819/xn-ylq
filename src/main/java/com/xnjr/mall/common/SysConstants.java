@@ -54,6 +54,10 @@ public class SysConstants {
 
     public static final String ST_A150000 = "stA150000"; // A1购买50000福利月卡
 
+    public static final String ST_BACKNUM = "stBackNum"; // 福利月卡返还期数
+
+    public static final String ST_BACKNUM_DEF = "10"; // 福利月卡默认返还期数
+
     public static final String HZB_PROVINCE = "hzbProvince"; // hzb辖区省
 
     public static final String HZB_CITY = "hzbCity"; // hzb辖区市
@@ -68,6 +72,30 @@ public class SysConstants {
 
     public static final String HZB_DISTANCE = "hzbDistance"; // 汇赚宝摇出距离
 
-    public static final String DEF_HZB_DISTANCE = "1000"; // 默认汇赚宝摇出距离
+    public static final String HZB_DISTANCE_DEF = "1000"; // 默认汇赚宝摇出距离
+
+    public static final String YY_PROVINCE = "hzbProvince"; // hzb辖区省
+
+    public static final String YY_CITY = "yyCity"; // yy辖区市
+
+    public static final String YY_AREA = "yyArea"; // yy辖区县
+
+    public static final String YY_CUSER = "yyCUser"; // yyC用户
+
+    public static final String YY_BUSER = "yyBUser"; // yyB用户
+
+    public static final String YY_AUSER = "yyAUser"; // yyA用户
+
+    public static final String YC_HBB = "ycHBB"; // yc红包币
+
+    public static final String YC_GWB = "ycGWB"; // yy购物币
+
+    public static final String YC_QBB = "ycQBB"; // yy钱包币
+
+    public static final String YY_AMOUNT_MIN = "yyAmountMin"; // 摇摇金额下限
+
+    public static final String YY_AMOUNT_MAX = "yyAmountMax"; // 摇摇金额上限
+
+    public static final Long AMOUNT_RADIX = 1000L; // 金额基数
 
 }
