@@ -36,7 +36,7 @@ public class LuckyNumberGenerator {
         List<String> randomNumber = generateLuckyNumbers(10000000L, 10L,
             exists, 10L);
         System.out.println(randomNumber);
-        // getLuckyNumber(10000000L, 6000L, 1L);
+        getLuckyNumber(10000000L, 6000L, 1L);
 
     }
 
