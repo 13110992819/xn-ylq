@@ -9,6 +9,7 @@
 package com.xnjr.mall.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -28,14 +29,14 @@ public class LuckyNumberGenerator {
      * @history: 
      */
     public static void main(String[] args) {
-        // List<String> exists = new ArrayList<String>();
+        List<String> exists = new ArrayList<String>();
         // exists.add("10000003");
         // exists.add("10000004");
         // exists.add("10000005");
-        // List<String> randomNumber = generateLuckyNumbers(10000000L, 6000L,
-        // exists, 6000L);
-        // System.out.println(randomNumber);
-        getLuckyNumber(10000000L, 6000L, 1L);
+        List<String> randomNumber = generateLuckyNumbers(10000000L, 10L,
+            exists, 10L);
+        System.out.println(randomNumber);
+        // getLuckyNumber(10000000L, 6000L, 1L);
 
     }
 
@@ -96,6 +97,7 @@ public class LuckyNumberGenerator {
             luckNumbers.add(luckNumber);
             existValues.add(luckNumber);
         }
+        Collections.sort(luckNumbers);
         return luckNumbers;
     }
 
