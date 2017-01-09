@@ -106,7 +106,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             remark = remark + ",优惠后金额" + yhAmount / 1000.00 + "元，使用折扣券编号:["
                     + ticketCode + "]";
         }
-        if (EPayType.NBHZ.getCode().equals(payType)) {
+        if (EPayType.YEZP.getCode().equals(payType)) {
             // 余额支付业务规则：优先扣贡献奖励，其次扣分润
             Long gxjlAmount = 0L;
             Long frAmount = 0L;
@@ -152,7 +152,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             StorePurchase data = new StorePurchase();
             data.setUserId(userId);
             data.setStoreCode(storeCode);
-            data.setPayType(EPayType.NBHZ.getCode());
+            data.setPayType(EPayType.YEZP.getCode());
             data.setAmount2(gxjlAmount);
             data.setAmount3(frAmount);
             data.setStatus(EStorePurchaseStatus.PAYED.getCode());
@@ -344,7 +344,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         XN802503Res sjFrAccount = accountBO.getAccountByUserId(systemCode,
             store.getOwner(), ECurrency.FRB.getCode());
         Long yhAmount = 0L;
-        if (EPayType.NBHZ.getCode().equals(storePurchase.getPayType())) {
+        if (EPayType.YEZP.getCode().equals(storePurchase.getPayType())) {
             Double gxjl2cnyRate = Double.valueOf(sysConfigBO.getConfigValue(
                 systemCode, ECategoryType.QBHL.getCode(), null,
                 SysConstants.GXJL2CNY));

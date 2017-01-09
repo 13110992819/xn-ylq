@@ -53,4 +53,16 @@ public class SysConstants {
     public static final String ST_A130000 = "stA130000"; // A1购买30000福利月卡
 
     public static final String ST_A150000 = "stA150000"; // A1购买50000福利月卡
+
+    public static final String HZB_PROVINCE = "hzbProvince"; // hzb辖区省
+
+    public static final String HZB_CITY = "hzbCity"; // hzb辖区市
+
+    public static final String HZB_AREA = "hzbArea"; // hzb辖区县
+
+    public static final String HZB_CUSER = "hzbCUser"; // hzbC用户
+
+    public static final String HZB_BUSER = "hzbBUser"; // hzbB用户
+
+    public static final String HZB_AUSER = "hzbAUser"; // hzbA用户
 }

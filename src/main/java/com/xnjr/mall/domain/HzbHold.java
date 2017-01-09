@@ -36,8 +36,19 @@ public class HzbHold extends ABaseDO {
     // 已摇总次数
     private Integer totalRockNum;
 
+    // 支付编号
+    private String payCode;
+
     // 系统编号
     private String systemCode;
+
+    public String getPayCode() {
+        return payCode;
+    }
+
+    public void setPayCode(String payCode) {
+        this.payCode = payCode;
+    }
 
     public Long getId() {
         return id;

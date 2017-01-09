@@ -21,6 +21,28 @@ public class XN808452Req {
     // 汇赚宝编号
     private String hzbCode;
 
+    // 支付类型(1 内部划转 2 微信 3 支付宝)
+    private String payType;
+
+    // ip
+    private String ip;
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
+
     public String getUserId() {
         return userId;
     }

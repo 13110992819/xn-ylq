@@ -30,6 +30,7 @@ CREATE TABLE `tact_hzb` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
 -- ----------------------------
 --  Table structure for `tact_hzb_hold`
 -- ----------------------------
@@ -43,6 +44,7 @@ CREATE TABLE `tact_hzb_hold` (
   `currency` varchar(4) DEFAULT NULL COMMENT '价格币种',
   `period_rock_num` int(11) DEFAULT NULL COMMENT '周期内被摇总次数',
   `total_rock_num` int(11) DEFAULT NULL COMMENT '已摇总次数',
+  `pay_code` varchar(32) DEFAULT NULL COMMENT '支付编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

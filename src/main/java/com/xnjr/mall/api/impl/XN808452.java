@@ -13,7 +13,6 @@ import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.dto.req.XN808452Req;
-import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.spring.SpringContextHolder;
@@ -34,8 +33,8 @@ public class XN808452 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        hzbAO.buyHzb(req.getUserId(), req.getHzbCode());
-        return new BooleanRes(true);
+        return hzbAO.buyHzb(req.getUserId(), req.getHzbCode(),
+            req.getPayType(), req.getIp());
     }
 
     /** 
@@ -44,7 +43,7 @@ public class XN808452 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808452Req.class);
-        StringValidater.validateBlank(req.getUserId());
+        StringValidater.validateBlank(req.getUserId(), req.getHzbCode(),
+            req.getPayType());
     }
-
 }

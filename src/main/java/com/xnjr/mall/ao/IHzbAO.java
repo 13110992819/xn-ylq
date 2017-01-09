@@ -9,17 +9,18 @@ import com.xnjr.mall.domain.HzbHold;
 public interface IHzbAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public int buyHzb(String userId, String hzbCode);
+    public Object buyHzb(String userId, String hzbCode, String payType,
+            String fromIp);
 
-    public int activateHzb(String userId);
+    public void activateHzb(String userId);
 
-    public int putOnOffHzb(String userId);
+    public void putOnOffHzb(String userId);
 
     public HzbHold myHzb(String userId);
 
-    public int dropHzb(String code);
+    public void dropHzb(String code);
 
-    public int editHzb(Hzb data);
+    public void editHzb(Hzb data);
 
     public Paginable<Hzb> queryHzbPage(int start, int limit, Hzb condition);
 

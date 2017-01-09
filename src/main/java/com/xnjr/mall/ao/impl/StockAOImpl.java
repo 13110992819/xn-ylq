@@ -83,6 +83,7 @@ public class StockAOImpl implements IStockAO {
         newStock.setPrice(data.getPrice());
         newStock.setCurrency(ECurrency.CNY.getCode());
         newStock.setBackInterval(data.getBackInterval());
+        // 待配置
         newStock.setBackCount(10);
         newStock.setWelfare1(data.getWelfare1());
         newStock.setWelfare2(data.getWelfare2());
@@ -127,7 +128,7 @@ public class StockAOImpl implements IStockAO {
             throw new BizException("xn0000", "该福利月卡不可用");
         }
         String systemCode = stock.getSystemCode();
-        if (EPayType.NBHZ.getCode().equals(payType)) {
+        if (EPayType.YEZP.getCode().equals(payType)) {
             Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
                 null);
             // 余额支付业务规则：优先扣贡献奖励，其次扣分润
@@ -199,12 +200,15 @@ public class StockAOImpl implements IStockAO {
             distributeAmount(stockHold);
             return stockHoldBO.saveStockHold(stockHold);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
+            if (StringUtils.isBlank(ip)) {
+                throw new BizException("xn0000", "微信支付，ip地址不能为空");
+            }
             // 获取微信APP支付信息
             XN802180Req req = new XN802180Req();
             req.setSystemCode(systemCode);
             req.setCompanyCode(systemCode);
             req.setUserId(userId);
-            req.setBizType(EBizType.AJ_GW.getCode());
+            req.setBizType(EBizType.AJ_GMFLYK.getCode());
             req.setBizNote(stock.getName() + "——福利月卡购买");
             req.setBody("正汇钱包—福利月卡");
             req.setTotalFee(String.valueOf(stock.getPrice()));
