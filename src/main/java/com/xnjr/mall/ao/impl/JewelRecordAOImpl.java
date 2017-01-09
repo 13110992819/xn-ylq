@@ -135,6 +135,14 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             JewelRecord condition) {
         Paginable<JewelRecord> page = jewelRecordBO.getPaginable(start, limit,
             condition);
+        return page;
+    }
+
+    @Override
+    public Paginable<JewelRecord> queryMyJewelRecordPage(int start, int limit,
+            JewelRecord condition) {
+        Paginable<JewelRecord> page = jewelRecordBO.getPaginable(start, limit,
+            condition);
         if (page != null && CollectionUtils.isNotEmpty(page.getList())) {
             for (JewelRecord jewelRecord : page.getList()) {
                 JewelRecordNumber imCondition = new JewelRecordNumber();
@@ -142,6 +150,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
                 List<JewelRecordNumber> recordNumberList = jewelRecordNumberBO
                     .queryJewelRecordNumberList(imCondition);
                 jewelRecord.setJewelRecordNumberList(recordNumberList);
+
+                Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
+                jewelRecord.setJewel(jewel);
             }
         }
         return page;

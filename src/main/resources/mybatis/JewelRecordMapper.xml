@@ -5,6 +5,8 @@
 	<resultMap id="jewelRecord_DB_Result" type="jewelRecord">
 		<result column="code" property="code" />
 		<result column="user_id" property="userId" />
+		<result column="nickname" property="nickname" />
+		<result column="photo" property="photo" />
 		<result column="jewel_code" property="jewelCode" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="times" property="times" />
@@ -37,6 +39,8 @@
 		SELECT
 		t.code
 		,t.user_id
+		,tu.nickname
+		,tue.photo
 		,t.jewel_code
 		,t.create_datetime
 		,t.times
@@ -46,7 +50,7 @@
 		,t.remark
 		,t.system_code
 		FROM
-		tact_jewel_record t
+		tact_jewel_record t LEFT JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id LEFT JOIN ${userDB}.tstd_user_ext tue ON tu.user_id = tue.user_id
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">

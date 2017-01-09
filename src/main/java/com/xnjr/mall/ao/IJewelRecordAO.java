@@ -51,6 +51,9 @@ public interface IJewelRecordAO {
     public Paginable<JewelRecord> queryJewelRecordPage(int start, int limit,
             JewelRecord condition);
 
+    public Paginable<JewelRecord> queryMyJewelRecordPage(int start, int limit,
+            JewelRecord condition);
+
     /**
      * 查询所有标的购买记录
      * @param condition

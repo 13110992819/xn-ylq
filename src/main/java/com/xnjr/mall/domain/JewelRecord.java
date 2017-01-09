@@ -24,6 +24,10 @@ public class JewelRecord extends ABaseDO {
     // 用户编号
     public String userId;
 
+    private String nickname;
+
+    private String photo;
+
     // 宝贝编号
     public String jewelCode;
 
@@ -46,6 +50,24 @@ public class JewelRecord extends ABaseDO {
     public String systemCode;
 
     public List<JewelRecordNumber> jewelRecordNumberList;
+
+    private Jewel jewel;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
     public String getCode() {
         return code;
@@ -126,5 +148,13 @@ public class JewelRecord extends ABaseDO {
     public void setJewelRecordNumberList(
             List<JewelRecordNumber> jewelRecordNumberList) {
         this.jewelRecordNumberList = jewelRecordNumberList;
+    }
+
+    public Jewel getJewel() {
+        return jewel;
+    }
+
+    public void setJewel(Jewel jewel) {
+        this.jewel = jewel;
     }
 }
