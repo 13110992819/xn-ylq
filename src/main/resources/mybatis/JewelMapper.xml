@@ -144,11 +144,27 @@
 		)
 	</insert>
 	
-	<update id="update_jewelApprove" parameterType="jewel">
+	<update id="update_status" parameterType="jewel">
 		UPDATE tact_jewel
 		SET
 		status=#{status}
-		
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_investInfo" parameterType="jewel">
+		UPDATE tact_jewel
+		SET
+		invest_num=#{investNum}
+		,invest_amount=#{investAmount}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_winInfo" parameterType="jewel">
+		UPDATE tact_jewel
+		SET
+		win_number=#{winNumber}
+		,win_user_id=#{winUserId}
+		,status=#{status}
 		WHERE code = #{code}
 	</update>
 	

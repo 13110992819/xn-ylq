@@ -64,6 +64,18 @@ public abstract class AMybatisTemplate {
     }
 
     /**
+     * 按给定条件查询数据列表
+     * 
+     * @param statement
+     * @param data
+     * @return
+     */
+    protected <E> List<E> selectList(String statement, Object data,
+            Class<E> clazz) {
+        return readDao.selectList(statement, data);
+    }
+
+    /**
      * 分页查询
      * 
      * @param statement

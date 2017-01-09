@@ -13,9 +13,8 @@ import com.xnjr.mall.bo.base.PaginableBOImpl;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.dao.IJewelRecordDAO;
 import com.xnjr.mall.domain.JewelRecord;
-import com.xnjr.mall.domain.JewelRecordNumber;
 import com.xnjr.mall.enums.EGeneratePrefix;
-import com.xnjr.mall.enums.EJewelRecordStart;
+import com.xnjr.mall.enums.EJewelRecordStatus;
 import com.xnjr.mall.exception.BizException;
 
 /**
@@ -52,17 +51,8 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             data.setCode(code);
             data.setCreateDatetime(new Date());
             data.setPayAmount(Long.valueOf((data.times * 1) * 1000));
-            data.setStatus(EJewelRecordStart.LOTTERY.getCode());
+            data.setStatus(EJewelRecordStatus.LOTTERY.getCode());
             jewelRecordDAO.insert(data);
-            int count = data.getTimes();
-            JewelRecordNumber jewelRecordNumber = new JewelRecordNumber();
-            List<JewelRecordNumber> condition = jewelRecordNumberBO
-                .queryJewelRecordNumberList(jewelRecordNumber);
-            System.out.println(condition.listIterator());
-            jewelRecordNumber.setRecordCode(code);
-            for (int i = 0; i < count; i++) {
-                jewelRecordNumberBO.saveJewelRecordNumber(jewelRecordNumber);
-            }
         }
         return code;
     }
@@ -74,15 +64,6 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             JewelRecord data = new JewelRecord();
             data.setCode(code);
             count = jewelRecordDAO.delete(data);
-        }
-        return count;
-    }
-
-    @Override
-    public int refreshJewelRecord(JewelRecord data) {
-        int count = 0;
-        if (StringUtils.isNotBlank(data.getCode())) {
-            count = jewelRecordDAO.update(data);
         }
         return count;
     }
@@ -104,6 +85,34 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     @Override
     public List<JewelRecord> queryJewelRecordList(JewelRecord data) {
         return jewelRecordDAO.selectList(data);
+    }
+
+    @Override
+    public int refreshStatus(String code, String status, String remark) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            JewelRecord data = new JewelRecord();
+            data.setCode(code);
+            data.setStatus(status);
+            data.setRemark(remark);
+            count = jewelRecordDAO.update(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshLostInfo(String code, String jewelCode, String status,
+            String remark) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            JewelRecord data = new JewelRecord();
+            data.setCode(code);
+            data.setJewelCode(jewelCode);
+            data.setStatus(status);
+            data.setRemark(remark);
+            count = jewelRecordDAO.updateLostInfo(data);
+        }
+        return count;
     }
 
 }

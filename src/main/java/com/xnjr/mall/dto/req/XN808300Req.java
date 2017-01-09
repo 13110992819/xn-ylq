@@ -24,6 +24,9 @@ public class XN808300Req {
     // 单价(必填)
     public String price;
 
+    // 总人次(必填)
+    public String totalNum;
+
     // 图文描述(必填)
     public String description;
 
@@ -106,5 +109,13 @@ public class XN808300Req {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public String getTotalNum() {
+        return totalNum;
+    }
+
+    public void setTotalNum(String totalNum) {
+        this.totalNum = totalNum;
     }
 }

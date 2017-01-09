@@ -14,11 +14,11 @@ package com.xnjr.mall.enums;
  * @since: 2016年12月19日 下午2:32:44 
  * @history:
  */
-public enum EJewelRecordStart {
-    LOTTERY("0", "待开奖"), WINNING("1", "已中奖"), LOST("2", "未中奖"), DELIVERY("3",
-            "已发货");
+public enum EJewelStatus {
+    APPROVAL("0", "待审批"), PASS("1", "审批通过（募集中"), NOPASS("2", "审批不通过"), EXPIRE(
+            "3", "到期"), WAITSEND("4", "待发货"), DELIVERED("5", "已发货");
 
-    EJewelRecordStart(String code, String value) {
+    EJewelStatus(String code, String value) {
         this.code = code;
         this.value = value;
     }

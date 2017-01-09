@@ -58,4 +58,10 @@ public class JewelRecordNumberDAOImpl extends AMybatisTemplate implements
         return super.update(NAMESPACE.concat("update_jewelRecordNumber"), data);
     }
 
+    @Override
+    public List<String> selectExistNumbers(String jewelCode) {
+        return super.selectList(NAMESPACE.concat("select_existNumbers"),
+            jewelCode, String.class);
+    }
+
 }

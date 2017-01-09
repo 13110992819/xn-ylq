@@ -18,6 +18,9 @@ public class JewelRecordNumber extends ABaseDO {
     // 序号
     public Long id;
 
+    // 夺宝标的编号
+    public String jewelCode;
+
     // 记录编号
     public String recordCode;
 
@@ -30,6 +33,14 @@ public class JewelRecordNumber extends ABaseDO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getJewelCode() {
+        return jewelCode;
+    }
+
+    public void setJewelCode(String jewelCode) {
+        this.jewelCode = jewelCode;
     }
 
     public String getRecordCode() {

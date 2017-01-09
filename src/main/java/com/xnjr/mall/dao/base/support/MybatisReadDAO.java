@@ -70,6 +70,17 @@ public final class MybatisReadDAO {
      * @param data
      * @return
      */
+    public <E> List<E> selectList(String statement, Object data) {
+        return readSqlSessionTemplate.<E> selectList(statement, data);
+    }
+
+    /**
+     * 查询
+     * 
+     * @param statement
+     * @param data
+     * @return
+     */
     public <E> List<E> selectList(String statement, int start, int count,
             ABaseDO data) {
         RowBounds rb = new RowBounds(start, count);

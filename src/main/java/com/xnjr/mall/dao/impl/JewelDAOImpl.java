@@ -57,8 +57,18 @@ public class JewelDAOImpl extends AMybatisTemplate implements IJewelDAO {
     }
 
     @Override
-    public int updateJewelApprove(Jewel data) {
-        return super.update(NAMESPACE.concat("update_jewelApprove"), data);
+    public int updateStatus(Jewel data) {
+        return super.update(NAMESPACE.concat("update_status"), data);
+    }
+
+    @Override
+    public int updateInvestInfo(Jewel data) {
+        return super.update(NAMESPACE.concat("update_investInfo"), data);
+    }
+
+    @Override
+    public int updateWinInfo(Jewel data) {
+        return super.update(NAMESPACE.concat("update_winInfo"), data);
     }
 
 }

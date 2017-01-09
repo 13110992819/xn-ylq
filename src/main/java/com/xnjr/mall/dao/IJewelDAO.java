@@ -19,12 +19,9 @@ public interface IJewelDAO extends IBaseDAO<Jewel> {
      */
     public int update(Jewel data);
 
-    /**
-     * 审核
-     * @param data
-     * @return 
-     * @create: 2016年12月19日 下午5:35:16 shan
-     * @history:
-     */
-    public int updateJewelApprove(Jewel data);
+    public int updateStatus(Jewel data);
+
+    public int updateInvestInfo(Jewel data);
+
+    public int updateWinInfo(Jewel data);
 }

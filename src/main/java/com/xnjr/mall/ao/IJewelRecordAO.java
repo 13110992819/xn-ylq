@@ -21,8 +21,7 @@ public interface IJewelRecordAO {
      * @create: 2016年12月20日 下午12:11:39 shan
      * @history:
      */
-    public String addJewelRecord(String userId, String jewelCode,
-            Integer times, String systemCode);
+    public String addJewelRecord(String userId, String jewelCode, Integer times);
 
     /**
      * 修改标的购买记录

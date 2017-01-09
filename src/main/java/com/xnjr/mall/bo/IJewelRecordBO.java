@@ -39,14 +39,20 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
      */
     public int removeJewelRecord(String code);
 
+    public int refreshStatus(String code, String status, String remark);
+
     /**
-     * 
-     * @param data
+     * 将所有未中奖记录修改状态
+     * @param code
+     * @param jewelCode
+     * @param status
+     * @param remark
      * @return 
-     * @create: 2016年12月20日 下午12:26:53 shan
+     * @create: 2017年1月9日 下午7:33:33 haiqingzheng
      * @history:
      */
-    public int refreshJewelRecord(JewelRecord data);
+    public int refreshLostInfo(String code, String jewelCode, String status,
+            String remark);
 
     /**
      * 

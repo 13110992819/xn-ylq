@@ -97,6 +97,14 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_lostInfo" parameterType="jewelRecord">
+		UPDATE tact_jewel_record
+		SET
+		status=#{status}
+		,remark=#{remark}
+		WHERE jewel_code = #{jewelCode} and code != #{code}
+	</update>
+	
 	<delete id="delete_jewelRecord" parameterType="jewelRecord">
 		DELETE FROM
 		tact_jewel_record

@@ -4,6 +4,7 @@
 <mapper namespace="com.xnjr.mall.dao.IJewelRecordNumberDAO">
 	<resultMap id="jewelRecordNumber_DB_Result" type="jewelRecordNumber">
 		<result column="id" property="id" />
+		<result column="jewel_code" property="jewelCode" />
 		<result column="record_code" property="recordCode" />
 		<result column="number" property="number" />
 	</resultMap>
@@ -11,6 +12,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="id != null and id != '' ">
 				AND t.id = #{id}
+			</if>
+			<if test="jewelCode != null and jewelCode != '' ">
+				AND t.jewel_code = #{jewelCode}
 			</if>
 			<if test="recordCode != null and recordCode != '' ">
 				AND t.record_code = #{recordCode}
@@ -23,6 +27,7 @@
 	<select id="select_jewelRecordNumber" parameterType="jewelRecordNumber" resultMap="jewelRecordNumber_DB_Result">
 		SELECT
 		t.id
+		,t.jewel_code
 		,t.record_code
 		,t.number 
 		FROM
@@ -40,16 +45,24 @@
 		SELECT count(1) FROM tact_jewel_record_number t 
 		<include refid="where_condition" />
 	</select>
+ 
+	<select id="select_existNumbers" parameterType="String"
+		resultType="java.lang.String">
+		SELECT t.number FROM tact_jewel_record_number t
+		where t.jewel_code = #{jewelCode};
+	</select>
 
 	<insert id="insert_jewelRecordNumber" parameterType="jewelRecordNumber">
 		INSERT INTO
 		tact_jewel_record_number(
 		id
+		,jewel_code
 		,record_code
 		,number 
 		)
 		VALUES(
 		#{id}
+		,#{jewelCode}
 		,#{recordCode}
 		,#{number}
 		)
