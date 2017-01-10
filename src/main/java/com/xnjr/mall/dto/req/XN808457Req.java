@@ -26,8 +26,30 @@ public class XN808457Req extends APageReq {
     // 纬度(必填)
     private String latitude;
 
-    // 距离(必填)
+    // 距离(选填)
     private String distance;
+
+    // 用户编号(必填)
+    private String userId;
+
+    // 设备编号(必填)
+    private String deviceNo;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getDeviceNo() {
+        return deviceNo;
+    }
+
+    public void setDeviceNo(String deviceNo) {
+        this.deviceNo = deviceNo;
+    }
 
     public String getDistance() {
         return distance;

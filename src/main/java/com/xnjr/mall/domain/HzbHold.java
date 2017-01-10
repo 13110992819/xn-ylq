@@ -52,6 +52,28 @@ public class HzbHold extends ABaseDO {
     // 距离
     private String distance;
 
+    // 分享URL
+    private String shareUrl;
+
+    // 手机号
+    private String mobile;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
+    }
+
     public String getDistance() {
         return distance;
     }

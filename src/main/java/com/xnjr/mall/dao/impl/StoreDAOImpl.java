@@ -42,7 +42,7 @@ public class StoreDAOImpl extends AMybatisTemplate implements IStoreDAO {
 
     @Override
     public List<Store> selectList(Store condition) {
-        // condition.setUserDB(PropertiesUtil.Config.USER_DB);
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList("select_store", condition, Store.class);
     }
 

@@ -5,6 +5,7 @@
 	<resultMap id="hzbHold_DB_Result" type="hzbHold">
 		<result column="id" property="id" />
 		<result column="user_id" property="userId" />
+		<result column="mobile" property="mobile" />
 		<result column="hzb_code" property="hzbCode" />
 		<result column="status" property="status" />
 		<result column="price" property="price" />
@@ -25,11 +26,11 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
-			</if>
 			<if test="distance != null and distance != '' ">
 				<![CDATA[ having distance <= #{distance}]]>
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
 			</if>
 		</trim>
 	</sql>
@@ -65,6 +66,7 @@
 		SELECT
 		t.id
 		,t.user_id
+		,tuser.mobile
 		,t.hzb_code
 		,t.status
 		,t.price
@@ -74,7 +76,7 @@
 		,t.system_code
 		,ROUND(6378.138*2*ASIN(SQRT(POW(SIN((#{userLatitude}*PI()/180-tu.latitude*PI()/180)/2),2)+COS(#{userLatitude}*PI()/180)*COS(tu.latitude*PI()/180)*POW(SIN((#{userLongitude}*PI()/180-tu.longitude*PI()/180)/2),2)))*1000) as distance
 		FROM
-		tact_hzb_hold t INNER JOIN ${userDB}.tstd_user_ext tu ON t.user_id = tu.user_id 
+		tact_hzb_hold t INNER JOIN ${userDB}.tstd_user_ext tu ON t.user_id = tu.user_id INNER JOIN ${userDB}.tstd_user tuser ON tu.user_id = tuser.user_id 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">

@@ -50,6 +50,21 @@ CREATE TABLE `tact_hzb_hold` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+--  Table structure for `tact_hzb_yy`
+-- ----------------------------
+DROP TABLE IF EXISTS `tact_hzb_yy`;
+CREATE TABLE `tact_hzb_yy` (
+  `code` varchar(32) NOT NULL COMMENT '编号',
+  `hzb_hold_id` bigint(32) DEFAULT NULL COMMENT '汇赚宝持有Id',
+  `type` varchar(32) DEFAULT NULL COMMENT '类型（1 红包 2 钱包 3 购物币）',
+  `quantity` int(11) DEFAULT NULL COMMENT '摇出数量',
+  `user_id` varchar(32) DEFAULT NULL,
+  `device_no` varchar(255) DEFAULT NULL COMMENT '设备编号',
+  `create_datetime` datetime DEFAULT NULL COMMENT '产生时间',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 --  Table structure for `tact_jewel`
 -- ----------------------------
 DROP TABLE IF EXISTS `tact_jewel`;

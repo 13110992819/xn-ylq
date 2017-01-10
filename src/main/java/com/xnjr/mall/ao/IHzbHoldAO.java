@@ -16,7 +16,8 @@ public interface IHzbHoldAO {
 
     public List<HzbHold> queryHzbHoldList(HzbHold condition);
 
-    public List<HzbHold> queryDistanceHzbHoldList(HzbHold condition);
+    public Object queryDistanceHzbHoldList(HzbHold condition, String userId,
+            String deviceNo);
 
     public HzbHold getHzbHold(Long id);
 }
