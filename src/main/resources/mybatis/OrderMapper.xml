@@ -34,6 +34,7 @@
 		<result column="delivery_datetime" property="deliveryDatetime" />
 		<result column="pdf" property="pdf" />
 		<result column="company_code" property="companyCode" />
+		<result column="pay_code" property="payCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -61,6 +62,9 @@
 			</if>
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
+			</if>
+			<if test="payCode != null and payCode != '' ">
+				AND t.pay_code = #{payCode}
 			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}

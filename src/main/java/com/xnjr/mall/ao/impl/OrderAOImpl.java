@@ -40,8 +40,10 @@ import com.xnjr.mall.domain.Cart;
 import com.xnjr.mall.domain.Order;
 import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.ProductOrder;
+import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EOrderStatus;
+import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.exception.BizException;
 
 /** 
@@ -96,14 +98,14 @@ public class OrderAOImpl implements IOrderAO {
         if (null != product.getPrice1()) {
             Long amount1 = quantity * product.getPrice1();
             data.setAmount1(amount1);
+            // 计算订单运费
+            Long yunfei = totalYunfei(data.getSystemCode(),
+                product.getCompanyCode(), amount1);
+            data.setYunfei(yunfei);
         }
         if (null != product.getPrice2()) {
             Long amount2 = quantity * product.getPrice2();
             data.setAmount2(amount2);
-            // 计算订单运费
-            Long yunfei = totalYunfei(data.getSystemCode(),
-                product.getCompanyCode(), amount2);
-            data.setYunfei(yunfei);
         }
         if (null != product.getPrice3()) {
             Long amount3 = quantity * product.getPrice3();
@@ -231,19 +233,47 @@ public class OrderAOImpl implements IOrderAO {
 
     @Override
     @Transactional
-    public void toPayOrder(String code, String channel) {
+    public void toPayOrder(String code, String payType) {
         Order order = orderBO.getOrder(code);
         if (!EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn000000", "订单不处于待支付状态");
         }
-        Long payAmount1 = order.getAmount1(); // 购物币
-        Long payAmount2 = order.getAmount2() + order.getYunfei(); // 人民币
-        Long payAmount3 = order.getAmount3(); // 钱包币
-        // if (EChannel.INTEGER.getCode().equals(channel)) {
-        // }
-        // userBO.doTransfer(order.getApplyUser(), EDirection.MINUS.getCode(),
-        // payAmount, "购买商品", code);
-        orderBO.refreshOrderPayAmount(code, payAmount1, payAmount2, payAmount3);
+        Long payAmount1 = order.getAmount1() + order.getYunfei(); // 人民币
+        if (EPayType.INTEGRAL.getCode().equals(payType)) {
+            // 虚拟币兑换
+        } else if (EPayType.WEIXIN.getCode().equals(payType)) {
+        } else if (EPayType.ALIPAY.getCode().equals(payType)) {
+        }
+        orderBO.refreshOrderPayAmount(code, payAmount1, 0L, 0L);
+    }
+
+    @Override
+    @Transactional
+    public void toPayMixOrder(String code, String payType) {
+        Order order = orderBO.getOrder(code);
+        if (!EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
+            throw new BizException("xn000000", "订单不处于待支付状态");
+        }
+        Long payAmount1 = order.getAmount1() + order.getYunfei(); // 人民币
+        Long gwAmount = order.getAmount2(); // 购物币
+        Long qbAmount = order.getAmount3(); // 钱包币
+        String systemCode = order.getSystemCode();
+        String toUserId = order.getCompanyCode();
+        // 人民币+购物币+钱包币
+        // 余额支付(余额支付)
+        if (EPayType.YEZP.getCode().equals(payType)) {
+            // 扣除钱包和购物币
+            accountBO.doGWBQBBPay(systemCode, order.getApplyUser(), toUserId,
+                qbAmount, gwAmount, EBizType.AJ_GW);
+            // 扣除余额
+            accountBO.doBalancePay(systemCode, order.getApplyUser(),
+                order.getCompanyCode(), payAmount1, EBizType.AJ_GW);
+            // 更新支付金额
+            orderBO.refreshOrderPayAmount(code, payAmount1, gwAmount, qbAmount);
+        } else if (EPayType.WEIXIN.getCode().equals(payType)) {
+
+        } else if (EPayType.ALIPAY.getCode().equals(payType)) {
+        }
     }
 
     /** 
@@ -382,6 +412,28 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     public void expedOrder(String code) {
         orderBO.expedOrder(code);
+    }
+
+    /**
+     * @see com.xnjr.mall.ao.IOrderAO#paySuccess(java.lang.String)
+     */
+    @Override
+    @Transactional
+    public void paySuccess(String payCode) {
+        Order condition = new Order();
+        condition.setPayCode(payCode);
+        List<Order> result = orderBO.queryOrderList(condition);
+        if (CollectionUtils.isEmpty(result)) {
+            throw new BizException("XN000000", "找不到对应的消费记录");
+        }
+        Order order = result.get(0);
+        // 扣除金额(购物币和钱包币)
+        accountBO.doGWBQBBPay(order.getSystemCode(), order.getApplyUser(),
+            order.getCompanyCode(), order.getAmount2(), order.getAmount3(),
+            EBizType.AJ_GW);
+        // 更新支付金额
+        orderBO.refreshOrderPayAmount(order.getCode(), order.getAmount1(),
+            order.getAmount2(), order.getAmount3());
     }
 
     /** 

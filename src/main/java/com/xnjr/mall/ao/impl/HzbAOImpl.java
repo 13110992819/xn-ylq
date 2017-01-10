@@ -330,21 +330,27 @@ public class HzbAOImpl implements IHzbAO {
                 // 省合伙人
                 XN805060Res provinceRes = userBO.getPartnerUserInfo(
                     userExt.getProvince(), null, null);
-                areaFcAmount(systemCode, provinceRes,
-                    SysConstants.HZB_PROVINCE, price, "省");
+                if (provinceRes != null) {
+                    areaFcAmount(systemCode, provinceRes.getUserId(),
+                        SysConstants.HZB_PROVINCE, price, "省");
+                }
                 if (StringUtils.isNotBlank(userExt.getCity())) {
                     // 市合伙人
                     XN805060Res cityRes = userBO.getPartnerUserInfo(
                         userExt.getProvince(), userExt.getCity(), null);
-                    areaFcAmount(systemCode, cityRes, SysConstants.HZB_CITY,
-                        price, "市");
+                    if (cityRes != null) {
+                        areaFcAmount(systemCode, cityRes.getUserId(),
+                            SysConstants.HZB_CITY, price, "市");
+                    }
                     if (StringUtils.isNotBlank(userExt.getArea())) {
                         // 县合伙人
                         XN805060Res areaRes = userBO.getPartnerUserInfo(
                             userExt.getProvince(), userExt.getCity(),
                             userExt.getArea());
-                        areaFcAmount(systemCode, areaRes,
-                            SysConstants.HZB_AREA, price, "县");
+                        if (areaRes != null) {
+                            areaFcAmount(systemCode, areaRes.getUserId(),
+                                SysConstants.HZB_AREA, price, "县");
+                        }
                     }
                 }
             }
@@ -366,7 +372,7 @@ public class HzbAOImpl implements IHzbAO {
         }
     }
 
-    private void areaFcAmount(String systemCode, XN805060Res user,
+    private void areaFcAmount(String systemCode, String userId,
             String sysConstants, Long price, String remark) {
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
             null);
@@ -374,8 +380,8 @@ public class HzbAOImpl implements IHzbAO {
         Long transAmount = Double.valueOf(price * rate).longValue();
         if (transAmount != null && transAmount != 0) {
             String bizNote = EBizType.AJ_GMHZBFC.getValue() + ",合伙人" + remark
-                    + "用户[" + user.getUserId() + "]分润分成";
-            accountBO.doTransferFcBySystem(systemCode, user.getUserId(),
+                    + "用户[" + userId + "]分润分成";
+            accountBO.doTransferFcBySystem(systemCode, userId,
                 ECurrency.FRB.getCode(), transAmount,
                 EBizType.AJ_GMHZBFC.getCode(), bizNote);
         }

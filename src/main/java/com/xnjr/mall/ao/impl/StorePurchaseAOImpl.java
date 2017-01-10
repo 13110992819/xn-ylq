@@ -331,7 +331,6 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         StorePurchase storePurchase = result.get(0);
         count = storePurchaseBO.refreshStatus(storePurchase.getCode(),
             EStorePurchaseStatus.PAYED.getCode());
-        Store store = storeBO.getStore(storePurchase.getStoreCode());
         distributeAmount(storePurchase);
         return count;
     }

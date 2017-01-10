@@ -38,11 +38,20 @@ public interface IOrderAO {
     /**
      * 支付订单,待发货
      * @param code
-     * @param channel 
-     * @create: 2016年11月24日 下午4:41:56 xieyj
+     * @param payType 
+     * @create: 2017年1月10日 下午4:17:36 xieyj
      * @history:
      */
-    public void toPayOrder(String code, String channel);
+    public void toPayOrder(String code, String payType);
+
+    /**
+     * 支付订单,待发货
+     * @param code
+     * @param payType 
+     * @create: 2017年1月10日 下午4:17:36 xieyj
+     * @history:
+     */
+    public void toPayMixOrder(String code, String payType);
 
     /**
      * 批量支付订单，待发货
@@ -148,6 +157,15 @@ public interface IOrderAO {
      * @history:
      */
     public Order getOrder(String code);
+
+    /**
+     * 根据流水编号，找到对应消费记录，更新支付状态
+     * @param jourCode
+     * @return 
+     * @create: 2017年1月10日 下午7:48:09 xieyj
+     * @history:
+     */
+    public void paySuccess(String payCode);
 
     /**
      *  订单未支付，扫描取消订单

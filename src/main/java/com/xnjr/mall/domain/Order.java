@@ -54,13 +54,13 @@ public class Order extends ABaseDO {
     // 申请时间
     private Date applyDatetime;
 
-    // 订单金额
+    // 订单金额(人民币)
     private Long amount1;
 
-    // 订单金额
+    // 订单金额(购物币)
     private Long amount2;
 
-    // 订单金额
+    // 订单金额(钱包币)
     private Long amount3;
 
     // 实际支付金额
@@ -111,6 +111,9 @@ public class Order extends ABaseDO {
     // 所属公司编号
     private String companyCode;
 
+    // 支付编号
+    private String payCode;
+
     // 所属系统编号
     private String systemCode;
 
@@ -136,6 +139,14 @@ public class Order extends ABaseDO {
 
     // 订单产品详情列表
     List<ProductOrder> productOrderList;
+
+    public String getPayCode() {
+        return payCode;
+    }
+
+    public void setPayCode(String payCode) {
+        this.payCode = payCode;
+    }
 
     public Date getUpdateDatetimeEnd() {
         return updateDatetimeEnd;

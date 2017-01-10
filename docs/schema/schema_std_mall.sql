@@ -248,6 +248,7 @@ CREATE TABLE `tmall_order` (
   `delivery_datetime` datetime DEFAULT NULL COMMENT '发货时间',
   `pdf` varchar(255) DEFAULT NULL COMMENT '物流单',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  `pay_code` varchar(32) DEFAULT NULL COMMENT '第三方支付编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -274,9 +275,9 @@ CREATE TABLE `tmall_product` (
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `price1` bigint(20) DEFAULT NULL COMMENT '价格1',
-  `price2` bigint(20) DEFAULT NULL COMMENT '价格2',
-  `price3` bigint(20) DEFAULT NULL COMMENT '价格3',
+  `price1` bigint(20) DEFAULT NULL COMMENT '价格1（人民币）',
+  `price2` bigint(20) DEFAULT NULL COMMENT '价格2（虚拟币1）',
+  `price3` bigint(20) DEFAULT NULL COMMENT '价格3（虚拟币2）',
   `location` varchar(32) DEFAULT NULL COMMENT '位置(0 普通 1 热门)',
   `order_no` int(11) DEFAULT NULL COMMENT '相对位置编号',
   `company_code` varchar(32) DEFAULT NULL COMMENT '所属公司',

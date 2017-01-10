@@ -23,8 +23,8 @@ INSERT INTO `tmall_category` (`code`,`parent_code`,`type`,`name`,`pic`,`order_no
 -- Query: SELECT * FROM std_mall.tsys_config
 -- Date: 2016-12-29 13:57
 */
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('A','A1','包邮订单金额','byje','90','订单金额大于等于该配置，包邮',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('A','A1','运费','yunfei','120','默认订单运费',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('A','A1','包邮订单金额','spByje','90','订单金额大于等于该配置，包邮',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('A','A1','运费','spYunfei','120','默认订单运费',0,NULL,'CD-CZH000001');
 
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B1','业务员','o2oYwy','0.1','消费分成10%',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B1','县','o2oArea','0.1','消费分成10%',0,NULL,'CD-CZH000001');
@@ -74,7 +74,10 @@ INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`b
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('D','D1','贡献奖励兑人民币','gxjl2Cny','1','1贡献奖励=1人民币',0,NULL,'CD-CZH000001');
 
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('O','O1','福利月卡返现期数','stBackNum','10','福利月卡返现期数',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('O','O1','汇赚宝摇出距离','hzbDistance','1000','汇赚宝摇出距离',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('E','E1','近距离店铺数','storeNum','10','近距离店铺数',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('E','E2','汇赚宝摇出距离','hzbDistance','1000','汇赚宝摇出距离',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('E','E2','汇赚宝摇出最大数量','hzbMaxNum','100','汇赚宝摇出最大数量',0,NULL,'CD-CZH000001');
+
 /*
 -- Query: SELECT * FROM std_mall.tact_hzb
 -- Date: 2017-01-08 19:32

@@ -8,7 +8,10 @@
  */
 package com.xnjr.mall.bo;
 
+import java.util.Map;
+
 import com.xnjr.mall.dto.res.XN802503Res;
+import com.xnjr.mall.enums.EBizType;
 
 /** 
  * @author: miyb 
@@ -16,6 +19,30 @@ import com.xnjr.mall.dto.res.XN802503Res;
  * @history:
  */
 public interface IAccountBO {
+
+    /**
+     * 根据用户编号和币种获取账户
+     * @param systemCode
+     * @param userId
+     * @param currency
+     * @return 
+     * @create: 2016年12月28日 下午2:29:43 xieyj
+     * @history:
+     */
+    public XN802503Res getAccountByUserId(String systemCode, String userId,
+            String currency);
+
+    /**
+     * 获取用户所有的账户
+     * @param systemCode
+     * @param userId
+     * @return 
+     * @create: 2017年1月10日 下午8:32:36 xieyj
+     * @history:
+     */
+    public Map<String, XN802503Res> getAccountsByUser(String systemCode,
+            String userId);
+
     /**
      * 账户划转资金
      * @param systemCode
@@ -90,14 +117,56 @@ public interface IAccountBO {
             String approveResult, String approver, String approveNote);
 
     /**
-     * 根据用户编号和币种获取账户
      * @param systemCode
      * @param userId
-     * @param currency
-     * @return 
-     * @create: 2016年12月28日 下午2:29:43 xieyj
+     * @param gwbPrice
+     * @param qbbPrice 
+     * @create: 2017年1月10日 下午8:24:48 xieyj
      * @history:
      */
-    public XN802503Res getAccountByUserId(String systemCode, String userId,
-            String currency);
+    public void checkGwQbBalance(String systemCode, String userId,
+            Long gwbPrice, Long qbbPrice);
+
+    /**
+     * 购物和钱包币支付
+     * @param systemCode
+     * @param fromUserId
+     * @param toUserId
+     * @param gwbPrice
+     * @param qbbPrice
+     * @param bizType 
+     * @create: 2017年1月10日 下午7:58:07 xieyj
+     * @history:
+     */
+    public void doGWBQBBPay(String systemCode, String fromUserId,
+            String toUserId, Long gwbPrice, Long qbbPrice, EBizType bizType);
+
+    /**
+     * 余额支付
+     * @param systemCode
+     * @param fromUserId
+     * @param toUserId
+     * @param price
+     * @param bizType 
+     * @create: 2017年1月10日 下午5:44:02 xieyj
+     * @history:
+     */
+    public void doBalancePay(String systemCode, String fromUserId,
+            String toUserId, Long price, EBizType bizType);
+
+    /**
+     * 购物，钱包和余额支付
+     * @param systemCode
+     * @param fromUserId
+     * @param toUserId
+     * @param gwPrice
+     * @param qbPrice
+     * @param cnyPrice
+     * @param bizType 
+     * @create: 2017年1月10日 下午8:27:59 xieyj
+     * @history:
+     */
+    public void doGwQbAndBalancePay(String systemCode, String fromUserId,
+            String toUserId, Long gwPrice, Long qbPrice, Long cnyPrice,
+            EBizType bizType);
 }
