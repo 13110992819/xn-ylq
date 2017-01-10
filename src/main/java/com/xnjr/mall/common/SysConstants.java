@@ -98,4 +98,6 @@ public class SysConstants {
 
     public static final Long AMOUNT_RADIX = 1000L; // 金额基数
 
+    public static final int TIMES = 8; // 摇出次数
+
 }

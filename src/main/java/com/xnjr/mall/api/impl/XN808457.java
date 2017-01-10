@@ -47,7 +47,8 @@ public class XN808457 extends AProcessor {
         // condition.setOrder(orderColumn, req.getOrderDir());
         // int start = StringValidater.toInteger(req.getStart());
         // int limit = StringValidater.toInteger(req.getLimit());
-        return hzbHoldAO.queryDistanceHzbHoldList(condition);
+        return hzbHoldAO.queryDistanceHzbHoldList(condition, req.getUserId(),
+            req.getDeviceNo());
     }
 
     /** 
@@ -56,6 +57,7 @@ public class XN808457 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808457Req.class);
-        StringValidater.validateBlank(req.getLatitude(), req.getLongitude());
+        StringValidater.validateBlank(req.getLatitude(), req.getLongitude(),
+            req.getUserId(), req.getDeviceNo());
     }
 }

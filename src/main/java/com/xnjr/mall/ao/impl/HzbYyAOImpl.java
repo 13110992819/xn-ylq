@@ -76,14 +76,16 @@ public class HzbYyAOImpl implements IHzbYyAO {
         yyCondition.setUserId(userId);
         yyCondition.setCreateDatetimeStart(DateUtil.getTodayStart());
         yyCondition.setCreateDatetimeEnd(DateUtil.getTodayEnd());
-        if (hzbYyBO.getTotalCount(yyCondition) > 3) {
-            throw new BizException("xn0000", "您的账号今天已摇3次，请明天再来哦");
+        if (hzbYyBO.getTotalCount(yyCondition) > SysConstants.TIMES) {
+            throw new BizException("xn0000", "您的账号今天已摇" + SysConstants.TIMES
+                    + "次，请明天再来哦");
         }
         // 一个手机一天只能摇3次
         yyCondition.setUserId(null);
         yyCondition.setDeviceNo(deviceNo);
-        if (hzbYyBO.getTotalCount(yyCondition) > 3) {
-            throw new BizException("xn0000", "您的手机今天已摇3次，请明天再来哦");
+        if (hzbYyBO.getTotalCount(yyCondition) > SysConstants.TIMES) {
+            throw new BizException("xn0000", "您的手机今天已摇" + +SysConstants.TIMES
+                    + "次，请明天再来哦");
         }
         HzbHold hzbHold = hzbHoldBO.getHzbHold(hzbHoldId);
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(
