@@ -17,58 +17,73 @@ public class Jewel extends ABaseDO {
     private static final long serialVersionUID = 1L;
 
     // 编号
-    public String code;
+    private String code;
 
     // 商家编号
-    public String storeCode;
+    private String storeCode;
 
     // 名称
-    public String name;
+    private String name;
 
     // 标语
-    public String slogan;
+    private String slogan;
 
     // 广告图
-    public String advPic;
+    private String advPic;
 
     // 图文描述
-    public String description;
+    private String description;
 
-    // 投资人数
-    public Integer investNum;
+    // 单价1
+    private Long price1;
 
-    // 投资金额
-    public Long investAmount;
+    // 单价2
+    private Long price2;
 
-    // 总投资人数
-    public Integer totalNum;
+    // 单价3
+    private Long price3;
 
-    // 单价
-    public Long price;
+    // 所需总人次
+    private Integer totalNum;
+
+    // 已投人次
+    private Integer investNum;
 
     // 夺宝开始时间
-    public Date startDatetime;
+    private Date startDatetime;
 
     // 募集天数
-    public String raiseDays;
+    private Integer raiseDays;
 
     // 中奖号码
-    public String winNumber;
+    private String winNumber;
 
     // 中奖人编号
-    public String winUserId;
+    private String winUserId;
 
     // 抽奖算法
-    public String lotAlg;
+    private String lotAlg;
 
     // 状态（0 待审批，1 募集中，2 审批不通过，3 到期，4 待发货，5 已发货）
-    public String status;
+    private String status;
 
     // 系统编号
-    public String systemCode;
+    private String systemCode;
 
-    // 活动截止时间
-    public Date endDatetime;
+    // 审批人
+    private String approver;
+
+    // 审批时间
+    private Date approveDatetime;
+
+    // 审批人
+    private String updater;
+
+    // 审批时间
+    private Date updateDatetime;
+
+    // 备注
+    private String remark;
 
     public String getCode() {
         return code;
@@ -118,20 +133,28 @@ public class Jewel extends ABaseDO {
         this.description = description;
     }
 
-    public Integer getInvestNum() {
-        return investNum;
+    public Long getPrice1() {
+        return price1;
     }
 
-    public void setInvestNum(Integer investNum) {
-        this.investNum = investNum;
+    public void setPrice1(Long price1) {
+        this.price1 = price1;
     }
 
-    public Long getInvestAmount() {
-        return investAmount;
+    public Long getPrice2() {
+        return price2;
     }
 
-    public void setInvestAmount(Long investAmount) {
-        this.investAmount = investAmount;
+    public void setPrice2(Long price2) {
+        this.price2 = price2;
+    }
+
+    public Long getPrice3() {
+        return price3;
+    }
+
+    public void setPrice3(Long price3) {
+        this.price3 = price3;
     }
 
     public Integer getTotalNum() {
@@ -142,12 +165,12 @@ public class Jewel extends ABaseDO {
         this.totalNum = totalNum;
     }
 
-    public Long getPrice() {
-        return price;
+    public Integer getInvestNum() {
+        return investNum;
     }
 
-    public void setPrice(Long price) {
-        this.price = price;
+    public void setInvestNum(Integer investNum) {
+        this.investNum = investNum;
     }
 
     public Date getStartDatetime() {
@@ -158,11 +181,11 @@ public class Jewel extends ABaseDO {
         this.startDatetime = startDatetime;
     }
 
-    public String getRaiseDays() {
+    public Integer getRaiseDays() {
         return raiseDays;
     }
 
-    public void setRaiseDay(String raiseDays) {
+    public void setRaiseDays(Integer raiseDays) {
         this.raiseDays = raiseDays;
     }
 
@@ -206,11 +229,44 @@ public class Jewel extends ABaseDO {
         this.systemCode = systemCode;
     }
 
-    public Date getEndDatetime() {
-        return endDatetime;
+    public String getApprover() {
+        return approver;
     }
 
-    public void setEndDatetime(Date endDatetime) {
-        this.endDatetime = endDatetime;
+    public void setApprover(String approver) {
+        this.approver = approver;
     }
+
+    public Date getApproveDatetime() {
+        return approveDatetime;
+    }
+
+    public void setApproveDatetime(Date approveDatetime) {
+        this.approveDatetime = approveDatetime;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
 }

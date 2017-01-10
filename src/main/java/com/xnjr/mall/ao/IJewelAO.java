@@ -45,6 +45,26 @@ public interface IJewelAO {
     public void reApplyJewel(Jewel data);
 
     /**
+     * 宝贝上架
+     * @param data
+     * @return 
+     * @create: 2017年1月10日 下午6:28:25 haiqingzheng
+     * @history:
+     */
+    public int putOn(Jewel data);
+
+    /**
+     * 宝贝下架
+     * @param code
+     * @param updater
+     * @param remark
+     * @return 
+     * @create: 2017年1月10日 下午7:52:02 haiqingzheng
+     * @history:
+     */
+    public int putOff(String code, String updater, String remark);
+
+    /**
      * 分页查询
      * @param start
      * @param limit

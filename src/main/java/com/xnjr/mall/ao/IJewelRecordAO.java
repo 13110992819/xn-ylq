@@ -15,13 +15,23 @@ public interface IJewelRecordAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     /**
-     * 新增标的购买记录
+     * 参与夺宝
      * @param data
      * @return 
      * @create: 2016年12月20日 下午12:11:39 shan
      * @history:
      */
-    public String addJewelRecord(String userId, String jewelCode, Integer times);
+    public String buy(String userId, String jewelCode, Integer times);
+
+    /**
+     * 追加
+     * @param jewelRecordCode
+     * @param times
+     * @return 
+     * @create: 2017年1月10日 下午8:19:35 haiqingzheng
+     * @history:
+     */
+    public void additionalBuy(String jewelRecordCode, Integer times);
 
     /**
      * 修改标的购买记录

@@ -16,7 +16,7 @@ package com.xnjr.mall.enums;
  */
 public enum EJewelRecordStatus {
     LOTTERY("0", "待开奖"), WINNING("1", "已中奖"), LOST("2", "未中奖"), DELIVERY("3",
-            "已发货");
+            "已发货"), FORCE_END("4", "强制退款");
 
     EJewelRecordStatus(String code, String value) {
         this.code = code;

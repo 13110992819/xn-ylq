@@ -76,7 +76,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             condition.setCode(code);
             data = jewelRecordDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "编号不存在");
+                throw new BizException("xn0000", "记录编号不存在");
             }
         }
         return data;
@@ -111,6 +111,18 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             data.setStatus(status);
             data.setRemark(remark);
             count = jewelRecordDAO.updateLostInfo(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshTimes(String code, Integer times) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            JewelRecord data = new JewelRecord();
+            data.setCode(code);
+            data.setTimes(times);
+            count = jewelRecordDAO.updateTimes(data);
         }
         return count;
     }

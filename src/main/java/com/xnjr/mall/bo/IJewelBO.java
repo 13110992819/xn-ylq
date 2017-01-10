@@ -75,8 +75,13 @@ public interface IJewelBO extends IPaginableBO<Jewel> {
      */
     public int refreshStatus(String code, String status);
 
-    public int refreshInvestInfo(String code, Integer investNum,
-            Long investAmount);
+    public int refreshApprove(Jewel data);
+
+    public int refreshPutOn(Jewel data);
+
+    public int refreshPutOff(String code, String updater, String remark);
+
+    public int refreshInvestInfo(String code, Integer investNum);
 
     public int refreshWinInfo(String code, String winNumber, String winUserId);
 }
