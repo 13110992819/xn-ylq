@@ -1,5 +1,6 @@
 package com.xnjr.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -99,14 +100,48 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
     }
 
     @Override
-    public int refreshInvestInfo(String code, Integer investNum,
-            Long investAmount) {
+    public int refreshApprove(Jewel data) {
+        int count = 0;
+        if (data != null && StringUtils.isNotBlank(data.getCode())) {
+            count = jewelDAO.updateApprove(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshPutOn(Jewel data) {
+        int count = 0;
+        if (data != null && StringUtils.isNotBlank(data.getCode())) {
+            data.setStatus(EJewelStatus.PUT_ON.getCode());
+            data.setStartDatetime(new Date());
+            data.setUpdateDatetime(new Date());
+            count = jewelDAO.updatePutOn(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshPutOff(String code, String updater, String remark) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            Jewel data = new Jewel();
+            data.setCode(code);
+            data.setStatus(EJewelStatus.PUT_OFF.getCode());
+            data.setUpdateDatetime(new Date());
+            data.setUpdater(updater);
+            data.setRemark(remark);
+            count = jewelDAO.updatePutOff(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshInvestInfo(String code, Integer investNum) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             Jewel data = new Jewel();
             data.setCode(code);
             data.setInvestNum(investNum);
-            data.setInvestAmount(investAmount);
             count = jewelDAO.updateInvestInfo(data);
         }
         return count;
@@ -120,9 +155,11 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
             data.setCode(code);
             data.setWinNumber(winNumber);
             data.setWinUserId(winUserId);
-            data.setStatus(EJewelStatus.WAITSEND.getCode());
+            data.setStatus(EJewelStatus.TO_SEND.getCode());
+            data.setRemark("已开奖");
             count = jewelDAO.updateWinInfo(data);
         }
         return count;
     }
+
 }

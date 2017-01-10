@@ -30,8 +30,6 @@ public class XN808311 extends AProcessor {
         condition.setSystemCode(req.getSystemCode());
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
-        condition.setEndDatetime(DateUtil.strToDate(req.getDateEnd(),
-            DateUtil.FRONT_DATE_FORMAT_STRING));
         return jewelAO.queryJewelList(condition);
     }
 

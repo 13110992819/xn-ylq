@@ -1,6 +1,5 @@
 package com.xnjr.mall.dto.req;
 
-import java.util.Date;
 
 /**
  * 宝贝重提
@@ -21,17 +20,8 @@ public class XN808302Req {
     // 广告图片(必填)
     public String advPic;
 
-    // 单价(必填)
-    public String price;
-
     // 图文描述(必填)
     public String description;
-
-    // 开始时间(必填)
-    public Date startDatetime;
-
-    // 募集天数(必填)
-    public String raiseDays;
 
     public String getCode() {
         return code;
@@ -65,14 +55,6 @@ public class XN808302Req {
         this.advPic = advPic;
     }
 
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -81,19 +63,4 @@ public class XN808302Req {
         this.description = description;
     }
 
-    public String getRaiseDays() {
-        return raiseDays;
-    }
-
-    public void setRaiseDays(String raiseDays) {
-        this.raiseDays = raiseDays;
-    }
-
-    public Date getStartDatetime() {
-        return startDatetime;
-    }
-
-    public void setStartDatetime(Date startDatetime) {
-        this.startDatetime = startDatetime;
-    }
 }

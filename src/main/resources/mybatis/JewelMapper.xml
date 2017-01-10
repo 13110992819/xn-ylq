@@ -10,19 +10,26 @@
 		<result column="adv_pic" property="advPic" />
 		
 		<result column="description" property="description" />
-		<result column="invest_num" property="investNum" />
-		<result column="invest_amount" property="investAmount" />
+		<result column="price1" property="price1" />
+		<result column="price2" property="price2" />
+		<result column="price3" property="price3" />
 		<result column="total_num" property="totalNum" />
-		<result column="price" property="price" />
 		
+		<result column="invest_num" property="investNum" />
 		<result column="start_datetime" property="startDatetime" />
 		<result column="raise_days" property="raiseDays" />
 		<result column="win_number" property="winNumber" />
 		<result column="win_user_id" property="winUserId" />
-		<result column="lot_alg" property="lotAlg" />
 		
+		<result column="lot_alg" property="lotAlg" />
 		<result column="status" property="status" />
 		<result column="system_code" property="systemCode" />
+		<result column="approver" property="approver" />
+		<result column="approve_datetime" property="approveDatetime" />
+		
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -53,9 +60,6 @@
 			<if test="startDatetime != null and startDatetime != '' ">
 				<![CDATA[AND t.start_datetime <= #{startDatetime}]]>
 			</if>
-			<if test="endDatetime != null and endDatetime != '' ">
-				<![CDATA[AND t.start_datetime <= #{endDatetime}]]>
-			</if>
 		</trim>
 	</sql>
 	<select id="select_jewel" parameterType="jewel" resultMap="jewel_DB_Result">
@@ -67,19 +71,26 @@
 		,adv_pic
 		
 		,description
-		,invest_num
-		,invest_amount
+		,price1
+		,price2
+		,price3
 		,total_num
-		,price
 		
+		,invest_num
 		,start_datetime
 		,raise_days
 		,win_number
 		,win_user_id
-		,lot_alg
 		
+		,lot_alg
 		,status
 		,system_code
+		,approver
+		,approve_datetime
+		
+		,updater
+		,update_datetime
+		,remark
 		FROM
 		tact_jewel t
 		<include refid="where_condition" />
@@ -104,19 +115,7 @@
 		,name
 		,slogan
 		,adv_pic
-		
 		,description
-		,invest_num
-		,invest_amount
-		,total_num
-		,price
-		
-		,start_datetime
-		,raise_days
-		,win_number
-		,win_user_id
-		,lot_alg
-		
 		,status
 		,system_code
 		)
@@ -126,19 +125,7 @@
 		,#{name}
 		,#{slogan}
 		,#{advPic}
-		
 		,#{description}
-		,#{investNum}
-		,#{investAmount}
-		,#{totalNum}
-		,#{price}
-		
-		,#{startDatetime}
-		,#{raiseDays}
-		,#{winNumber}
-		,#{winUserId}
-		,#{lotAlg}
-		
 		,#{status}
 		,#{systemCode}
 		)
@@ -151,11 +138,46 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_approve" parameterType="jewel">
+		UPDATE tact_jewel
+		SET
+		status = #{status}
+		,approver = #{approver}
+		,approve_datetime = #{approveDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_putOn" parameterType="jewel">
+		UPDATE tact_jewel
+		SET
+		price1 = #{price1}
+		,price2 = #{price2}
+		,price3 = #{price3}
+		,total_num = #{totalNum}
+		,start_datetime = #{startDatetime}
+		,raise_days = #{raiseDays}
+		,status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_putOff" parameterType="jewel">
+		UPDATE tact_jewel
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
 	<update id="update_investInfo" parameterType="jewel">
 		UPDATE tact_jewel
 		SET
 		invest_num=#{investNum}
-		,invest_amount=#{investAmount}
 		WHERE code = #{code}
 	</update>
 	
@@ -165,21 +187,19 @@
 		win_number=#{winNumber}
 		,win_user_id=#{winUserId}
 		,status=#{status}
+		,remark=#{remark}
 		WHERE code = #{code}
 	</update>
 	
 	<update id="update_jewel" parameterType="jewel">
 		UPDATE tact_jewel
 		SET
-		code=#{code}
-		,name=#{name}
+		name=#{name}
 		,slogan=#{slogan}
     	,adv_pic=#{advPic}
-		,price=#{price}
-		
     	,description=#{description}
-    	,start_datetime=#{startDatetime}
-		,raise_days=#{raiseDays}
+    	,status=#{status}
+    	,remark=#{remark}
 		WHERE code = #{code}
 	</update>
 	

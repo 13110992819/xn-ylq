@@ -54,6 +54,8 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
     public int refreshLostInfo(String code, String jewelCode, String status,
             String remark);
 
+    public int refreshTimes(String code, Integer times);
+
     /**
      * 
      * @param code

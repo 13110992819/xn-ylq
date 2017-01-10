@@ -15,8 +15,10 @@ package com.xnjr.mall.enums;
  * @history:
  */
 public enum EJewelStatus {
-    APPROVAL("0", "待审批"), PASS("1", "审批通过（募集中"), NOPASS("2", "审批不通过"), EXPIRE(
-            "3", "到期"), WAITSEND("4", "待发货"), DELIVERED("5", "已发货");
+    NEW("0", "待审批"), PASS("1", "审批通过"), UNPASS("2", "审批不通过"), PUT_ON("3",
+            "夺宝进行中"), PUT_OFF("4", "强制下架"), EXPIRED("5", "到期流标"), SUCCESSED(
+            "6", "夺宝成功，待开奖"), TO_SEND("7", "已开奖，待发货"), DELIVERED("8", "已发货，待收货"), RECEIVED(
+            "9", "已收货");
 
     EJewelStatus(String code, String value) {
         this.code = code;

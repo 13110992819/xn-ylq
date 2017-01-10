@@ -21,7 +21,13 @@ public interface IJewelDAO extends IBaseDAO<Jewel> {
 
     public int updateStatus(Jewel data);
 
+    public int updateApprove(Jewel data);
+
     public int updateInvestInfo(Jewel data);
 
     public int updateWinInfo(Jewel data);
+
+    public int updatePutOn(Jewel data);
+
+    public int updatePutOff(Jewel data);
 }

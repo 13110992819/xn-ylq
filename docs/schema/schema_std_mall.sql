@@ -60,19 +60,28 @@ CREATE TABLE `tact_jewel` (
   `slogan` varchar(255) DEFAULT NULL COMMENT '标语',
   `adv_pic` text COMMENT '广告图',
   `description` text COMMENT '图文描述',
-  `invest_num` int(11) DEFAULT NULL COMMENT '投资人数',
-  `invest_amount` bigint(20) DEFAULT NULL COMMENT '投资金额',
-  `total_num` int(11) DEFAULT NULL COMMENT '总投资人次',
-  `price` bigint(20) DEFAULT NULL COMMENT '单价',
+  `price1` bigint(20) DEFAULT NULL COMMENT '单价1',
+  `price2` bigint(20) DEFAULT NULL COMMENT '单价2',
+  `price3` bigint(20) DEFAULT NULL COMMENT '单价3',
+  `total_num` int(11) DEFAULT NULL COMMENT '所需总人次',
+  `invest_num` int(11) DEFAULT NULL COMMENT '已投资人次',
   `start_datetime` datetime DEFAULT NULL COMMENT '夺宝开始时间',
-  `raise_days` varchar(45) DEFAULT NULL COMMENT '募集天数',
+  `raise_days` int(11) DEFAULT NULL COMMENT '募集天数',
   `win_number` varchar(255) DEFAULT NULL COMMENT '中奖号码',
   `win_user_id` varchar(255) DEFAULT NULL COMMENT '中奖人编号',
   `lot_alg` varchar(255) DEFAULT NULL COMMENT '抽奖算法',
-  `status` varchar(4) DEFAULT NULL COMMENT '状态（0 待审批，1 审批通过（募集中），2 审批不通过，3 到期，4 待发货，5 已发货）',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态（0 待审批，1 审批通过，2 审批不通过，3 夺宝进行中，4 强制下架，5 到期流标，6 夺宝成功，待开奖 ，7 已开奖，待发货， 8 已发货，待收货， 9 已收货）',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  `approver` varchar(32) DEFAULT NULL COMMENT '审批人',
+  `approve_datetime` datetime DEFAULT NULL COMMENT '审批时间',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
 
 -- ----------------------------
 --  Table structure for `tact_jewel_interact`
