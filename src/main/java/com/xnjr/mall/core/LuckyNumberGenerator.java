@@ -110,7 +110,7 @@ public class LuckyNumberGenerator {
      * @create: 2017年1月9日 上午10:53:10 haiqingzheng
      * @history:
      */
-    private static String getLuckyNumber(Long initialValue, Long headcount,
+    public static String getLuckyNumber(Long initialValue, Long headcount,
             Long outRandom) {
         String luckyNumber = null;
         // 生成一个内部5位随机数

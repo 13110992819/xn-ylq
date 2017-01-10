@@ -67,11 +67,16 @@ public interface IJewelBO extends IPaginableBO<Jewel> {
     public List<Jewel> queryJewelList(Jewel data);
 
     /**
-     * 审核
+     * 更新状态
      * @param data
      * @return 
      * @create: 2016年12月19日 下午5:32:37 shan
      * @history:
      */
-    public int refreshApprove(Jewel data);
+    public int refreshStatus(String code, String status);
+
+    public int refreshInvestInfo(String code, Integer investNum,
+            Long investAmount);
+
+    public int refreshWinInfo(String code, String winNumber, String winUserId);
 }

@@ -17,9 +17,6 @@ public class XN808303Req {
     // 购买次数
     public String times;
 
-    // 系统编号
-    public String systemCode;
-
     public String getUserId() {
         return userId;
     }
@@ -44,11 +41,4 @@ public class XN808303Req {
         this.times = times;
     }
 
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 }

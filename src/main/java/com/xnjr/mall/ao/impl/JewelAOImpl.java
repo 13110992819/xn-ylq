@@ -10,7 +10,7 @@ import com.xnjr.mall.bo.IJewelBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.Jewel;
 import com.xnjr.mall.enums.EBoolean;
-import com.xnjr.mall.enums.EJewelStart;
+import com.xnjr.mall.enums.EJewelStatus;
 import com.xnjr.mall.exception.BizException;
 
 /**
@@ -30,7 +30,7 @@ public class JewelAOImpl implements IJewelAO {
         if (data == null) {
             throw new BizException("xn0000", "编写内容不能为空");
         }
-        data.setStatus(EJewelStart.APPROVAL.getCode());
+        data.setStatus(EJewelStatus.APPROVAL.getCode());
         code = jewelBO.saveJewel(data);
         return code;
     }
@@ -41,14 +41,11 @@ public class JewelAOImpl implements IJewelAO {
         if (!jewelBO.isJewelExist(code)) {
             throw new BizException("xn0000", "宝贝编号不存在");
         }
-        Jewel data = new Jewel();
-        data.setCode(code);
-        if (EBoolean.YES.getCode().equals(approveResult)) {
-            data.setStatus(EJewelStart.PASS.getCode());
-        } else {
-            data.setStatus(EJewelStart.NOPASS.getCode());
+        String status = EJewelStatus.PASS.getCode();
+        if (EBoolean.NO.getCode().equals(approveResult)) {
+            status = EJewelStatus.NOPASS.getCode();
         }
-        jewelBO.refreshApprove(data);
+        jewelBO.refreshStatus(code, status);
     }
 
     @Override
@@ -57,8 +54,8 @@ public class JewelAOImpl implements IJewelAO {
             throw new BizException("xn0000", "宝贝编号不存在");
         }
         Jewel jewel = jewelBO.getJewel(data.getCode());
-        if (EJewelStart.NOPASS.getCode().equals(jewel.getStatus())) {
-            data.setStatus(EJewelStart.APPROVAL.getCode());
+        if (EJewelStatus.NOPASS.getCode().equals(jewel.getStatus())) {
+            data.setStatus(EJewelStatus.APPROVAL.getCode());
             jewelBO.refreshJewel(data);
         } else {
             throw new BizException("xn0000", "宝贝已通过审核，不用重复提交");

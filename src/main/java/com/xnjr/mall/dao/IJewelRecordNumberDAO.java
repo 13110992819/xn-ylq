@@ -1,5 +1,7 @@
 package com.xnjr.mall.dao;
 
+import java.util.List;
+
 import com.xnjr.mall.dao.base.IBaseDAO;
 import com.xnjr.mall.domain.JewelRecordNumber;
 
@@ -20,4 +22,13 @@ public interface IJewelRecordNumberDAO extends IBaseDAO<JewelRecordNumber> {
      * @history:
      */
     public int update(JewelRecordNumber data);
+
+    /**
+     * 查询某个夺宝已分配抽奖号码
+     * @param jewelCode
+     * @return 
+     * @create: 2017年1月9日 下午3:55:40 haiqingzheng
+     * @history:
+     */
+    public List<String> selectExistNumbers(String jewelCode);
 }

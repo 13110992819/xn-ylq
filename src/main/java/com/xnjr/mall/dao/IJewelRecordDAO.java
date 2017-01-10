@@ -20,4 +20,6 @@ public interface IJewelRecordDAO extends IBaseDAO<JewelRecord> {
      * @history:
      */
     public int update(JewelRecord data);
+
+    public int updateLostInfo(JewelRecord data);
 }

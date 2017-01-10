@@ -25,7 +25,7 @@ public class XN808303 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         jewelRecordAO.addJewelRecord(req.getUserId(), req.getJewelCode(),
-            Integer.valueOf(req.getTimes()), req.getSystemCode());
+            Integer.valueOf(req.getTimes()));
         return new BooleanRes(true);
     }
 
@@ -33,7 +33,7 @@ public class XN808303 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN808303Req.class);
         StringValidater.validateBlank(req.getUserId(), req.getJewelCode(),
-            req.getTimes(), req.getSystemCode());
+            req.getTimes());
     }
 
 }

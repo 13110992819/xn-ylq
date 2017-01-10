@@ -12,6 +12,7 @@ import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.dao.IJewelDAO;
 import com.xnjr.mall.domain.Jewel;
 import com.xnjr.mall.enums.EGeneratePrefix;
+import com.xnjr.mall.enums.EJewelStatus;
 import com.xnjr.mall.exception.BizException;
 
 /**
@@ -86,12 +87,42 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
     }
 
     @Override
-    public int refreshApprove(Jewel data) {
+    public int refreshStatus(String code, String status) {
         int count = 0;
-        if (StringUtils.isNotBlank(data.getCode())) {
-            count = jewelDAO.updateJewelApprove(data);
+        if (StringUtils.isNotBlank(code)) {
+            Jewel data = new Jewel();
+            data.setCode(code);
+            data.setStatus(status);
+            count = jewelDAO.updateStatus(data);
         }
         return count;
     }
 
+    @Override
+    public int refreshInvestInfo(String code, Integer investNum,
+            Long investAmount) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            Jewel data = new Jewel();
+            data.setCode(code);
+            data.setInvestNum(investNum);
+            data.setInvestAmount(investAmount);
+            count = jewelDAO.updateInvestInfo(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshWinInfo(String code, String winNumber, String winUserId) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            Jewel data = new Jewel();
+            data.setCode(code);
+            data.setWinNumber(winNumber);
+            data.setWinUserId(winUserId);
+            data.setStatus(EJewelStatus.WAITSEND.getCode());
+            count = jewelDAO.updateWinInfo(data);
+        }
+        return count;
+    }
 }

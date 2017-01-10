@@ -29,6 +29,7 @@ public class XN808300 extends AProcessor {
         data.setSlogan(req.getSlogan());
         data.setAdvPic(req.getAdvPic());
         data.setPrice(Long.valueOf(req.getPrice()) * 1000);
+        data.setTotalNum(StringValidater.toInteger(req.getTotalNum()));
         data.setDescription(req.getDescription());
         data.setStartDatetime(req.getStartDatetime());
         data.setRaiseDay(req.getRaiseDays());
@@ -40,8 +41,9 @@ public class XN808300 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN808300Req.class);
         StringValidater.validateBlank(req.getAdvPic(), req.getDescription(),
-            req.getName(), req.getPrice(), req.getRaiseDays(), req.getSlogan(),
-            req.getStoreCode(), req.getSystemCode());
+            req.getName(), req.getPrice(), req.getTotalNum(),
+            req.getRaiseDays(), req.getSlogan(), req.getStoreCode(),
+            req.getSystemCode());
     }
 
 }

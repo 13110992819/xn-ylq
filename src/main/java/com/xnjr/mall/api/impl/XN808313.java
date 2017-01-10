@@ -36,7 +36,7 @@ public class XN808313 extends AProcessor {
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return jewelRecordAO.queryJewelRecordPage(start, limit, condition);
+        return jewelRecordAO.queryMyJewelRecordPage(start, limit, condition);
     }
 
     @Override

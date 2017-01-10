@@ -126,10 +126,12 @@ CREATE TABLE `tact_jewel_record` (
 DROP TABLE IF EXISTS `tact_jewel_record_number`;
 CREATE TABLE `tact_jewel_record_number` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '序号',
-  `record_code` varchar(32) DEFAULT NULL COMMENT '记录编号',
-  `number` varchar(32) DEFAULT NULL COMMENT '号码',
+  `jewel_code` varchar(32) DEFAULT NULL COMMENT '夺宝标的编号',
+  `record_code` varchar(32) DEFAULT NULL COMMENT '夺宝记录编号',
+  `number` varchar(32) DEFAULT NULL COMMENT '夺宝号码',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
 
 -- ----------------------------
 --  Table structure for `tact_stock`
