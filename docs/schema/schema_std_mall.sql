@@ -9,7 +9,7 @@
  Target Server Version : 50545
  File Encoding         : utf-8
 
- Date: 01/03/2017 18:27:43 PM
+ Date: 01/10/2017 22:50:34 PM
 */
 
 SET NAMES utf8;
@@ -29,7 +29,6 @@ CREATE TABLE `tact_hzb` (
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 -- ----------------------------
 --  Table structure for `tact_hzb_hold`
@@ -130,8 +129,7 @@ CREATE TABLE `tact_jewel_record_number` (
   `record_code` varchar(32) DEFAULT NULL COMMENT '夺宝记录编号',
   `number` varchar(32) DEFAULT NULL COMMENT '夺宝号码',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Table structure for `tact_stock`
@@ -140,6 +138,7 @@ DROP TABLE IF EXISTS `tact_stock`;
 CREATE TABLE `tact_stock` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `name` varchar(64) DEFAULT NULL COMMENT '名称',
+  `type` varchar(4) DEFAULT NULL COMMENT '类型(A A档，B B档，C C档，D D档)',
   `pic` varchar(255) DEFAULT NULL COMMENT '图片',
   `description` text COMMENT '玩法描述',
   `capital` int(11) DEFAULT NULL COMMENT '股本',
@@ -359,6 +358,7 @@ CREATE TABLE `to2o_store_action` (
 -- ----------------------------
 --  Table structure for `to2o_store_purchase`
 -- ----------------------------
+DROP TABLE IF EXISTS `to2o_store_purchase`;
 CREATE TABLE `to2o_store_purchase` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
@@ -374,11 +374,8 @@ CREATE TABLE `to2o_store_purchase` (
   `store_code` varchar(32) DEFAULT NULL COMMENT '商家编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   `jour_code` varchar(32) DEFAULT NULL COMMENT '橙账本对应流水编号',
-  `amount` bigint(20) DEFAULT NULL COMMENT '待删除',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 
 -- ----------------------------
 --  Table structure for `to2o_store_ticket`
