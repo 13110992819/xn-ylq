@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnjr.mall.dao.IHzbYyDAO">
+	<resultMap id="hzbYy_DB_Result" type="hzbYy">
+		<result column="code" property="code" />
+		<result column="hzb_hold_id" property="hzbHoldId" />
+		<result column="type" property="type" />
+		<result column="quantity" property="quantity" />
+		<result column="user_id" property="userId" />
+		<result column="device_no" property="deviceNo" />
+		<result column="create_datetime" property="createDatetime" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="hzbHoldId != null and hzbHoldId != '' ">
+				AND t.hzb_hold_id = #{hzbHoldId}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<if test="deviceNo != null and deviceNo != '' ">
+				AND t.device_no = #{deviceNo}
+			</if>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
+			</if>
+		</trim>
+	</sql>
+	<select id="select_hzbYy" parameterType="hzbYy" resultMap="hzbYy_DB_Result">
+		SELECT
+		t.code
+		,t.hzb_hold_id
+		,t.type
+		,t.quantity
+		,t.user_id
+		,t.device_no
+		,t.create_datetime
+		FROM
+		tact_hzb_yy t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_hzbYy_count" parameterType="hzbYy"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tact_hzb_yy t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_hzbYy" parameterType="hzbYy">
+		INSERT INTO
+		tact_hzb_yy(
+		code
+		,hzb_hold_id
+		,type
+		,quantity
+		,user_id
+		,device_no
+		,create_datetime
+		)
+		VALUES(
+		#{code}
+		,#{hzbHoldId}
+		,#{type}
+		,#{quantity}
+		,#{userId}
+		,#{deviceNo}
+		,#{createDatetime}
+		)
+	</insert>
+
+	<update id="update_hzbYy" parameterType="hzbYy">
+		UPDATE tact_hzb_yy
+		SET
+		hzb_hold_id = #{hzbHoldId}
+		,type = #{type}
+		,quantity = #{quantity}
+		,user_id = #{userId}
+		,device_no = #{deviceNo}
+		,create_datetime = #{createDatetime}
+		WHERE code = #{code}
+	</update>
+
+
+</mapper>

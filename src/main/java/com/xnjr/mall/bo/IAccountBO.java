@@ -32,6 +32,35 @@ public interface IAccountBO {
             String toAccountNumber, Long amount, String bizType, String bizNote);
 
     /**
+     * 根据用户编号进行账户资金划转
+     * @param systemCode
+     * @param fromUserId
+     * @param toUserId
+     * @param currency
+     * @param amount
+     * @param bizType
+     * @param bizNote 
+     * @create: 2017年1月10日 下午2:37:34 xieyj
+     * @history:
+     */
+    public void doTransferAmountByUser(String systemCode, String fromUserId,
+            String toUserId, String currency, Long amount, String bizType,
+            String bizNote);
+
+    /**
+     * @param systemCode
+     * @param userId
+     * @param currency
+     * @param transAmount
+     * @param bizType
+     * @param bizNote 
+     * @create: 2017年1月10日 下午3:19:52 xieyj
+     * @history:
+     */
+    public void doTransferFcBySystem(String systemCode, String userId,
+            String currency, Long transAmount, String bizType, String bizNote);
+
+    /**
      * 不同币种账户之间划转资金
      * @param systemCode
      * @param fromAccountNumber

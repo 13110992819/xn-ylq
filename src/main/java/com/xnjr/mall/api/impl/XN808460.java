@@ -1,14 +1,6 @@
-/**
- * @Title XN808459.java 
- * @Package com.xnjr.mall.api.impl 
- * @Description 
- * @author haiqingzheng  
- * @date 2016年12月21日 下午4:31:31 
- * @version V1.0   
- */
 package com.xnjr.mall.api.impl;
 
-import com.xnjr.mall.ao.IHzbHoldAO;
+import com.xnjr.mall.ao.IHzbYyAO;
 import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.core.StringValidater;
@@ -24,8 +16,7 @@ import com.xnjr.mall.spring.SpringContextHolder;
  * @history:
  */
 public class XN808460 extends AProcessor {
-    private IHzbHoldAO hzbHoldAO = SpringContextHolder
-        .getBean(IHzbHoldAO.class);
+    private IHzbYyAO hzbYyAO = SpringContextHolder.getBean(IHzbYyAO.class);
 
     private XN808460Req req = null;
 
@@ -34,7 +25,8 @@ public class XN808460 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return null;
+        Long hzbHoldId = StringValidater.toLong(req.getHzbHoldId());
+        return hzbYyAO.doHzbYy(req.getUserId(), hzbHoldId, req.getDeviceNo());
     }
 
     /** 

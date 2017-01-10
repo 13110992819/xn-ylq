@@ -10,6 +10,8 @@ public interface IHzbHoldBO extends IPaginableBO<HzbHold> {
 
     public boolean isHzbHoldExist(Long id);
 
+    public boolean isHzbHoldExistByUser(String userId);
+
     public int saveHzbHold(HzbHold data);
 
     public int removeHzbHold(Long id);
@@ -24,5 +26,4 @@ public interface IHzbHoldBO extends IPaginableBO<HzbHold> {
             HzbHold condition);
 
     public HzbHold getHzbHold(Long id);
-
 }

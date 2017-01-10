@@ -31,6 +31,16 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
     }
 
     @Override
+    public boolean isHzbHoldExistByUser(String userId) {
+        HzbHold condition = new HzbHold();
+        condition.setUserId(userId);
+        if (hzbHoldDAO.selectTotalCount(condition) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public int saveHzbHold(HzbHold data) {
         int count = 0;
         if (data != null) {

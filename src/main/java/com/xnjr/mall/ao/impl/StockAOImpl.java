@@ -83,8 +83,12 @@ public class StockAOImpl implements IStockAO {
         newStock.setPrice(data.getPrice());
         newStock.setCurrency(ECurrency.CNY.getCode());
         newStock.setBackInterval(data.getBackInterval());
-        // 待配置
-        newStock.setBackCount(10);
+        String backCount = sysConfigBO.getConfigValue(null, null, null,
+            SysConstants.ST_BACKNUM);
+        if (StringUtils.isBlank(backCount)) {
+            backCount = SysConstants.ST_BACKNUM_DEF;
+        }
+        newStock.setBackCount(Integer.valueOf(backCount));
         newStock.setWelfare1(data.getWelfare1());
         newStock.setWelfare2(data.getWelfare2());
         newStock.setStatus(EStockStatus.IN_USE.getCode());
