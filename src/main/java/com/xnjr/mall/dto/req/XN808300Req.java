@@ -19,8 +19,11 @@ public class XN808300Req {
     // 广告图片(必填)
     private String advPic;
 
-    // 图文描述(必填)
-    private String description;
+    // 详情文本
+    private String descriptionText;
+
+    // 详情图片
+    private String descriptionPic;
 
     // 系统编号(必填)
     private String systemCode;
@@ -57,12 +60,20 @@ public class XN808300Req {
         this.advPic = advPic;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescriptionText() {
+        return descriptionText;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescriptionText(String descriptionText) {
+        this.descriptionText = descriptionText;
+    }
+
+    public String getDescriptionPic() {
+        return descriptionPic;
+    }
+
+    public void setDescriptionPic(String descriptionPic) {
+        this.descriptionPic = descriptionPic;
     }
 
     public String getSystemCode() {

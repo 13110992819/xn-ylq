@@ -31,8 +31,11 @@ public class Jewel extends ABaseDO {
     // 广告图
     private String advPic;
 
-    // 图文描述
-    private String description;
+    // 详情文本
+    private String descriptionText;
+
+    // 详情图片
+    private String descriptionPic;
 
     // 单价1
     private Long price1;
@@ -125,12 +128,20 @@ public class Jewel extends ABaseDO {
         this.advPic = advPic;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescriptionText() {
+        return descriptionText;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescriptionText(String descriptionText) {
+        this.descriptionText = descriptionText;
+    }
+
+    public String getDescriptionPic() {
+        return descriptionPic;
+    }
+
+    public void setDescriptionPic(String descriptionPic) {
+        this.descriptionPic = descriptionPic;
     }
 
     public Long getPrice1() {
