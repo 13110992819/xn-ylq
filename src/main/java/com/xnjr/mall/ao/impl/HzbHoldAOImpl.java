@@ -11,12 +11,11 @@ import com.xnjr.mall.ao.IHzbHoldAO;
 import com.xnjr.mall.bo.IHzbHoldBO;
 import com.xnjr.mall.bo.IHzbYyBO;
 import com.xnjr.mall.bo.ISYSConfigBO;
+import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
-import com.xnjr.mall.common.DateUtil;
 import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.domain.HzbHold;
-import com.xnjr.mall.domain.HzbYy;
-import com.xnjr.mall.exception.BizException;
+import com.xnjr.mall.dto.res.XN805901Res;
 
 @Service
 public class HzbHoldAOImpl implements IHzbHoldAO {
@@ -29,6 +28,9 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
 
     @Autowired
     private IHzbYyBO hzbYyBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     public Paginable<HzbHold> queryHzbHoldPage(int start, int limit,
@@ -53,23 +55,9 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
     @Override
     public Object queryDistanceHzbHoldList(HzbHold condition, String userId,
             String deviceNo) {
-        HzbYy yyCondition = new HzbYy();
-        yyCondition.setHzbHoldId(null);
-        yyCondition.setUserId(userId);
-        yyCondition.setCreateDatetimeStart(DateUtil.getTodayStart());
-        yyCondition.setCreateDatetimeEnd(DateUtil.getTodayEnd());
-        if (hzbYyBO.getTotalCount(yyCondition) > SysConstants.TIMES) {
-            BizException exp = new BizException("xn0000", "您的账号今天已摇"
-                    + SysConstants.TIMES + "次，请明天再来哦");
-            return exp;
-        }
-        yyCondition.setUserId(null);
-        yyCondition.setDeviceNo(deviceNo);
-        if (hzbYyBO.getTotalCount(yyCondition) > SysConstants.TIMES) {
-            BizException exp = new BizException("xn0000", "您的手机今天已摇"
-                    + +SysConstants.TIMES + "次，请明天再来哦");
-            return exp;
-        }
+        XN805901Res userRes = userBO.getRemoteUser(userId, userId);
+        hzbYyBO.checkHzbYyCondition(userRes.getSystemCode(), userId, deviceNo);
+        // 设置距离
         String distance = sysConfigBO.getConfigValue(null, null, null,
             SysConstants.HZB_DISTANCE);
         if (StringUtils.isBlank(distance)) {
@@ -77,9 +65,16 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
             distance = SysConstants.HZB_DISTANCE_DEF;
         }
         condition.setDistance(distance);
+        // 设置数量
+        String hzbMaxNumStr = sysConfigBO.getConfigValue(null, null, null,
+            SysConstants.HZB_MAX_NUM);
+        int hzbMaxNum = SysConstants.HZB_MAX_NUM_DEF;
+        if (StringUtils.isNotBlank(hzbMaxNumStr)) {
+            hzbMaxNum = Integer.valueOf(hzbMaxNumStr);
+        }
         List<HzbHold> list = hzbHoldBO.queryDistanceHzbHoldList(condition);
-        if (CollectionUtils.isNotEmpty(list) && list.size() > 100) {
-            list = list.subList(0, 100);
+        if (CollectionUtils.isNotEmpty(list) && list.size() > hzbMaxNum) {
+            list = list.subList(0, hzbMaxNum);
         }
         for (HzbHold hzbHold : list) {
             hzbHold.setShareUrl("http://www.sina.com.cn");

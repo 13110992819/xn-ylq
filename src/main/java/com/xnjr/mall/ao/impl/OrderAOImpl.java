@@ -270,9 +270,6 @@ public class OrderAOImpl implements IOrderAO {
             accountBO.doGwQbAndBalancePay(systemCode, fromUserId, toUserId,
                 gwAmount, qbAmount, cnyAmount, EBizType.AJ_GW);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-            if (StringUtils.isBlank(ip)) {
-                throw new BizException("xn0000", "微信支付，ip地址不能为空");
-            }
             String bizNote = "订单号：" + order.getCode() + "——购买尖货";
             String body = "正汇钱包—尖货";
             return accountBO.doWeiXinPay(systemCode, fromUserId,
@@ -433,13 +430,17 @@ public class OrderAOImpl implements IOrderAO {
             throw new BizException("XN000000", "找不到对应的消费记录");
         }
         Order order = result.get(0);
-        // 扣除金额(购物币和钱包币)
-        accountBO.doGWBQBBPay(order.getSystemCode(), order.getApplyUser(),
-            order.getCompanyCode(), order.getAmount2(), order.getAmount3(),
-            EBizType.AJ_GW);
-        // 更新支付金额
-        orderBO.refreshOrderPayAmount(order.getCode(), order.getAmount1(),
-            order.getAmount2(), order.getAmount3());
+        if (EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
+            // 扣除金额(购物币和钱包币)
+            accountBO.doGWBQBBPay(order.getSystemCode(), order.getApplyUser(),
+                order.getCompanyCode(), order.getAmount2(), order.getAmount3(),
+                EBizType.AJ_GW);
+            // 更新支付金额
+            orderBO.refreshOrderPayAmount(order.getCode(), order.getAmount1(),
+                order.getAmount2(), order.getAmount3());
+        } else {
+            logger.info("订单号：" + order.getCode() + "已支付，重复回调");
+        }
     }
 
     /** 

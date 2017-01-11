@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,6 @@ import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
-import com.xnjr.mall.enums.ESysAccount;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.http.BizConnecter;
@@ -229,11 +229,11 @@ public class AccountBOImpl implements IAccountBO {
         }
         // 扣除贡献奖励
         doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ESysAccount.GXJL.getCode(), gxjlPrice, bizType.getCode(),
+            ECurrency.GXJL.getCode(), gxjlPrice, bizType.getCode(),
             bizType.getValue());
         // 扣除分润
         doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ESysAccount.FRB.getCode(), frPrice, bizType.getCode(),
+            ECurrency.FRB.getCode(), frPrice, bizType.getCode(),
             bizType.getValue());
     }
 
@@ -262,11 +262,11 @@ public class AccountBOImpl implements IAccountBO {
         checkGWBQBBAmount(systemCode, fromUserId, gwbPrice, qbbPrice);
         // 扣除购物币
         doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ESysAccount.GWB.getCode(), gwbPrice, bizType.getCode(),
+            ECurrency.GWB.getCode(), gwbPrice, bizType.getCode(),
             bizType.getValue());
         // 扣除钱包币
         doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ESysAccount.QBB.getCode(), qbbPrice, bizType.getCode(),
+            ECurrency.QBB.getCode(), qbbPrice, bizType.getCode(),
             bizType.getValue());
     }
 
@@ -282,11 +282,11 @@ public class AccountBOImpl implements IAccountBO {
         checkBalanceAmount(systemCode, fromUserId, cnyPrice);
         // 扣除购物币
         doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ESysAccount.GWB.getCode(), gwbPrice, bizType.getCode(),
+            ECurrency.GWB.getCode(), gwbPrice, bizType.getCode(),
             bizType.getValue());
         // 扣除钱包币
         doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ESysAccount.QBB.getCode(), qbbPrice, bizType.getCode(),
+            ECurrency.QBB.getCode(), qbbPrice, bizType.getCode(),
             bizType.getValue());
         // 扣除余额
         doBalancePay(systemCode, fromUserId, toUserId, cnyPrice, bizType);
@@ -296,6 +296,9 @@ public class AccountBOImpl implements IAccountBO {
     public XN802180Res doWeiXinPay(String systemCode, String userId,
             EBizType bizType, String bizNote, String body, Long cnyAmount,
             String ip) {
+        if (StringUtils.isBlank(ip)) {
+            throw new BizException("xn0000", "微信支付，ip地址不能为空");
+        }
         // 获取微信APP支付信息
         XN802180Req req = new XN802180Req();
         req.setSystemCode(systemCode);

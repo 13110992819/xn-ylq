@@ -74,6 +74,10 @@ public class SysConstants {
 
     public static final String HZB_DISTANCE_DEF = "1000"; // 默认汇赚宝摇出距离
 
+    public static final String HZB_MAX_NUM = "hzbMaxNum"; // 汇赚宝摇出数量
+
+    public static final Integer HZB_MAX_NUM_DEF = 100; // 默认汇赚宝摇出数量
+
     public static final String YY_PROVINCE = "hzbProvince"; // hzb辖区省
 
     public static final String YY_CITY = "yyCity"; // yy辖区市
@@ -98,6 +102,15 @@ public class SysConstants {
 
     public static final Long AMOUNT_RADIX = 1000L; // 金额基数
 
-    public static final int TIMES = 8; // 摇出次数
+    public static final String USER_DAY_MAX_COUNT = "userDayMaxCount"; // 用户每天摇出次数
 
+    public static final int USER_DAY_MAX_COUNT_DEF = 3; // 默认用户每天摇出次数
+
+    public static final String DEVICE_DAY_MAX_COUNT = "deviceDayMaxCount"; // 设备每天摇出次数
+
+    public static final int DEVICE_DAY_MAX_COUNT_DEF = 3; // 默认设备每天摇出次数
+
+    public static final String HZB_YY_DAY_MAX_COUNT = "hzbYyDayMaxCount"; // 一个汇赚宝每天摇摇的最大次数
+
+    public static final int HZB_YY_DAY_MAX_COUNT_DEF = 900; // 一个汇赚宝每天摇摇的最大次数
 }
