@@ -9,7 +9,7 @@
  Target Server Version : 50545
  File Encoding         : utf-8
 
- Date: 01/10/2017 22:50:34 PM
+ Date: 01/11/2017 14:26:00 PM
 */
 
 SET NAMES utf8;
@@ -94,9 +94,6 @@ CREATE TABLE `tact_jewel` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
 
 -- ----------------------------
 --  Table structure for `tact_jewel_interact`
