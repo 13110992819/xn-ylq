@@ -9,6 +9,12 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
 
     public boolean isHzbYyExist(String code);
 
+    public void checkHzbYyCondition(String systemCode, String userId,
+            String deviceNo);
+
+    public void checkHzbYyCondition(String systemCode, Long hzbHoldId,
+            String userId, String deviceNo);
+
     public String saveHzbYy(HzbYy data);
 
     public int removeHzbYy(String code);

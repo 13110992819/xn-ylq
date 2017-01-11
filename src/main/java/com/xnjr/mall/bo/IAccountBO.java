@@ -10,6 +10,7 @@ package com.xnjr.mall.bo;
 
 import java.util.Map;
 
+import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.enums.EBizType;
 
@@ -117,6 +118,7 @@ public interface IAccountBO {
             String approveResult, String approver, String approveNote);
 
     /**
+     * 检查购物币和钱包币余额是否足够
      * @param systemCode
      * @param userId
      * @param gwbPrice
@@ -124,7 +126,7 @@ public interface IAccountBO {
      * @create: 2017年1月10日 下午8:24:48 xieyj
      * @history:
      */
-    public void checkGwQbBalance(String systemCode, String userId,
+    public void checkGWBQBBAmount(String systemCode, String userId,
             Long gwbPrice, Long qbbPrice);
 
     /**
@@ -140,6 +142,17 @@ public interface IAccountBO {
      */
     public void doGWBQBBPay(String systemCode, String fromUserId,
             String toUserId, Long gwbPrice, Long qbbPrice, EBizType bizType);
+
+    /**
+     * 检查余额是否足够支付
+     * @param systemCode
+     * @param fromUserId
+     * @param toUserId
+     * @param price 
+     * @create: 2017年1月11日 上午10:50:05 xieyj
+     * @history:
+     */
+    public void checkBalanceAmount(String systemCode, String userId, Long price);
 
     /**
      * 余额支付
@@ -169,4 +182,21 @@ public interface IAccountBO {
     public void doGwQbAndBalancePay(String systemCode, String fromUserId,
             String toUserId, Long gwPrice, Long qbPrice, Long cnyPrice,
             EBizType bizType);
+
+    /**
+     * 微信支付
+     * @param systemCode
+     * @param userId
+     * @param bizType
+     * @param bizNote
+     * @param body
+     * @param cnyAmount
+     * @param ip
+     * @return 
+     * @create: 2017年1月11日 上午11:10:19 xieyj
+     * @history:
+     */
+    public XN802180Res doWeiXinPay(String systemCode, String userId,
+            EBizType bizType, String bizNote, String body, Long cnyAmount,
+            String ip);
 }

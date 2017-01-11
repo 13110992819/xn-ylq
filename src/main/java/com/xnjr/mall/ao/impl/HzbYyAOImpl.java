@@ -17,7 +17,6 @@ import com.xnjr.mall.bo.IHzbYyBO;
 import com.xnjr.mall.bo.ISYSConfigBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
-import com.xnjr.mall.common.DateUtil;
 import com.xnjr.mall.common.PrizeUtil;
 import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.domain.HzbHold;
@@ -31,7 +30,6 @@ import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EPrizeType;
 import com.xnjr.mall.enums.ESysUser;
-import com.xnjr.mall.exception.BizException;
 
 @Service
 public class HzbYyAOImpl implements IHzbYyAO {
@@ -61,33 +59,10 @@ public class HzbYyAOImpl implements IHzbYyAO {
     @Override
     @Transactional
     public XN808460Res doHzbYy(String userId, Long hzbHoldId, String deviceNo) {
-        // 限制规则：
-        // 一个手机一天只能摇3次
-        // 一个账号一天只能摇3次
-        // 传染性
-        // 一个汇赚宝权限，一天最多可以被摇900次
-        HzbYy yyCondition = new HzbYy();
-        yyCondition.setHzbHoldId(hzbHoldId);
-        if (hzbYyBO.getTotalCount(yyCondition) >= 900) {
-            throw new BizException("xn0000", "该汇赚宝已摇次数超出限制次数，请选择其他汇赚宝");
-        }
-        // 一个账号一天只能摇3次
-        yyCondition.setHzbHoldId(null);
-        yyCondition.setUserId(userId);
-        yyCondition.setCreateDatetimeStart(DateUtil.getTodayStart());
-        yyCondition.setCreateDatetimeEnd(DateUtil.getTodayEnd());
-        if (hzbYyBO.getTotalCount(yyCondition) > SysConstants.TIMES) {
-            throw new BizException("xn0000", "您的账号今天已摇" + SysConstants.TIMES
-                    + "次，请明天再来哦");
-        }
-        // 一个手机一天只能摇3次
-        yyCondition.setUserId(null);
-        yyCondition.setDeviceNo(deviceNo);
-        if (hzbYyBO.getTotalCount(yyCondition) > SysConstants.TIMES) {
-            throw new BizException("xn0000", "您的手机今天已摇" + +SysConstants.TIMES
-                    + "次，请明天再来哦");
-        }
         HzbHold hzbHold = hzbHoldBO.getHzbHold(hzbHoldId);
+        // 验证次数
+        hzbYyBO.checkHzbYyCondition(hzbHold.getSystemCode(), hzbHoldId, userId,
+            deviceNo);
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(
             hzbHold.getSystemCode(), null);
         // 默认第三次摇，且前面两次未摇到红包

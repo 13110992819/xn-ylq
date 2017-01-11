@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,16 +13,18 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.ISYSConfigBO;
+import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.common.SysConstants;
+import com.xnjr.mall.dto.req.XN802180Req;
 import com.xnjr.mall.dto.req.XN802503Req;
 import com.xnjr.mall.dto.req.XN802512Req;
 import com.xnjr.mall.dto.req.XN802517Req;
 import com.xnjr.mall.dto.req.XN802519Req;
 import com.xnjr.mall.dto.req.XN802525Req;
+import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
-import com.xnjr.mall.enums.ESysAccount;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.http.BizConnecter;
@@ -40,8 +43,8 @@ public class AccountBOImpl implements IAccountBO {
     @Override
     public XN802503Res getAccountByUserId(String systemCode, String userId,
             String currency) {
-        Map<String, XN802503Res> map = this
-            .getAccountsByUser(systemCode, userId);
+        Map<String, XN802503Res> map = this.getAccountsByUser(systemCode,
+            userId);
         XN802503Res result = map.get(currency);
         if (null == result) {
             throw new BizException("xn000000", "用户[" + userId + "]账户不存在");
@@ -158,6 +161,31 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     /** 
+     * @see com.xnjr.mall.bo.IAccountBO#checkBalanceAmount(java.lang.String, java.lang.String, java.lang.Long)
+     */
+    @Override
+    public void checkBalanceAmount(String systemCode, String userId, Long price) {
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
+            null);
+        // 余额支付业务规则：优先扣贡献奖励，其次扣分润
+        XN802503Res gxjlAccount = this.getAccountByUserId(systemCode, userId,
+            ECurrency.GXJL.getCode());
+        // 查询用户分润账户
+        XN802503Res frAccount = this.getAccountByUserId(systemCode, userId,
+            ECurrency.FRB.getCode());
+        Double gxjl2cny = Double.valueOf(rateMap.get(SysConstants.GXJL2CNY));
+        Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
+        Long gxjlCnyAmount = Double.valueOf(gxjlAccount.getAmount() / gxjl2cny)
+            .longValue();
+        Long frCnyAmount = Double.valueOf(frAccount.getAmount() / fr2cny)
+            .longValue();
+        // 1、贡献奖励+分润<价格 余额不足
+        if (gxjlCnyAmount + frCnyAmount < price) {
+            throw new BizException("xn0000", "余额不足");
+        }
+    }
+
+    /** 
      * @see com.xnjr.mall.bo.IAccountBO#doBalancePay(com.xnjr.mall.enums.EBizType)
      */
     @Override
@@ -201,16 +229,16 @@ public class AccountBOImpl implements IAccountBO {
         }
         // 扣除贡献奖励
         doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ESysAccount.GXJL.getCode(), gxjlPrice, bizType.getCode(),
+            ECurrency.GXJL.getCode(), gxjlPrice, bizType.getCode(),
             bizType.getValue());
         // 扣除分润
         doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ESysAccount.FRB.getCode(), frPrice, bizType.getCode(),
+            ECurrency.FRB.getCode(), frPrice, bizType.getCode(),
             bizType.getValue());
     }
 
     @Override
-    public void checkGwQbBalance(String systemCode, String userId,
+    public void checkGWBQBBAmount(String systemCode, String userId,
             Long gwbPrice, Long qbbPrice) {
         XN802503Res gwbRes = getAccountByUserId(systemCode, userId,
             ECurrency.GWB.getCode());
@@ -230,15 +258,15 @@ public class AccountBOImpl implements IAccountBO {
     @Override
     public void doGWBQBBPay(String systemCode, String fromUserId,
             String toUserId, Long gwbPrice, Long qbbPrice, EBizType bizType) {
-        // 校验
-        checkGwQbBalance(systemCode, fromUserId, gwbPrice, qbbPrice);
+        // 校验购物币和钱包币
+        checkGWBQBBAmount(systemCode, fromUserId, gwbPrice, qbbPrice);
         // 扣除购物币
         doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ESysAccount.GWB.getCode(), gwbPrice, bizType.getCode(),
+            ECurrency.GWB.getCode(), gwbPrice, bizType.getCode(),
             bizType.getValue());
         // 扣除钱包币
         doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ESysAccount.QBB.getCode(), qbbPrice, bizType.getCode(),
+            ECurrency.QBB.getCode(), qbbPrice, bizType.getCode(),
             bizType.getValue());
     }
 
@@ -250,9 +278,39 @@ public class AccountBOImpl implements IAccountBO {
             String toUserId, Long gwbPrice, Long qbbPrice, Long cnyPrice,
             EBizType bizType) {
         // 检验购物币和钱包币和余额是否充足
-        checkGwQbBalance(systemCode, fromUserId, gwbPrice, qbbPrice);
-        doGWBQBBPay(systemCode, fromUserId, toUserId, gwbPrice, qbbPrice,
-            bizType);
+        checkGWBQBBAmount(systemCode, fromUserId, gwbPrice, qbbPrice);
+        checkBalanceAmount(systemCode, fromUserId, cnyPrice);
+        // 扣除购物币
+        doTransferAmountByUser(systemCode, fromUserId, toUserId,
+            ECurrency.GWB.getCode(), gwbPrice, bizType.getCode(),
+            bizType.getValue());
+        // 扣除钱包币
+        doTransferAmountByUser(systemCode, fromUserId, toUserId,
+            ECurrency.QBB.getCode(), qbbPrice, bizType.getCode(),
+            bizType.getValue());
+        // 扣除余额
         doBalancePay(systemCode, fromUserId, toUserId, cnyPrice, bizType);
+    }
+
+    @Override
+    public XN802180Res doWeiXinPay(String systemCode, String userId,
+            EBizType bizType, String bizNote, String body, Long cnyAmount,
+            String ip) {
+        if (StringUtils.isBlank(ip)) {
+            throw new BizException("xn0000", "微信支付，ip地址不能为空");
+        }
+        // 获取微信APP支付信息
+        XN802180Req req = new XN802180Req();
+        req.setSystemCode(systemCode);
+        req.setCompanyCode(systemCode);
+        req.setUserId(userId);
+        req.setBizType(bizType.getCode());
+        req.setBizNote(bizNote);
+        req.setBody(body);
+        req.setTotalFee(String.valueOf(cnyAmount));
+        req.setSpbillCreateIp(ip);
+        XN802180Res res = BizConnecter.getBizData("802180",
+            JsonUtil.Object2Json(req), XN802180Res.class);
+        return res;
     }
 }
