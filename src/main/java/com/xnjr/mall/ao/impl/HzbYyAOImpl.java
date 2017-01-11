@@ -100,7 +100,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
             ESysUser.SYS_USER.getCode(), userId, currency, quantity * 1000L,
             EBizType.AJ_YYJL.getCode(), EBizType.AJ_YYJL.getValue()
                     + EPrizeType.getResultMap().get(type).getValue() + ",数量:"
-                    + quantity + "");
+                    + quantity / SysConstants.AMOUNT_RADIX + "");
         return new XN808460Res(type, String.valueOf(quantity));
     }
 
@@ -116,10 +116,12 @@ public class HzbYyAOImpl implements IHzbYyAO {
     }
 
     private int getQuantity(Map<String, String> rateMap) {
-        Integer yyAmountMin = Integer.valueOf(rateMap
-            .get(SysConstants.YY_AMOUNT_MIN));
-        Integer yyAmountMAX = Integer.valueOf(rateMap
-            .get(SysConstants.YY_AMOUNT_MAX));
+        Integer yyAmountMin = Double.valueOf(
+            Double.valueOf(rateMap.get(SysConstants.YY_AMOUNT_MIN))
+                    * SysConstants.AMOUNT_RADIX).intValue();
+        Integer yyAmountMAX = Double.valueOf(
+            Double.valueOf(rateMap.get(SysConstants.YY_AMOUNT_MAX))
+                    * SysConstants.AMOUNT_RADIX).intValue();
         Random rand = new Random();
         return rand.nextInt(yyAmountMAX - yyAmountMin) + yyAmountMin;
     }

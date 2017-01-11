@@ -50,7 +50,7 @@
 		,t.remark
 		,t.system_code
 		FROM
-		tact_jewel_record t LEFT JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id LEFT JOIN ${userDB}.tstd_user_ext tue ON tu.user_id = tue.user_id
+		tact_jewel_record t INNER JOIN tact_jewel tj on t.user_id=tj.store_code LEFT JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id LEFT JOIN ${userDB}.tstd_user_ext tue ON tu.user_id = tue.user_id
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">

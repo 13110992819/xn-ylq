@@ -13,14 +13,13 @@ public class XN808315Req extends APageReq {
     private static final long serialVersionUID = -3572987603574928980L;
 
     // 夺宝标的编号
-    public String code;
+    public String JewelCode;
 
-    public String getCode() {
-        return code;
+    public String getJewelCode() {
+        return JewelCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setJewelCode(String jewelCode) {
+        JewelCode = jewelCode;
     }
-
 }
