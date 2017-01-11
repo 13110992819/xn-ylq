@@ -1,6 +1,5 @@
 package com.xnjr.mall.dto.req;
 
-
 /**
  * 宝贝重提
  * @author: shan 
@@ -20,8 +19,11 @@ public class XN808302Req {
     // 广告图片(必填)
     public String advPic;
 
-    // 图文描述(必填)
-    public String description;
+    // 详情文本(必填)
+    private String descriptionText;
+
+    // 详情图片(必填)
+    private String descriptionPic;
 
     public String getCode() {
         return code;
@@ -55,12 +57,20 @@ public class XN808302Req {
         this.advPic = advPic;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescriptionText() {
+        return descriptionText;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescriptionText(String descriptionText) {
+        this.descriptionText = descriptionText;
+    }
+
+    public String getDescriptionPic() {
+        return descriptionPic;
+    }
+
+    public void setDescriptionPic(String descriptionPic) {
+        this.descriptionPic = descriptionPic;
     }
 
 }

@@ -29,7 +29,8 @@ public class XN808302 extends AProcessor {
         data.setName(req.getName());
         data.setSlogan(req.getSlogan());
         data.setAdvPic(req.getAdvPic());
-        data.setDescription(req.getDescription());
+        data.setDescriptionText(req.getDescriptionText());
+        data.setDescriptionPic(req.getDescriptionPic());
         jewelAO.reApplyJewel(data);
         return new BooleanRes(true);
     }
@@ -38,7 +39,8 @@ public class XN808302 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN808302Req.class);
         StringValidater.validateBlank(req.getCode(), req.getName(),
-            req.getSlogan(), req.getAdvPic(), req.getDescription());
+            req.getSlogan(), req.getAdvPic(), req.getDescriptionText(),
+            req.getDescriptionPic());
 
     }
 
