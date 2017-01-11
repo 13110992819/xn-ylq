@@ -33,7 +33,7 @@ public class XN808310 extends AProcessor {
             DateUtil.FRONT_DATE_FORMAT_STRING));
         condition.setStartDatetime(DateUtil.strToDate(req.getDateEnd(),
             DateUtil.FRONT_DATE_FORMAT_STRING));
-
+        condition.setStatus(req.getStatus());
         condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {

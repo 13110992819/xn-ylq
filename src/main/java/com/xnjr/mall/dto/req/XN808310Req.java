@@ -1,6 +1,5 @@
 package com.xnjr.mall.dto.req;
 
-
 /**
  * 宝贝分页查询
  * @author: shan 
@@ -14,13 +13,16 @@ public class XN808310Req extends APageReq {
     private static final long serialVersionUID = 1L;
 
     // 商铺编号
-    public String storeCode;
+    private String storeCode;
 
     // 宝贝名称
-    public String name;
+    private String name;
+
+    // 状态
+    private String status;
 
     // 系统编号
-    public String systemCode;
+    private String systemCode;
 
     public String getStoreCode() {
         return storeCode;
@@ -36,6 +38,14 @@ public class XN808310Req extends APageReq {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getSystemCode() {
