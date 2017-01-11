@@ -27,7 +27,7 @@ public class XN808059 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        orderAO.toPayMixOrder(req.getCode(), req.getPayType());
+        orderAO.toPayMixOrder(req.getCode(), req.getPayType(), req.getIp());
         return new BooleanRes(true);
     }
 

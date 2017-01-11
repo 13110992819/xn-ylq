@@ -233,7 +233,7 @@ public class OrderAOImpl implements IOrderAO {
 
     @Override
     @Transactional
-    public void toPayOrder(String code, String payType) {
+    public Object toPayOrder(String code, String payType) {
         Order order = orderBO.getOrder(code);
         if (!EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn000000", "订单不处于待支付状态");
@@ -245,35 +245,41 @@ public class OrderAOImpl implements IOrderAO {
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
         }
         orderBO.refreshOrderPayAmount(code, payAmount1, 0L, 0L);
+        return null;
     }
 
     @Override
     @Transactional
-    public void toPayMixOrder(String code, String payType) {
+    public Object toPayMixOrder(String code, String payType, String ip) {
         Order order = orderBO.getOrder(code);
         if (!EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn000000", "订单不处于待支付状态");
         }
-        Long payAmount1 = order.getAmount1() + order.getYunfei(); // 人民币
+        Long cnyAmount = order.getAmount1() + order.getYunfei(); // 人民币
         Long gwAmount = order.getAmount2(); // 购物币
         Long qbAmount = order.getAmount3(); // 钱包币
         String systemCode = order.getSystemCode();
+        String fromUserId = order.getApplyUser();
         String toUserId = order.getCompanyCode();
         // 人民币+购物币+钱包币
         // 余额支付(余额支付)
         if (EPayType.YEZP.getCode().equals(payType)) {
-            // 扣除钱包和购物币
-            accountBO.doGWBQBBPay(systemCode, order.getApplyUser(), toUserId,
-                qbAmount, gwAmount, EBizType.AJ_GW);
-            // 扣除余额
-            accountBO.doBalancePay(systemCode, order.getApplyUser(),
-                order.getCompanyCode(), payAmount1, EBizType.AJ_GW);
-            // 更新支付金额
-            orderBO.refreshOrderPayAmount(code, payAmount1, gwAmount, qbAmount);
+            // 更新订单支付金额
+            orderBO.refreshOrderPayAmount(code, cnyAmount, gwAmount, qbAmount);
+            // 扣除金额
+            accountBO.doGwQbAndBalancePay(systemCode, fromUserId, toUserId,
+                gwAmount, qbAmount, cnyAmount, EBizType.AJ_GW);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-
+            if (StringUtils.isBlank(ip)) {
+                throw new BizException("xn0000", "微信支付，ip地址不能为空");
+            }
+            String bizNote = "订单号：" + order.getCode() + "——购买尖货";
+            String body = "正汇钱包—尖货";
+            return accountBO.doWeiXinPay(systemCode, fromUserId,
+                EBizType.AJ_GW, bizNote, body, cnyAmount, ip);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
         }
+        return null;
     }
 
     /** 

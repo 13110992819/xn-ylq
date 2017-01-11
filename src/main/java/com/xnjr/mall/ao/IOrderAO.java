@@ -42,16 +42,17 @@ public interface IOrderAO {
      * @create: 2017年1月10日 下午4:17:36 xieyj
      * @history:
      */
-    public void toPayOrder(String code, String payType);
+    public Object toPayOrder(String code, String payType);
 
     /**
      * 支付订单,待发货
      * @param code
-     * @param payType 
-     * @create: 2017年1月10日 下午4:17:36 xieyj
+     * @param payType
+     * @param ip 
+     * @create: 2017年1月11日 上午10:17:31 xieyj
      * @history:
      */
-    public void toPayMixOrder(String code, String payType);
+    public Object toPayMixOrder(String code, String payType, String ip);
 
     /**
      * 批量支付订单，待发货
