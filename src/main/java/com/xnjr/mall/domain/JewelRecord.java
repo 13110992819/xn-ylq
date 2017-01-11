@@ -19,39 +19,96 @@ public class JewelRecord extends ABaseDO {
     private static final long serialVersionUID = 1L;
 
     // 编号
-    public String code;
+    private String code;
 
     // 用户编号
-    public String userId;
-
-    private String nickname;
-
-    private String photo;
+    private String userId;
 
     // 宝贝编号
-    public String jewelCode;
+    private String jewelCode;
 
-    // 标语
-    public Date createDatetime;
+    // 创建时间
+    private Date createDatetime;
 
     // 参与次数
-    public Integer times;
+    private Integer times;
 
-    // 支付金额
-    public Long payAmount;
+    // 支付金额(人民币)
+    private Long payAmount1;
+
+    // 支付金额(购物币)
+    private Long payAmount2;
+
+    // 支付金额(钱包币)
+    private Long payAmount3;
+
+    // 支付时间
+    private Date payDatetime;
 
     // 状态(0待开奖，1已中奖，2未中奖)
-    public String status;
+    private String status;
 
     // 备注
-    public String remark;
+    private String remark;
+
+    // 支付编号
+    private String payCode;
 
     // 系统编号
-    public String systemCode;
+    private String systemCode;
 
-    public List<JewelRecordNumber> jewelRecordNumberList;
+    // ***********************db properties **************************
+    // 昵称
+    private String nickname;
 
+    // 照片
+    private String photo;
+
+    // 宝贝购买记录
+    private List<JewelRecordNumber> jewelRecordNumberList;
+
+    // 宝贝
     private Jewel jewel;
+
+    public Date getPayDatetime() {
+        return payDatetime;
+    }
+
+    public void setPayDatetime(Date payDatetime) {
+        this.payDatetime = payDatetime;
+    }
+
+    public Long getPayAmount1() {
+        return payAmount1;
+    }
+
+    public void setPayAmount1(Long payAmount1) {
+        this.payAmount1 = payAmount1;
+    }
+
+    public Long getPayAmount2() {
+        return payAmount2;
+    }
+
+    public void setPayAmount2(Long payAmount2) {
+        this.payAmount2 = payAmount2;
+    }
+
+    public Long getPayAmount3() {
+        return payAmount3;
+    }
+
+    public void setPayAmount3(Long payAmount3) {
+        this.payAmount3 = payAmount3;
+    }
+
+    public String getPayCode() {
+        return payCode;
+    }
+
+    public void setPayCode(String payCode) {
+        this.payCode = payCode;
+    }
 
     public String getNickname() {
         return nickname;
@@ -107,14 +164,6 @@ public class JewelRecord extends ABaseDO {
 
     public void setTimes(Integer times) {
         this.times = times;
-    }
-
-    public Long getPayAmount() {
-        return payAmount;
-    }
-
-    public void setPayAmount(Long payAmount) {
-        this.payAmount = payAmount;
     }
 
     public String getStatus() {

@@ -72,5 +72,4 @@ public class JewelRecordDAOImpl extends AMybatisTemplate implements
     public int updateTimes(JewelRecord data) {
         return super.update(NAMESPACE.concat("update_times"), data);
     }
-
 }

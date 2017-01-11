@@ -20,10 +20,10 @@ import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.http.JsonUtils;
 import com.xnjr.mall.spring.SpringContextHolder;
 
-/** 
- * 夺宝进度查询
- * @author: haiqingzheng 
- * @since: 2017年1月9日 下午8:22:49 
+/**
+ * 夺宝进度分页查询
+ * @author: xieyj 
+ * @since: 2017年1月11日 下午5:53:04 
  * @history:
  */
 public class XN808315 extends AProcessor {
@@ -38,7 +38,9 @@ public class XN808315 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         JewelRecord condition = new JewelRecord();
-        // condition.setJewelCode(req.getCode());
+        condition.setSystemCode(req.getSystemCode());
+        condition.setJewelCode(req.getJewelCode());
+        condition.setStatus(req.getStatus());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IJewelRecordAO.DEFAULT_ORDER_COLUMN;
@@ -55,7 +57,7 @@ public class XN808315 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN808315Req.class);
-        StringValidater.validateBlank(req.getStart(), req.getLimit());
+        StringValidater.validateBlank(req.getStart(), req.getLimit(),
+            req.getSystemCode());
     }
-
 }

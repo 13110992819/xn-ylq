@@ -50,8 +50,6 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
                 .getCode());
             data.setCode(code);
             data.setCreateDatetime(new Date());
-            data.setPayAmount(Long.valueOf((data.times * 1) * 1000));
-            data.setStatus(EJewelRecordStatus.LOTTERY.getCode());
             jewelRecordDAO.insert(data);
         }
         return code;
@@ -101,6 +99,19 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     }
 
     @Override
+    public int refreshPaySuccess(String code) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            JewelRecord data = new JewelRecord();
+            data.setCode(code);
+            data.setStatus(EJewelRecordStatus.LOTTERY.getCode());
+            data.setPayDatetime(new Date());
+            count = jewelRecordDAO.update(data);
+        }
+        return count;
+    }
+
+    @Override
     public int refreshLostInfo(String code, String jewelCode, String status,
             String remark) {
         int count = 0;
@@ -126,5 +137,4 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
         }
         return count;
     }
-
 }

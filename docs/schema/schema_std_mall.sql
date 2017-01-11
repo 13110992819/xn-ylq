@@ -117,11 +117,15 @@ CREATE TABLE `tact_jewel_record` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `jewel_code` varchar(32) DEFAULT NULL COMMENT '宝贝编号',
-  `create_datetime` datetime DEFAULT NULL COMMENT '标语',
+  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `times` int(11) DEFAULT NULL COMMENT '参与次数',
-  `pay_amount` bigint(20) DEFAULT NULL COMMENT '支付金额',
+  `pay_amount1` bigint(20) DEFAULT NULL COMMENT '支付金额(人民币)',
+  `pay_amount2` bigint(20) DEFAULT NULL COMMENT '支付金额(购物币)',
+  `pay_amount3` varchar(20) DEFAULT NULL COMMENT '支付金额(钱包币)',
+  `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
   `status` varchar(4) DEFAULT NULL COMMENT '状态(0待开奖，1已中奖，2未中奖)',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `pay_code` varchar(32) DEFAULT NULL COMMENT '支付编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

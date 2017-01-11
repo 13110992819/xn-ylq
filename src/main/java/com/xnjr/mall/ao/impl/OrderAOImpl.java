@@ -44,6 +44,7 @@ import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EOrderStatus;
 import com.xnjr.mall.enums.EPayType;
+import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.exception.BizException;
 
 /** 
@@ -132,8 +133,7 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     @Transactional
     public void commitOrder(List<String> cartCodeList, Order data) {
-        // 按公司编号进行拆单
-        // 遍历获取公司编号列表
+        // 按公司编号进行拆单, 遍历获取公司编号列表
         Map<String, String> companyMap = new HashMap<String, String>();
         for (String cartCode : cartCodeList) {
             Cart cart = cartBO.getCart(cartCode);
@@ -260,15 +260,15 @@ public class OrderAOImpl implements IOrderAO {
         Long qbAmount = order.getAmount3(); // 钱包币
         String systemCode = order.getSystemCode();
         String fromUserId = order.getApplyUser();
-        String toUserId = order.getCompanyCode();
         // 人民币+购物币+钱包币
         // 余额支付(余额支付)
         if (EPayType.YEZP.getCode().equals(payType)) {
             // 更新订单支付金额
             orderBO.refreshOrderPayAmount(code, cnyAmount, gwAmount, qbAmount);
             // 扣除金额
-            accountBO.doGwQbAndBalancePay(systemCode, fromUserId, toUserId,
-                gwAmount, qbAmount, cnyAmount, EBizType.AJ_GW);
+            accountBO.doGwQbAndBalancePay(systemCode, fromUserId,
+                ESysUser.SYS_USER.getCode(), gwAmount, qbAmount, cnyAmount,
+                EBizType.AJ_GW);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
             String bizNote = "订单号：" + order.getCode() + "——购买尖货";
             String body = "正汇钱包—尖货";

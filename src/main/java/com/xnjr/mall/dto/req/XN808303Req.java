@@ -1,9 +1,9 @@
 package com.xnjr.mall.dto.req;
 
 /**
- * 参与夺宝
- * @author: shan 
- * @since: 2016年12月20日 下午3:32:06 
+ * 购买宝贝
+ * @author: xieyj 
+ * @since: 2017年1月11日 下午7:30:57 
  * @history:
  */
 public class XN808303Req {
@@ -16,6 +16,28 @@ public class XN808303Req {
 
     // 购买次数
     public String times;
+
+    // 支付类型
+    private String payType;
+
+    // ip 地址
+    private String ip;
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 
     public String getUserId() {
         return userId;

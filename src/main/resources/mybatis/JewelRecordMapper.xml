@@ -11,9 +11,13 @@
 		<result column="create_datetime" property="createDatetime" />
 		<result column="times" property="times" />
 		
-		<result column="pay_amount" property="payAmount" />
+		<result column="pay_amount1" property="payAmount1" />
+		<result column="pay_amount2" property="payAmount2" />
+		<result column="pay_amount3" property="payAmount3" />
+		
 		<result column="status" property="status" />
 		<result column="remark" property="remark" />
+		<result column="pay_code" property="payCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -30,6 +34,9 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="payCode != null and payCode != '' ">
+				AND t.pay_code = #{payCode}
+			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
@@ -45,12 +52,15 @@
 		,t.create_datetime
 		,t.times
 		
-		,t.pay_amount
+		,t.pay_amount1
+		,t.pay_amount2
+		,t.pay_amount3
 		,t.status
 		,t.remark
+		,t.pay_code 
 		,t.system_code
 		FROM
-		tact_jewel_record t INNER JOIN tact_jewel tj on t.user_id=tj.store_code LEFT JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id LEFT JOIN ${userDB}.tstd_user_ext tue ON tu.user_id = tue.user_id
+		tact_jewel_record t LEFT JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id LEFT JOIN ${userDB}.tstd_user_ext tue ON tu.user_id = tue.user_id
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -77,6 +87,9 @@
 		,pay_amount
 		,status
 		,remark
+		,pay_amount1
+		,pay_amount2
+		,pay_amount3
 		,system_code
 		)
 		VALUES(
@@ -89,6 +102,9 @@
 		,#{payAmount}
 		,#{status}
 		,#{remark}
+		,#{payAmount1}
+		,#{payAmount2}
+		,#{payAmount3}
 		,#{systemCode}
 		)
 	</insert>
@@ -97,6 +113,9 @@
 		UPDATE tact_jewel_record
 		SET
 		status=#{status}
+		<if test="payDatetime != null and payDatetime != '' ">
+			 ,pay_datetime = #{payDatetime}
+		</if>
 		,remark=#{remark}
 		WHERE code = #{code}
 	</update>

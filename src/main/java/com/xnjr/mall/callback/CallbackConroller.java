@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.xnjr.mall.ao.IJewelRecordAO;
 import com.xnjr.mall.ao.IOrderAO;
 import com.xnjr.mall.ao.IStockAO;
 import com.xnjr.mall.ao.IStorePurchaseAO;
@@ -50,6 +51,9 @@ public class CallbackConroller {
 
     @Autowired
     IOrderAO orderAO;
+
+    @Autowired
+    private IJewelRecordAO jewelRecordAO;
 
     @RequestMapping("/zhpay/app/callback")
     public void doCallbackZhpay(HttpServletRequest request,
@@ -94,6 +98,10 @@ public class CallbackConroller {
                     System.out.println("**** 进入商品购物，微信APP支付服务器回调 start****");
                     orderAO.paySuccess(jourCode);
                     System.out.println("**** 进入商品购物，微信APP支付服务器回调 end****");
+                } else if (EBizType.AJ_DUOBAO.getCode().equals(bizType)) {
+                    System.out.println("**** 进入一元夺宝，微信APP支付服务器回调 start****");
+                    jewelRecordAO.paySuccess(jourCode);
+                    System.out.println("**** 进入一元夺宝，微信APP支付服务器回调 end****");
                 }
             } catch (Exception e) {
                 logger.info("支付回调异常");

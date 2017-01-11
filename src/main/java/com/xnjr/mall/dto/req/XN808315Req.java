@@ -1,9 +1,8 @@
 package com.xnjr.mall.dto.req;
 
 /**
- * 我的夺宝号码列表查询
- * @author: asus 
- * @since: 2016年12月21日 下午5:03:34 
+ * @author: xieyj 
+ * @since: 2017年1月11日 下午5:41:54 
  * @history:
  */
 public class XN808315Req extends APageReq {
@@ -12,14 +11,36 @@ public class XN808315Req extends APageReq {
      */
     private static final long serialVersionUID = -3572987603574928980L;
 
-    // 夺宝标的编号
-    public String JewelCode;
+    // 夺宝标的编号(选填)
+    private String jewelCode;
+
+    // 状态(0待开奖，1已中奖，2未中奖)(选填)
+    private String status;
+
+    // 系统编号(必填)
+    private String systemCode;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getJewelCode() {
-        return JewelCode;
+        return jewelCode;
     }
 
     public void setJewelCode(String jewelCode) {
-        JewelCode = jewelCode;
+        this.jewelCode = jewelCode;
     }
 }

@@ -13,9 +13,8 @@ import com.xnjr.mall.domain.JewelRecordNumber;
 import com.xnjr.mall.exception.BizException;
 
 /**
- * 
- * @author: shan 
- * @since: 2016年12月20日 下午1:02:48 
+ * @author: xieyj 
+ * @since: 2017年1月11日 下午6:29:08 
  * @history:
  */
 @Component

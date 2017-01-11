@@ -17,9 +17,8 @@ import com.xnjr.mall.enums.EJewelStatus;
 import com.xnjr.mall.exception.BizException;
 
 /**
- * 
- * @author: shan 
- * @since: 2016年12月19日 下午4:25:46 
+ * @author: xieyj 
+ * @since: 2017年1月11日 下午6:12:17 
  * @history:
  */
 @Component
@@ -43,6 +42,7 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
         if (data != null) {
             code = OrderNoGenerater.generateM(EGeneratePrefix.IEWEL.getCode());
             data.setCode(code);
+            data.setStatus(EJewelStatus.NEW.getCode());
             jewelDAO.insert(data);
         }
         return code;
@@ -103,6 +103,7 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
     public int refreshApprove(Jewel data) {
         int count = 0;
         if (data != null && StringUtils.isNotBlank(data.getCode())) {
+            data.setApproveDatetime(new Date());
             count = jewelDAO.updateApprove(data);
         }
         return count;

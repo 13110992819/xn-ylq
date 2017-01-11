@@ -31,7 +31,6 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
     public String saveJewelRecord(JewelRecord data);
 
     /**
-     * 
      * @param code
      * @return 
      * @create: 2016年12月20日 下午12:26:49 shan
@@ -40,6 +39,8 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
     public int removeJewelRecord(String code);
 
     public int refreshStatus(String code, String status, String remark);
+
+    public int refreshPaySuccess(String code);
 
     /**
      * 将所有未中奖记录修改状态

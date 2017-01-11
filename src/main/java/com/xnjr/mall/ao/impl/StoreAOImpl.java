@@ -18,7 +18,6 @@ import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StoreTicket;
 import com.xnjr.mall.dto.req.XN805042Req;
-import com.xnjr.mall.dto.res.XN805901Res;
 import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.EStoreTicketStatus;
@@ -63,13 +62,15 @@ public class StoreAOImpl implements IStoreAO {
         if (CollectionUtils.isNotEmpty(list)) {
             throw new BizException("xn000000", "该名称已存在");
         } else {
-            if (StringUtils.isNotBlank(data.getUserReferee())) {
-                // 店铺推荐人传手机号过来，转化成用户编号，C端和B端
-                XN805901Res refereeRes = userBO.getRemoteUser(
-                    data.getUserReferee(), data.getUserReferee());
-                if (refereeRes == null) {
-                    throw new BizException("xn000000", "该推荐人不存在");
+            // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
+            String userReferee = data.getUserReferee();
+            if (StringUtils.isNotBlank(userReferee)) {
+                String userId = userBO.getUserId(userReferee,
+                    EUserKind.F1.getCode(), data.getSystemCode());
+                if (StringUtils.isBlank(userId)) {
+                    throw new BizException("xn702002", "推荐人不存在");
                 }
+                data.setUserReferee(userId);
             }
             // 注册B端用户，无推荐人
             XN805042Req req = new XN805042Req();

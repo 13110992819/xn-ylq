@@ -15,13 +15,18 @@ public interface IJewelRecordAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     /**
-     * 参与夺宝
-     * @param data
+     * 购买宝贝
+     * @param userId
+     * @param jewelCode
+     * @param times
+     * @param payType
+     * @param ip
      * @return 
-     * @create: 2016年12月20日 下午12:11:39 shan
+     * @create: 2017年1月11日 下午7:35:31 xieyj
      * @history:
      */
-    public String buy(String userId, String jewelCode, Integer times);
+    public Object buyJewel(String userId, String jewelCode, Integer times,
+            String payType, String ip);
 
     /**
      * 追加
@@ -48,6 +53,15 @@ public interface IJewelRecordAO {
      * @history:
      */
     public void dropJewelRecord(String code);
+
+    /**
+     * 根据流水编号，找到对应消费记录，更新支付状态
+     * @param payCode
+     * @return 
+     * @create: 2017年1月10日 下午7:48:09 xieyj
+     * @history:
+     */
+    public void paySuccess(String payCode);
 
     /**
      * 标的购买记录分页
