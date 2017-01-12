@@ -9,7 +9,7 @@ import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.http.JsonUtils;
 
 /**
- * 追加
+ * 追加(接口作废)
  * @author: haiqingzheng 
  * @since: 2017年1月10日 下午8:10:26 
  * @history:
