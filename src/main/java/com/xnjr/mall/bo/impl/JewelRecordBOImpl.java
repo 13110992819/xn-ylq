@@ -74,7 +74,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             condition.setCode(code);
             data = jewelRecordDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "记录编号不存在");
+                throw new BizException("xn0000", "夺宝记录不存在");
             }
         }
         return data;
@@ -94,6 +94,24 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             data.setStatus(status);
             data.setRemark(remark);
             count = jewelRecordDAO.update(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshPayAmount(String code, Long payAmount1, Long payAmount2,
+            Long payAmount3) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            JewelRecord jewelRecord = getJewelRecord(code);
+            JewelRecord data = new JewelRecord();
+            data.setCode(code);
+            data.setPayAmount1(jewelRecord.getPayAmount1() + payAmount1);
+            data.setPayAmount2(jewelRecord.getPayAmount2() + payAmount2);
+            data.setPayAmount3(jewelRecord.getPayAmount3() + payAmount3);
+            data.setPayDatetime(new Date());
+            data.setRemark("追加号码");
+            count = jewelRecordDAO.updatePayAmount(data);
         }
         return count;
     }

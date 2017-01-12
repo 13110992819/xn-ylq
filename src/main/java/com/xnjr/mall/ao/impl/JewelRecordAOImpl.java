@@ -83,8 +83,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             distributeNumber(jewel, times, jewelRecordCode);
             // 扣除余额
             accountBO.doGwQbAndBalancePay(systemCode, userId,
-                ESysUser.SYS_USER.getCode(), jewel.getPrice2(),
-                jewel.getPrice3(), jewel.getPrice1(), EBizType.AJ_DUOBAO);
+                ESysUser.SYS_USER.getCode(), data.getPayAmount2(),
+                data.getPayAmount3(), data.getPayAmount1(), EBizType.AJ_DUOBAO);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
             data.setStatus(EJewelRecordStatus.TO_PAY.getCode());
             jewelRecordCode = jewelRecordBO.saveJewelRecord(data);
@@ -97,6 +97,55 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         return result;
     }
 
+    // @Override
+    // @Transactional
+    // public void additionalBuy(String jewelRecordCode, Integer times,
+    // String payType, String ip) {
+    // JewelRecord record = jewelRecordBO.getJewelRecord(jewelRecordCode);
+    // Jewel jewel = jewelBO.getJewel(record.getJewelCode());
+    // if (!EJewelStatus.PUT_ON.getCode().equals(jewel.getStatus())) {
+    // throw new BizException("xn0000", "夺宝标的不处于可夺宝状态，不能进行追加操作");
+    // }
+    // if (times > jewel.getTotalNum() - jewel.getInvestNum()) {
+    // throw new BizException("xn0000", "剩余可参与人次不足");
+    // }
+    //
+    // // 更新夺宝记录参与次数
+    // Integer newTimes = record.getTimes() + times;
+    // jewelRecordBO.refreshTimes(jewelRecordCode, newTimes);
+    // // 余额支付(余额支付)
+    // if (EPayType.YEZP.getCode().equals(payType)) {
+    // Long payAmount1 = jewel.getPrice1() * times;
+    // Long payAmount2 = jewel.getPrice2() * times;
+    // Long payAmount3 = jewel.getPrice3() * times;
+    // // 分配号码
+    // distributeNumber(jewel, times, jewelRecordCode);
+    // jewelRecordBO.refreshPayAmount(jewelRecordCode, payAmount1,
+    // payAmount2, payAmount3);
+    // // 扣除余额
+    // accountBO.doGwQbAndBalancePay(record.getSystemCode(),
+    // record.getUserId(), ESysUser.SYS_USER.getCode(), payAmount2,
+    // payAmount3, payAmount1, EBizType.AJ_DUOBAO);
+    // } else if (EPayType.WEIXIN.getCode().equals(payType)) {
+    // data.setStatus(EJewelRecordStatus.TO_PAY.getCode());
+    // jewelRecordCode = jewelRecordBO.saveJewelRecord(data);
+    // String bizNote = "宝贝单号：" + jewelRecordCode + "——一元夺宝";
+    // String body = "正汇钱包—一元夺宝";
+    // result = accountBO.doWeiXinPay(systemCode, userId, EBizType.AJ_GW,
+    // bizNote, body, jewel.getPrice1(), ip);
+    // } else if (EPayType.ALIPAY.getCode().equals(payType)) {
+    // }
+    // return result;
+    // }
+
+    /**
+     * 分配号码
+     * @param jewel
+     * @param times
+     * @param jewelRecordCode 
+     * @create: 2017年1月12日 上午10:31:16 xieyj
+     * @history:
+     */
     private void distributeNumber(Jewel jewel, Integer times,
             String jewelRecordCode) {
         String jewelCode = jewel.getCode();
@@ -146,73 +195,6 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     }
 
     @Override
-    @Transactional
-    public void additionalBuy(String jewelRecordCode, Integer times) {
-        JewelRecord record = jewelRecordBO.getJewelRecord(jewelRecordCode);
-        Jewel jewel = jewelBO.getJewel(record.getJewelCode());
-        if (!EJewelStatus.PUT_ON.getCode().equals(jewel.getStatus())) {
-            throw new BizException("xn0000", "夺宝标的不处于可夺宝状态，不能进行追加操作");
-        }
-        if (times > jewel.getTotalNum() - jewel.getInvestNum()) {
-            throw new BizException("xn0000", "剩余可参与人次不足");
-        }
-
-        // 更新夺宝记录参与次数
-        Integer newTimes = record.getTimes() + times;
-        jewelRecordBO.refreshTimes(jewelRecordCode, newTimes);
-
-        // 查询已有号码列表
-        List<String> existNumbers = jewelRecordNumberBO.queryExistNumbers(jewel
-            .getCode());
-
-        // 自动生成夺宝号码
-        List<String> numbers = LuckyNumberGenerator.generateLuckyNumbers(
-            10000000L, Long.valueOf(jewel.getTotalNum()), existNumbers,
-            Long.valueOf(times));
-        for (int i = 0; i < numbers.size(); i++) {
-            JewelRecordNumber jewelRecordNumber = new JewelRecordNumber();
-            jewelRecordNumber.setJewelCode(jewel.getCode());
-            jewelRecordNumber.setRecordCode(jewelRecordCode);
-            jewelRecordNumber.setNumber(numbers.get(i));
-            jewelRecordNumberBO.saveJewelRecordNumber(jewelRecordNumber);
-        }
-
-        // 更新夺宝标的已投资人次及已投资金额
-        JewelRecordNumber condition = new JewelRecordNumber();
-        condition.setJewelCode(jewel.getCode());
-        Long investNum = jewelRecordNumberBO.getTotalCount(condition);
-        jewelBO.refreshInvestInfo(jewel.getCode(), investNum.intValue());
-
-        // 如果已投满，产生中奖名单
-        if (investNum.intValue() == jewel.getTotalNum()) {
-            // 产生中奖号码
-            String luckyNumber = LuckyNumberGenerator.getLuckyNumber(10000000L,
-                Long.valueOf(jewel.getTotalNum()), 0L);
-            // 根据幸运号码招到夺宝记录ID
-            JewelRecordNumber condition1 = new JewelRecordNumber();
-            condition1.setJewelCode(jewel.getCode());
-            condition1.setNumber(luckyNumber);
-            JewelRecordNumber jewelRecordNumber = jewelRecordNumberBO
-                .queryJewelRecordNumberList(condition1).get(0);
-            JewelRecord jewelRecord = jewelRecordBO
-                .getJewelRecord(jewelRecordNumber.getRecordCode());
-            String winUserId = jewelRecord.getUserId();
-            // 更新此次夺宝所有夺宝记录的状态
-            jewelRecordBO.refreshStatus(jewelRecord.getCode(),
-                EJewelRecordStatus.WINNING.getCode(), "夺宝号" + luckyNumber
-                        + "已中奖");
-            jewelRecordBO
-                .refreshLostInfo(jewelRecord.getCode(), jewel.getCode(),
-                    EJewelRecordStatus.LOST.getCode(), "很遗憾，本次未中奖");
-
-            // 更新夺宝标的中奖人信息
-            jewelBO.refreshWinInfo(jewel.getCode(), luckyNumber, winUserId);
-
-        }
-
-    }
-
-    @Override
     public void editJewelRecord(JewelRecord data) {
         if (!jewelRecordBO.isJewelRecordExist(data.getCode())) {
             throw new BizException("xn0000", "不存在该记录");
@@ -248,7 +230,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         if (EJewelRecordStatus.TO_PAY.getCode().equals(jewelRecord.getStatus())) {
             // 分配号码
             Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
-            this.distributeNumber(jewel, jewelRecord.getTimes(),
+            distributeNumber(jewel, jewelRecord.getTimes(),
                 jewelRecord.getCode());
             jewelRecordBO.refreshPaySuccess(jewelRecord.getCode());
             // 扣除金额(购物币和钱包币)

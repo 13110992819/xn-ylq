@@ -1,6 +1,5 @@
 package com.xnjr.mall.api.impl;
 
-import com.xnjr.mall.ao.IJewelRecordAO;
 import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.dto.req.XN808307Req;
@@ -8,7 +7,6 @@ import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.http.JsonUtils;
-import com.xnjr.mall.spring.SpringContextHolder;
 
 /**
  * 追加
@@ -17,15 +15,15 @@ import com.xnjr.mall.spring.SpringContextHolder;
  * @history:
  */
 public class XN808307 extends AProcessor {
-    private IJewelRecordAO jewelRecordAO = SpringContextHolder
-        .getBean(IJewelRecordAO.class);
+    // private IJewelRecordAO jewelRecordAO = SpringContextHolder
+    // .getBean(IJewelRecordAO.class);
 
     private XN808307Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        jewelRecordAO.additionalBuy(req.getJewelRecordCode(),
-            StringValidater.toInteger(req.getTimes()));
+        // jewelRecordAO.additionalBuy(req.getJewelRecordCode(),
+        // StringValidater.toInteger(req.getTimes()));
         return new BooleanRes(true);
     }
 

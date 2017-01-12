@@ -40,6 +40,19 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
 
     public int refreshStatus(String code, String status, String remark);
 
+    /**
+     * 更新支付金额
+     * @param code
+     * @param payAmount1
+     * @param payAmount2
+     * @param payAmount3
+     * @return 
+     * @create: 2017年1月12日 上午11:00:39 xieyj
+     * @history:
+     */
+    public int refreshPayAmount(String code, Long payAmount1, Long payAmount2,
+            Long payAmount3);
+
     public int refreshPaySuccess(String code);
 
     /**

@@ -72,4 +72,13 @@ public class JewelRecordDAOImpl extends AMybatisTemplate implements
     public int updateTimes(JewelRecord data) {
         return super.update(NAMESPACE.concat("update_times"), data);
     }
+
+    /** 
+     * @see com.xnjr.mall.dao.IJewelRecordDAO#updatePayAmount(com.xnjr.mall.domain.JewelRecord)
+     */
+    @Override
+    public int updatePayAmount(JewelRecord data) {
+        return super.update(NAMESPACE.concat("update_jewelRecordPayAmount"),
+            data);
+    }
 }

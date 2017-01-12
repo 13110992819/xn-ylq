@@ -28,15 +28,17 @@ public interface IJewelRecordAO {
     public Object buyJewel(String userId, String jewelCode, Integer times,
             String payType, String ip);
 
-    /**
-     * 追加
-     * @param jewelRecordCode
-     * @param times
-     * @return 
-     * @create: 2017年1月10日 下午8:19:35 haiqingzheng
-     * @history:
-     */
-    public void additionalBuy(String jewelRecordCode, Integer times);
+    // /**
+    // * 追加购买宝贝记录
+    // * @param jewelRecordCode
+    // * @param times
+    // * @param payType
+    // * @param ip
+    // * @create: 2017年1月12日 上午10:44:54 xieyj
+    // * @history:
+    // */
+    // public void additionalBuy(String jewelRecordCode, Integer times,
+    // String payType, String ip);
 
     /**
      * 修改标的购买记录

@@ -84,12 +84,13 @@
 		,create_datetime
 		,times
 		
-		,pay_amount
-		,status
-		,remark
 		,pay_amount1
 		,pay_amount2
 		,pay_amount3
+		,pay_datetime
+		,status
+		
+		,remark
 		,system_code
 		)
 		VALUES(
@@ -99,12 +100,13 @@
 		,#{createDatetime}
 		,#{times}
 		
-		,#{payAmount}
-		,#{status}
-		,#{remark}
 		,#{payAmount1}
 		,#{payAmount2}
 		,#{payAmount3}
+		,#{payDatetime}
+		,#{status}
+		
+		,#{remark}
 		,#{systemCode}
 		)
 	</insert>
@@ -116,6 +118,18 @@
 		<if test="payDatetime != null and payDatetime != '' ">
 			 ,pay_datetime = #{payDatetime}
 		</if>
+		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_jewelRecordPayAmount" parameterType="jewelRecord">
+		UPDATE tact_jewel_record
+		SET
+		status=#{status}
+		,pay_amount1 = #{payAmount1}
+		,pay_amount2 = #{payAmount2}
+		,pay_amount3 = #{payAmount3}
+		,pay_datetime = #{payDatetime}
 		,remark=#{remark}
 		WHERE code = #{code}
 	</update>
