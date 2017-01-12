@@ -39,8 +39,7 @@ public class XN808302 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN808302Req.class);
         StringValidater.validateBlank(req.getCode(), req.getName(),
-            req.getSlogan(), req.getAdvPic(), req.getDescriptionText(),
-            req.getDescriptionPic());
+            req.getSlogan(), req.getAdvPic(), req.getDescriptionText());
 
     }
 

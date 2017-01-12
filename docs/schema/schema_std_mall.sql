@@ -78,8 +78,8 @@ CREATE TABLE `tact_jewel` (
   `price1` bigint(20) DEFAULT NULL COMMENT '单价1',
   `price2` bigint(20) DEFAULT NULL COMMENT '单价2',
   `price3` bigint(20) DEFAULT NULL COMMENT '单价3',
-  `total_num` int(11) DEFAULT NULL COMMENT '所需总人次',
-  `invest_num` int(11) DEFAULT NULL COMMENT '已投资人次',
+  `total_num` int(11) DEFAULT '0' COMMENT '所需总人次',
+  `invest_num` int(11) DEFAULT '0' COMMENT '已投资人次',
   `start_datetime` datetime DEFAULT NULL COMMENT '夺宝开始时间',
   `raise_days` int(11) DEFAULT NULL COMMENT '募集天数',
   `win_number` varchar(255) DEFAULT NULL COMMENT '中奖号码',
@@ -94,6 +94,7 @@ CREATE TABLE `tact_jewel` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 -- ----------------------------
 --  Table structure for `tact_jewel_interact`
