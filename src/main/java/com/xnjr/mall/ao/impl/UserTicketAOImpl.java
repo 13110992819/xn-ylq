@@ -78,7 +78,15 @@ public class UserTicketAOImpl implements IUserTicketAO {
     @Override
     public Paginable<UserTicket> queryUserTicketPage(int start, int limit,
             UserTicket condition) {
-        return userTicketBO.getPaginable(start, limit, condition);
+        Paginable<UserTicket> page = userTicketBO.getPaginable(start, limit,
+            condition);
+        List<UserTicket> list = page.getList();
+        for (UserTicket userTicket : list) {
+            StoreTicket storeTicket = storeTicketBO.getStoreTicket(userTicket
+                .getTicketCode());
+            userTicket.setStoreTicket(storeTicket);
+        }
+        return page;
     }
 
     @Override

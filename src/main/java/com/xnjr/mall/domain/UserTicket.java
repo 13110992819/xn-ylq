@@ -48,6 +48,17 @@ public class UserTicket extends ABaseDO {
     // 店铺编号
     private String storeCode;
 
+    // 店铺折扣券
+    private StoreTicket storeTicket;
+
+    public StoreTicket getStoreTicket() {
+        return storeTicket;
+    }
+
+    public void setStoreTicket(StoreTicket storeTicket) {
+        this.storeTicket = storeTicket;
+    }
+
     public String getStoreCode() {
         return storeCode;
     }
