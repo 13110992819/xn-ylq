@@ -16,24 +16,46 @@ package com.xnjr.mall.dto.req;
 public class XN808307Req {
 
     // 夺宝记录编号
-    public String jewelRecordCode;
+    public String code;
 
-    // 购买次数
-    public String times;
+    // 收件人
+    private String receiver;
 
-    public String getJewelRecordCode() {
-        return jewelRecordCode;
+    // 收件人手机号
+    private String reMobile;
+
+    // 收件地址
+    private String reAddress;
+
+    public String getCode() {
+        return code;
     }
 
-    public void setJewelRecordCode(String jewelRecordCode) {
-        this.jewelRecordCode = jewelRecordCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getTimes() {
-        return times;
+    public String getReceiver() {
+        return receiver;
     }
 
-    public void setTimes(String times) {
-        this.times = times;
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
+
+    public String getReMobile() {
+        return reMobile;
+    }
+
+    public void setReMobile(String reMobile) {
+        this.reMobile = reMobile;
+    }
+
+    public String getReAddress() {
+        return reAddress;
+    }
+
+    public void setReAddress(String reAddress) {
+        this.reAddress = reAddress;
     }
 }

@@ -55,6 +55,9 @@ public class Jewel extends ABaseDO {
     // 夺宝开始时间
     private Date startDatetime;
 
+    // 夺宝开奖时间
+    private Date lotteryDatetime;
+
     // 募集天数
     private Integer raiseDays;
 
@@ -87,6 +90,37 @@ public class Jewel extends ABaseDO {
 
     // 备注
     private String remark;
+
+    // **********db properties ******************
+    // 开奖时间起
+    private Date lotteryDatetimeStart;
+
+    // 开奖时间止
+    private Date lotteryDatetimeEnd;
+
+    public Date getLotteryDatetimeStart() {
+        return lotteryDatetimeStart;
+    }
+
+    public void setLotteryDatetimeStart(Date lotteryDatetimeStart) {
+        this.lotteryDatetimeStart = lotteryDatetimeStart;
+    }
+
+    public Date getLotteryDatetimeEnd() {
+        return lotteryDatetimeEnd;
+    }
+
+    public void setLotteryDatetimeEnd(Date lotteryDatetimeEnd) {
+        this.lotteryDatetimeEnd = lotteryDatetimeEnd;
+    }
+
+    public Date getLotteryDatetime() {
+        return lotteryDatetime;
+    }
+
+    public void setLotteryDatetime(Date lotteryDatetime) {
+        this.lotteryDatetime = lotteryDatetime;
+    }
 
     public String getCode() {
         return code;

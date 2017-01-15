@@ -31,6 +31,7 @@ public class XN808302 extends AProcessor {
         data.setAdvPic(req.getAdvPic());
         data.setDescriptionText(req.getDescriptionText());
         data.setDescriptionPic(req.getDescriptionPic());
+        data.setRemark(req.getRemark());
         jewelAO.reApplyJewel(data);
         return new BooleanRes(true);
     }

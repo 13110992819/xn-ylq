@@ -11,9 +11,9 @@ import com.xnjr.mall.http.JsonUtils;
 import com.xnjr.mall.spring.SpringContextHolder;
 
 /**
- * 宝贝强制下架，金额原路退回
- * @author: shan 
- * @since: 2016年12月20日 下午3:04:22 
+ * 在宝贝已上架，且无人购买时，可下架
+ * @author: xieyj 
+ * @since: 2017年1月12日 下午3:35:59 
  * @history:
  */
 public class XN808306 extends AProcessor {

@@ -34,6 +34,7 @@ import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.common.DateUtil;
 import com.xnjr.mall.common.SysConstants;
+import com.xnjr.mall.core.CalculationUtil;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.Cart;
@@ -41,6 +42,7 @@ import com.xnjr.mall.domain.Order;
 import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.ProductOrder;
 import com.xnjr.mall.enums.EBizType;
+import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EOrderStatus;
 import com.xnjr.mall.enums.EPayType;
@@ -300,9 +302,6 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     public int cancelOrderOss(String code, String updater, String remark) {
         Order data = orderBO.getOrder(code);
-        Long payAmount1 = data.getAmount1();
-        Long payAmount2 = data.getAmount2() + data.getYunfei();
-        Long payAmount3 = data.getAmount3();
         if (!EOrderStatus.TO_PAY.getCode().equals(data.getStatus())
                 && !EOrderStatus.PAY_YES.getCode().equals(data.getStatus())
                 && !EOrderStatus.SEND.getCode().equals(data.getStatus())) {
@@ -400,13 +399,31 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     @Override
-    public int confirmOrder(String code, String updater, String remark) {
+    public void confirmOrder(String code, String updater, String remark) {
         Order order = orderBO.getOrder(code);
         if (!EOrderStatus.SEND.getCode().equalsIgnoreCase(order.getStatus())) {
             throw new BizException("xn000000", "订单不是已发货状态，无法操作");
         }
-        return orderBO.approveOrder(code, updater,
-            EOrderStatus.RECEIVE.getCode(), remark);
+        orderBO.approveOrder(code, updater, EOrderStatus.RECEIVE.getCode(),
+            remark);
+        Long cnyAmount = order.getPayAmount1();
+        String systemCode = order.getSystemCode();
+        // 打款给商家分润账户
+        // 将人民币转出分润
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
+            null);
+        Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
+        Long frAmount = Double.valueOf(fr2cny * cnyAmount).longValue();
+        String frAmountStr = CalculationUtil.divi(frAmount);
+        accountBO.doTransferAmountByUser(order.getSystemCode(),
+            ESysUser.SYS_USER.getCode(), order.getCompanyCode(),
+            ECurrency.FRB.getCode(), frAmount, EBizType.AJ_QRSH.getCode(),
+            "用户确认收货，系统需支付人民币:" + CalculationUtil.divi(cnyAmount) + "元，商户收到分润:"
+                    + frAmountStr);
+        smsOutBO
+            .sentContent(order.getCompanyCode(), order.getCompanyCode(),
+                "尊敬的商户，订单号[" + code + "]的用户已确认收货,本次收入分润：" + frAmountStr
+                        + ",请注意查收!");
     }
 
     /** 

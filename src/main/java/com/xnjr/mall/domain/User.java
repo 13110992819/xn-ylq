@@ -58,10 +58,10 @@ public class User extends ABaseDO {
     // 真实姓名
     private String realName;
 
-    // 交易密码
+    // 支付密码
     private String tradePwd;
 
-    // 交易密码强度
+    // 支付密码强度
     private String tradePwdStrength;
 
     // 创建时间

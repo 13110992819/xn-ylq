@@ -25,6 +25,17 @@ public class XN808302Req {
     // 详情图片(必填)
     private String descriptionPic;
 
+    // 备注(选填)
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public String getCode() {
         return code;
     }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.xnjr.mall.bo.IJewelBO;
 import com.xnjr.mall.bo.base.PaginableBOImpl;
+import com.xnjr.mall.common.DateUtil;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.dao.IJewelDAO;
 import com.xnjr.mall.domain.Jewel;
@@ -88,12 +89,13 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
     }
 
     @Override
-    public int refreshStatus(String code, String status) {
+    public int refreshStatus(String code, String status, String remark) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             Jewel data = new Jewel();
             data.setCode(code);
             data.setStatus(status);
+            data.setUpdateDatetime(new Date());
             count = jewelDAO.updateStatus(data);
         }
         return count;
@@ -114,8 +116,11 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
         int count = 0;
         if (data != null && StringUtils.isNotBlank(data.getCode())) {
             data.setStatus(EJewelStatus.PUT_ON.getCode());
-            data.setStartDatetime(new Date());
-            data.setUpdateDatetime(new Date());
+            Date date = new Date();
+            data.setStartDatetime(date);
+            data.setLotteryDatetime(DateUtil.getRelativeDateOfDays(
+                data.getStartDatetime(), data.getRaiseDays()));
+            data.setUpdateDatetime(date);
             count = jewelDAO.updatePutOn(data);
         }
         return count;

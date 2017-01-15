@@ -6,38 +6,12 @@ import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.JewelRecordNumber;
 
 /**
- * 
- * @author: shan 
- * @since: 2016年12月20日 下午12:16:23 
+ * @author: xieyj 
+ * @since: 2017年1月13日 下午3:03:41 
  * @history:
  */
 public interface IJewelRecordNumberAO {
     static final String DEFAULT_ORDER_COLUMN = "id";
-
-    /**
-     * 
-     * @param data
-     * @return 
-     * @create: 2016年12月20日 下午12:18:19 shan
-     * @history:
-     */
-    public String addJewelRecordNumber(Long id, String recordCode, String number);
-
-    /**
-     * 
-     * @param data 
-     * @create: 2016年12月20日 下午12:18:22 shan
-     * @history:
-     */
-    public void editJewelRecordNumber(Long id, String recordCode, String number);
-
-    /**
-     * 
-     * @param id 
-     * @create: 2016年12月20日 下午12:18:26 shan
-     * @history:
-     */
-    public void dropJewelRecordNumber(Long id);
 
     /**
      * 
@@ -48,7 +22,7 @@ public interface IJewelRecordNumberAO {
      * @create: 2016年12月20日 下午12:18:29 shan
      * @history:
      */
-    public Paginable<JewelRecordNumber> queryJewelRecordPage(int start,
+    public Paginable<JewelRecordNumber> queryJewelRecordNumberPage(int start,
             int limit, JewelRecordNumber condition);
 
     /**

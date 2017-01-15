@@ -1,5 +1,7 @@
 package com.xnjr.mall.dao;
 
+import java.util.List;
+
 import com.xnjr.mall.dao.base.IBaseDAO;
 import com.xnjr.mall.domain.JewelRecord;
 
@@ -15,7 +17,14 @@ public interface IJewelRecordDAO extends IBaseDAO<JewelRecord> {
 
     public int updatePayAmount(JewelRecord data);
 
+    public int updateReAddress(JewelRecord data);
+
     public int updateLostInfo(JewelRecord data);
 
-    public int updateTimes(JewelRecord data);
+    public JewelRecord selectMy(JewelRecord condition);
+
+    public List<JewelRecord> selectMyList(JewelRecord condition);
+
+    public List<JewelRecord> selectMyList(JewelRecord condition, int start,
+            int count);
 }

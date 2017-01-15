@@ -6,7 +6,7 @@ public class XN805902Req {
 
     private String userId;
 
-    // 待校验交易密码
+    // 待校验支付密码
     private String tradePwd;
 
     public String getTokenId() {

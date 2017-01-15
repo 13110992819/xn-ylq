@@ -10,6 +10,7 @@ package com.xnjr.mall.bo;
 
 import java.util.Map;
 
+import com.xnjr.mall.dto.res.PayBalanceRes;
 import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.enums.EBizType;
@@ -164,7 +165,7 @@ public interface IAccountBO {
      * @create: 2017年1月10日 下午5:44:02 xieyj
      * @history:
      */
-    public void doBalancePay(String systemCode, String fromUserId,
+    public PayBalanceRes doBalancePay(String systemCode, String fromUserId,
             String toUserId, Long price, EBizType bizType);
 
     /**

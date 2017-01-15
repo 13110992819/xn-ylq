@@ -10,9 +10,8 @@ import com.xnjr.mall.dao.base.support.AMybatisTemplate;
 import com.xnjr.mall.domain.JewelRecord;
 
 /**
- * 
- * @author: shan 
- * @since: 2016年12月20日 上午11:36:35 
+ * @author: xieyj 
+ * @since: 2017年1月13日 下午2:17:34 
  * @history:
  */
 @Repository("jewelRecordDAOImpl")
@@ -69,16 +68,36 @@ public class JewelRecordDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
-    public int updateTimes(JewelRecord data) {
-        return super.update(NAMESPACE.concat("update_times"), data);
+    public int updateReAddress(JewelRecord data) {
+        return super.update(NAMESPACE.concat("update_jewelRecordReAddress"),
+            data);
     }
 
-    /** 
-     * @see com.xnjr.mall.dao.IJewelRecordDAO#updatePayAmount(com.xnjr.mall.domain.JewelRecord)
-     */
     @Override
     public int updatePayAmount(JewelRecord data) {
         return super.update(NAMESPACE.concat("update_jewelRecordPayAmount"),
             data);
+    }
+
+    @Override
+    public JewelRecord selectMy(JewelRecord condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
+        return super.select(NAMESPACE.concat("select_my_jewelRecord"),
+            condition, JewelRecord.class);
+    }
+
+    @Override
+    public List<JewelRecord> selectMyList(JewelRecord condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
+        return super.selectList(NAMESPACE.concat("select_my_jewelRecord"),
+            condition, JewelRecord.class);
+    }
+
+    @Override
+    public List<JewelRecord> selectMyList(JewelRecord condition, int start,
+            int count) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
+        return super.selectList(NAMESPACE.concat("select_my_jewelRecord"),
+            start, count, condition, JewelRecord.class);
     }
 }

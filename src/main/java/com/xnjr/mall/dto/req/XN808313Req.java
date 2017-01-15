@@ -15,6 +15,17 @@ public class XN808313Req extends APageReq {
     // 用户ID
     public String userId;
 
+    // 状态
+    private String jewelStatus;
+
+    public String getJewelStatus() {
+        return jewelStatus;
+    }
+
+    public void setJewelStatus(String jewelStatus) {
+        this.jewelStatus = jewelStatus;
+    }
+
     public String getUserId() {
         return userId;
     }

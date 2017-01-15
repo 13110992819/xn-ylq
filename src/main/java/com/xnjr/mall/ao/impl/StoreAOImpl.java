@@ -18,6 +18,7 @@ import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StoreTicket;
 import com.xnjr.mall.dto.req.XN805042Req;
+import com.xnjr.mall.dto.res.XN805901Res;
 import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.EStoreTicketStatus;
@@ -93,9 +94,18 @@ public class StoreAOImpl implements IStoreAO {
         List<Store> list = storeBO.queryStoreList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             throw new BizException("xn000000", "该名称已存在");
-        } else {
-            return storeBO.saveStore(data);
         }
+        // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
+        String userReferee = data.getUserReferee();
+        if (StringUtils.isNotBlank(userReferee)) {
+            String userId = userBO.getUserId(userReferee,
+                EUserKind.F1.getCode(), data.getSystemCode());
+            if (StringUtils.isBlank(userId)) {
+                throw new BizException("xn702002", "推荐人不存在");
+            }
+            data.setUserReferee(userId);
+        }
+        return storeBO.saveStore(data);
     }
 
     @Override
@@ -118,12 +128,27 @@ public class StoreAOImpl implements IStoreAO {
     }
 
     @Override
-    public int editStore(Store data) {
-        int count = 0;
-        if (data.getCode() != null && data.getCode() != "") {
-            count = storeBO.refreshStore(data);
+    public void editStore(Store data) {
+        Store condition = new Store();
+        condition.setName(data.getName());
+        List<Store> list = storeBO.queryStoreList(condition);
+        if (CollectionUtils.isNotEmpty(list)) {
+            Store store = list.get(0);
+            if (!store.getCode().equals(data.getCode())) {
+                throw new BizException("xn000000", "该名称已存在");
+            }
         }
-        return count;
+        // 验证推荐人是否是平台的已注册用户,将userReferee手机号转化为用户编号
+        String userReferee = data.getUserReferee();
+        if (StringUtils.isNotBlank(userReferee)) {
+            String userId = userBO.getUserId(userReferee,
+                EUserKind.F1.getCode(), data.getSystemCode());
+            if (StringUtils.isBlank(userId)) {
+                throw new BizException("xn702002", "推荐人不存在");
+            }
+            data.setUserReferee(userId);
+        }
+        storeBO.refreshStore(data);
     }
 
     @Override
@@ -231,6 +256,7 @@ public class StoreAOImpl implements IStoreAO {
     //
     // }
     //
+
     @Override
     public Paginable<Store> queryStorePage(int start, int limit, Store condition) {
         Paginable<Store> paginable = storeBO.getPaginable(start, limit,
@@ -282,22 +308,17 @@ public class StoreAOImpl implements IStoreAO {
     @Override
     public Store getStore(String code, String fromUser) {
         Store store = storeBO.getStore(code);
-
+        // 设置推荐人手机号
+        String refereeUserId = store.getUserReferee();
+        if (StringUtils.isNotBlank(refereeUserId)) {
+            XN805901Res remoteRes = userBO.getRemoteUser(refereeUserId,
+                refereeUserId);
+            store.setRefereeMobile(remoteRes.getMobile());
+        }
         StoreTicket condition = new StoreTicket();
         condition.setStoreCode(store.getCode());
         condition.setStatus(EStoreTicketStatus.ONLINE.getCode());
         store.setStoreTickets(storeTicketBO.queryStoreTicketList(condition));
-
-        // if (StringUtils.isBlank(fromUser)) {
-        // store.setIsDZ(false);
-        // } else {
-        // if (null != storeActionBO.getStoreActionByUser(store.getCode(),
-        // EActionType.DZ, fromUser)) {
-        // store.setIsDZ(true);
-        // } else {
-        // store.setIsDZ(false);
-        // }
-        // }
         return store;
     }
 

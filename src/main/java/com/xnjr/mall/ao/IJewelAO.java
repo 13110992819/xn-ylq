@@ -36,6 +36,18 @@ public interface IJewelAO {
             String approver, String approveNote);
 
     /**
+     * 批量审批宝贝
+     * @param codeList
+     * @param approveResult 1或0
+     * @param approver
+     * @param approveNote 
+     * @create: 2016年12月19日 下午4:52:25 shan
+     * @history:
+     */
+    public void approveJewelList(List<String> codeList, String approveResult,
+            String approver, String approveNote);
+
+    /**
      * 重新提交宝贝
      * @param data
      * @return 
@@ -63,6 +75,13 @@ public interface IJewelAO {
      * @history:
      */
     public void putOff(String code, String updater, String remark);
+
+    /**
+     * 判断宝贝是否已到开奖时间,到则判断是否满标，满标则抽奖，未满标则流标
+     * @create: 2017年1月12日 下午4:35:51 xieyj
+     * @history:
+     */
+    public void doChangeStatusDaily();
 
     /**
      * 分页查询

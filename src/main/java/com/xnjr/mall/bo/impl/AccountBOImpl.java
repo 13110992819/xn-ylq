@@ -21,6 +21,7 @@ import com.xnjr.mall.dto.req.XN802512Req;
 import com.xnjr.mall.dto.req.XN802517Req;
 import com.xnjr.mall.dto.req.XN802519Req;
 import com.xnjr.mall.dto.req.XN802525Req;
+import com.xnjr.mall.dto.res.PayBalanceRes;
 import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.enums.EBizType;
@@ -189,8 +190,10 @@ public class AccountBOImpl implements IAccountBO {
      * @see com.xnjr.mall.bo.IAccountBO#doBalancePay(com.xnjr.mall.enums.EBizType)
      */
     @Override
-    public void doBalancePay(String systemCode, String fromUserId,
+    public PayBalanceRes doBalancePay(String systemCode, String fromUserId,
             String toUserId, Long price, EBizType bizType) {
+        Long gxjlPrice = 0L;
+        Long frPrice = 0L;
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
             null);
         // 余额支付业务规则：优先扣贡献奖励，其次扣分润
@@ -205,8 +208,6 @@ public class AccountBOImpl implements IAccountBO {
             .longValue();
         Long frCnyAmount = Double.valueOf(frAccount.getAmount() / fr2cny)
             .longValue();
-        Long gxjlPrice = 0L;
-        Long frPrice = 0L;
         // 1、贡献奖励+分润<价格 余额不足
         if (gxjlCnyAmount + frCnyAmount < price) {
             throw new BizException("xn0000", "余额不足");
@@ -235,6 +236,7 @@ public class AccountBOImpl implements IAccountBO {
         doTransferAmountByUser(systemCode, fromUserId, toUserId,
             ECurrency.FRB.getCode(), frPrice, bizType.getCode(),
             bizType.getValue());
+        return new PayBalanceRes(gxjlPrice, frPrice);
     }
 
     @Override

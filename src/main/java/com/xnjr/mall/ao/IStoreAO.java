@@ -35,7 +35,7 @@ public interface IStoreAO {
     public int checkStore(String code, String checkResult, String checkUser,
             String remark);
 
-    public int editStore(Store data);
+    public void editStore(Store data);
 
     /**
      * 店铺上下架

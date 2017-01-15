@@ -103,7 +103,7 @@ public interface IOrderAO {
      * @create: 2016年11月17日 下午3:26:14 haiqingzheng
      * @history:
      */
-    public int confirmOrder(String code, String updater, String remark);
+    public void confirmOrder(String code, String updater, String remark);
 
     /**
      * 订单发货

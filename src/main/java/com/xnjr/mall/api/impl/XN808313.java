@@ -3,7 +3,6 @@ package com.xnjr.mall.api.impl;
 import org.apache.commons.lang3.StringUtils;
 
 import com.xnjr.mall.ao.IJewelRecordAO;
-import com.xnjr.mall.ao.IOrderAO;
 import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.JewelRecord;
@@ -29,9 +28,10 @@ public class XN808313 extends AProcessor {
     public Object doBusiness() throws BizException {
         JewelRecord condition = new JewelRecord();
         condition.setUserId(req.getUserId());
+        condition.getJewel().setStatus(req.getJewelStatus());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
-            orderColumn = IOrderAO.DEFAULT_ORDER_COLUMN;
+            orderColumn = IJewelRecordAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
@@ -42,8 +42,8 @@ public class XN808313 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN808313Req.class);
-        StringValidater.validateBlank(req.getUserId(), req.getStart(),
-            req.getLimit());
+        StringValidater.validateBlank(req.getUserId());
+        StringValidater.validateNumber(req.getStart(), req.getLimit());
     }
 
 }

@@ -3,7 +3,6 @@ package com.xnjr.mall.ao;
 import java.util.List;
 
 import com.xnjr.mall.bo.base.Paginable;
-import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StorePurchase;
 
 public interface IStorePurchaseAO {
@@ -21,19 +20,6 @@ public interface IStorePurchaseAO {
      */
     public Object storePurchase(String userId, String storeCode,
             String ticketCode, Long amount, String payType, String ip);
-
-    /**
-     * 购买成功
-     * @param systemCode
-     * @param store
-     * @param yhAmount
-     * @param userId
-     * @param fcRate 
-     * @create: 2017年1月5日 下午4:08:36 xieyj
-     * @history:
-     */
-    public void purchaseSuccess(String systemCode, Store store, Long yhAmount,
-            String userId, Double fcRate);
 
     public int dropStorePurchase(String code);
 

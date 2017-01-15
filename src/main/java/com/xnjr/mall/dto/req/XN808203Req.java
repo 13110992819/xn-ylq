@@ -75,6 +75,17 @@ public class XN808203Req {
     // 附件（选填）
     private String pdf;
 
+    // 系统编号
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getCode() {
         return code;
     }

@@ -8,7 +8,9 @@
 		<result column="nickname" property="nickname" />
 		<result column="photo" property="photo" />
 		<result column="jewel_code" property="jewelCode" />
+		
 		<result column="create_datetime" property="createDatetime" />
+		<result column="my_invest_times" property="myInvestTimes" />
 		<result column="times" property="times" />
 		
 		<result column="pay_amount1" property="payAmount1" />
@@ -16,10 +18,34 @@
 		<result column="pay_amount3" property="payAmount3" />
 		
 		<result column="status" property="status" />
+		<result column="receiver" property="receiver" />
+		<result column="re_mobile" property="reMobile" />
+		<result column="re_address" property="reAddress" />
 		<result column="remark" property="remark" />
 		<result column="pay_code" property="payCode" />
 		<result column="system_code" property="systemCode" />
+		
+		<result column="jewel_code" property="jewel.code" />
+		<result column="jewel_start_datetime" property="jewel.startDatetime" />
+		<result column="jewel_name" property="jewel.name" />
+		<result column="jewel_slogan" property="jewel.slogan" />
+		<result column="jewel_adv_pic" property="jewel.advPic" />
+		
+		<result column="jewel_price1" property="jewel.price1" />
+		<result column="jewel_price2" property="jewel.price2" />
+		<result column="jewel_price3" property="jewel.price3" />
+		
+		<result column="jewel_total_num" property="jewel.totalNum" />
+		<result column="jewel_invest_num" property="jewel.investNum" />
+		<result column="jewel_raise_days" property="jewel.raiseDays" />
+		<result column="jewel_win_number" property="jewel.winNumber" />
+		
+		<result column="jewel_win_user_id" property="jewel.winUserId" />
+		<result column="jewel_lot_alg" property="jewel.lotAlg" />
+		<result column="jewel_status" property="jewel.status" />
+		<result column="jewel_remark" property="jewel.remark" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -32,7 +58,24 @@
 				AND t.jewel_code = #{jewelCode}
 			</if>
 			<if test="status != null and status != '' ">
-				AND t.status = #{status}
+				<choose>
+					<when test='status == "win"'>
+						AND t.status in(2,4,5,6)
+					</when>
+				    <otherwise>
+						AND t.status = #{status}
+					</otherwise>
+				</choose>
+			</if>
+			<if test="jewel != null and jewel.status != null and jewel.status != '' ">
+				<choose>
+					<when test='jewel.status == "all"'>
+						AND tj.status in (3,5,7)
+					</when>
+				    <otherwise>
+						AND tj.status = #{jewel.status}
+					</otherwise>
+				</choose>
 			</if>
 			<if test="payCode != null and payCode != '' ">
 				AND t.pay_code = #{payCode}
@@ -46,6 +89,7 @@
 		SELECT
 		t.code
 		,t.user_id
+		,(select sum(tjr.times) from tact_jewel_record tjr where tjr.user_id=t.user_id and tjr.jewel_code = t.jewel_code) as my_invest_times
 		,tu.nickname
 		,tue.photo
 		,t.jewel_code
@@ -56,11 +100,16 @@
 		,t.pay_amount2
 		,t.pay_amount3
 		,t.status
+		,t.receiver
+		,t.re_mobile
+		
+		,t.re_address
 		,t.remark
 		,t.pay_code 
 		,t.system_code
 		FROM
-		tact_jewel_record t LEFT JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id LEFT JOIN ${userDB}.tstd_user_ext tue ON tu.user_id = tue.user_id
+		tact_jewel_record t LEFT JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id  
+		                    LEFT JOIN ${userDB}.tstd_user_ext tue ON tu.user_id = tue.user_id
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -68,13 +117,48 @@
 			</if>
 		</trim>
 	</select>
-
+	
 	<select id="select_jewelRecord_count" parameterType="jewelRecord"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tact_jewel_record t 
 		<include refid="where_condition" />
 	</select>
-
+	
+	<select id="select_my_jewelRecord" parameterType="jewelRecord" resultMap="jewelRecord_DB_Result">
+		SELECT
+		t.user_id
+        ,sum(t.times) as my_invest_times
+		,t.jewel_code
+		,tj.code jewel_code
+		,tj.name jewel_name
+		,tj.start_datetime as jewel_start_datetime
+		,tj.slogan jewel_slogan
+		,tj.adv_pic jewel_adv_pic
+		
+		,tj.price1 jewel_price1
+		,tj.price2 jewel_price2
+		,tj.price3 jewel_price3
+		,tj.total_num jewel_total_num
+		
+		,tj.invest_num jewel_invest_num
+		,tj.raise_days jewel_raise_days
+		,tj.win_number jewel_win_number
+		,tj.win_user_id jewel_win_user_id
+		
+		,tj.lot_alg jewel_lot_alg
+		,tj.status jewel_status
+		,tj.remark jewel_remark
+		FROM
+		tact_jewel_record t 
+		LEFT JOIN tact_jewel tj ON t.jewel_code = tj.code
+		LEFT JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id 
+		LEFT JOIN ${userDB}.tstd_user_ext tue ON tu.user_id = tue.user_id
+		<include refid="where_condition" />
+		<trim prefix="GROUP BY ">
+			t.jewel_code 
+		</trim>
+	</select>
+	
 	<insert id="insert_jewelRecord" parameterType="jewelRecord">
 		INSERT INTO
 		tact_jewel_record(
@@ -134,6 +218,16 @@
 		WHERE code = #{code}
 	</update>
 	
+	<update id="update_jewelRecordReAddress" parameterType="jewelRecord">
+		UPDATE tact_jewel_record
+		SET
+		status=#{status}
+		,receiver=#{receiver}
+		,re_mobile=#{reMobile}
+		,re_address=#{reAddress}
+		WHERE code = #{code}
+	</update>
+	
 	<update id="update_lostInfo" parameterType="jewelRecord">
 		UPDATE tact_jewel_record
 		SET
@@ -141,12 +235,4 @@
 		,remark=#{remark}
 		WHERE jewel_code = #{jewelCode} and code != #{code}
 	</update>
-	
-	<update id="update_times" parameterType="jewelRecord">
-		UPDATE tact_jewel_record
-		SET
-		times=#{times}
-		WHERE code = #{code}
-	</update>
-	
 </mapper>

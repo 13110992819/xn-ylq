@@ -48,6 +48,15 @@ public class JewelRecord extends ABaseDO {
     // 状态(0待开奖，1已中奖，2未中奖)
     private String status;
 
+    // 收件人
+    private String receiver;
+
+    // 收件人手机号
+    private String reMobile;
+
+    // 收件地址
+    private String reAddress;
+
     // 备注
     private String remark;
 
@@ -69,6 +78,46 @@ public class JewelRecord extends ABaseDO {
 
     // 宝贝
     private Jewel jewel;
+
+    // 我投资人次
+    private String myInvestTimes;
+
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
+    }
+
+    public String getReMobile() {
+        return reMobile;
+    }
+
+    public void setReMobile(String reMobile) {
+        this.reMobile = reMobile;
+    }
+
+    public String getReAddress() {
+        return reAddress;
+    }
+
+    public void setReAddress(String reAddress) {
+        this.reAddress = reAddress;
+    }
+
+    public JewelRecord() {
+        Jewel jewel = new Jewel();
+        this.jewel = jewel;
+    }
+
+    public String getMyInvestTimes() {
+        return myInvestTimes;
+    }
+
+    public void setMyInvestTimes(String myInvestTimes) {
+        this.myInvestTimes = myInvestTimes;
+    }
 
     public Date getPayDatetime() {
         return payDatetime;
