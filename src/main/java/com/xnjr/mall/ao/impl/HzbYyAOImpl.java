@@ -19,6 +19,7 @@ import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.common.PrizeUtil;
 import com.xnjr.mall.common.SysConstants;
+import com.xnjr.mall.core.CalculationUtil;
 import com.xnjr.mall.domain.HzbHold;
 import com.xnjr.mall.domain.HzbYy;
 import com.xnjr.mall.domain.Prize;
@@ -95,7 +96,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
             currency = ECurrency.HBB.getCode();
             distributeAmount(hzbHold.getSystemCode(), hzbHold.getUserId());
         }
-        String quantityStr = quantity / SysConstants.AMOUNT_RADIX + "";
+        String quantityStr = CalculationUtil.divi(Long.valueOf(quantity));
         // 奖励划拨
         accountBO.doTransferAmountByUser(hzbHold.getSystemCode(),
             ESysUser.SYS_USER.getCode(), userId, currency, quantity * 1000L,
