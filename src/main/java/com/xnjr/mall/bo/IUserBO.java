@@ -21,7 +21,7 @@ public interface IUserBO {
     public XN805901Res getRemoteUser(String tokenId, String userId);
 
     /**
-     * 校验交易密码
+     * 校验支付密码
      * @param userId
      * @param tradePwd
      * @return 

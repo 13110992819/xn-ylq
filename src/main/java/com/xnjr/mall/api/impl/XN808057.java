@@ -26,9 +26,8 @@ public class XN808057 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        int count = orderAO.confirmOrder(req.getCode(), req.getUpdater(),
-            req.getRemark());
-        return new BooleanRes(count > 0 ? true : false);
+        orderAO.confirmOrder(req.getCode(), req.getUpdater(), req.getRemark());
+        return new BooleanRes(true);
     }
 
     /** 

@@ -12,9 +12,8 @@ import com.xnjr.mall.domain.JewelRecordNumber;
 import com.xnjr.mall.exception.BizException;
 
 /**
- * 
- * @author: shan 
- * @since: 2016年12月20日 下午1:10:37 
+ * @author: xieyj 
+ * @since: 2017年1月13日 下午3:04:08 
  * @history:
  */
 @Service
@@ -23,39 +22,7 @@ public class JewelRecordNumberAOImpl implements IJewelRecordNumberAO {
     private IJewelRecordNumberBO jewelRecordNumberBO;
 
     @Override
-    public String addJewelRecordNumber(Long id, String recordCode, String number) {
-        if (id == null && recordCode == null) {
-            throw new BizException("xn0000", "请添加记录号码");
-        }
-        JewelRecordNumber data = new JewelRecordNumber();
-        data.setId(id);
-        data.setRecordCode(recordCode);
-        data.setNumber(number);
-        return jewelRecordNumberBO.saveJewelRecordNumber(data);
-    }
-
-    @Override
-    public void editJewelRecordNumber(Long id, String recordCode, String number) {
-        if (!jewelRecordNumberBO.isJewelRecordNumberExist(id)) {
-            throw new BizException("xn0000", "没有该记录");
-        }
-        JewelRecordNumber data = new JewelRecordNumber();
-        data.setId(id);
-        data.setRecordCode(recordCode);
-        data.setNumber(number);
-        jewelRecordNumberBO.refreshJewelRecordNumber(data);
-    }
-
-    @Override
-    public void dropJewelRecordNumber(Long id) {
-        if (!jewelRecordNumberBO.isJewelRecordNumberExist(id)) {
-            throw new BizException("xn0000", "没有该记录");
-        }
-        jewelRecordNumberBO.removeJewelRecordNumber(id);
-    }
-
-    @Override
-    public Paginable<JewelRecordNumber> queryJewelRecordPage(int start,
+    public Paginable<JewelRecordNumber> queryJewelRecordNumberPage(int start,
             int limit, JewelRecordNumber condition) {
         return jewelRecordNumberBO.getPaginable(start, limit, condition);
     }

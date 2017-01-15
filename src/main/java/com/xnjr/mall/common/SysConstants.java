@@ -30,8 +30,6 @@ public class SysConstants {
 
     public static final String GXJL2CNY = "gxjl2Cny"; // 贡献奖励兑人民币
 
-    public static final String CUSERQBBRATE = "0.35"; // C端用户得到消费钱包币的35%
-
     public static final String ST_AREA = "stArea"; // 福利月卡辖区县
 
     public static final String ST_CITY = "stCity"; // 福利月卡辖区市
@@ -113,4 +111,6 @@ public class SysConstants {
     public static final String HZB_YY_DAY_MAX_COUNT = "hzbYyDayMaxCount"; // 一个汇赚宝每天摇摇的最大次数
 
     public static final int HZB_YY_DAY_MAX_COUNT_DEF = 900; // 一个汇赚宝每天摇摇的最大次数
+
+    public static final Long JEWEL_NUM_RADIX = 10000000L; // 一个汇赚宝每天摇摇的最大次数
 }

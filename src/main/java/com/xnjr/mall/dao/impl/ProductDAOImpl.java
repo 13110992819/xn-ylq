@@ -30,7 +30,7 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
      */
     @Override
     public int insert(Product data) {
-        return super.insert("insert_product", data);
+        return super.insert(NAMESPACE.concat("insert_product"), data);
     }
 
     /** 
@@ -38,7 +38,7 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
      */
     @Override
     public int delete(Product data) {
-        return super.delete("delete_product", data);
+        return super.delete(NAMESPACE.concat("delete_product"), data);
     }
 
     /** 
@@ -47,7 +47,8 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
     @Override
     public Product select(Product condition) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.select("select_product", condition, Product.class);
+        return super.select(NAMESPACE.concat("select_product"), condition,
+            Product.class);
     }
 
     /** 
@@ -56,7 +57,8 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
     @Override
     public Long selectTotalCount(Product condition) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.selectTotalCount("select_product_count", condition);
+        return super.selectTotalCount(NAMESPACE.concat("select_product_count"),
+            condition);
     }
 
     /** 
@@ -65,7 +67,8 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
     @Override
     public List<Product> selectList(Product condition) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.selectList("select_product", condition, Product.class);
+        return super.selectList(NAMESPACE.concat("select_product"), condition,
+            Product.class);
     }
 
     /** 
@@ -73,8 +76,8 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
      */
     @Override
     public List<Product> selectList(Product condition, int start, int count) {
-        return super.selectList("select_product", start, count, condition,
-            Product.class);
+        return super.selectList(NAMESPACE.concat("select_product"), start,
+            count, condition, Product.class);
     }
 
     /** 
@@ -82,17 +85,17 @@ public class ProductDAOImpl extends AMybatisTemplate implements IProductDAO {
      */
     @Override
     public int updateProduct(Product product) {
-        return super.update("update_product", product);
+        return super.update(NAMESPACE.concat("update_product"), product);
     }
 
     @Override
     public int updateStatus(Product product) {
-        return super.update("update_productStatus", product);
+        return super.update(NAMESPACE.concat("update_productStatus"), product);
     }
 
     @Override
     public int updatePutOnProduct(Product product) {
-        return super.update("update_putOn", product);
+        return super.update(NAMESPACE.concat("update_putOn"), product);
     }
 
     /** 

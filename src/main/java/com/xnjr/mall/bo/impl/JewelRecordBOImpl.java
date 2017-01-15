@@ -9,16 +9,15 @@ import org.springframework.stereotype.Component;
 
 import com.xnjr.mall.bo.IJewelRecordBO;
 import com.xnjr.mall.bo.IJewelRecordNumberBO;
+import com.xnjr.mall.bo.base.Page;
+import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.bo.base.PaginableBOImpl;
-import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.dao.IJewelRecordDAO;
 import com.xnjr.mall.domain.JewelRecord;
-import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EJewelRecordStatus;
 import com.xnjr.mall.exception.BizException;
 
 /**
- * 
  * @author: shan 
  * @since: 2016年12月20日 下午12:53:21 
  * @history:
@@ -46,10 +45,6 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     public String saveJewelRecord(JewelRecord data) {
         String code = null;
         if (data != null) {
-            code = OrderNoGenerater.generateM(EGeneratePrefix.IEWEL_RECORD
-                .getCode());
-            data.setCode(code);
-            data.setCreateDatetime(new Date());
             jewelRecordDAO.insert(data);
         }
         return code;
@@ -74,7 +69,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             condition.setCode(code);
             data = jewelRecordDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "夺宝记录不存在");
+                throw new BizException("xn0000", "夺宝购买记录不存在");
             }
         }
         return data;
@@ -99,31 +94,14 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     }
 
     @Override
-    public int refreshPayAmount(String code, Long payAmount1, Long payAmount2,
-            Long payAmount3) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            JewelRecord jewelRecord = getJewelRecord(code);
-            JewelRecord data = new JewelRecord();
-            data.setCode(code);
-            data.setPayAmount1(jewelRecord.getPayAmount1() + payAmount1);
-            data.setPayAmount2(jewelRecord.getPayAmount2() + payAmount2);
-            data.setPayAmount3(jewelRecord.getPayAmount3() + payAmount3);
-            data.setPayDatetime(new Date());
-            data.setRemark("追加号码");
-            count = jewelRecordDAO.updatePayAmount(data);
-        }
-        return count;
-    }
-
-    @Override
-    public int refreshPaySuccess(String code) {
+    public int refreshPaySuccess(String code, String status, String remark) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             JewelRecord data = new JewelRecord();
             data.setCode(code);
-            data.setStatus(EJewelRecordStatus.LOTTERY.getCode());
+            data.setStatus(status);
             data.setPayDatetime(new Date());
+            data.setRemark(remark);
             count = jewelRecordDAO.update(data);
         }
         return count;
@@ -145,14 +123,65 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     }
 
     @Override
-    public int refreshTimes(String code, Integer times) {
+    public int refreshReAddress(String code, String receiver, String reMobile,
+            String reAddress) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             JewelRecord data = new JewelRecord();
             data.setCode(code);
-            data.setTimes(times);
-            count = jewelRecordDAO.updateTimes(data);
+            data.setStatus(EJewelRecordStatus.TO_SEND.getCode());
+            data.setReceiver(receiver);
+            data.setReMobile(reMobile);
+            data.setReAddress(reAddress);
+            count = jewelRecordDAO.updateReAddress(data);
         }
         return count;
+    }
+
+    @Override
+    public List<JewelRecord> queryMyJewelRecordList(JewelRecord condition) {
+        return jewelRecordDAO.selectMyList(condition);
+    }
+
+    @Override
+    public Paginable<JewelRecord> queryMyJewelRecordPage(int start,
+            int pageSize, JewelRecord condition) {
+        long totalCount = jewelRecordDAO.selectMyList(condition).size();
+        Paginable<JewelRecord> page = new Page<JewelRecord>(start, pageSize,
+            totalCount);
+        List<JewelRecord> dataList = jewelRecordDAO.selectMyList(condition,
+            page.getStart(), page.getPageSize());
+        page.setList(dataList);
+        return page;
+    }
+
+    @Override
+    public Long getLastRecordsTimes(String jewelCode, Date curCreateDatetime) {
+        Long outRandomA = 0L;
+        Long curCount = 0L;
+        if (curCreateDatetime != null) {
+            curCount = 1L;
+            outRandomA = curCreateDatetime.getTime();
+            System.out.println("outRandomA:" + curCreateDatetime.getTime());
+        }
+        JewelRecord condition = new JewelRecord();
+        condition.setJewelCode(jewelCode);
+        condition.setStatus(EJewelRecordStatus.LOTTERY.getCode());
+        Long totalCount = jewelRecordDAO.selectTotalCount(condition);
+        Long start = 0L;
+        Long timesNum = 5 - curCount;
+        if (totalCount >= timesNum) {
+            start = totalCount - timesNum;
+        } else {
+            start = 0L;
+        }
+        List<JewelRecord> list = jewelRecordDAO.selectList(condition,
+            start.intValue(), timesNum.intValue());
+        for (JewelRecord jewelRecord : list) {
+            outRandomA += jewelRecord.getCreateDatetime().getTime();
+            System.out.println("outRandomA:" + String.valueOf(outRandomA));
+        }
+        System.out.println("totalOutRandomA:" + String.valueOf(outRandomA));
+        return outRandomA;
     }
 }

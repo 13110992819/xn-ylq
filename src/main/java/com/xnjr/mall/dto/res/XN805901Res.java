@@ -39,7 +39,7 @@ public class XN805901Res {
     // 是否实名认证
     private String identityFlag;
 
-    // 是否设置交易密码
+    // 是否设置支付密码
     private String tradepwdFlag;
 
     // 是否绑定银行卡

@@ -19,6 +19,7 @@
        <property name="triggers">  
            <list>
               <ref bean="orderTrigger"/> 
+              <ref bean="jewelTrigger"/>
            </list>  
        </property>  
        <property name="autoStartup" value="true"/>  
@@ -33,6 +34,16 @@
 	        <property name="targetMethod" value="doChangeOrderStatusDaily"/>  
 	        <property name="concurrent" value="true"/>  <!--  是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程-->  
 	</bean>
+	
+	 <bean id="jewelTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="jewelJobDetail"/>  
+       <property name="cronExpression" value="0 0/2 * * * ?"/>
+	</bean>
+	<bean id="jewelJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+	        <property name="targetObject" ref="jewelAOImpl"/>  
+	        <property name="targetMethod" value="doChangeStatusDaily"/>  
+	        <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	</bean> 
 	
 	<!-- 将汇赚宝周期被摇次数重置为0 -->
 	<bean id="hzbTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  

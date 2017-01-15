@@ -40,6 +40,7 @@ public class XN808211 extends AProcessor {
         StorePurchase condition = new StorePurchase();
         condition.setUserId(req.getUserId());
         condition.setStoreCode(req.getStoreCode());
+        condition.setStatus(req.getStatus());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IStorePurchaseAO.DEFAULT_ORDER_COLUMN;

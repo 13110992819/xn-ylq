@@ -169,21 +169,27 @@ public class HzbYyAOImpl implements IHzbYyAO {
                 // 省合伙人
                 XN805060Res provinceRes = userBO.getPartnerUserInfo(
                     userExt.getProvince(), null, null);
-                areaFcAmount(systemCode, provinceRes.getUserId(),
-                    SysConstants.YY_PROVINCE, "省");
+                if (provinceRes != null) {
+                    areaFcAmount(systemCode, provinceRes.getUserId(),
+                        SysConstants.YY_PROVINCE, "省");
+                }
                 if (StringUtils.isNotBlank(userExt.getCity())) {
                     // 市合伙人
                     XN805060Res cityRes = userBO.getPartnerUserInfo(
                         userExt.getProvince(), userExt.getCity(), null);
-                    areaFcAmount(systemCode, cityRes.getUserId(),
-                        SysConstants.YY_CITY, "市");
+                    if (cityRes != null) {
+                        areaFcAmount(systemCode, cityRes.getUserId(),
+                            SysConstants.YY_CITY, "市");
+                    }
                     if (StringUtils.isNotBlank(userExt.getArea())) {
                         // 县合伙人
                         XN805060Res areaRes = userBO.getPartnerUserInfo(
                             userExt.getProvince(), userExt.getCity(),
                             userExt.getArea());
-                        areaFcAmount(systemCode, areaRes.getUserId(),
-                            SysConstants.YY_AREA, "县");
+                        if (areaRes != null) {
+                            areaFcAmount(systemCode, areaRes.getUserId(),
+                                SysConstants.YY_AREA, "县");
+                        }
                     }
                 }
             }

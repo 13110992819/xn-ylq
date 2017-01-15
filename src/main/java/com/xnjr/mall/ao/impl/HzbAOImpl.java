@@ -27,6 +27,7 @@ import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.dto.res.XN805060Res;
 import com.xnjr.mall.dto.res.XN805901Res;
 import com.xnjr.mall.enums.EBizType;
+import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EHzbHoldStatus;
 import com.xnjr.mall.enums.EPayType;
@@ -55,11 +56,11 @@ public class HzbAOImpl implements IHzbAO {
     @Transactional
     public Object buyHzb(String userId, String hzbCode, String payType,
             String ip) {
-        // // 判断用户是否实名认证
-        // XN805901Res userRes = userBO.getRemoteUser(userId, userId);
-        // if (!EBoolean.YES.getCode().equals(userRes.getIdentityFlag())) {
-        // throw new BizException("xn0000", "用户未实名认证，请先实名认证");
-        // }
+        // 判断用户是否实名认证
+        XN805901Res userRes = userBO.getRemoteUser(userId, userId);
+        if (!EBoolean.YES.getCode().equals(userRes.getIdentityFlag())) {
+            throw new BizException("xn0000", "用户未实名认证，请先实名认证");
+        }
         // 查询是否已经购买摇钱树
         HzbHold condition = new HzbHold();
         condition.setUserId(userId);

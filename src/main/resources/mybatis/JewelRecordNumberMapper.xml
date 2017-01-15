@@ -49,7 +49,7 @@
 	<select id="select_existNumbers" parameterType="String"
 		resultType="java.lang.String">
 		SELECT t.number FROM tact_jewel_record_number t
-		where t.jewel_code = #{jewelCode};
+		where t.jewel_code = #{jewelCode}
 	</select>
 
 	<insert id="insert_jewelRecordNumber" parameterType="jewelRecordNumber">

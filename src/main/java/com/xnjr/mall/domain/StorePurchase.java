@@ -35,6 +35,9 @@ public class StorePurchase extends ABaseDO {
     // 返现金额
     private Long backAmount;
 
+    // 折扣券编号
+    private String ticketCode;
+
     // 状态
     private String status;
 
@@ -55,6 +58,14 @@ public class StorePurchase extends ABaseDO {
 
     // 流水编号
     private String jourCode;
+
+    public String getTicketCode() {
+        return ticketCode;
+    }
+
+    public void setTicketCode(String ticketCode) {
+        this.ticketCode = ticketCode;
+    }
 
     public String getCode() {
         return code;

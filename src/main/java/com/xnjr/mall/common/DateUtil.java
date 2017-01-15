@@ -52,6 +52,17 @@ public class DateUtil {
         }
     }
 
+    public static Date getRelativeDateOfDays(Date startDate, int days) {
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(startDate);
+            calendar.add(Calendar.SECOND, days * 3600 * 24);
+            return calendar.getTime();
+        } catch (Exception e) {
+            return startDate;
+        }
+    }
+
     /** 
      * Date按格式pattern转String
      * @param date

@@ -10,6 +10,7 @@
 		<result column="amount2" property="amount2" />
 		<result column="amount3" property="amount3" />
 		<result column="back_amount" property="backAmount" />
+		<result column="ticket_code" property="ticketCode" />
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="pay_datetime" property="payDatetime" />
@@ -25,6 +26,12 @@
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
+			</if>
+			<if test="ticketCode != null and ticketCode != '' ">
+				AND t.ticket_code = #{ticketCode}
+			</if>
+			<if test="storeCode != null and storeCode != '' ">
+				AND t.store_code = #{storeCode}
 			</if>
 			<if test="jourCode != null and jourCode != '' ">
 				AND t.jour_code = #{jourCode}
@@ -43,6 +50,7 @@
 		,t.amount2
 		,t.amount3
 		,t.back_amount
+		,t.ticket_code
 		,t.status
 		,t.create_datetime
 		,t.pay_datetime
@@ -76,6 +84,7 @@
 		,amount2
 		,amount3
 		,back_amount
+		,ticket_code
 		,status
 		,create_datetime
 		,remark
@@ -91,6 +100,7 @@
 		,#{amount2}
 		,#{amount3}
 		,#{backAmount}
+		,#{ticketCode}
 		,#{status}
 		,#{createDatetime}
 		,#{remark}

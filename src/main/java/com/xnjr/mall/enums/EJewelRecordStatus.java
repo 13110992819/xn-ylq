@@ -1,22 +1,14 @@
-/**
- * @Title Status.java 
- * @Package com.ibis.pz.enums 
- * @Description 
- * @author miyb  
- * @date 2015-3-7 上午8:41:50 
- * @version V1.0   
- */
 package com.xnjr.mall.enums;
 
 /**
- * 
- * @author: shan 
- * @since: 2016年12月19日 下午2:32:44 
+ * @author: xieyj 
+ * @since: 2017年1月12日 下午10:55:25 
  * @history:
  */
 public enum EJewelRecordStatus {
     TO_PAY("0", "待支付"), LOTTERY("1", "待开奖"), WINNING("2", "已中奖"), LOST("3",
-            "未中奖"), DELIVERY("4", "已发货"), FORCE_END("5", "强制退款");
+            "未中奖"), TO_SEND("4", "已填写地址，待发货"), SENT("5", "已发货"), SIGN("6",
+            "已签收");
 
     EJewelRecordStatus(String code, String value) {
         this.code = code;

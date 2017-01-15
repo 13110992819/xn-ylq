@@ -19,14 +19,15 @@
 		<result column="invest_num" property="investNum" />
 		<result column="start_datetime" property="startDatetime" />
 		<result column="raise_days" property="raiseDays" />
-		<result column="win_number" property="winNumber" />
+		<result column="lottery_datetime" property="lotteryDatetime" />
 		
+		<result column="win_number" property="winNumber" />
 		<result column="win_user_id" property="winUserId" />
 		<result column="lot_alg" property="lotAlg" />
 		<result column="status" property="status" />
 		<result column="system_code" property="systemCode" />
-		<result column="approver" property="approver" />
 		
+		<result column="approver" property="approver" />
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
@@ -52,11 +53,17 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
-			</if>
 			<if test="startDatetime != null and startDatetime != '' ">
 				<![CDATA[AND t.start_datetime <= #{startDatetime}]]>
+			</if>
+			<if test="lotteryDatetimeStart != null and lotteryDatetimeStart != '' ">
+				<![CDATA[AND t.lottery_datetime >= #{lotteryDatetimeStart}]]>
+			</if>
+			<if test="lotteryDatetimeEnd != null and lotteryDatetimeEnd != '' ">
+				<![CDATA[AND t.lottery_datetime <= #{lotteryDatetimeEnd}]]>
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
 			</if>
 		</trim>
 	</sql>
@@ -78,6 +85,7 @@
 		,invest_num
 		,start_datetime
 		,raise_days
+		,lottery_datetime
 		,win_number
 		,win_user_id
 		
@@ -136,6 +144,8 @@
 		UPDATE tact_jewel
 		SET
 		status=#{status}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	
@@ -158,6 +168,7 @@
 		,total_num = #{totalNum}
 		,start_datetime = #{startDatetime}
 		,raise_days = #{raiseDays}
+		,lottery_datetime = #{lotteryDatetime}
 		,status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}

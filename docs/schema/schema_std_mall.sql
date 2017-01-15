@@ -9,7 +9,7 @@
  Target Server Version : 50545
  File Encoding         : utf-8
 
- Date: 01/11/2017 14:26:00 PM
+ Date: 01/13/2017 11:26:40 AM
 */
 
 SET NAMES utf8;
@@ -92,9 +92,9 @@ CREATE TABLE `tact_jewel` (
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `lottery_datetime` datetime DEFAULT NULL COMMENT '开奖时间',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 -- ----------------------------
 --  Table structure for `tact_jewel_interact`
@@ -118,12 +118,17 @@ CREATE TABLE `tact_jewel_record` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `jewel_code` varchar(32) DEFAULT NULL COMMENT '宝贝编号',
-  `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_datetime` datetime DEFAULT NULL COMMENT '标语',
   `times` int(11) DEFAULT NULL COMMENT '参与次数',
-  `pay_amount1` bigint(20) DEFAULT NULL COMMENT '支付金额(人民币)',
-  `pay_amount2` bigint(20) DEFAULT NULL COMMENT '支付金额(购物币)',
-  `pay_amount3` varchar(20) DEFAULT NULL COMMENT '支付金额(钱包币)',
+  `pay_amount1` bigint(20) DEFAULT NULL COMMENT '支付金额',
+  `pay_amount2` bigint(20) DEFAULT NULL,
+  `pay_amount3` bigint(20) DEFAULT NULL,
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
+  `receiver` varchar(255) DEFAULT NULL COMMENT '收件人姓名',
+  `re_mobile` varchar(32) DEFAULT NULL COMMENT '收件人电话',
+  `re_address` varchar(255) DEFAULT NULL COMMENT '收货地址',
+  `logistics_code` varchar(32) DEFAULT NULL COMMENT '物流单号',
+  `logistics_company` varchar(32) DEFAULT NULL COMMENT '物流公司编号',
   `status` varchar(4) DEFAULT NULL COMMENT '状态(0待开奖，1已中奖，2未中奖)',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付编号',
@@ -341,7 +346,7 @@ CREATE TABLE `to2o_store` (
   `is_default` char(1) DEFAULT NULL COMMENT '是否默认',
   `ui_location` varchar(32) DEFAULT NULL COMMENT 'UI位置',
   `ui_order` int(11) DEFAULT NULL COMMENT 'UI序号',
-  `status` char(1) DEFAULT NULL COMMENT '状态(1 上线，0 下线)',
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `approver` varchar(32) DEFAULT NULL COMMENT '审核人',
   `approve_datetime` datetime DEFAULT NULL COMMENT '审核时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
@@ -380,6 +385,7 @@ CREATE TABLE `to2o_store_purchase` (
   `amount2` bigint(20) DEFAULT NULL COMMENT '虚拟币1',
   `amount3` bigint(20) DEFAULT NULL COMMENT '虚拟币2',
   `back_amount` bigint(20) DEFAULT NULL COMMENT '返现金额',
+  `ticket_code` varchar(32) DEFAULT NULL COMMENT '折扣券编号',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   `create_datetime` datetime DEFAULT NULL COMMENT '消费提交时间',
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',

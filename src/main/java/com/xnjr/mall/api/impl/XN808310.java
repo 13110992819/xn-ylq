@@ -16,8 +16,8 @@ import com.xnjr.mall.spring.SpringContextHolder;
 
 /**
  * 宝贝分页查询
- * @author: shan 
- * @since: 2016年12月20日 下午6:00:23 
+ * @author: xieyj 
+ * @since: 2017年1月12日 下午2:54:00 
  * @history:
  */
 public class XN808310 extends AProcessor {
@@ -29,10 +29,11 @@ public class XN808310 extends AProcessor {
     public Object doBusiness() throws BizException {
         Jewel condition = new Jewel();
         condition.setStoreCode(req.getStoreCode());
-        condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
-            DateUtil.FRONT_DATE_FORMAT_STRING));
-        condition.setStartDatetime(DateUtil.strToDate(req.getDateEnd(),
-            DateUtil.FRONT_DATE_FORMAT_STRING));
+        condition.setName(req.getName());
+        condition.setStartDatetime(DateUtil.getFrontDate(req.getDateStart(),
+            false));
+        condition
+            .setStartDatetime(DateUtil.getFrontDate(req.getDateEnd(), true));
         condition.setStatus(req.getStatus());
         condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();

@@ -68,12 +68,14 @@ public interface IJewelBO extends IPaginableBO<Jewel> {
 
     /**
      * 更新状态
-     * @param data
+     * @param code
+     * @param status
+     * @param remark
      * @return 
-     * @create: 2016年12月19日 下午5:32:37 shan
+     * @create: 2017年1月12日 下午5:20:58 xieyj
      * @history:
      */
-    public int refreshStatus(String code, String status);
+    public int refreshStatus(String code, String status, String remark);
 
     public int refreshApprove(Jewel data);
 

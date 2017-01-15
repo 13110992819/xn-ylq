@@ -26,6 +26,9 @@ public class Store extends ABaseDO {
     // 店铺推荐人
     private String userReferee;
 
+    // 推荐人手机号
+    private String refereeMobile;
+
     // 费率1 使用折扣券分成比例
     private Double rate1;
 
@@ -134,6 +137,14 @@ public class Store extends ABaseDO {
 
     // 距离
     private String distance;
+
+    public String getRefereeMobile() {
+        return refereeMobile;
+    }
+
+    public void setRefereeMobile(String refereeMobile) {
+        this.refereeMobile = refereeMobile;
+    }
 
     public String getDistance() {
         return distance;

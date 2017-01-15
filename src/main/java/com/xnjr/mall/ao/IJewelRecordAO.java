@@ -6,7 +6,6 @@ import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.JewelRecord;
 
 /**
- * 
  * @author: shan 
  * @since: 2016年12月20日 下午12:08:57 
  * @history:
@@ -28,34 +27,6 @@ public interface IJewelRecordAO {
     public Object buyJewel(String userId, String jewelCode, Integer times,
             String payType, String ip);
 
-    // /**
-    // * 追加购买宝贝记录
-    // * @param jewelRecordCode
-    // * @param times
-    // * @param payType
-    // * @param ip
-    // * @create: 2017年1月12日 上午10:44:54 xieyj
-    // * @history:
-    // */
-    // public void additionalBuy(String jewelRecordCode, Integer times,
-    // String payType, String ip);
-
-    /**
-     * 修改标的购买记录
-     * @param data 
-     * @create: 2016年12月20日 下午12:11:42 shan
-     * @history:
-     */
-    public void editJewelRecord(JewelRecord data);
-
-    /**
-     * 删除标的购买记录
-     * @param code
-     * @create: 2016年12月20日 下午12:11:45 shan
-     * @history:
-     */
-    public void dropJewelRecord(String code);
-
     /**
      * 根据流水编号，找到对应消费记录，更新支付状态
      * @param payCode
@@ -64,6 +35,36 @@ public interface IJewelRecordAO {
      * @history:
      */
     public void paySuccess(String payCode);
+
+    /**
+     * 填写收货地址
+     * @param code
+     * @param receiver
+     * @param reMobile
+     * @param reAddress 
+     * @create: 2017年1月13日 下午2:24:57 xieyj
+     * @history:
+     */
+    public void fulReAddress(String code, String receiver, String reMobile,
+            String reAddress);
+
+    /**
+     * 发货 
+     * @param code
+     * @param updater
+     * @param remark 
+     * @create: 2017年1月13日 下午2:31:00 xieyj
+     * @history:
+     */
+    public void sendJewel(String code, String updater, String remark);
+
+    /**
+     * 签收
+     * @param code 
+     * @create: 2017年1月13日 下午2:25:28 xieyj
+     * @history:
+     */
+    public void signJewel(String code);
 
     /**
      * 标的购买记录分页

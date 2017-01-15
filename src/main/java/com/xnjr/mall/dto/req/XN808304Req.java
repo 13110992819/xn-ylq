@@ -2,13 +2,13 @@ package com.xnjr.mall.dto.req;
 
 /**
  * 发货
- * @author: shan 
- * @since: 2016年12月20日 下午5:40:08 
+ * @author: xieyj 
+ * @since: 2017年1月13日 上午10:33:53 
  * @history:
  */
 public class XN808304Req {
-    // 记录编号(必填)
-    public String recordCode;
+    // 宝贝编号(必填)
+    public String code;
 
     // 更新人编号(必填)
     public String updater;
@@ -16,12 +16,12 @@ public class XN808304Req {
     // 物流信息(必填)
     public String remark;
 
-    public String getRecordCode() {
-        return recordCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setRecordCode(String recordCode) {
-        this.recordCode = recordCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getUpdater() {
