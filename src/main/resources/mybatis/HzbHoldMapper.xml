@@ -26,6 +26,9 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
+			<if test="periodRockNum != null and periodRockNum != '' ">
+				<![CDATA[AND t.period_rock_num < #{periodRockNum}]]>
+			</if>
 			<if test="distance != null and distance != '' ">
 				<![CDATA[ having distance <= #{distance}]]>
 			</if>
@@ -127,6 +130,14 @@
 		,total_rock_num = #{totalRockNum}
 		,system_code = #{systemCode}
 		WHERE code = #{code}
+	</update>
+	
+	<update id="update_rockNum" parameterType="hzbHold">
+		UPDATE tact_hzb_hold
+		SET
+		period_rock_num = #{periodRockNum}
+		,total_rock_num = #{totalRockNum}
+		WHERE id = #{id}
 	</update>
 	
 	<update id="update_status" parameterType="hzbHold">

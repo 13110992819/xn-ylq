@@ -10,6 +10,8 @@ public interface IHzbHoldDAO extends IBaseDAO<HzbHold> {
 
     public int updateStatus(HzbHold data);
 
+    public int updateRockNum(HzbHold data);
+
     public Long selectDistanceTotalCount(HzbHold condition);
 
     public List<HzbHold> selectDistanceList(HzbHold condition);

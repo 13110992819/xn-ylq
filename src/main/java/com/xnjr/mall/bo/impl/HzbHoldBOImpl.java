@@ -109,4 +109,18 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
         page.setList(dataList);
         return page;
     }
+
+    @Override
+    public int refreshRockNum(Long id, Integer periodRockNum,
+            Integer totalRockNum) {
+        int count = 0;
+        if (id != null) {
+            HzbHold data = new HzbHold();
+            data.setId(id);
+            data.setPeriodRockNum(periodRockNum);
+            data.setTotalRockNum(totalRockNum);
+            count = hzbHoldDAO.updateRockNum(data);
+        }
+        return count;
+    }
 }
