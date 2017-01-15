@@ -79,6 +79,9 @@ public class StoreAOImpl implements IStoreAO {
             req.setMobile(data.getMobile());
             req.setKind(EUserKind.F2.getCode());
             req.setUpdater(data.getUpdater());
+            req.setProvince(data.getProvince());
+            req.setCity(data.getCity());
+            req.setArea(data.getArea());
             req.setSystemCode(data.getSystemCode());
             String userId = userBO.doSaveUser(req);
             data.setOwner(userId);
@@ -326,15 +329,16 @@ public class StoreAOImpl implements IStoreAO {
     public List<Store> getStore(String userId) {
         Store condition = new Store();
         condition.setOwner(userId);
-        return storeBO.queryStoreList(condition);
-        // if (CollectionUtils.isEmpty(list)) {
-        // throw new BizException("xn0000", "该用户未申请店铺");
-        // }
+        List<Store> list = storeBO.queryStoreList(condition);
+        for (Store store : list) {
+            // 设置推荐人手机号
+            String refereeUserId = store.getUserReferee();
+            if (StringUtils.isNotBlank(refereeUserId)) {
+                XN805901Res remoteRes = userBO.getRemoteUser(refereeUserId,
+                    refereeUserId);
+                store.setRefereeMobile(remoteRes.getMobile());
+            }
+        }
+        return list;
     }
-    // @Override
-    // public void doStoreShop(String fromUser, String toStore, Long amount,
-    // Long cnyAmount, Long jfCashBack, Long cnyCashBack) {
-    // // TODO Auto-generated method stub
-    //
-    // }
 }

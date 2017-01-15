@@ -21,10 +21,23 @@
 				AND t.id = #{id}
 			</if>
 			<if test="status != null and status != '' ">
-				AND t.status = #{status}
+				<choose>
+					<when test='status == "effect"'>
+						AND t.status in(1,2,3)
+					</when>
+				    <otherwise>
+						AND t.status = #{status}
+					</otherwise>
+				</choose>
 			</if>
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
+			</if>
+			<if test='userList != null and userList.size() > 0'>
+				AND t.user_id in 
+                <foreach item="item" index="index" collection="userList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
 			</if>
 			<if test="periodRockNum != null and periodRockNum != '' ">
 				<![CDATA[AND t.period_rock_num < #{periodRockNum}]]>

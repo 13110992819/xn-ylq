@@ -125,4 +125,30 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         }
         return result;
     }
+
+    /**
+     * @param province
+     * @param city
+     * @param area
+     * @param kind
+     * @return 
+     * @create: 2017年1月15日 下午5:56:14 xieyj
+     * @history:
+     */
+    @Override
+    public List<XN805060Res> getUserList(String province, String city,
+            String area, String kind) {
+        XN805060Req req = new XN805060Req();
+        req.setProvince(province);
+        req.setCity(city);
+        req.setArea(area);
+        req.setKind(EUserKind.FCB.getCode());
+        String jsonStr = BizConnecter.getBizData("805060",
+            JsonUtils.object2Json(req));
+        Gson gson = new Gson();
+        List<XN805060Res> list = gson.fromJson(jsonStr,
+            new TypeToken<List<XN805060Res>>() {
+            }.getType());
+        return list;
+    }
 }

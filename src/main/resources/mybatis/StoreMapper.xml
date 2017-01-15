@@ -64,14 +64,30 @@
 			<if test="province != null and province != '' ">
 				AND t.province = #{province}
 			</if>
+			<if test="provinceForQuery != null and provinceForQuery != '' ">
+				AND t.province like "%"#{provinceForQuery}"%"
+			</if>
 			<if test="city != null and city != '' ">
 				AND t.city = #{city}
+			</if>
+			<if test="cityForQuery != null and cityForQuery != '' ">
+				AND t.city like "%"#{cityForQuery}"%"
 			</if>
 			<if test="area != null and area != '' ">
 				AND t.area = #{area}
 			</if>
+			<if test="areaForQuery != null and areaForQuery != '' ">
+				AND t.area like "%"#{areaForQuery}"%"
+			</if>
 			<if test="status != null and status != '' ">
-				AND t.status = #{status}
+				<choose>
+					<when test='status == "effect"'>
+						AND t.status in(1,2,3)
+					</when>
+				    <otherwise>
+						AND t.status = #{status}
+					</otherwise>
+				</choose>
 			</if>
 			<if test="owner != null and owner != '' ">
 				AND t.owner = #{owner}

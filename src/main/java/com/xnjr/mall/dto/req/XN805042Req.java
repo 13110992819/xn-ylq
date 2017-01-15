@@ -31,8 +31,41 @@ public class XN805042Req {
     // 附件(选填)
     private String pdf;
 
+    // 省(选填)
+    private String province;
+
+    // 市(选填)
+    private String city;
+
+    // 区(选填)
+    private String area;
+
     // 系统编号(必填)
     private String systemCode;
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 
     public String getSystemCode() {
         return systemCode;

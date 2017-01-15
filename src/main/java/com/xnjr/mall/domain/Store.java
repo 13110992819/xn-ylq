@@ -138,6 +138,39 @@ public class Store extends ABaseDO {
     // 距离
     private String distance;
 
+    // 省份
+    private String provinceForQuery;
+
+    // 城市
+    private String cityForQuery;
+
+    // 区
+    private String areaForQuery;
+
+    public String getProvinceForQuery() {
+        return provinceForQuery;
+    }
+
+    public void setProvinceForQuery(String provinceForQuery) {
+        this.provinceForQuery = provinceForQuery;
+    }
+
+    public String getCityForQuery() {
+        return cityForQuery;
+    }
+
+    public void setCityForQuery(String cityForQuery) {
+        this.cityForQuery = cityForQuery;
+    }
+
+    public String getAreaForQuery() {
+        return areaForQuery;
+    }
+
+    public void setAreaForQuery(String areaForQuery) {
+        this.areaForQuery = areaForQuery;
+    }
+
     public String getRefereeMobile() {
         return refereeMobile;
     }

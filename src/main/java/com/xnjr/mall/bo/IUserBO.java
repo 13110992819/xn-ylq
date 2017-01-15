@@ -1,5 +1,7 @@
 package com.xnjr.mall.bo;
 
+import java.util.List;
+
 import com.xnjr.mall.dto.req.XN805042Req;
 import com.xnjr.mall.dto.res.XN805060Res;
 import com.xnjr.mall.dto.res.XN805901Res;
@@ -74,4 +76,17 @@ public interface IUserBO {
      */
     public XN805060Res getPartnerUserInfo(String province, String city,
             String area);
+
+    /**
+     * 获取用户列表
+     * @param province
+     * @param city
+     * @param area
+     * @param kind
+     * @return 
+     * @create: 2017年1月15日 下午5:56:30 xieyj
+     * @history:
+     */
+    public List<XN805060Res> getUserList(String province, String city,
+            String area, String kind);
 }

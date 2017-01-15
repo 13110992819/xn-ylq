@@ -1,5 +1,7 @@
 package com.xnjr.mall.domain;
 
+import java.util.List;
+
 import com.xnjr.mall.dao.base.ABaseDO;
 
 /**
@@ -57,6 +59,17 @@ public class HzbHold extends ABaseDO {
 
     // 手机号
     private String mobile;
+
+    // 用户列表编号
+    private List<String> userList;
+
+    public List<String> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<String> userList) {
+        this.userList = userList;
+    }
 
     public String getMobile() {
         return mobile;

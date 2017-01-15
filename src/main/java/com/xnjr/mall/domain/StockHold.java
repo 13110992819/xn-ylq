@@ -1,6 +1,7 @@
 package com.xnjr.mall.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.xnjr.mall.dao.base.ABaseDO;
 
@@ -46,6 +47,17 @@ public class StockHold extends ABaseDO {
 
     // 福利月卡
     private Stock stock;
+
+    // 用户列表编号
+    private List<String> userList;
+
+    public List<String> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<String> userList) {
+        this.userList = userList;
+    }
 
     public Stock getStock() {
         return stock;

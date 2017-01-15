@@ -84,9 +84,11 @@ public class ProductAOImpl implements IProductAO {
             throw new BizException("jd00001", "产品名称已存在");
         }
         if (!EProductStatus.TO_PUBLISH.getCode().equals(dbProduct.getStatus())
+                && !EProductStatus.APPROVE_NO.getCode().equals(
+                    dbProduct.getStatus())
                 && !EProductStatus.PUBLISH_NO.getCode().equals(
                     dbProduct.getStatus())) {
-            throw new BizException("xn000000", "该产品不是已提交或者已下架状态，无法修改");
+            throw new BizException("xn000000", "该产品不是已提交,审核不通过和已下架状态，无法修改");
         }
         int count = 0;
         if (product != null) {
