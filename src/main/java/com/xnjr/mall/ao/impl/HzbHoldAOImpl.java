@@ -6,6 +6,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xnjr.mall.ao.IHzbHoldAO;
 import com.xnjr.mall.bo.IHzbHoldBO;
@@ -53,6 +54,7 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
     }
 
     @Override
+    @Transactional
     public Object queryDistanceHzbHoldList(HzbHold condition, String userId,
             String deviceNo) {
         XN805901Res userRes = userBO.getRemoteUser(userId, userId);
@@ -65,6 +67,14 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
             distance = SysConstants.HZB_DISTANCE_DEF;
         }
         condition.setDistance(distance);
+        // 设置最多被摇次数
+        Integer periodRockNum = Integer.valueOf(sysConfigBO.getConfigValue(
+            null, null, null, SysConstants.HZB_YY_DAY_MAX_COUNT));
+        if (StringUtils.isBlank(distance)) {
+            // 默认900次
+            periodRockNum = SysConstants.HZB_YY_DAY_MAX_COUNT_DEF;
+        }
+        condition.setPeriodRockNum(periodRockNum);
         // 设置数量
         String hzbMaxNumStr = sysConfigBO.getConfigValue(null, null, null,
             SysConstants.HZB_MAX_NUM);
@@ -78,6 +88,9 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
         }
         for (HzbHold hzbHold : list) {
             hzbHold.setShareUrl("http://www.sina.com.cn");
+            // 更新被摇次数
+            hzbHoldBO.refreshRockNum(hzbHold.getId(),
+                hzbHold.getPeriodRockNum() + 1, hzbHold.getTotalRockNum() + 1);
         }
         return list;
     }
@@ -90,5 +103,10 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
     @Override
     public HzbHold getHzbHold(Long id) {
         return hzbHoldBO.getHzbHold(id);
+    }
+
+    @Override
+    public void doResetRockNumDaily() {
+        hzbHoldBO.resetPeriodRockNum();
     }
 }

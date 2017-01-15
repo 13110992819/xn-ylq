@@ -20,4 +20,12 @@ public interface IHzbHoldAO {
             String deviceNo);
 
     public HzbHold getHzbHold(Long id);
+
+    /**
+     * 重置用户汇赚宝周期内被摇次数（暂定周期为一天）
+     *  
+     * @create: 2017年1月15日 下午3:52:47 haiqingzheng
+     * @history:
+     */
+    public void doResetRockNumDaily();
 }

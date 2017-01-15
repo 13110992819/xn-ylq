@@ -18,6 +18,11 @@ public interface IHzbHoldBO extends IPaginableBO<HzbHold> {
 
     public int refreshStatus(Long id, String status);
 
+    public int refreshRockNum(Long id, Integer periodRockNum,
+            Integer totalRockNum);
+
+    public void resetPeriodRockNum();
+
     public List<HzbHold> queryHzbHoldList(HzbHold condition);
 
     public List<HzbHold> queryDistanceHzbHoldList(HzbHold condition);
