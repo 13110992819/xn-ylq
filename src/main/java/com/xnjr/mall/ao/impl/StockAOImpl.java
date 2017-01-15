@@ -327,13 +327,11 @@ public class StockAOImpl implements IStockAO {
 
     private void transStockAmount(String systemCode, String userId,
             Long BackWelfare1, Long BackWelfare2, String bizNote) {
-        XN802503Res accountRes = accountBO.getAccountByUserId(systemCode,
-            userId, ECurrency.GXJL.getCode());
-        accountBO.doTransferAmount(systemCode, ESysAccount.GXJL.getCode(),
-            accountRes.getAccountNumber(), BackWelfare1,
-            EBizType.AJ_FLYKHH.getCode(), bizNote);
-        accountBO.doTransferAmount(systemCode, ESysAccount.GWB.getCode(),
-            accountRes.getAccountNumber(), BackWelfare2,
+        accountBO.doTransferAmountByUser(systemCode,
+            ESysAccount.GXJL.getCode(), userId, ECurrency.GXJL.getCode(),
+            BackWelfare1, EBizType.AJ_FLYKHH.getCode(), bizNote);
+        accountBO.doTransferAmountByUser(systemCode, ESysAccount.GWB.getCode(),
+            userId, ECurrency.GWB.getCode(), BackWelfare2,
             EBizType.AJ_FLYKHH.getCode(), bizNote);
     }
 
