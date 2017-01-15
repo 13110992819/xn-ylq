@@ -68,11 +68,12 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
         }
         condition.setDistance(distance);
         // 设置最多被摇次数
-        Integer periodRockNum = Integer.valueOf(sysConfigBO.getConfigValue(
-            null, null, null, SysConstants.HZB_YY_DAY_MAX_COUNT));
-        if (StringUtils.isBlank(distance)) {
+        Integer periodRockNum = SysConstants.HZB_YY_DAY_MAX_COUNT_DEF;
+        String periodRockNumString = sysConfigBO.getConfigValue(null, null,
+            null, SysConstants.HZB_YY_DAY_MAX_COUNT);
+        if (StringUtils.isNotBlank(periodRockNumString)) {
             // 默认900次
-            periodRockNum = SysConstants.HZB_YY_DAY_MAX_COUNT_DEF;
+            periodRockNum = Integer.valueOf(periodRockNumString);
         }
         condition.setPeriodRockNum(periodRockNum);
         // 设置数量
