@@ -27,5 +27,5 @@ public interface IHzbHoldAO {
      * @create: 2017年1月15日 下午3:52:47 haiqingzheng
      * @history:
      */
-    public void clearPeriodRockNum();
+    public void doResetRockNumDaily();
 }

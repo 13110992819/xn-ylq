@@ -106,8 +106,7 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
     }
 
     @Override
-    public void clearPeriodRockNum() {
-        // TODO Auto-generated method stub
-
+    public void doResetRockNumDaily() {
+        hzbHoldBO.resetPeriodRockNum();
     }
 }

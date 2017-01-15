@@ -86,4 +86,10 @@ public class HzbHoldDAOImpl extends AMybatisTemplate implements IHzbHoldDAO {
     public int updateRockNum(HzbHold data) {
         return super.update(NAMESPACE.concat("update_rockNum"), data);
     }
+
+    @Override
+    public int resetPeriodRockNum() {
+        return super
+            .update(NAMESPACE.concat("update_resetPeriodRockNum"), null);
+    }
 }

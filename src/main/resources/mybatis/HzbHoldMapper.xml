@@ -140,6 +140,12 @@
 		WHERE id = #{id}
 	</update>
 	
+	<update id="update_resetPeriodRockNum" parameterType="hzbHold">
+		UPDATE tact_hzb_hold
+		SET
+		period_rock_num = 0
+	</update>
+	
 	<update id="update_status" parameterType="hzbHold">
 		UPDATE tact_hzb_hold
 		SET

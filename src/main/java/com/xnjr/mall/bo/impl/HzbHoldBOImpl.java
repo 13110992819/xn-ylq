@@ -123,4 +123,9 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
         }
         return count;
     }
+
+    @Override
+    public void resetPeriodRockNum() {
+        hzbHoldDAO.resetPeriodRockNum();
+    }
 }
