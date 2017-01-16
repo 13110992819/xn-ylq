@@ -3,6 +3,7 @@ package com.xnjr.mall.bo.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
@@ -108,6 +109,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public XN805060Res getPartnerUserInfo(String province, String city,
             String area) {
+        // 只有省 province，city,area=省
+        // 有省市 area=市
+        if (StringUtils.isBlank(city) && StringUtils.isBlank(area)) {
+            city = province;
+            area = province;
+        } else if (StringUtils.isBlank(area)) {
+            area = city;
+        }
         XN805060Req req = new XN805060Req();
         req.setProvince(province);
         req.setCity(city);

@@ -35,9 +35,8 @@ public class XN808309 extends AProcessor {
         req = JsonUtils.json2Bean(inputparams, XN808309Req.class);
         StringValidater.validateBlank(req.getApproveNote(), req.getApprover(),
             req.getApproveResult());
-        if (CollectionUtils.isNotEmpty(req.getCodeList())) {
+        if (CollectionUtils.isEmpty(req.getCodeList())) {
             throw new BizException("xn0000", "编号列表不能为空");
         }
     }
-
 }
