@@ -300,16 +300,15 @@ public class StockAOImpl implements IStockAO {
         // 更新返还金额
         Stock stock = stockBO.getStock(stockHold.getStockCode());
         String status = EStockHoldStatus.CLEARED.getCode();
-        int backNum = stockHold.getBackNum() + 1;
         Long backWelfare1 = stock.getWelfare1()
                 * (stock.getBackCount() - stockHold.getBackNum());
         Long backWelfare2 = stock.getWelfare2()
                 * (stock.getBackCount() - stockHold.getBackNum());
 
         stockHold.setStatus(status);
-        stockHold.setBackNum(backNum);
-        stockHold.setBackWelfare1(stockHold.getBackWelfare1() + backWelfare1);
-        stockHold.setBackWelfare2(stockHold.getBackWelfare2() + backWelfare2);
+        stockHold.setBackNum(stock.getBackCount());
+        stockHold.setBackWelfare1(stock.getWelfare1());
+        stockHold.setBackWelfare2(stock.getWelfare2());
         stockHold.setNextBack(null);
         stockHoldBO.refreshStockHold(stockHold);
 
