@@ -22,6 +22,7 @@ import com.xnjr.mall.domain.Hzb;
 import com.xnjr.mall.domain.HzbHold;
 import com.xnjr.mall.domain.UserExt;
 import com.xnjr.mall.dto.req.XN802180Req;
+import com.xnjr.mall.dto.res.PayBalanceRes;
 import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.dto.res.XN805060Res;
 import com.xnjr.mall.dto.res.XN805901Res;
@@ -72,7 +73,7 @@ public class HzbAOImpl implements IHzbAO {
         Long price = hzb.getPrice();
         if (EPayType.YEZP.getCode().equals(payType)) {
             // 余额支付
-            accountBO.doBalancePay(systemCode, userId,
+            PayBalanceRes payRes = accountBO.doBalancePay(systemCode, userId,
                 ESysUser.SYS_USER.getCode(), price, EBizType.AJ_GMHZB);
             HzbHold hzbHold = new HzbHold();
             hzbHold.setUserId(userId);
@@ -82,6 +83,9 @@ public class HzbAOImpl implements IHzbAO {
             hzbHold.setCurrency(hzb.getCurrency());
             hzbHold.setPeriodRockNum(0);
             hzbHold.setTotalRockNum(0);
+            hzbHold.setPayAmount1(0L);
+            hzbHold.setPayAmount2(payRes.getGxjlAmount());
+            hzbHold.setPayAmount3(payRes.getFrAmount());
             hzbHold.setSystemCode(hzb.getSystemCode());
             int count = hzbHoldBO.saveHzbHold(hzbHold);
             // 分销规则

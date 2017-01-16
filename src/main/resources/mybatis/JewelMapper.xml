@@ -125,6 +125,7 @@
 		,description_text
 		,description_pic
 		,status
+		,remark
 		,system_code
 		)
 		VALUES(
@@ -136,6 +137,7 @@
 		,#{descriptionText}
 		,#{descriptionPic}
 		,#{status}
+		,#{remark}
 		,#{systemCode}
 		)
 	</insert>

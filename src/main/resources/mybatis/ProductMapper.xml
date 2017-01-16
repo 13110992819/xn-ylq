@@ -175,6 +175,7 @@
 		,description = #{description}
 		,cost_price = #{costPrice}
 		,quantity = #{quantity}
+		,status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}

@@ -42,11 +42,11 @@
 			<if test="periodRockNum != null and periodRockNum != '' ">
 				<![CDATA[AND t.period_rock_num < #{periodRockNum}]]>
 			</if>
-			<if test="distance != null and distance != '' ">
-				<![CDATA[ having distance <= #{distance}]]>
-			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
+			</if>
+			<if test="distance != null and distance != '' ">
+				<![CDATA[ having distance <= #{distance}]]>
 			</if>
 		</trim>
 	</sql>
@@ -95,9 +95,7 @@
 		tact_hzb_hold t INNER JOIN ${userDB}.tstd_user_ext tu ON t.user_id = tu.user_id INNER JOIN ${userDB}.tstd_user tuser ON tu.user_id = tuser.user_id 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
-			<if test="order != null and order != '' ">
-				distance asc,t.${order}
-			</if>
+			  distance asc
 		</trim>
 	</select>
 	

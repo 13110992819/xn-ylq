@@ -67,17 +67,29 @@ public class StoreAOImpl implements IStoreAO {
                 }
                 data.setUserReferee(userId);
             }
-            // 注册B端用户，无推荐人
-            XN805042Req req = new XN805042Req();
-            req.setLoginName(data.getMobile());
-            req.setMobile(data.getMobile());
-            req.setKind(EUserKind.F2.getCode());
-            req.setUpdater(data.getUpdater());
-            req.setProvince(data.getProvince());
-            req.setCity(data.getCity());
-            req.setArea(data.getArea());
-            req.setSystemCode(data.getSystemCode());
-            String userId = userBO.doSaveUser(req);
+            String userId = userBO.getUserId(data.getMobile(),
+                EUserKind.F2.getCode(), data.getSystemCode());
+            if (StringUtils.isBlank(userId)) {
+                // 注册B端用户，无推荐人
+                XN805042Req req = new XN805042Req();
+                req.setLoginName(data.getMobile());
+                req.setMobile(data.getMobile());
+                req.setKind(EUserKind.F2.getCode());
+                req.setUpdater(data.getUpdater());
+                req.setProvince(data.getProvince());
+                req.setCity(data.getCity());
+                req.setArea(data.getArea());
+                req.setSystemCode(data.getSystemCode());
+                userId = userBO.doSaveUser(req);
+            } else {
+                // 判断该用户是否有店铺了
+                Store sCondition = new Store();
+                sCondition.setOwner(userId);
+                long totalCount = storeBO.getTotalCount(sCondition);
+                if (totalCount > 0) {
+                    throw new BizException("xn000000", "该用户已经拥有店铺，无需再次申请");
+                }
+            }
             data.setOwner(userId);
             return storeBO.saveStore(data, EStoreStatus.ONLINE_CLOSE.getCode());
         }
