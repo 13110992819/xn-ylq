@@ -99,11 +99,16 @@ public class HzbYyAOImpl implements IHzbYyAO {
         String quantityStr = CalculationUtil.divi(Long.valueOf(quantity));
         // 奖励划拨
         accountBO.doTransferAmountByUser(hzbHold.getSystemCode(),
-            ESysUser.SYS_USER.getCode(), userId, currency, quantity * 1000L,
-            EBizType.AJ_YYJL.getCode(), EBizType.AJ_YYJL.getValue()
+            ESysUser.SYS_USER.getCode(), userId, currency,
+            Long.valueOf(quantity), EBizType.AJ_YYJL.getCode(),
+            EBizType.AJ_YYJL.getValue()
                     + EPrizeType.getResultMap().get(type).getValue() + ",数量:"
                     + quantityStr);
         return new XN808460Res(type, quantityStr);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(CalculationUtil.divi(Long.valueOf(9688)));
     }
 
     private Double getWeight(Map<String, String> rateMap, String ycType) {
