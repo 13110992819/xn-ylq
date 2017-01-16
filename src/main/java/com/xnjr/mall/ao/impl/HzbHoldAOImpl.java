@@ -89,9 +89,6 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
         }
         for (HzbHold hzbHold : list) {
             hzbHold.setShareUrl("http://www.sina.com.cn");
-            // 更新被摇次数
-            hzbHoldBO.refreshRockNum(hzbHold.getId(),
-                hzbHold.getPeriodRockNum() + 1, hzbHold.getTotalRockNum() + 1);
         }
         return list;
     }

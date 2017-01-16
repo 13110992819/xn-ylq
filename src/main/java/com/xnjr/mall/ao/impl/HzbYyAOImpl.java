@@ -87,6 +87,9 @@ public class HzbYyAOImpl implements IHzbYyAO {
         data.setType(type);
         data.setQuantity(quantity);
         hzbYyBO.saveHzbYy(data);
+        // 更新被摇次数
+        hzbHoldBO.refreshRockNum(hzbHold.getId(),
+            hzbHold.getPeriodRockNum() + 1, hzbHold.getTotalRockNum() + 1);
         String currency = null;
         if (EPrizeType.GWB.getCode().equals(type)) {
             currency = ECurrency.GWB.getCode();
