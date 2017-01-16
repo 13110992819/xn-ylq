@@ -36,12 +36,6 @@ public class StoreAOImpl implements IStoreAO {
     @Autowired
     private IStoreBO storeBO;
 
-    // @Autowired
-    // private IStoreActionBO storeActionBO;
-    //
-    // @Autowired
-    // private IStorePurchaseBO storePurchaseBO;
-
     @Autowired
     private IStoreTicketBO storeTicketBO;
 

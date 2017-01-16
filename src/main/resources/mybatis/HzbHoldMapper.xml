@@ -117,6 +117,9 @@
 		,currency
 		,period_rock_num
 		,total_rock_num
+		,pay_amount1
+		,pay_amount2
+		,pay_amount3
 		,system_code
 		)
 		VALUES(
@@ -127,6 +130,9 @@
 		,#{currency}
 		,#{periodRockNum}
 		,#{totalRockNum}
+		,#{payAmount1}
+		,#{payAmount2}
+		,#{payAmount3}
 		,#{systemCode}
 		)
 	</insert>

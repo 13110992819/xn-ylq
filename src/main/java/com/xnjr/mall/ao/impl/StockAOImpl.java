@@ -228,8 +228,9 @@ public class StockAOImpl implements IStockAO {
         stockBack.setSystemCode(stockHold.getSystemCode());
         stockBackBO.saveStockBack(stockBack);
         // 发放贡献奖励和购物币
-        transStockAmount(stockHold.getSystemCode(), userId, backWelfare1,
-            backWelfare2, "用户[" + userId + "]福利月卡返还，已返第" + backNum + "期");
+        transStockAmount(stockHold.getSystemCode(), userId,
+            stock.getWelfare1(), stock.getWelfare2(), "用户[" + userId
+                    + "]福利月卡返还，已返第" + backNum + "期");
     }
 
     @Override
@@ -253,8 +254,8 @@ public class StockAOImpl implements IStockAO {
 
         stockHold.setStatus(status);
         stockHold.setBackNum(stock.getBackCount());
-        stockHold.setBackWelfare1(stock.getWelfare1());
-        stockHold.setBackWelfare2(stock.getWelfare2());
+        stockHold.setBackWelfare1(stockHold.getBackWelfare1() + backWelfare1);
+        stockHold.setBackWelfare2(stockHold.getBackWelfare2() + backWelfare2);
         stockHold.setNextBack(null);
         stockHoldBO.refreshStockHold(stockHold);
 
@@ -288,6 +289,8 @@ public class StockAOImpl implements IStockAO {
         List<StockHold> list = stockHoldBO.queryStockHoldList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             stockHold = list.get(0);
+            Stock stock = stockBO.getStock(stockHold.getStockCode());
+            stockHold.setStock(stock);
         }
         return stockHold;
     }

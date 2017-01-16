@@ -23,7 +23,6 @@ import com.xnjr.mall.domain.HzbHold;
 import com.xnjr.mall.domain.UserExt;
 import com.xnjr.mall.dto.req.XN802180Req;
 import com.xnjr.mall.dto.res.XN802180Res;
-import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.dto.res.XN805060Res;
 import com.xnjr.mall.dto.res.XN805901Res;
 import com.xnjr.mall.enums.EBizType;
@@ -31,7 +30,7 @@ import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EHzbHoldStatus;
 import com.xnjr.mall.enums.EPayType;
-import com.xnjr.mall.enums.ESysAccount;
+import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.http.BizConnecter;
 
@@ -73,7 +72,8 @@ public class HzbAOImpl implements IHzbAO {
         Long price = hzb.getPrice();
         if (EPayType.YEZP.getCode().equals(payType)) {
             // 余额支付
-            transAmount(systemCode, userId, price, EBizType.AJ_GMHZB);
+            accountBO.doBalancePay(systemCode, userId,
+                ESysUser.SYS_USER.getCode(), price, EBizType.AJ_GMHZB);
             HzbHold hzbHold = new HzbHold();
             hzbHold.setUserId(userId);
             hzbHold.setHzbCode(hzbCode);
@@ -121,59 +121,59 @@ public class HzbAOImpl implements IHzbAO {
         return null;
     }
 
-    private void transAmount(String systemCode, String userId, Long price,
-            EBizType bizType) {
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
-            null);
-        // 余额支付业务规则：优先扣贡献奖励，其次扣分润
-        Long gxjlCnyAmount = 0L;
-        Long frCnyAmount = 0L;
-        // 查询用户贡献奖励账户
-        XN802503Res gxjlAccount = accountBO.getAccountByUserId(systemCode,
-            userId, ECurrency.GXJL.getCode());
-        // 查询用户分润账户
-        XN802503Res frAccount = accountBO.getAccountByUserId(systemCode,
-            userId, ECurrency.FRB.getCode());
-        Double gxjl2cny = Double.valueOf(rateMap.get(SysConstants.GXJL2CNY));
-        Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
-        gxjlCnyAmount = Double.valueOf(gxjlAccount.getAmount() / gxjl2cny)
-            .longValue();
-        frCnyAmount = Double.valueOf(frAccount.getAmount() / fr2cny)
-            .longValue();
-        // 1、贡献奖励+分润<价格 余额不足
-        if (gxjlCnyAmount + frCnyAmount < price) {
-            throw new BizException("xn0000", "余额不足");
-        }
-        // 2、贡献奖励=0 直接扣分润
-        if (gxjlAccount.getAmount() <= 0L) {
-            Long frPrice = Double.valueOf(price * fr2cny).longValue();
-            // 扣除分润
-            accountBO.doTransferAmount(systemCode,
-                frAccount.getAccountNumber(), ESysAccount.FRB.getCode(),
-                frPrice, bizType.getCode(), bizType.getValue());
-        }
-        // 3、0<贡献奖励<price 先扣贡献奖励，再扣分润
-        if (gxjlCnyAmount > 0L && gxjlCnyAmount < price) {
-            // 扣除贡献奖励
-            accountBO.doTransferAmount(systemCode,
-                gxjlAccount.getAccountNumber(), ESysAccount.GXJL.getCode(),
-                gxjlAccount.getAmount(), bizType.getCode(), bizType.getValue());
-            // 再扣除分润
-            Long frPrice = Double.valueOf((price - gxjlCnyAmount) * fr2cny)
-                .longValue();
-            accountBO.doTransferAmount(systemCode,
-                frAccount.getAccountNumber(), ESysAccount.FRB.getCode(),
-                frPrice, bizType.getCode(), bizType.getValue());
-        }
-        // 4、贡献奖励>=price 直接扣贡献奖励
-        if (gxjlCnyAmount >= price) {
-            Long gxjlPrice = Double.valueOf(price * gxjl2cny).longValue();
-            // 扣除贡献奖励
-            accountBO.doTransferAmount(systemCode,
-                gxjlAccount.getAccountNumber(), ESysAccount.GXJL.getCode(),
-                gxjlPrice, bizType.getCode(), bizType.getValue());
-        }
-    }
+    // private void transAmount(String systemCode, String userId, Long price,
+    // EBizType bizType) {
+    // Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
+    // null);
+    // // 余额支付业务规则：优先扣贡献奖励，其次扣分润
+    // Long gxjlCnyAmount = 0L;
+    // Long frCnyAmount = 0L;
+    // // 查询用户贡献奖励账户
+    // XN802503Res gxjlAccount = accountBO.getAccountByUserId(systemCode,
+    // userId, ECurrency.GXJL.getCode());
+    // // 查询用户分润账户
+    // XN802503Res frAccount = accountBO.getAccountByUserId(systemCode,
+    // userId, ECurrency.FRB.getCode());
+    // Double gxjl2cny = Double.valueOf(rateMap.get(SysConstants.GXJL2CNY));
+    // Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
+    // gxjlCnyAmount = Double.valueOf(gxjlAccount.getAmount() / gxjl2cny)
+    // .longValue();
+    // frCnyAmount = Double.valueOf(frAccount.getAmount() / fr2cny)
+    // .longValue();
+    // // 1、贡献奖励+分润<价格 余额不足
+    // if (gxjlCnyAmount + frCnyAmount < price) {
+    // throw new BizException("xn0000", "余额不足");
+    // }
+    // // 2、贡献奖励=0 直接扣分润
+    // if (gxjlAccount.getAmount() <= 0L) {
+    // Long frPrice = Double.valueOf(price * fr2cny).longValue();
+    // // 扣除分润
+    // accountBO.doTransferAmount(systemCode,
+    // frAccount.getAccountNumber(), ESysAccount.FRB.getCode(),
+    // frPrice, bizType.getCode(), bizType.getValue());
+    // }
+    // // 3、0<贡献奖励<price 先扣贡献奖励，再扣分润
+    // if (gxjlCnyAmount > 0L && gxjlCnyAmount < price) {
+    // // 扣除贡献奖励
+    // accountBO.doTransferAmount(systemCode,
+    // gxjlAccount.getAccountNumber(), ESysAccount.GXJL.getCode(),
+    // gxjlAccount.getAmount(), bizType.getCode(), bizType.getValue());
+    // // 再扣除分润
+    // Long frPrice = Double.valueOf((price - gxjlCnyAmount) * fr2cny)
+    // .longValue();
+    // accountBO.doTransferAmount(systemCode,
+    // frAccount.getAccountNumber(), ESysAccount.FRB.getCode(),
+    // frPrice, bizType.getCode(), bizType.getValue());
+    // }
+    // // 4、贡献奖励>=price 直接扣贡献奖励
+    // if (gxjlCnyAmount >= price) {
+    // Long gxjlPrice = Double.valueOf(price * gxjl2cny).longValue();
+    // // 扣除贡献奖励
+    // accountBO.doTransferAmount(systemCode,
+    // gxjlAccount.getAccountNumber(), ESysAccount.GXJL.getCode(),
+    // gxjlPrice, bizType.getCode(), bizType.getValue());
+    // }
+    // }
 
     @Override
     public void activateHzb(String userId) {

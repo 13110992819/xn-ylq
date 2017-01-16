@@ -341,19 +341,6 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         Store store = storeBO.getStore(storePurchase.getStoreCode());
         XN802503Res sjFrAccount = accountBO.getAccountByUserId(systemCode,
             store.getOwner(), ECurrency.FRB.getCode());
-        // if (EPayType.YEZP.getCode().equals(storePurchase.getPayType())) {
-        // Double gxjl2cnyRate = Double.valueOf(sysConfigBO.getConfigValue(
-        // systemCode, ECategoryType.QBHL.getCode(), null,
-        // SysConstants.GXJL2CNY));
-        // Double fr2cnyRate = Double.valueOf(sysConfigBO.getConfigValue(
-        // systemCode, ECategoryType.QBHL.getCode(), null,
-        // SysConstants.FR2CNY));
-        // yhAmount = Double
-        // .valueOf(storePurchase.getAmount2() / gxjl2cnyRate).longValue()
-        // + Double.valueOf(storePurchase.getAmount3() / fr2cnyRate)
-        // .longValue();
-        // } else {
-        // }
         Long yhAmount = storePurchase.getAmount1();
         Double fcRate = store.getRate1();
         if (StringUtils.isNotBlank(storePurchase.getTicketCode())) {
