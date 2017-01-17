@@ -201,4 +201,15 @@ public class ProductBOImpl extends PaginableBOImpl<Product> implements
         }
         return count;
     }
+
+    @Override
+    public Long getBoughtCount(String code) {
+        Long count = 0L;
+        if (StringUtils.isNotBlank(code)) {
+            Product data = new Product();
+            data.setCode(code);
+            count = productDAO.selectBoughtCount(data);
+        }
+        return count;
+    }
 }

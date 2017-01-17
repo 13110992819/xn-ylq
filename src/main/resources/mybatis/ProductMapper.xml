@@ -108,6 +108,13 @@
 		</trim>
 	</select>
 
+	<select id="select_buyNumber" parameterType="product" resultType="java.lang.Long">
+		select count(*) as bought_count
+		from tmall_product_order tpo inner join tmall_order torder on
+		tpo.order_code = torder.code
+		where product_code = #{code} and torder.status in ("2","3","4")
+	</select>
+
 	<select id="select_product_count" parameterType="product"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM tmall_product t LEFT JOIN ${userDB}.tstd_user tu ON t.company_code = tu.user_id
