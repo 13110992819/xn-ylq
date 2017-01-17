@@ -110,6 +110,9 @@ public class Store extends ABaseDO {
     // 总的点赞数
     private int totalDzNum;
 
+    // 合同编号
+    private String contractNo;
+
     // 系统编号
     private String systemCode;
 
@@ -146,6 +149,14 @@ public class Store extends ABaseDO {
 
     // 区
     private String areaForQuery;
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
 
     public String getProvinceForQuery() {
         return provinceForQuery;

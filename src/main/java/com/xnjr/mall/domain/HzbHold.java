@@ -38,6 +38,15 @@ public class HzbHold extends ABaseDO {
     // 已摇总次数
     private Integer totalRockNum;
 
+    // 支付价格1人民币
+    private Long payAmount1;
+
+    // 支付价格2人民币
+    private Long payAmount2;
+
+    // 支付价格3人民币
+    private Long payAmount3;
+
     // 支付编号
     private String payCode;
 
@@ -62,6 +71,30 @@ public class HzbHold extends ABaseDO {
 
     // 用户列表编号
     private List<String> userList;
+
+    public Long getPayAmount1() {
+        return payAmount1;
+    }
+
+    public void setPayAmount1(Long payAmount1) {
+        this.payAmount1 = payAmount1;
+    }
+
+    public Long getPayAmount2() {
+        return payAmount2;
+    }
+
+    public void setPayAmount2(Long payAmount2) {
+        this.payAmount2 = payAmount2;
+    }
+
+    public Long getPayAmount3() {
+        return payAmount3;
+    }
+
+    public void setPayAmount3(Long payAmount3) {
+        this.payAmount3 = payAmount3;
+    }
 
     public List<String> getUserList() {
         return userList;

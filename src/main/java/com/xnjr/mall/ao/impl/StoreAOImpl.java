@@ -15,6 +15,7 @@ import com.xnjr.mall.bo.IStoreBO;
 import com.xnjr.mall.bo.IStoreTicketBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
+import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StoreTicket;
 import com.xnjr.mall.dto.req.XN805042Req;
@@ -35,12 +36,6 @@ public class StoreAOImpl implements IStoreAO {
 
     @Autowired
     private IStoreBO storeBO;
-
-    // @Autowired
-    // private IStoreActionBO storeActionBO;
-    //
-    // @Autowired
-    // private IStorePurchaseBO storePurchaseBO;
 
     @Autowired
     private IStoreTicketBO storeTicketBO;
@@ -73,17 +68,29 @@ public class StoreAOImpl implements IStoreAO {
                 }
                 data.setUserReferee(userId);
             }
-            // 注册B端用户，无推荐人
-            XN805042Req req = new XN805042Req();
-            req.setLoginName(data.getMobile());
-            req.setMobile(data.getMobile());
-            req.setKind(EUserKind.F2.getCode());
-            req.setUpdater(data.getUpdater());
-            req.setProvince(data.getProvince());
-            req.setCity(data.getCity());
-            req.setArea(data.getArea());
-            req.setSystemCode(data.getSystemCode());
-            String userId = userBO.doSaveUser(req);
+            String userId = userBO.getUserId(data.getMobile(),
+                EUserKind.F2.getCode(), data.getSystemCode());
+            if (StringUtils.isBlank(userId)) {
+                // 注册B端用户，无推荐人
+                XN805042Req req = new XN805042Req();
+                req.setLoginName(data.getMobile());
+                req.setMobile(data.getMobile());
+                req.setKind(EUserKind.F2.getCode());
+                req.setUpdater(data.getUpdater());
+                req.setProvince(data.getProvince());
+                req.setCity(data.getCity());
+                req.setArea(data.getArea());
+                req.setSystemCode(data.getSystemCode());
+                userId = userBO.doSaveUser(req);
+            } else {
+                // 判断该用户是否有店铺了
+                Store sCondition = new Store();
+                sCondition.setOwner(userId);
+                long totalCount = storeBO.getTotalCount(sCondition);
+                if (totalCount > 0) {
+                    throw new BizException("xn000000", "该用户已经拥有店铺，无需再次申请");
+                }
+            }
             data.setOwner(userId);
             return storeBO.saveStore(data, EStoreStatus.ONLINE_CLOSE.getCode());
         }
@@ -124,6 +131,10 @@ public class StoreAOImpl implements IStoreAO {
             store.setStatus(EStoreStatus.UNPASS.getCode());
         } else {
             store.setStatus(EStoreStatus.ONLINE_CLOSE.getCode());
+            // 第一次审核通过产生合同编号
+            if (StringUtils.isBlank(dbStore.getContractNo())) {
+                store.setContractNo(OrderNoGenerater.generateM("ZHS_"));
+            }
         }
         store.setApprover(checkUser);
         store.setRemark(remark);

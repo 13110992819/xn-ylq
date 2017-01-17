@@ -134,7 +134,8 @@ public class OrderAOImpl implements IOrderAO {
      */
     @Override
     @Transactional
-    public void commitOrder(List<String> cartCodeList, Order data) {
+    public List<String> commitOrder(List<String> cartCodeList, Order data) {
+        List<String> result = new ArrayList<String>();
         // 按公司编号进行拆单, 遍历获取公司编号列表
         Map<String, String> companyMap = new HashMap<String, String>();
         for (String cartCode : cartCodeList) {
@@ -154,8 +155,10 @@ public class OrderAOImpl implements IOrderAO {
                     cartsCompany.add(cartCode);
                 }
             }
-            commitOneOrder(cartsCompany, data);
+            String orderCode = commitOneOrder(cartsCompany, data);
+            result.add(orderCode);
         }
+        return result;
     }
 
     private String commitOneOrder(List<String> cartCodeList, Order data) {

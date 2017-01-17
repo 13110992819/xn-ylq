@@ -25,8 +25,19 @@ public class XN808300Req {
     // 详情图片
     private String descriptionPic;
 
+    // 备注
+    private String remark;
+
     // 系统编号(必填)
     private String systemCode;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public String getStoreCode() {
         return storeCode;

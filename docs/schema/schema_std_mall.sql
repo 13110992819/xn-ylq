@@ -43,6 +43,9 @@ CREATE TABLE `tact_hzb_hold` (
   `currency` varchar(4) DEFAULT NULL COMMENT '价格币种',
   `period_rock_num` int(11) DEFAULT NULL COMMENT '周期内被摇总次数',
   `total_rock_num` int(11) DEFAULT NULL COMMENT '已摇总次数',
+  `pay_amount1` bigint(20) DEFAULT NULL COMMENT '支付人民币',
+  `pay_amount2` bigint(20) DEFAULT NULL COMMENT '支付虚拟币1',
+  `pay_amount3` bigint(20) DEFAULT NULL COMMENT '支付虚拟币2',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
@@ -195,6 +198,9 @@ CREATE TABLE `tact_stock_hold` (
   `back_num` int(11) DEFAULT NULL COMMENT '已经返还次数',
   `back_welfare1` bigint(20) DEFAULT NULL COMMENT '已返福利1',
   `back_welfare2` bigint(20) DEFAULT NULL COMMENT '已返福利2',
+  `pay_amount1` bigint(20) DEFAULT NULL COMMENT '支付人民币',
+  `pay_amount2` bigint(20) DEFAULT NULL COMMENT '支付虚拟币1',
+  `pay_amount3` bigint(20) DEFAULT NULL COMMENT '支付虚拟币2',
   `next_back` datetime DEFAULT NULL COMMENT '下次返还时间',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '第三方支付编号',
@@ -355,6 +361,7 @@ CREATE TABLE `to2o_store` (
   `owner` varchar(32) DEFAULT NULL COMMENT '店铺主人',
   `total_jf_num` bigint(20) DEFAULT '0' COMMENT '累计积分数量',
   `total_dz_num` int(11) DEFAULT '0' COMMENT '累计点赞数',
+  `contract_no` varchar(255) DEFAULT NULL COMMENT '合同编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`) COMMENT '商户表'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

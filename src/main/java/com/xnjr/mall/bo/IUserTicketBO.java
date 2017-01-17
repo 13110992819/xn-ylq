@@ -13,7 +13,7 @@ public interface IUserTicketBO extends IPaginableBO<UserTicket> {
 
     public int removeUserTicket(String code);
 
-    // public int refreshUserTicket(UserTicket data);
+    public int refreshUserTicketStatus(String code, String status);
 
     public List<UserTicket> queryUserTicketList(UserTicket condition);
 
