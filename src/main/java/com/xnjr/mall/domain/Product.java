@@ -103,6 +103,9 @@ public class Product extends ABaseDO {
     // 商户手机号
     private String mobile;
 
+    // 已购买人数
+    private Long boughtCount;
+
     public String getMobile() {
         return mobile;
     }
@@ -309,6 +312,14 @@ public class Product extends ABaseDO {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public Long getBoughtCount() {
+        return boughtCount;
+    }
+
+    public void setBoughtCount(Long boughtCount) {
+        this.boughtCount = boughtCount;
     }
 
 }

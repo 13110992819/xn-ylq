@@ -390,8 +390,17 @@ public class OrderAOImpl implements IOrderAO {
             deliveryDatetime, pdf, updater, remark);
         // 发送短信
         String userId = order.getApplyUser();
-        smsOutBO.sentContent(userId, userId, "尊敬的用户，您的订单[" + order.getCode()
-                + "]已发货,请注意查收。");
+        String notice = "";
+        if (order.getProductOrderList().size() > 1) {
+            notice = "尊敬的用户，您的订单[" + order.getCode() + "]中的商品["
+                    + order.getProductOrderList().get(0).getProductName()
+                    + "等]已发货，请注意查收。";
+        } else {
+            notice = "尊敬的用户，您的订单[" + order.getCode() + "]中的商品["
+                    + order.getProductOrderList().get(0).getProductName()
+                    + "]已发货，请注意查收。";
+        }
+        smsOutBO.sentContent(userId, userId, notice);
     }
 
     @Override

@@ -41,4 +41,6 @@ public interface IProductBO extends IPaginableBO<Product> {
             String location, Integer orderNo, String updater, String remark);
 
     public int putOff(String code, String updater, String remark);
+
+    public Long getBoughtCount(String code);
 }

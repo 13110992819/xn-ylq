@@ -119,7 +119,10 @@ public class ProductAOImpl implements IProductAO {
      */
     @Override
     public Product getProduct(String code) {
-        return productBO.getProduct(code);
+        Product product = productBO.getProduct(code);
+        // 查询已购买人数
+        product.setBoughtCount(productBO.getBoughtCount(code));
+        return product;
     }
 
     @Override

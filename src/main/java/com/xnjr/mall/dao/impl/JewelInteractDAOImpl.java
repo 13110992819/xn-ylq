@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.xnjr.mall.common.PropertiesUtil;
 import com.xnjr.mall.dao.IJewelInteractDAO;
 import com.xnjr.mall.dao.base.support.AMybatisTemplate;
 import com.xnjr.mall.domain.JewelInteract;
@@ -30,12 +31,14 @@ public class JewelInteractDAOImpl extends AMybatisTemplate implements
 
     @Override
     public JewelInteract select(JewelInteract condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.select(NAMESPACE.concat("select_jewelInteract"),
             condition, JewelInteract.class);
     }
 
     @Override
     public Long selectTotalCount(JewelInteract condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectTotalCount(
             NAMESPACE.concat("select_jewelInteract_count"), condition);
     }

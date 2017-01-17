@@ -17,22 +17,24 @@ public class JewelInteract extends ABaseDO {
     private static final long serialVersionUID = 1L;
 
     // 序号
-    public Long id;
+    private Long id;
 
     // 类型（1 好评）
-    public String type;
+    private String type;
 
     // 互动人
-    public String interacter;
+    private String interacter;
 
     // 互动时间
-    public Date interactDatetime;
+    private Date interactDatetime;
 
     // 标的编号
-    public String jewelCode;
+    private String jewelCode;
 
     // 系统编号
-    public String systemCode;
+    private String systemCode;
+
+    private User interacterUser;
 
     public Long getId() {
         return id;
@@ -80,5 +82,13 @@ public class JewelInteract extends ABaseDO {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public User getInteracterUser() {
+        return interacterUser;
+    }
+
+    public void setInteracterUser(User interacterUser) {
+        this.interacterUser = interacterUser;
     }
 }

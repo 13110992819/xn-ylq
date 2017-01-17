@@ -18,6 +18,7 @@ import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.IJewelBO;
 import com.xnjr.mall.bo.IJewelRecordBO;
 import com.xnjr.mall.bo.IJewelRecordNumberBO;
+import com.xnjr.mall.bo.ISmsOutBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.common.SysConstants;
@@ -59,6 +60,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
 
     @Autowired
     private IJewelRecordNumberBO jewelRecordNumberBO;
+
+    @Autowired
+    private ISmsOutBO smsOutBO;
 
     @Override
     @Transactional
@@ -264,6 +268,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         }
         jewelRecordBO.refreshStatus(code, EJewelRecordStatus.SENT.getCode(),
             remark);
+        Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
+        smsOutBO.sentContent(jewelRecord.getUserId(), jewelRecord.getUserId(),
+            "尊敬的用户，您的夺宝宝贝[" + jewel.getName() + "]已发货,请注意查收。");
     }
 
     @Override
