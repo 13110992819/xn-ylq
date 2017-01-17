@@ -9,6 +9,8 @@
 		<result column="interact_datetime" property="interactDatetime" />
 		<result column="jewel_code" property="jewelCode" />
 		<result column="system_code" property="systemCode" />
+		<result column="interacter" property="interacterUser.userId" />
+		<result column="nickname" property="interacterUser.nickname" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -25,14 +27,15 @@
 	</sql>
 	<select id="select_jewelInteract" parameterType="jewelInteract" resultMap="jewelInteract_DB_Result">
 		SELECT
-		id
-		,type
-		,interacter
-		,interact_datetime
-		,jewel_code
-		,system_code
+		t.id
+		,t.type
+		,t.interacter
+		,t.interact_datetime
+		,t.jewel_code
+		,t.system_code
+		,tu.nickname
 		FROM
-		tact_jewel_interact t
+		tact_jewel_interact t LEFT JOIN ${userDB}.tstd_user tu ON t.interacter = tu.user_id 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -43,23 +46,21 @@
 
 	<select id="select_jewelInteract_count" parameterType="jewelInteract"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tact_jewel_interact t 
+		SELECT count(1) FROM tact_jewel_interact t LEFT JOIN ${userDB}.tstd_user tu ON t.interacter = tu.user_id
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_jewelInteract" parameterType="jewelInteract">
 		INSERT INTO
 		tact_jewel_interact(
-		id
-		,type
+		type
 		,interacter
 		,interact_datetime
 		,jewel_code
 		,system_code
 		)
 		VALUES(
-		#{id}
-		,#{type}
+		#{type}
 		,#{interacter}
 		,#{interactDatetime}
 		,#{jewelCode}

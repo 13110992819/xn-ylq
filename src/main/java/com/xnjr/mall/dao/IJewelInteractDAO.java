@@ -10,7 +10,7 @@ import com.xnjr.mall.domain.JewelInteract;
  * @history:
  */
 public interface IJewelInteractDAO extends IBaseDAO<JewelInteract> {
-    String NAMESPACE = IJewelDAO.class.getName().concat(".");
+    String NAMESPACE = IJewelInteractDAO.class.getName().concat(".");
 
     /**
      * 更新互动

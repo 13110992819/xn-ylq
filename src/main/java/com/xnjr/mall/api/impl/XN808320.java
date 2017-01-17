@@ -4,6 +4,7 @@ import com.xnjr.mall.ao.IJewelInteractAO;
 import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.dto.req.XN808320Req;
+import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
 import com.xnjr.mall.http.JsonUtils;
@@ -23,15 +24,15 @@ public class XN808320 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return jewelInteractAO.addJewelInteract(req.getJewelCode(),
-            req.getInteracter(), req.getSystemCode());
+        jewelInteractAO.addJewelInteract(req.getInteracter(),
+            req.getJewelCode());
+        return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN808320Req.class);
-        StringValidater.validateBlank(req.getJewelCode(), req.getInteracter(),
-            req.getSystemCode());
+        StringValidater.validateBlank(req.getJewelCode(), req.getInteracter());
     }
 
 }

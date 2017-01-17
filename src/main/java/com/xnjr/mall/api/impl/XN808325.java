@@ -3,7 +3,6 @@ package com.xnjr.mall.api.impl;
 import org.apache.commons.lang3.StringUtils;
 
 import com.xnjr.mall.ao.IJewelInteractAO;
-import com.xnjr.mall.ao.IOrderAO;
 import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.JewelInteract;
@@ -31,7 +30,7 @@ public class XN808325 extends AProcessor {
         condition.setJewelCode(req.getJewelCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
-            orderColumn = IOrderAO.DEFAULT_ORDER_COLUMN;
+            orderColumn = IJewelInteractAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
