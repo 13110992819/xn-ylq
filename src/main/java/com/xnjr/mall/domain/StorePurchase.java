@@ -59,6 +59,17 @@ public class StorePurchase extends ABaseDO {
     // 流水编号
     private String jourCode;
 
+    // *************db properties****************
+    private Store store;
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
     public String getTicketCode() {
         return ticketCode;
     }

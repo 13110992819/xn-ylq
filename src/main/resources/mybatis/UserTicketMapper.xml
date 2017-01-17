@@ -81,14 +81,10 @@
 		)
 	</insert>
 
-	<update id="update_userTicket" parameterType="userTicket">
+	<update id="update_userTicket_status" parameterType="userTicket">
 		UPDATE to2o_user_ticket
 		SET
-		user_id = #{userId}
-		,ticket_code = #{ticketCode}
-		,create_datetime = #{createDatetime}
-		,status = #{status}
-		,system_code = #{systemCode}
+		status = #{status}
 		WHERE code = #{code}
 	</update>
 </mapper>

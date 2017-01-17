@@ -38,7 +38,6 @@ import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.EStorePurchaseStatus;
 import com.xnjr.mall.enums.EStoreStatus;
 import com.xnjr.mall.enums.EStoreTicketType;
-import com.xnjr.mall.enums.ESysAccount;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.EUserTicketStatus;
 import com.xnjr.mall.exception.BizException;
@@ -78,6 +77,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     @Transactional
     public Object storePurchase(String userId, String storeCode,
             String ticketCode, Long amount, String payType, String ip) {
+        Object result = null;
         Store store = storeBO.getStore(storeCode);
         String systemCode = store.getSystemCode();
         if (!EStoreStatus.ONLINE_OPEN.getCode().equals(store.getStatus())) {
@@ -180,7 +180,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                                 + store.getName() + "消费买单");
             }
             distributeAmount(data);
-            return new BooleanRes(true);
+            result = new BooleanRes(true);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
             // 获取微信APP支付信息
             XN802180Req req = new XN802180Req();
@@ -205,92 +205,15 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             data.setRemark(remark);
             data.setJourCode(res.getJourCode());
             storePurchaseBO.saveStorePurchase(data);
-
-            return res;
+            result = res;
         }
-        return null;
+        // 优惠券状态修改
+        if (StringUtils.isNotBlank(ticketCode)) {
+            userTicketBO.refreshUserTicketStatus(ticketCode,
+                EUserTicketStatus.USED.getCode());
+        }
+        return result;
     }
-
-    // @Override
-    // public void purchaseSuccess(String systemCode, Store store, Long
-    // yhAmount,
-    // String userId, Double fcRate) {
-    // // 1,用户C可以得到消费额35%的钱包币,平台扣除钱包币
-    // Double qbbRate = Double.valueOf(SysConstants.CUSERQBBRATE);
-    // Long transAmount = Double.valueOf(yhAmount * qbbRate).longValue();
-    // XN802503Res qbbAccount = accountBO.getAccountByUserId(
-    // store.getSystemCode(), ESysAccount.SYS_ACCOUNT.getCode(),
-    // ECurrency.QBB.getCode());
-    // // 获取用户账户
-    // XN802503Res userAccount = accountBO.getAccountByUserId(
-    // store.getSystemCode(), userId, ECurrency.QBB.getCode());
-    // accountBO.doTransferAmount(systemCode, qbbAccount.getAccountNumber(),
-    // userAccount.getAccountNumber(), transAmount,
-    // EBizType.AJ_DPXF.getCode(), EBizType.AJ_DPXF.getValue());
-    // // 用户A和用户B和用户C分润值，从哪里来?
-    // Double o2oAUserRate = Double.valueOf(sysConfigBO.getConfigValue(
-    // systemCode, ECategoryType.O2O.getCode(), null,
-    // SysConstants.O2O_AUSER));
-    // Double o2oBUserRate = Double.valueOf(sysConfigBO.getConfigValue(
-    // systemCode, ECategoryType.O2O.getCode(), null,
-    // SysConstants.O2O_BUSER));
-    // Double o2oCUserRate = Double.valueOf(sysConfigBO.getConfigValue(
-    // systemCode, ECategoryType.O2O.getCode(), null,
-    // SysConstants.O2O_CUSER));
-    // Long frAmountA = Double.valueOf(yhAmount * o2oAUserRate * fcRate)
-    // .longValue();
-    // Long frAmountB = Double.valueOf(yhAmount * o2oBUserRate * fcRate)
-    // .longValue();
-    // Long frAmountC = Double.valueOf(yhAmount * o2oCUserRate * fcRate)
-    // .longValue();
-    // // 辖区管理用户获取的分润
-    // // 省合伙人
-    // Long proAmount = 0L;
-    // Long cityAmount = 0L;
-    // Long areaAmount = 0L;
-    // Double proRate = Double.valueOf(sysConfigBO.getConfigValue(systemCode,
-    // ECategoryType.O2O.getCode(), null, SysConstants.O2O_PROVINCE));
-    // Double cityRate = Double.valueOf(sysConfigBO.getConfigValue(systemCode,
-    // ECategoryType.O2O.getCode(), null, SysConstants.O2O_CITY));
-    // Double areaRate = Double.valueOf(sysConfigBO.getConfigValue(systemCode,
-    // ECategoryType.O2O.getCode(), null, SysConstants.O2O_AREA));
-    // // 省合伙人
-    // XN805060Res provinceRes = userBO.getPartnerUserInfo(
-    // store.getProvince(), null, null);
-    // if (provinceRes != null) {
-    // proAmount = Double.valueOf(yhAmount * proRate * fcRate).longValue();
-    // }
-    // // 市合伙人
-    // XN805060Res cityRes = userBO.getPartnerUserInfo(store.getProvince(),
-    // store.getCity(), null);
-    // if (cityRes != null) {
-    // cityAmount = Double.valueOf(yhAmount * cityRate * fcRate)
-    // .longValue();
-    // }
-    // // 县合伙人
-    // XN805060Res areaRes = userBO.getPartnerUserInfo(store.getProvince(),
-    // store.getCity(), store.getArea());
-    //
-    // if (areaRes != null) {
-    // areaAmount = Double.valueOf(yhAmount * areaRate * fcRate)
-    // .longValue();
-    // }
-    //
-    // StorePurchase data = new StorePurchase();
-    // data.setUserId(userId);
-    // // data.setStoreCode(storeCode);
-    // // data.setAmount(amount);
-    // // data.setSystemCode(systemCode);
-    // // data.setRemark(remark);
-    // // 消费1000块(优先共享奖励，分润)
-    // // 1,用户C可以得到消费额35%的钱包币
-    // // 2,用户B和A可以得到对应分润为X1和X2
-    // // 3,业务员可以得到分润为X3
-    // // 4,所在省市县可以得到对应分润为X4，X5和X6
-    // // 5,最后到店铺手里的钱为1000-X1-X2-X3-X4-X5-X6
-    // // 6,另外，35%的钱包币由平台发放
-    // storePurchaseBO.saveStorePurchase(data);
-    // }
 
     @Override
     public int dropStorePurchase(String code) {
@@ -303,17 +226,33 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
     @Override
     public Paginable<StorePurchase> queryStorePurchasePage(int start,
             int limit, StorePurchase condition) {
-        return storePurchaseBO.getPaginable(start, limit, condition);
+        Paginable<StorePurchase> page = storePurchaseBO.getPaginable(start,
+            limit, condition);
+        List<StorePurchase> list = page.getList();
+        for (StorePurchase storePurchase : list) {
+            Store store = storeBO.getStore(storePurchase.getStoreCode());
+            storePurchase.setStore(store);
+        }
+        return page;
     }
 
     @Override
     public List<StorePurchase> queryStorePurchaseList(StorePurchase condition) {
-        return storePurchaseBO.queryStorePurchaseList(condition);
+        List<StorePurchase> list = storePurchaseBO
+            .queryStorePurchaseList(condition);
+        for (StorePurchase storePurchase : list) {
+            Store store = storeBO.getStore(storePurchase.getStoreCode());
+            storePurchase.setStore(store);
+        }
+        return list;
     }
 
     @Override
     public StorePurchase getStorePurchase(String code) {
-        return storePurchaseBO.getStorePurchase(code);
+        StorePurchase storePurchase = storePurchaseBO.getStorePurchase(code);
+        Store store = storeBO.getStore(storePurchase.getStoreCode());
+        storePurchase.setStore(store);
+        return storePurchase;
     }
 
     @Override
@@ -339,8 +278,6 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         String systemCode = storePurchase.getSystemCode();
         String userId = storePurchase.getUserId();
         Store store = storeBO.getStore(storePurchase.getStoreCode());
-        XN802503Res sjFrAccount = accountBO.getAccountByUserId(systemCode,
-            store.getOwner(), ECurrency.FRB.getCode());
         Long yhAmount = storePurchase.getAmount1();
         Double fcRate = store.getRate1();
         if (StringUtils.isNotBlank(storePurchase.getTicketCode())) {
@@ -349,11 +286,11 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 分销规则
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
             null);
-        Double o2oCuserRate = Double.valueOf(rateMap
+        Double o2oCUserRate = Double.valueOf(rateMap
             .get(SysConstants.O2O_CUSER));
-        Double o2oBuserRate = Double.valueOf(rateMap
+        Double o2oBUserRate = Double.valueOf(rateMap
             .get(SysConstants.O2O_BUSER)) * fcRate;
-        Double o2oAuserRate = Double.valueOf(rateMap
+        Double o2oAUserRate = Double.valueOf(rateMap
             .get(SysConstants.O2O_AUSER)) * fcRate;
         Double o2oYwyRate = Double.valueOf(rateMap.get(SysConstants.O2O_YWY))
                 * fcRate;
@@ -366,7 +303,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         // 1、买单用户C得到消费额35%的钱包币 —— 平台发放
         accountBO.doTransferAmountByUser(systemCode,
             ESysUser.SYS_USER.getCode(), userId, ECurrency.QBB.getCode(),
-            Double.valueOf(yhAmount * o2oCuserRate).longValue(),
+            Double.valueOf(yhAmount * o2oCUserRate).longValue(),
             EBizType.AJ_DPXF.getCode(), "优店消费买单，赠送钱包币");
         // 2、C的推荐人B可得到分润X1 B的推荐人A可得到分润X2 —— 消费额里面扣除
         XN805901Res res = userBO.getRemoteUser(userId, userId);
@@ -378,13 +315,10 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         if (refereeUser1 == null) {
             logger.info("用户" + userId + "无一级推荐人,无需推荐人分成");
         } else {
-            XN802503Res refereeUser1FrAccount = accountBO.getAccountByUserId(
-                systemCode, refereeUser1.getUserId(), ECurrency.FRB.getCode());
             // 一级推荐人得到分润
-            accountBO.doTransferAmount(systemCode,
-                sjFrAccount.getAccountNumber(),
-                refereeUser1FrAccount.getAccountNumber(),
-                Double.valueOf(yhAmount * o2oBuserRate).longValue(),
+            accountBO.doTransferAmountByUser(systemCode, store.getOwner(),
+                refereeUser1.getUserId(), ECurrency.FRB.getCode(), Double
+                    .valueOf(yhAmount * o2oBUserRate).longValue(),
                 EBizType.AJ_DPXF.getCode(), "优店消费买单，一级推荐人分成");
             XN805901Res refereeUser2 = null;
             if (StringUtils.isNotBlank(refereeUser1.getUserReferee())) {
@@ -395,33 +329,23 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             if (refereeUser2 == null) {
                 logger.info("用户" + userId + "无二级推荐人,无需推荐人分成");
             } else {
-                XN802503Res refereeUser2FrAccount = accountBO
-                    .getAccountByUserId(systemCode, refereeUser2.getUserId(),
-                        ECurrency.FRB.getCode());
                 // 二级推荐人得到分润
-                accountBO.doTransferAmount(systemCode,
-                    sjFrAccount.getAccountNumber(),
-                    refereeUser2FrAccount.getAccountNumber(),
-                    Double.valueOf(yhAmount * o2oAuserRate).longValue(),
+                accountBO.doTransferAmountByUser(systemCode, store.getOwner(),
+                    refereeUser2.getUserId(), ECurrency.FRB.getCode(), Double
+                        .valueOf(yhAmount * o2oAUserRate).longValue(),
                     EBizType.AJ_DPXF.getCode(), "优店消费买单，二级推荐人分成");
             }
         }
         // 3、业务员可得到分润X3 —— 消费额里面扣除
         if (StringUtils.isNotBlank(store.getUserReferee())) {
-            XN802503Res ywyAccount = accountBO.getAccountByUserId(systemCode,
-                store.getUserReferee(), ECurrency.FRB.getCode());
-            if (StringUtils.isNotBlank(ywyAccount.getAccountNumber())) {
-                accountBO.doTransferAmount(systemCode,
-                    sjFrAccount.getAccountNumber(),
-                    ywyAccount.getAccountNumber(),
-                    Double.valueOf(yhAmount * o2oYwyRate).longValue(),
-                    EBizType.AJ_DPXF.getCode(), "优店消费买单，业务员分成");
-            }
+            accountBO.doTransferAmountByUser(systemCode, store.getOwner(),
+                store.getUserReferee(), ECurrency.FRB.getCode(), Double
+                    .valueOf(yhAmount * o2oYwyRate).longValue(),
+                EBizType.AJ_DPXF.getCode(), "优店消费买单，业务员分成");
         } else {
             logger.info("店铺" + store.getName() + "无业务员，无需业务员分成");
         }
         // 4、店铺所在县、市、省得到分瑞X4、X5、X6 —— 消费额里面扣除
-
         XN805060Res areaRes = null;
         XN805060Res cityRes = null;
         XN805060Res provinceRes = null;
@@ -452,27 +376,21 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         }
 
         if (areaRes != null) {
-            XN802503Res areaAccount = accountBO.getAccountByUserId(systemCode,
-                areaRes.getUserId(), ECurrency.FRB.getCode());
-            accountBO.doTransferAmount(systemCode,
-                sjFrAccount.getAccountNumber(), areaAccount.getAccountNumber(),
+            accountBO.doTransferAmountByUser(systemCode, store.getOwner(),
+                areaRes.getUserId(), ECurrency.FRB.getCode(),
                 Double.valueOf(yhAmount * o2oAreaRate).longValue(),
                 EBizType.AJ_DPXF.getCode(), "优店消费买单,县合伙人分成");
         }
         if (cityRes != null) {
-            XN802503Res cityAccount = accountBO.getAccountByUserId(systemCode,
-                cityRes.getUserId(), ECurrency.FRB.getCode());
-            accountBO.doTransferAmount(systemCode, ESysAccount.FRB.getCode(),
-                cityAccount.getAccountNumber(),
+            accountBO.doTransferAmountByUser(systemCode, store.getOwner(),
+                cityRes.getUserId(), ECurrency.FRB.getCode(),
                 Double.valueOf(yhAmount * o2oCityRate).longValue(),
                 EBizType.AJ_DPXF.getCode(), "优店消费买单,市合伙人分成");
         }
         if (provinceRes != null) {
-            XN802503Res provinceAccount = accountBO.getAccountByUserId(
-                systemCode, provinceRes.getUserId(), ECurrency.FRB.getCode());
-            accountBO.doTransferAmount(systemCode, ESysAccount.FRB.getCode(),
-                provinceAccount.getAccountNumber(),
-                Double.valueOf(yhAmount * o2oProvinceRate).longValue(),
+            accountBO.doTransferAmountByUser(systemCode, store.getOwner(),
+                provinceRes.getUserId(), ECurrency.FRB.getCode(), Double
+                    .valueOf(yhAmount * o2oProvinceRate).longValue(),
                 EBizType.AJ_DPXF.getCode(), "优店消费买单,省合伙人分成");
         }
     }

@@ -42,6 +42,7 @@
 		<result column="total_jf_num" property="totalJfNum" />
 		<result column="total_dz_num" property="totalDzNum" />
 		<result column="distance" property="distance" />
+		<result column="contract_no" property="contractNo" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -189,6 +190,7 @@
 		,remark
 		,owner
 		
+		,contract_no
 		,system_code
 		)
 		VALUES(
@@ -222,6 +224,7 @@
 		,#{remark}
 		,#{owner}
 		
+		,#{contractNo}
 		,#{systemCode}
 		)
 	</insert>
@@ -253,7 +256,6 @@
 		,update_datetime = #{updateDatetime}
 		
 		,status = #{status}
-		
 		WHERE code = #{code}
 	</update>
 	
@@ -273,6 +275,9 @@
 		status = #{status}
 		,approver = #{approver}
 		,approve_datetime = #{approveDatetime}
+		<if test="contractNo != null and contractNo != '' ">
+			,contract_no = #{contractNo}
+		</if>
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>

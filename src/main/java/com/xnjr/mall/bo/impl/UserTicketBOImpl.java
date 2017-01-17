@@ -58,15 +58,6 @@ public class UserTicketBOImpl extends PaginableBOImpl<UserTicket> implements
         return count;
     }
 
-    // @Override
-    // public int refreshUserTicket(UserTicket data) {
-    // int count = 0;
-    // if (StringUtils.isNotBlank(data.getCode())) {
-    // count = userTicketDAO.update(data);
-    // }
-    // return count;
-    // }
-
     @Override
     public List<UserTicket> queryUserTicketList(UserTicket condition) {
         return userTicketDAO.selectList(condition);
@@ -84,5 +75,17 @@ public class UserTicketBOImpl extends PaginableBOImpl<UserTicket> implements
             }
         }
         return data;
+    }
+
+    @Override
+    public int refreshUserTicketStatus(String code, String status) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            UserTicket data = new UserTicket();
+            data.setCode(code);
+            data.setStatus(status);
+            count = userTicketDAO.updateUserTicketStatus(data);
+        }
+        return count;
     }
 }

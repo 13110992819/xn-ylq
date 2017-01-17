@@ -361,6 +361,7 @@ CREATE TABLE `to2o_store` (
   `owner` varchar(32) DEFAULT NULL COMMENT '店铺主人',
   `total_jf_num` bigint(20) DEFAULT '0' COMMENT '累计积分数量',
   `total_dz_num` int(11) DEFAULT '0' COMMENT '累计点赞数',
+  `contract_no` varchar(255) DEFAULT NULL COMMENT '合同编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`) COMMENT '商户表'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

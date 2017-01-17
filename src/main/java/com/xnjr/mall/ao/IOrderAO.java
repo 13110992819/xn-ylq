@@ -33,7 +33,7 @@ public interface IOrderAO {
      * @create: 2017年1月3日 下午8:16:11 xieyj
      * @history:
      */
-    public void commitOrder(List<String> cartCodeList, Order data);
+    public List<String> commitOrder(List<String> cartCodeList, Order data);
 
     /**
      * 支付订单,待发货

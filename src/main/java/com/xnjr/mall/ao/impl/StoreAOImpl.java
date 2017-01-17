@@ -15,6 +15,7 @@ import com.xnjr.mall.bo.IStoreBO;
 import com.xnjr.mall.bo.IStoreTicketBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
+import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StoreTicket;
 import com.xnjr.mall.dto.req.XN805042Req;
@@ -130,6 +131,10 @@ public class StoreAOImpl implements IStoreAO {
             store.setStatus(EStoreStatus.UNPASS.getCode());
         } else {
             store.setStatus(EStoreStatus.ONLINE_CLOSE.getCode());
+            // 第一次审核通过产生合同编号
+            if (StringUtils.isBlank(dbStore.getContractNo())) {
+                store.setContractNo(OrderNoGenerater.generateM("ZHS_"));
+            }
         }
         store.setApprover(checkUser);
         store.setRemark(remark);

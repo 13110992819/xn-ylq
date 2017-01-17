@@ -8,7 +8,6 @@ import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.core.StringValidater;
 import com.xnjr.mall.domain.Order;
 import com.xnjr.mall.dto.req.XN808051Req;
-import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.enums.EOrderType;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.exception.ParaException;
@@ -39,8 +38,7 @@ public class XN808051 extends AProcessor {
         data.setReceiver(req.getReceiver());
         data.setReMobile(req.getReMobile());
         data.setReAddress(req.getReAddress());
-        invoiceAO.commitOrder(req.getCartCodeList(), data);
-        return new BooleanRes(true);
+        return invoiceAO.commitOrder(req.getCartCodeList(), data);
     }
 
     /** 
