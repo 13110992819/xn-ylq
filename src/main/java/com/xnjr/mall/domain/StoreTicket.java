@@ -63,6 +63,28 @@ public class StoreTicket extends ABaseDO {
     // 是否已有 1 是 0 否
     private String isExist;
 
+    // 有效期止开始时间
+    private Date validateEndStart;
+
+    // 有效期止结束时间
+    private Date validateEndEnd;
+
+    public Date getValidateEndStart() {
+        return validateEndStart;
+    }
+
+    public void setValidateEndStart(Date validateEndStart) {
+        this.validateEndStart = validateEndStart;
+    }
+
+    public Date getValidateEndEnd() {
+        return validateEndEnd;
+    }
+
+    public void setValidateEndEnd(Date validateEndEnd) {
+        this.validateEndEnd = validateEndEnd;
+    }
+
     public String getIsExist() {
         return isExist;
     }

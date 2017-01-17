@@ -1,8 +1,12 @@
 package com.xnjr.mall.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,8 @@ import com.xnjr.mall.exception.BizException;
 
 @Service
 public class StoreTicketAOImpl implements IStoreTicketAO {
+    protected static final Logger logger = LoggerFactory
+        .getLogger(OrderAOImpl.class);
 
     @Autowired
     private IStoreTicketBO storeTicketBO;
@@ -119,5 +125,35 @@ public class StoreTicketAOImpl implements IStoreTicketAO {
             throw new BizException("xn0000", "折扣券状态不允许上下架操作");
         }
         return storeTicketBO.refreshStatus(code, status);
+    }
+
+    /** 
+     * @see com.xnjr.mall.ao.IStoreTicketAO#doChangeStatusByInvalid()
+     */
+    @Override
+    public void doChangeStatusByInvalid() {
+        logger.info("***************开始扫描失效折扣券记录***************");
+        StoreTicket condition = new StoreTicket();
+        condition.setStatus("12");
+        condition.setValidateEndEnd(new Date());
+        List<StoreTicket> storeTicketList = storeTicketBO
+            .queryStoreTicketList(condition);
+        if (CollectionUtils.isNotEmpty(storeTicketList)) {
+            for (StoreTicket storeTicket : storeTicketList) {
+                storeTicketBO.refreshStatus(storeTicket.getCode(),
+                    EStoreTicketStatus.INVAILD.getCode());
+                UserTicket utCondition = new UserTicket();
+                utCondition.setTicketCode(storeTicket.getCode());
+                utCondition.setStatus(EUserTicketStatus.UNUSED.getCode());
+                List<UserTicket> utList = userTicketBO
+                    .queryUserTicketList(utCondition);
+                for (UserTicket userTicket : utList) {
+                    userTicketBO.refreshUserTicketStatus(userTicket.getCode(),
+                        EUserTicketStatus.INVAILD.getCode());
+                }
+            }
+        }
+        logger.info("***************结束扫描失效折扣券记录***************");
+
     }
 }
