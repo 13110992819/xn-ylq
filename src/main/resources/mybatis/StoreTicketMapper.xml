@@ -27,7 +27,20 @@
 				AND t.store_code = #{storeCode}
 			</if>
 			<if test="status != null and status != '' ">
-				AND t.status = #{status}
+				<choose>
+				 <when test='status == "12"'>
+				  AND t.status in(1,2)
+				 </when>
+				 <otherwise>
+				  AND t.status = #{status}
+				 </otherwise>
+			</choose>	
+			</if>
+			<if test="validateEndStart != null and validateEndStart != '' ">
+				<![CDATA[AND t.validate_end >= #{validateEndStart}]]>
+			</if>
+			<if test="validateEndEnd != null and validateEndEnd != '' ">
+				<![CDATA[AND t.validate_end <= #{validateEndEnd}]]>
 			</if>
 		</trim>
 	</sql>

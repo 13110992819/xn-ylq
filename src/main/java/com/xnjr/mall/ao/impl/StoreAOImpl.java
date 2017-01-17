@@ -133,7 +133,7 @@ public class StoreAOImpl implements IStoreAO {
             store.setStatus(EStoreStatus.ONLINE_CLOSE.getCode());
             // 第一次审核通过产生合同编号
             if (StringUtils.isBlank(dbStore.getContractNo())) {
-                store.setContractNo(OrderNoGenerater.generateM("ZHS_"));
+                store.setContractNo(OrderNoGenerater.generateM("ZHS-"));
             }
         }
         store.setApprover(checkUser);

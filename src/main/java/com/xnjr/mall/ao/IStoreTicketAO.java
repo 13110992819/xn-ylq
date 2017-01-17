@@ -15,6 +15,14 @@ public interface IStoreTicketAO {
     public int editStoreTicket(StoreTicket data);
 
     /**
+     * 定时器更新店铺折扣券和用户折扣券失效
+     * @return 
+     * @create: 2017年1月17日 下午1:29:42 xieyj
+     * @history:
+     */
+    public void doChangeStatusByInvalid();
+
+    /**
      * 折扣券上架/下架
      * @param code
      * @return 

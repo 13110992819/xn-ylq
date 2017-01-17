@@ -20,6 +20,7 @@
            <list>
               <ref bean="orderTrigger"/> 
               <ref bean="jewelTrigger"/>
+              <ref bean="storeTicketTrigger"/>
            </list>  
        </property>  
        <property name="autoStartup" value="true"/>  
@@ -35,7 +36,7 @@
 	        <property name="concurrent" value="true"/>  <!--  是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程-->  
 	</bean>
 	
-	 <bean id="jewelTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+	<bean id="jewelTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="jewelJobDetail"/>  
        <property name="cronExpression" value="0 0/2 * * * ?"/>
 	</bean>
@@ -45,14 +46,24 @@
 	        <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
 	</bean> 
 	
-	<!-- 将汇赚宝周期被摇次数重置为0 -->
+	<!-- 将汇赚宝周期被摇次数重置为0
 	<bean id="hzbTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="doResetRockNumDaily"/>  
-       <property name="cronExpression" value="59 59 23 * * ?"/><!-- 每天23:59:59开始执行 -->
+       <property name="cronExpression" value="59 59 23 * * ?"/>每天23:59:59开始执行
 	</bean>
 	<bean id="doResetRockNumDaily" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
 	        <property name="targetObject" ref="hzbHoldAOImpl"/>  
 	        <property name="targetMethod" value="doResetRockNumDaily"/>  
-	        <property name="concurrent" value="true"/>  <!--  是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程-->  
+	        <property name="concurrent" value="true"/>   是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程  
+	</bean> -->
+	
+	<bean id="storeTicketTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="storeTicketJobDetail"/>  
+       <property name="cronExpression" value="0 0/2 * * * ?"/>
 	</bean>
+	<bean id="storeTicketJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+	        <property name="targetObject" ref="storeTicketAOImpl"/>  
+	        <property name="targetMethod" value="doChangeStatusByInvalid"/>  
+	        <property name="concurrent" value="true"/>  <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程   -->
+	</bean> 
 </beans>
