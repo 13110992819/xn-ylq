@@ -62,6 +62,16 @@ public class StorePurchase extends ABaseDO {
     // *************db properties****************
     private Store store;
 
+    private StoreTicket storeTicket;
+
+    public StoreTicket getStoreTicket() {
+        return storeTicket;
+    }
+
+    public void setStoreTicket(StoreTicket storeTicket) {
+        this.storeTicket = storeTicket;
+    }
+
     public Store getStore() {
         return store;
     }

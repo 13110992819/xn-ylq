@@ -24,6 +24,7 @@ import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.core.CalculationUtil;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StorePurchase;
+import com.xnjr.mall.domain.StoreTicket;
 import com.xnjr.mall.domain.UserTicket;
 import com.xnjr.mall.dto.req.XN802180Req;
 import com.xnjr.mall.dto.res.BooleanRes;
@@ -232,6 +233,13 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         for (StorePurchase storePurchase : list) {
             Store store = storeBO.getStore(storePurchase.getStoreCode());
             storePurchase.setStore(store);
+            if (StringUtils.isNotBlank(storePurchase.getTicketCode())) {
+                UserTicket userTicket = userTicketBO
+                    .getUserTicket(storePurchase.getTicketCode());
+                StoreTicket storeTicket = storeTicketBO
+                    .getStoreTicket(userTicket.getTicketCode());
+                storePurchase.setStoreTicket(storeTicket);
+            }
         }
         return page;
     }
@@ -243,6 +251,13 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         for (StorePurchase storePurchase : list) {
             Store store = storeBO.getStore(storePurchase.getStoreCode());
             storePurchase.setStore(store);
+            if (StringUtils.isNotBlank(storePurchase.getTicketCode())) {
+                UserTicket userTicket = userTicketBO
+                    .getUserTicket(storePurchase.getTicketCode());
+                StoreTicket storeTicket = storeTicketBO
+                    .getStoreTicket(userTicket.getTicketCode());
+                storePurchase.setStoreTicket(storeTicket);
+            }
         }
         return list;
     }
@@ -279,9 +294,9 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         String userId = storePurchase.getUserId();
         Store store = storeBO.getStore(storePurchase.getStoreCode());
         Long yhAmount = storePurchase.getAmount1();
-        Double fcRate = store.getRate1();
+        Double fcRate = store.getRate2();
         if (StringUtils.isNotBlank(storePurchase.getTicketCode())) {
-            fcRate = store.getRate2();
+            fcRate = store.getRate1();
         }
         // 分销规则
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
