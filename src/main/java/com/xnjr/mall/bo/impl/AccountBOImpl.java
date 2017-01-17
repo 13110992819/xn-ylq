@@ -272,6 +272,17 @@ public class AccountBOImpl implements IAccountBO {
             bizType.getValue());
     }
 
+    /**
+     * @see com.xnjr.mall.bo.IAccountBO#checkGwQbAndBalance(java.lang.String, java.lang.String, java.lang.Long, java.lang.Long, java.lang.Long)
+     */
+    @Override
+    public void checkGwQbAndBalance(String systemCode, String userId,
+            Long gwbPrice, Long qbbPrice, Long cnyPrice) {
+        // 检验购物币和钱包币和余额是否充足
+        checkGWBQBBAmount(systemCode, userId, gwbPrice, qbbPrice);
+        checkBalanceAmount(systemCode, userId, cnyPrice);
+    }
+
     /** 
      * @see com.xnjr.mall.bo.IAccountBO#doGwQbAndBalancePay(java.lang.String, java.lang.String, java.lang.String, java.lang.Long, com.xnjr.mall.enums.EBizType)
      */
@@ -280,8 +291,8 @@ public class AccountBOImpl implements IAccountBO {
             String toUserId, Long gwbPrice, Long qbbPrice, Long cnyPrice,
             EBizType bizType) {
         // 检验购物币和钱包币和余额是否充足
-        checkGWBQBBAmount(systemCode, fromUserId, gwbPrice, qbbPrice);
-        checkBalanceAmount(systemCode, fromUserId, cnyPrice);
+        checkGwQbAndBalance(systemCode, fromUserId, gwbPrice, qbbPrice,
+            cnyPrice);
         // 扣除购物币
         doTransferAmountByUser(systemCode, fromUserId, toUserId,
             ECurrency.GWB.getCode(), gwbPrice, bizType.getCode(),

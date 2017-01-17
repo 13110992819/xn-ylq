@@ -91,6 +91,10 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         String systemCode = userRes.getSystemCode();
         // 余额支付(余额支付)
         if (EPayType.YEZP.getCode().equals(payType)) {
+            // 检验购物币和钱包币和余额是否充足
+            accountBO.checkGwQbAndBalance(systemCode, userId,
+                data.getPayAmount2(), data.getPayAmount3(),
+                data.getPayAmount1());
             String status = EJewelRecordStatus.LOTTERY.getCode();
             Date createDatetime = new Date();
             // 分配号码

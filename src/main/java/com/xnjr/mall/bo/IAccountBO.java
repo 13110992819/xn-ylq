@@ -169,6 +169,19 @@ public interface IAccountBO {
             String toUserId, Long price, EBizType bizType);
 
     /**
+     * 检查购物币和钱包币和余额
+     * @param systemCode
+     * @param userId
+     * @param gwbPrice
+     * @param qbbPrice
+     * @param cnyPrice 
+     * @create: 2017年1月17日 下午6:37:22 xieyj
+     * @history:
+     */
+    public void checkGwQbAndBalance(String systemCode, String userId,
+            Long gwbPrice, Long qbbPrice, Long cnyPrice);
+
+    /**
      * 购物，钱包和余额支付
      * @param systemCode
      * @param fromUserId

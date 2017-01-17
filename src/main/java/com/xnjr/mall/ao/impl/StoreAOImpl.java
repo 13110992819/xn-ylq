@@ -92,6 +92,7 @@ public class StoreAOImpl implements IStoreAO {
                 }
             }
             data.setOwner(userId);
+            data.setContractNo(OrderNoGenerater.generateM("ZHS-"));
             return storeBO.saveStore(data, EStoreStatus.ONLINE_CLOSE.getCode());
         }
     }

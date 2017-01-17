@@ -98,5 +98,4 @@ public class UserTicketAOImpl implements IUserTicketAO {
     public UserTicket getUserTicket(String code) {
         return userTicketBO.getUserTicket(code);
     }
-
 }

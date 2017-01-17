@@ -34,17 +34,17 @@ INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`b
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B1','B用户','o2oBUser','0.1','消费分成10%',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B1','A用户','o2oAUser','0.1','消费分成10%',0,NULL,'CD-CZH000001');
 
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','县(A1未买)','stAreaNotA1','0','A1未买福利月卡分成比例',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','市(A1未买)','stCityNotA1','0','A1未买福利月卡分成比例',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','省(A1未买)','stProvinceNotA1','0','A1未买福利月卡分成比例',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','县(A1已买)','stArea','0.03','A1已买福利月卡分成比例',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','市(A1已买)','stCity','0','A1已买福利月卡分成比例',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','省(A1已买)','stProvince','0','A1已买福利月卡分成比例',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','A1','stA10','0','A1未买福利月卡时',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','A1','stA12000','0.03','A1买福利月卡2000时',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','A1','stA110000','0.05','A1买福利月卡1万时',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','A1','stA130000','0.06','A1买福利月卡3万时',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','A1','stA150000','0.08','A1买福利月卡5万时',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','县(A未买)','stAreaNotA1','0','A未买福利月卡分成比例',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','市(A未买)','stCityNotA1','0','A未买福利月卡分成比例',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','省(A未买)','stProvinceNotA1','0','A未买福利月卡分成比例',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','县(A已买)','stArea','0.03','A已买福利月卡分成比例',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','市(A已买)','stCity','0','A已买福利月卡分成比例',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','省(A已买)','stProvince','0','A已买福利月卡分成比例',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','A','stA10','0','A未买福利月卡时',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','A','stA12000','0.03','A买福利月卡2000时,A分成比例',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','A','stA110000','0.05','A买福利月卡1万时,A分成比例',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','A','stA130000','0.06','A买福利月卡3万时,A分成比例',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','A','stA150000','0.08','A买福利月卡5万时,A分成比例',0,NULL,'CD-CZH000001');
 
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B3','县','hzbArea','0.1','购买汇赚宝分成10%',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B3','市','hzbCity','0.1','购买汇赚宝分成10%',0,NULL,'CD-CZH000001');

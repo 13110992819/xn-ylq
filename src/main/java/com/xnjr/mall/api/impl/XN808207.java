@@ -38,9 +38,9 @@ public class XN808207 extends AProcessor {
         condition.setType(req.getType());
         condition.setLegalPersonName(req.getLegalPersonName());
         condition.setUserReferee(req.getUserReferee());
-        condition.setProvince(req.getProvince());
-        condition.setCity(req.getCity());
-        condition.setArea(req.getArea());
+        condition.setProvinceForQuery(req.getProvince());
+        condition.setCityForQuery(req.getCity());
+        condition.setAreaForQuery(req.getArea());
         condition.setStatus(req.getStatus());
         condition.setSystemCode(req.getSystemCode());
         condition.setUserLatitude(req.getUserLatitude());

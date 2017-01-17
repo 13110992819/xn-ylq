@@ -268,6 +268,9 @@ public class OrderAOImpl implements IOrderAO {
         // 人民币+购物币+钱包币
         // 余额支付(余额支付)
         if (EPayType.YEZP.getCode().equals(payType)) {
+            // 检验购物币和钱包币和余额是否充足
+            accountBO.checkGwQbAndBalance(systemCode, fromUserId, gwAmount,
+                qbAmount, cnyAmount);
             // 更新订单支付金额
             orderBO.refreshOrderPayAmount(code, cnyAmount, gwAmount, qbAmount);
             // 扣除金额
