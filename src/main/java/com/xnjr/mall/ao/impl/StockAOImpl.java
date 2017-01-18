@@ -20,13 +20,11 @@ import com.xnjr.mall.bo.IStockHoldBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.common.DateUtil;
-import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.domain.Stock;
 import com.xnjr.mall.domain.StockBack;
 import com.xnjr.mall.domain.StockHold;
 import com.xnjr.mall.domain.UserExt;
-import com.xnjr.mall.dto.req.XN802180Req;
 import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.dto.res.XN805060Res;
@@ -40,7 +38,6 @@ import com.xnjr.mall.enums.EStockType;
 import com.xnjr.mall.enums.ESysAccount;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.exception.BizException;
-import com.xnjr.mall.http.BizConnecter;
 
 @Service
 public class StockAOImpl implements IStockAO {
@@ -123,6 +120,7 @@ public class StockAOImpl implements IStockAO {
     @Override
     @Transactional
     public Object buyStock(String code, String userId, String payType, String ip) {
+        Object result = null;
         StockHold condition = new StockHold();
         condition.setUserId(userId);
         if (stockHoldBO.getTotalCount(condition) > 0) {
@@ -134,9 +132,8 @@ public class StockAOImpl implements IStockAO {
         }
         String systemCode = stock.getSystemCode();
         if (EPayType.YEZP.getCode().equals(payType)) {
-            accountBO.doBalancePay(systemCode, userId,
-                ESysUser.SYS_USER.getCode(), stock.getPrice(),
-                EBizType.AJ_GMFLYK);
+            // 校验余额是否充足
+            accountBO.checkBalanceAmount(systemCode, userId, stock.getPrice());
             StockHold stockHold = new StockHold();
             stockHold.setUserId(userId);
             stockHold.setStockCode(code);
@@ -148,23 +145,16 @@ public class StockAOImpl implements IStockAO {
                 DateUtil.getTodayStart(), 24 * 60 * 60));
             stockHold.setSystemCode(systemCode);
             distributeAmount(stockHold);
-            return stockHoldBO.saveStockHold(stockHold);
+            result = stockHoldBO.saveStockHold(stockHold);
+            accountBO.doBalancePay(systemCode, userId,
+                ESysUser.SYS_USER.getCode(), stock.getPrice(),
+                EBizType.AJ_GMFLYK);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-            if (StringUtils.isBlank(ip)) {
-                throw new BizException("xn0000", "微信支付，ip地址不能为空");
-            }
             // 获取微信APP支付信息
-            XN802180Req req = new XN802180Req();
-            req.setSystemCode(systemCode);
-            req.setCompanyCode(systemCode);
-            req.setUserId(userId);
-            req.setBizType(EBizType.AJ_GMFLYK.getCode());
-            req.setBizNote(stock.getName() + "——福利月卡购买");
-            req.setBody("正汇钱包—福利月卡");
-            req.setTotalFee(String.valueOf(stock.getPrice()));
-            req.setSpbillCreateIp(ip);
-            XN802180Res res = BizConnecter.getBizData("802180",
-                JsonUtil.Object2Json(req), XN802180Res.class);
+            String bizNote = stock.getName() + "——福利月卡购买";
+            String body = "正汇钱包—福利月卡";
+            XN802180Res res = accountBO.doWeiXinPay(systemCode, userId,
+                EBizType.AJ_GMFLYK, bizNote, body, stock.getPrice(), ip);
             // 落地本地系统消费记录，状态为未支付
             StockHold data = new StockHold();
             data.setUserId(userId);
@@ -179,9 +169,9 @@ public class StockAOImpl implements IStockAO {
             data.setPayCode(res.getJourCode());
             data.setSystemCode(systemCode);
             stockHoldBO.saveStockHold(data);
-            return res;
+            result = res;
         }
-        return null;
+        return result;
     }
 
     @Override
@@ -296,17 +286,18 @@ public class StockAOImpl implements IStockAO {
     }
 
     @Override
-    public int paySuccess(String payCode) {
+    @Transactional
+    public void paySuccess(String payCode) {
         StockHold condition = new StockHold();
         condition.setPayCode(payCode);
         List<StockHold> result = stockHoldBO.queryStockHoldList(condition);
         if (CollectionUtils.isEmpty(result)) {
             throw new BizException("XN000000", "找不到对应的消费记录");
         }
+        stockHoldBO.refreshStatus(result.get(0).getId(),
+            EStockHoldStatus.UNCLEARED.getCode());
         // 分配分成
         distributeAmount(result.get(0));
-        return stockHoldBO.refreshStatus(result.get(0).getId(),
-            EStockHoldStatus.UNCLEARED.getCode());
     }
 
     private void distributeAmount(StockHold stockHold) {

@@ -64,5 +64,5 @@ public interface IStockAO {
      * @create: 2017年1月6日 下午9:25:22 xieyj
      * @history:
      */
-    public int paySuccess(String payCode);
+    public void paySuccess(String payCode);
 }

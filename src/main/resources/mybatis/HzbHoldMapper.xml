@@ -13,6 +13,7 @@
 		<result column="period_rock_num" property="periodRockNum" />
 		<result column="total_rock_num" property="totalRockNum" />
 		<result column="distance" property="distance" />
+		<result column="pay_code" property="payCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -42,11 +43,14 @@
 			<if test="periodRockNum != null and periodRockNum != '' ">
 				<![CDATA[AND t.period_rock_num < #{periodRockNum}]]>
 			</if>
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
-			</if>
 			<if test="distance != null and distance != '' ">
 				<![CDATA[ having distance <= #{distance}]]>
+			</if>
+			<if test="payCode != null and payCode != '' ">
+				AND t.pay_code = #{payCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
 			</if>
 		</trim>
 	</sql>
@@ -61,6 +65,7 @@
 		,t.currency
 		,t.period_rock_num
 		,t.total_rock_num
+		,t.pay_code
 		,t.system_code
 		FROM
 		tact_hzb_hold t
@@ -118,6 +123,7 @@
 		,pay_amount1
 		,pay_amount2
 		,pay_amount3
+		,pay_code
 		,system_code
 		)
 		VALUES(
@@ -131,6 +137,7 @@
 		,#{payAmount1}
 		,#{payAmount2}
 		,#{payAmount3}
+		,#{payCode}
 		,#{systemCode}
 		)
 	</insert>

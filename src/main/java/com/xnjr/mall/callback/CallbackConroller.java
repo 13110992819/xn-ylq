@@ -1,11 +1,3 @@
-/**
- * @Title CallbackWeChatServlet.java 
- * @Package com.std.account 
- * @Description 
- * @author haiqingzheng  
- * @date 2016年12月26日 下午1:44:16 
- * @version V1.0   
- */
 package com.xnjr.mall.callback;
 
 import java.io.ByteArrayInputStream;
@@ -23,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.xnjr.mall.ao.IHzbAO;
 import com.xnjr.mall.ao.IJewelRecordAO;
 import com.xnjr.mall.ao.IOrderAO;
 import com.xnjr.mall.ao.IStockAO;
@@ -44,16 +37,19 @@ public class CallbackConroller {
     private static Logger logger = Logger.getLogger(CallbackConroller.class);
 
     @Autowired
+    IOrderAO orderAO;
+
+    @Autowired
+    private IJewelRecordAO jewelRecordAO;
+
+    @Autowired
     IStorePurchaseAO storePurchaseAO;
 
     @Autowired
     IStockAO stockAO;
 
     @Autowired
-    IOrderAO orderAO;
-
-    @Autowired
-    private IJewelRecordAO jewelRecordAO;
+    IHzbAO hzbAO;
 
     @RequestMapping("/zhpay/app/callback")
     public void doCallbackZhpay(HttpServletRequest request,
@@ -102,6 +98,10 @@ public class CallbackConroller {
                     System.out.println("**** 进入购买福利月卡，微信APP支付服务器回调 start****");
                     stockAO.paySuccess(jourCode);
                     System.out.println("**** 进入购买福利月卡，微信APP支付服务器回调 end****");
+                } else if (EBizType.AJ_GMHZB.getCode().equals(bizType)) {
+                    System.out.println("**** 进入购买汇赚宝，微信APP支付服务器回调 start****");
+                    hzbAO.paySuccess(jourCode);
+                    System.out.println("**** 进入购买汇赚宝，微信APP支付服务器回调 end****");
                 }
             } catch (Exception e) {
                 logger.info("支付回调异常");

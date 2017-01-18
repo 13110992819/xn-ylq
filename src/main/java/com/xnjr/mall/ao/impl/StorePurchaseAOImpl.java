@@ -185,12 +185,12 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                                 * fr2cnyRate, EBizType.AJ_DPXF.getCode(), "店铺"
                                 + store.getName() + "消费买单");
             }
-            distributeAmount(data);
             // 优惠券状态修改
             if (StringUtils.isNotBlank(ticketCode)) {
                 userTicketBO.refreshUserTicketStatus(ticketCode,
                     EUserTicketStatus.USED.getCode());
             }
+            distributeAmount(data);
             result = new BooleanRes(true);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
             // 获取微信APP支付信息
@@ -282,6 +282,12 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         StorePurchase storePurchase = result.get(0);
         count = storePurchaseBO.refreshStatus(storePurchase.getCode(),
             EStorePurchaseStatus.PAYED.getCode());
+        // 优惠券状态修改
+        String ticketCode = storePurchase.getTicketCode();
+        if (StringUtils.isNotBlank(ticketCode)) {
+            userTicketBO.refreshUserTicketStatus(ticketCode,
+                EUserTicketStatus.USED.getCode());
+        }
         distributeAmount(storePurchase);
         return count;
     }
