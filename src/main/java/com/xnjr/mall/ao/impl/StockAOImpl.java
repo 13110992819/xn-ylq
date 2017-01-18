@@ -38,6 +38,7 @@ import com.xnjr.mall.enums.EStockHoldStatus;
 import com.xnjr.mall.enums.EStockStatus;
 import com.xnjr.mall.enums.EStockType;
 import com.xnjr.mall.enums.ESysAccount;
+import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.http.BizConnecter;
 
@@ -327,11 +328,11 @@ public class StockAOImpl implements IStockAO {
     private void transStockAmount(String systemCode, String userId,
             Long BackWelfare1, Long BackWelfare2, String bizNote) {
         accountBO.doTransferAmountByUser(systemCode,
-            ESysAccount.GXJL.getCode(), userId, ECurrency.GXJL.getCode(),
+            ESysUser.SYS_USER.getCode(), userId, ECurrency.GXJL.getCode(),
             BackWelfare1, EBizType.AJ_FLYKHH.getCode(), bizNote);
-        accountBO.doTransferAmountByUser(systemCode, ESysAccount.GWB.getCode(),
-            userId, ECurrency.GWB.getCode(), BackWelfare2,
-            EBizType.AJ_FLYKHH.getCode(), bizNote);
+        accountBO.doTransferAmountByUser(systemCode,
+            ESysUser.SYS_USER.getCode(), userId, ECurrency.GWB.getCode(),
+            BackWelfare2, EBizType.AJ_FLYKHH.getCode(), bizNote);
     }
 
     @Override
