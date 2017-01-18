@@ -139,6 +139,7 @@
 		,t.total_dz_num
 		
 		,t.total_jf_num
+		,t.contract_no
 		,t.system_code
 		,ROUND(6378.138*2*ASIN(SQRT(POW(SIN((#{userLatitude}*PI()/180-t.latitude*PI()/180)/2),2)+COS(#{userLatitude}*PI()/180)*COS(t.latitude*PI()/180)*POW(SIN((#{userLongitude}*PI()/180-t.longitude*PI()/180)/2),2)))*1000) as distance
 		FROM

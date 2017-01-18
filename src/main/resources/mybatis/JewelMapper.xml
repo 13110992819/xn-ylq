@@ -44,6 +44,9 @@
 			<if test="name != null and name != '' ">
 				AND t.name = #{name}
 			</if>
+			<if test="nameForQuery != null and nameForQuery != '' ">
+				AND t.name like "%"#{nameForQuery}"%"
+			</if>
 			<if test="slogan != null and slogan != '' ">
 				AND t.slogan = #{slogan}
 			</if>

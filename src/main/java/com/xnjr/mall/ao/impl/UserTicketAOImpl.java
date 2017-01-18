@@ -85,6 +85,7 @@ public class UserTicketAOImpl implements IUserTicketAO {
             StoreTicket storeTicket = storeTicketBO.getStoreTicket(userTicket
                 .getTicketCode());
             userTicket.setStoreTicket(storeTicket);
+            userTicket.setStore(storeBO.getStore(storeTicket.getStoreCode()));
         }
         return page;
     }

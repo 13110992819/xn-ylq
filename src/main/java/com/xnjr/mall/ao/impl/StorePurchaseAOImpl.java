@@ -103,8 +103,16 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                 // 扣减消费金额
                 yhAmount = amount - userTicket.getTicketKey2();
             }
+            StoreTicket storeTicket = storeTicketBO.getStoreTicket(userTicket
+                .getTicketCode());
             remark = remark + ",优惠后金额" + CalculationUtil.divi(yhAmount)
-                    + "元，使用折扣券编号:[" + ticketCode + "]";
+                    + "元，使用折扣券:[" + storeTicket.getName() + "]";
+            if (EStoreTicketType.MANJIAN.getCode()
+                .equals(storeTicket.getType())) {
+                remark = remark + ",满"
+                        + CalculationUtil.divi(storeTicket.getKey1()) + "减"
+                        + CalculationUtil.divi(storeTicket.getKey2());
+            }
         }
         if (EPayType.YEZP.getCode().equals(payType)) {
             // 余额支付业务规则：优先扣贡献奖励，其次扣分润
@@ -181,6 +189,11 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                                 + store.getName() + "消费买单");
             }
             distributeAmount(data);
+            // 优惠券状态修改
+            if (StringUtils.isNotBlank(ticketCode)) {
+                userTicketBO.refreshUserTicketStatus(ticketCode,
+                    EUserTicketStatus.USED.getCode());
+            }
             result = new BooleanRes(true);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
             // 获取微信APP支付信息
@@ -207,11 +220,6 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             data.setJourCode(res.getJourCode());
             storePurchaseBO.saveStorePurchase(data);
             result = res;
-        }
-        // 优惠券状态修改
-        if (StringUtils.isNotBlank(ticketCode)) {
-            userTicketBO.refreshUserTicketStatus(ticketCode,
-                EUserTicketStatus.USED.getCode());
         }
         return result;
     }

@@ -29,7 +29,7 @@ public class XN808310 extends AProcessor {
     public Object doBusiness() throws BizException {
         Jewel condition = new Jewel();
         condition.setStoreCode(req.getStoreCode());
-        condition.setName(req.getName());
+        condition.setNameForQuery(req.getName());
         condition.setStartDatetime(DateUtil.getFrontDate(req.getDateStart(),
             false));
         condition

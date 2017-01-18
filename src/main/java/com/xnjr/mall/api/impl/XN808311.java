@@ -25,7 +25,7 @@ public class XN808311 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Jewel condition = new Jewel();
-        condition.setName(req.getName());
+        condition.setNameForQuery(req.getName());
         condition.setStoreCode(req.getStoreCode());
         condition.setSystemCode(req.getSystemCode());
         condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),

@@ -98,6 +98,17 @@ public class Jewel extends ABaseDO {
     // 开奖时间止
     private Date lotteryDatetimeEnd;
 
+    // 名称模糊查询
+    private String nameForQuery;
+
+    public String getNameForQuery() {
+        return nameForQuery;
+    }
+
+    public void setNameForQuery(String nameForQuery) {
+        this.nameForQuery = nameForQuery;
+    }
+
     public Date getLotteryDatetimeStart() {
         return lotteryDatetimeStart;
     }
