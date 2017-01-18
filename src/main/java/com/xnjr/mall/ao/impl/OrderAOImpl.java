@@ -155,10 +155,6 @@ public class OrderAOImpl implements IOrderAO {
                 if (company.equals(companyCode)) {
                     cartsCompany.add(cartCode);
                 }
-                // 设置系统编号
-                if (StringUtils.isBlank(data.getSystemCode())) {
-                    data.setSystemCode(cart.getSystemCode());
-                }
             }
             String orderCode = commitOneOrder(cartsCompany, data);
             result.add(orderCode);
@@ -181,7 +177,7 @@ public class OrderAOImpl implements IOrderAO {
             Product product = productBO.getProduct(cart.getProductCode());
             if (StringUtils.isBlank(systemCode)) {
                 // 设置系统编号
-                systemCode = cart.getSystemCode();
+                systemCode = product.getSystemCode();
             }
             if (product.getQuantity() != null) {
                 if ((product.getQuantity() - cart.getQuantity()) < 0) {
