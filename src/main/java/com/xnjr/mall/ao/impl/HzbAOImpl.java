@@ -27,6 +27,7 @@ import com.xnjr.mall.dto.res.XN805901Res;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.ECurrency;
+import com.xnjr.mall.enums.EDiviFlag;
 import com.xnjr.mall.enums.EHzbHoldStatus;
 import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.ESysUser;
@@ -62,6 +63,7 @@ public class HzbAOImpl implements IHzbAO {
         // 查询是否已经购买摇钱树
         HzbHold condition = new HzbHold();
         condition.setUserId(userId);
+        condition.setStatus(EDiviFlag.EFFECT.getCode());
         if (hzbHoldBO.getTotalCount(condition) > 0) {
             throw new BizException("xn0000", "该用户已经购买过汇赚宝");
         }
@@ -219,6 +221,7 @@ public class HzbAOImpl implements IHzbAO {
         // 查询是否已经购买摇钱树
         HzbHold condition = new HzbHold();
         condition.setUserId(userId);
+        condition.setStatus(EDiviFlag.EFFECT.getCode());
         List<HzbHold> list = hzbHoldBO.queryHzbHoldList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             hzbHold = list.get(0);

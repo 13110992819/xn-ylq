@@ -26,6 +26,7 @@ import com.xnjr.mall.domain.UserExt;
 import com.xnjr.mall.dto.res.XN805060Res;
 import com.xnjr.mall.dto.res.XN805901Res;
 import com.xnjr.mall.dto.res.XN808800Res;
+import com.xnjr.mall.enums.EDiviFlag;
 import com.xnjr.mall.enums.EUserKind;
 import com.xnjr.mall.exception.BizException;
 
@@ -76,15 +77,15 @@ public class UserAOImpl implements IUserAO {
         storeCondition.setProvinceForQuery(userExt.getProvince());
         storeCondition.setCityForQuery(userExt.getCity());
         storeCondition.setAreaForQuery(userExt.getArea());
-        storeCondition.setStatus("effect");
+        storeCondition.setStatus(EDiviFlag.EFFECT.getCode());
         long storeNum = storeBO.getTotalCount(storeCondition);
         StockHold stockHoldCondition = new StockHold();
         stockHoldCondition.setUserList(cUserList);
-        stockHoldCondition.setStatus("effect");
+        stockHoldCondition.setStatus(EDiviFlag.EFFECT.getCode());
         long stockNum = stockHoldBO.getTotalCount(stockHoldCondition);
         HzbHold hzbHoldCondition = new HzbHold();
         hzbHoldCondition.setUserList(cUserList);
-        hzbHoldCondition.setStatus("effect");
+        hzbHoldCondition.setStatus(EDiviFlag.EFFECT.getCode());
         long hzbNum = hzbHoldBO.getTotalCount(hzbHoldCondition);
         return new XN808800Res(storeNum, stockNum, hzbNum);
     }

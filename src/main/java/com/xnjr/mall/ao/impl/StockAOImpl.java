@@ -31,6 +31,7 @@ import com.xnjr.mall.dto.res.XN805060Res;
 import com.xnjr.mall.dto.res.XN805901Res;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
+import com.xnjr.mall.enums.EDiviFlag;
 import com.xnjr.mall.enums.EPayType;
 import com.xnjr.mall.enums.EStockHoldStatus;
 import com.xnjr.mall.enums.EStockStatus;
@@ -123,6 +124,7 @@ public class StockAOImpl implements IStockAO {
         Object result = null;
         StockHold condition = new StockHold();
         condition.setUserId(userId);
+        condition.setStatus(EDiviFlag.EFFECT.getCode());
         if (stockHoldBO.getTotalCount(condition) > 0) {
             throw new BizException("xn0000", "用户已经购买过福利月卡，不允许多次购买");
         }
@@ -276,6 +278,7 @@ public class StockAOImpl implements IStockAO {
         StockHold stockHold = null;
         StockHold condition = new StockHold();
         condition.setUserId(userId);
+        condition.setStatus(EDiviFlag.EFFECT.getCode());
         List<StockHold> list = stockHoldBO.queryStockHoldList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             stockHold = list.get(0);
