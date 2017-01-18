@@ -229,8 +229,8 @@ public class StockAOImpl implements IStockAO {
         stockBackBO.saveStockBack(stockBack);
         // 发放贡献奖励和购物币
         transStockAmount(stockHold.getSystemCode(), userId,
-            stock.getWelfare1(), stock.getWelfare2(), "用户[" + userId
-                    + "]福利月卡返还，已返第" + backNum + "期");
+            stock.getWelfare1(), stock.getWelfare2(), "福利月卡返还，已返第" + backNum
+                    + "期");
     }
 
     @Override
@@ -268,7 +268,7 @@ public class StockAOImpl implements IStockAO {
         stockBackBO.saveStockBack(stockBack);
         // 发放贡献奖励和购物币
         transStockAmount(stockHold.getSystemCode(), userId, backWelfare1,
-            backWelfare2, "用户[" + userId + "]福利月卡清算");
+            backWelfare2, "福利月卡清算");
     }
 
     private void transStockAmount(String systemCode, String userId,
@@ -351,32 +351,32 @@ public class StockAOImpl implements IStockAO {
                 .longValue();
             provinceFrAmount = Double.valueOf(stockPrice * provinceRateNotA1)
                 .longValue();
-            bizNote = "A未买福利月卡，A和各辖区分销分成";
+            bizNote = "推荐人未买福利月卡";
         } else {
             Stock aStock = stockBO.getStock(aStockHold.getStockCode());
             if (EStockType.A.getCode().equals(aStock.getType())) {
                 Double a12kRate = Double.valueOf(rateMap
                     .get(SysConstants.ST_A12000));
                 a1FrAmount = Double.valueOf(stockPrice * a12kRate).longValue();
-                bizNote = "A买第一档福利月卡，A和各辖区分销分成";
+                bizNote = "推荐人买第一档福利月卡";
             }
             if (EStockType.B.getCode().equals(aStock.getType())) {
                 Double a11wRate = Double.valueOf(rateMap
                     .get(SysConstants.ST_A110000));
                 a1FrAmount = Double.valueOf(stockPrice * a11wRate).longValue();
-                bizNote = "A买第二档福利月卡，A和各辖区分销分成";
+                bizNote = "推荐人买第二档福利月卡";
             }
             if (EStockType.C.getCode().equals(aStock.getType())) {
                 Double a13wRate = Double.valueOf(rateMap
                     .get(SysConstants.ST_A130000));
                 a1FrAmount = Double.valueOf(stockPrice * a13wRate).longValue();
-                bizNote = "A买第三档福利月卡，A和各辖区分销分成";
+                bizNote = "推荐人买第三档福利月卡";
             }
             if (EStockType.D.getCode().equals(aStock.getType())) {
                 Double a15wRate = Double.valueOf(rateMap
                     .get(SysConstants.ST_A150000));
                 a1FrAmount = Double.valueOf(stockPrice * a15wRate).longValue();
-                bizNote = "A买第四档福利月卡，A和各辖区分销分成";
+                bizNote = "推荐人买第四档福利月卡";
             }
             Double areaRate = Double.valueOf(rateMap.get(SysConstants.ST_AREA));
             Double cityRate = Double.valueOf(rateMap.get(SysConstants.ST_CITY));
@@ -422,7 +422,7 @@ public class StockAOImpl implements IStockAO {
                 accountBO.doTransferAmount(systemCode,
                     ESysAccount.FRB.getCode(), accountRes.getAccountNumber(),
                     a1Amount, EBizType.AJ_FLYKFC.getCode(), bizNote
-                            + ",A用户分成分润");
+                            + ",推荐人分成分润");
             }
             if (areaRes != null && areaAmount != null && areaAmount != 0L) {
                 XN802503Res areaAccount = accountBO.getAccountByUserId(

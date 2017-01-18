@@ -110,10 +110,6 @@ public class HzbYyAOImpl implements IHzbYyAO {
         return new XN808460Res(type, quantityStr);
     }
 
-    public static void main(String[] args) {
-        System.out.println(CalculationUtil.divi(Long.valueOf(9688)));
-    }
-
     private Double getWeight(Map<String, String> rateMap, String ycType) {
         Double result = 0.0D;
         String weight = rateMap.get(ycType);
@@ -210,13 +206,12 @@ public class HzbYyAOImpl implements IHzbYyAO {
         // 分销规则
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
             null);
-        // C用户分成
         XN805901Res refUser = userBO.getRemoteUser(userId, userId);
         Double fc = Double.valueOf(rateMap.get(sysConstants));
         Long fcAmount = Double.valueOf(fc * SysConstants.AMOUNT_RADIX)
             .longValue();
-        String cBizNote = EBizType.AJ_YYFC.getValue() + ",用户[" + userId
-                + "]红包业绩分成";
+        String cBizNote = EBizType.AJ_YYFC.getValue() + ",用户["
+                + refUser.getMobile() + "]红包业绩分成";
         accountBO.doTransferFcBySystem(systemCode, userId,
             ECurrency.HBYJ.getCode(), fcAmount, EBizType.AJ_YYFC.getCode(),
             cBizNote);
@@ -231,8 +226,9 @@ public class HzbYyAOImpl implements IHzbYyAO {
         Double fc = Double.valueOf(rateMap.get(sysConstants));
         Long fcAmount = Double.valueOf(fc * SysConstants.AMOUNT_RADIX)
             .longValue();
+        XN805901Res user = userBO.getRemoteUser(userId, userId);
         String bizNote = EBizType.AJ_YYFC.getValue() + ",合伙人" + remark + "用户["
-                + userId + "]分成";
+                + user.getMobile() + "]分成";
         accountBO.doTransferFcBySystem(systemCode, userId,
             ECurrency.HBYJ.getCode(), fcAmount, EBizType.AJ_YYFC.getCode(),
             bizNote);

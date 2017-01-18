@@ -370,7 +370,7 @@ public class HzbAOImpl implements IHzbAO {
         Long transAmount = Double.valueOf(hzbUserRate * price).longValue();
         if (transAmount != null && transAmount != 0) {
             String bizNote = EBizType.AJ_GMHZBFC.getValue() + ",用户["
-                    + user.getUserId() + "]分润分成";
+                    + user.getMobile() + "]分润分成";
             accountBO.doTransferFcBySystem(systemCode, user.getUserId(),
                 ECurrency.FRB.getCode(), transAmount,
                 EBizType.AJ_GMHZBFC.getCode(), bizNote);
@@ -381,11 +381,12 @@ public class HzbAOImpl implements IHzbAO {
             String sysConstants, Long price, String remark) {
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
             null);
+        XN805901Res user = userBO.getRemoteUser(userId, userId);
         Double rate = Double.valueOf(rateMap.get(sysConstants));
         Long transAmount = Double.valueOf(price * rate).longValue();
         if (transAmount != null && transAmount != 0) {
             String bizNote = EBizType.AJ_GMHZBFC.getValue() + ",合伙人" + remark
-                    + "用户[" + userId + "]分润分成";
+                    + "用户[" + user.getMobile() + "]分润分成";
             accountBO.doTransferFcBySystem(systemCode, userId,
                 ECurrency.FRB.getCode(), transAmount,
                 EBizType.AJ_GMHZBFC.getCode(), bizNote);
