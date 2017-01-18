@@ -91,10 +91,10 @@ INSERT INTO `tact_hzb` (`code`,`name`,`pic`,`description`,`price`,`currency`,`sy
 -- Query: SELECT * FROM std_mall.tact_stock
 -- Date: 2017-01-07 10:55
 */
-INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000001','股份两千','A',NULL,'股份2000',200,2000000,'CNY',30,10,200000,20000,'1','CD-CZH000001');
-INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000002','股份一万','B',NULL,'股份10000',1000,10000000,'CNY',30,10,1000000,100000,'1','CD-CZH000001');
-INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000003','股份三万','C',NULL,'股份30000',3000,30000000,'CNY',30,10,3000000,300000,'1','CD-CZH000001');
-INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000004','股份五万','D',NULL,'股份50000',5000,50000000,'CNY',30,10,5000000,500000,'1','CD-CZH000001');
+INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000001','福利月卡两千','A',NULL,'福利月卡2000',200,2000000,'CNY',30,10,200000,20000,'1','CD-CZH000001');
+INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000002','福利月卡一万','B',NULL,'福利月卡10000',1000,10000000,'CNY',30,10,1000000,100000,'1','CD-CZH000001');
+INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000003','福利月卡三万','C',NULL,'福利月卡30000',3000,30000000,'CNY',30,10,3000000,300000,'1','CD-CZH000001');
+INSERT INTO `tact_stock` (`code`,`name`,`type`,`pic`,`description`,`capital`,`price`,`currency`,`back_interval`,`back_count`,`welfare1`,`welfare2`,`status`,`system_code`) VALUES ('ST00000004','福利月卡五万','D',NULL,'福利月卡50000',5000,50000000,'CNY',30,10,5000000,500000,'1','CD-CZH000001');
 
 
 
