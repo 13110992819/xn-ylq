@@ -388,6 +388,7 @@ CREATE TABLE `to2o_store_purchase` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `pay_type` varchar(4) DEFAULT NULL COMMENT '支付方式',
+  `purchase_amount` bigint(20) DEFAULT NULL COMMENT '消费金额',
   `amount1` bigint(20) DEFAULT NULL COMMENT '人民币',
   `amount2` bigint(20) DEFAULT NULL COMMENT '虚拟币1',
   `amount3` bigint(20) DEFAULT NULL COMMENT '虚拟币2',

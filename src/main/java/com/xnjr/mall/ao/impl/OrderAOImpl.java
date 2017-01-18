@@ -155,6 +155,10 @@ public class OrderAOImpl implements IOrderAO {
                 if (company.equals(companyCode)) {
                     cartsCompany.add(cartCode);
                 }
+                // 设置系统编号
+                if (StringUtils.isBlank(data.getSystemCode())) {
+                    data.setSystemCode(cart.getSystemCode());
+                }
             }
             String orderCode = commitOneOrder(cartsCompany, data);
             result.add(orderCode);

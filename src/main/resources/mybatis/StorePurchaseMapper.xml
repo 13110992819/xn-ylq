@@ -6,6 +6,7 @@
 		<result column="code" property="code" />
 		<result column="user_id" property="userId" />
 		<result column="pay_type" property="payType" />
+		<result column="purchase_amount" property="purchaseAmount" />
 		<result column="amount1" property="amount1" />
 		<result column="amount2" property="amount2" />
 		<result column="amount3" property="amount3" />
@@ -49,6 +50,7 @@
 		t.code
 		,t.user_id
 		,t.pay_type
+		,t.purchase_amount
 		,t.amount1
 		,t.amount2
 		,t.amount3
@@ -83,6 +85,7 @@
 		code
 		,user_id
 		,pay_type
+		,purchase_amount
 		,amount1
 		,amount2
 		,amount3
@@ -99,6 +102,7 @@
 		#{code}
 		,#{userId}
 		,#{payType}
+		,#{purchaseAmount}
 		,#{amount1}
 		,#{amount2}
 		,#{amount3}
@@ -133,6 +137,4 @@
 		,pay_datetime = #{payDatetime}
 		WHERE code = #{code}
 	</update>
-
-
 </mapper>

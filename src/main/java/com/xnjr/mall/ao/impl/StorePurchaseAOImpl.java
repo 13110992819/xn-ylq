@@ -158,6 +158,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             data.setUserId(userId);
             data.setStoreCode(storeCode);
             data.setPayType(EPayType.YEZP.getCode());
+            data.setPurchaseAmount(amount);
             data.setAmount1(yhAmount);
             data.setAmount2(gxjlAmount);
             data.setAmount3(frAmount);
@@ -203,6 +204,7 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             data.setUserId(userId);
             data.setStoreCode(storeCode);
             data.setPayType(EPayType.WEIXIN.getCode());
+            data.setPurchaseAmount(amount);
             data.setAmount1(yhAmount);
             data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
             data.setSystemCode(systemCode);

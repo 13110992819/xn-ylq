@@ -22,6 +22,7 @@ import com.xnjr.mall.dto.res.XN805060Res;
 import com.xnjr.mall.dto.res.XN805901Res;
 import com.xnjr.mall.dto.res.XN805910Res;
 import com.xnjr.mall.enums.EUserKind;
+import com.xnjr.mall.enums.EUserStatus;
 import com.xnjr.mall.exception.BizException;
 import com.xnjr.mall.http.BizConnecter;
 import com.xnjr.mall.http.JsonUtils;
@@ -122,6 +123,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         req.setCity(city);
         req.setArea(area);
         req.setKind(EUserKind.Partner.getCode());
+        req.setStatus(EUserStatus.NORMAL.getCode());
         XN805060Res result = null;
         String jsonStr = BizConnecter.getBizData("805060",
             JsonUtils.object2Json(req));

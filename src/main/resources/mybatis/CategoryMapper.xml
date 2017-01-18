@@ -52,8 +52,9 @@
 		tmall_category t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
+		    t.order_no
 			<if test="order != null and order != '' ">
-				t.${order}
+				,t.${order}
 			</if>
 		</trim>
 	</select>

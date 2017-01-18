@@ -23,6 +23,9 @@ public class StorePurchase extends ABaseDO {
     // 支付方式
     private String payType;
 
+    // 消费金额
+    private Long purchaseAmount;
+
     // 人民币消费金额
     private Long amount1;
 
@@ -63,6 +66,14 @@ public class StorePurchase extends ABaseDO {
     private Store store;
 
     private StoreTicket storeTicket;
+
+    public Long getPurchaseAmount() {
+        return purchaseAmount;
+    }
+
+    public void setPurchaseAmount(Long purchaseAmount) {
+        this.purchaseAmount = purchaseAmount;
+    }
 
     public StoreTicket getStoreTicket() {
         return storeTicket;

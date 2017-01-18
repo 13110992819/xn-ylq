@@ -13,6 +13,17 @@ public class XN805060Req {
     // kind
     private String kind;
 
+    // 状态
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getKind() {
         return kind;
     }
