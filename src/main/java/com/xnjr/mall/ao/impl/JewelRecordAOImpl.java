@@ -27,6 +27,7 @@ import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.domain.Jewel;
 import com.xnjr.mall.domain.JewelRecord;
 import com.xnjr.mall.domain.JewelRecordNumber;
+import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.dto.res.XN805901Res;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.EGeneratePrefix;
@@ -125,12 +126,17 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
                 data.getPayAmount3(), data.getPayAmount1(), EBizType.AJ_DUOBAO);
             result = jewelRecordCode;
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-            data.setStatus(EJewelRecordStatus.TO_PAY.getCode());
-            jewelRecordCode = jewelRecordBO.saveJewelRecord(data);
+            // 检验购物币和钱包币是否充足
+            accountBO.checkGWBQBBAmount(systemCode, userId, jewel.getPrice2(),
+                jewel.getPrice3());
             String bizNote = "宝贝单号：" + jewelRecordCode + "——一元夺宝";
             String body = "正汇钱包—一元夺宝";
-            result = accountBO.doWeiXinPay(systemCode, userId, EBizType.AJ_GW,
-                bizNote, body, jewel.getPrice1(), ip);
+            XN802180Res res = accountBO.doWeiXinPay(systemCode, userId,
+                EBizType.AJ_DUOBAO, bizNote, body, jewel.getPrice1(), ip);
+            data.setStatus(EJewelRecordStatus.TO_PAY.getCode());
+            data.setPayCode(res.getJourCode());
+            jewelRecordBO.saveJewelRecord(data);
+            result = res;
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
         }
         return result;

@@ -87,6 +87,24 @@ public class OrderBOImpl extends PaginableBOImpl<Order> implements IOrderBO {
     }
 
     /** 
+     * @see com.xnjr.mall.bo.IOrderBO#refreshOrderPayCode(java.lang.String, java.lang.String)
+     */
+    @Override
+    public int refreshOrderPayCode(String code, String payCode) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            if (!isOrderExist(code)) {
+                throw new BizException("xn0000", "发货单不存在");
+            }
+            Order data = new Order();
+            data.setCode(code);
+            data.setPayCode(payCode);
+            count = orderDAO.updateOrderPayCode(data);
+        }
+        return count;
+    }
+
+    /** 
      * @see com.xnjr.mall.bo.IOrderBO#cancelOrder(java.lang.String, java.lang.String)
      */
     @Override

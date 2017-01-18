@@ -41,6 +41,7 @@ import com.xnjr.mall.domain.Cart;
 import com.xnjr.mall.domain.Order;
 import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.ProductOrder;
+import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EGeneratePrefix;
@@ -278,10 +279,15 @@ public class OrderAOImpl implements IOrderAO {
                 ESysUser.SYS_USER.getCode(), gwAmount, qbAmount, cnyAmount,
                 EBizType.AJ_GW);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
+            // 检验购物币和钱包币是否充足
+            accountBO.checkGWBQBBAmount(systemCode, fromUserId, gwAmount,
+                qbAmount);
             String bizNote = "订单号：" + order.getCode() + "——购买尖货";
             String body = "正汇钱包—尖货";
-            return accountBO.doWeiXinPay(systemCode, fromUserId,
+            XN802180Res res = accountBO.doWeiXinPay(systemCode, fromUserId,
                 EBizType.AJ_GW, bizNote, body, cnyAmount, ip);
+            orderBO.refreshOrderPayCode(code, res.getJourCode());
+            return res;
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
         }
         return null;

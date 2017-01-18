@@ -183,6 +183,14 @@
 		code = #{code}
 	</update>
 	
+	<update id="update_orderPayCode" parameterType="order">
+		UPDATE tmall_order
+		SET
+		pay_code = #{payCode}
+		WHERE
+		code = #{code}
+	</update>
+	
 	<update id="update_orderCancel" parameterType="order">
 		UPDATE tmall_order
 		SET

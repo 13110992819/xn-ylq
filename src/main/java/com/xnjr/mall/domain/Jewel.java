@@ -37,13 +37,13 @@ public class Jewel extends ABaseDO {
     // 详情图片
     private String descriptionPic;
 
-    // 单价1
+    // 单价1(人民币)
     private Long price1;
 
-    // 单价2
+    // 单价2(购物币)
     private Long price2;
 
-    // 单价3
+    // 单价3(钱包币)
     private Long price3;
 
     // 所需总人次

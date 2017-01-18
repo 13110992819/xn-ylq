@@ -21,6 +21,15 @@ public interface IOrderDAO extends IBaseDAO<Order> {
     public int updateOrderStatus(Order data);
 
     /**
+     * 更新支付编号
+     * @param data
+     * @return 
+     * @create: 2015年8月26日 下午11:27:59 xieyj
+     * @history:
+     */
+    public int updateOrderPayCode(Order data);
+
+    /**
      * 订单取消
      * @param data
      * @return 

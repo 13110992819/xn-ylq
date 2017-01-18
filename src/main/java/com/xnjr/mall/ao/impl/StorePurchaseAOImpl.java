@@ -19,14 +19,12 @@ import com.xnjr.mall.bo.IStoreTicketBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.IUserTicketBO;
 import com.xnjr.mall.bo.base.Paginable;
-import com.xnjr.mall.common.JsonUtil;
 import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.core.CalculationUtil;
 import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.StorePurchase;
 import com.xnjr.mall.domain.StoreTicket;
 import com.xnjr.mall.domain.UserTicket;
-import com.xnjr.mall.dto.req.XN802180Req;
 import com.xnjr.mall.dto.res.BooleanRes;
 import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.dto.res.XN802503Res;
@@ -42,7 +40,6 @@ import com.xnjr.mall.enums.EStoreTicketType;
 import com.xnjr.mall.enums.ESysUser;
 import com.xnjr.mall.enums.EUserTicketStatus;
 import com.xnjr.mall.exception.BizException;
-import com.xnjr.mall.http.BizConnecter;
 
 @Service
 public class StorePurchaseAOImpl implements IStorePurchaseAO {
@@ -197,24 +194,17 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             result = new BooleanRes(true);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
             // 获取微信APP支付信息
-            XN802180Req req = new XN802180Req();
-            req.setSystemCode(systemCode);
-            req.setCompanyCode(systemCode);
-            req.setUserId(userId);
-            req.setBizType(EBizType.AJ_GW.getCode());
-            req.setBizNote(store.getName() + "——消费买单");
-            req.setBody("正汇钱包—优店");
-            req.setTotalFee(String.valueOf(yhAmount));
-            req.setSpbillCreateIp(ip);
-            XN802180Res res = BizConnecter.getBizData("802180",
-                JsonUtil.Object2Json(req), XN802180Res.class);
+            String bizNote = store.getName() + "——消费买单";
+            String body = "正汇钱包—优店";
+            XN802180Res res = accountBO.doWeiXinPay(systemCode, userId,
+                EBizType.AJ_DPXF, bizNote, body, yhAmount, ip);
             // 落地本地系统消费记录，状态为未支付
             StorePurchase data = new StorePurchase();
             data.setUserId(userId);
             data.setStoreCode(storeCode);
             data.setPayType(EPayType.WEIXIN.getCode());
-            data.setAmount1(amount);
-            data.setStatus(EStorePurchaseStatus.NEW.getCode());
+            data.setAmount1(yhAmount);
+            data.setStatus(EStorePurchaseStatus.TO_PAY.getCode());
             data.setSystemCode(systemCode);
             data.setRemark(remark);
             data.setJourCode(res.getJourCode());

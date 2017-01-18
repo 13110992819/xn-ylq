@@ -41,6 +41,16 @@ public interface IOrderBO extends IPaginableBO<Order> {
     public int refreshOrderStatus(String code, String status);
 
     /**
+     * 更新发货单支付流水号
+     * @param code
+     * @param payCode
+     * @return 
+     * @create: 2017年1月18日 下午4:36:38 xieyj
+     * @history:
+     */
+    public int refreshOrderPayCode(String code, String payCode);
+
+    /**
      * 订单催货
      * @param code
      * @return 

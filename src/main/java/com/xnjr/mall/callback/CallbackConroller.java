@@ -86,15 +86,7 @@ public class CallbackConroller {
             // ------------------------------
             try {
                 logger.info("流水编号为：" + jourCode);
-                if (EBizType.AJ_GMFLYK.getCode().equals(bizType)) {
-                    System.out.println("**** 进入购买福利月卡，微信APP支付服务器回调 start****");
-                    stockAO.paySuccess(jourCode);
-                    System.out.println("**** 进入购买福利月卡，微信APP支付服务器回调 end****");
-                } else if (EBizType.AJ_DPXF.getCode().equals(bizType)) {
-                    System.out.println("**** 进入优店买单，微信APP支付服务器回调 start****");
-                    storePurchaseAO.paySuccess(jourCode);
-                    System.out.println("**** 进入优店买单，微信APP支付服务器回调 end****");
-                } else if (EBizType.AJ_GW.getCode().equals(bizType)) {
+                if (EBizType.AJ_GW.getCode().equals(bizType)) {
                     System.out.println("**** 进入商品购物，微信APP支付服务器回调 start****");
                     orderAO.paySuccess(jourCode);
                     System.out.println("**** 进入商品购物，微信APP支付服务器回调 end****");
@@ -102,6 +94,14 @@ public class CallbackConroller {
                     System.out.println("**** 进入一元夺宝，微信APP支付服务器回调 start****");
                     jewelRecordAO.paySuccess(jourCode);
                     System.out.println("**** 进入一元夺宝，微信APP支付服务器回调 end****");
+                } else if (EBizType.AJ_DPXF.getCode().equals(bizType)) {
+                    System.out.println("**** 进入优店买单，微信APP支付服务器回调 start****");
+                    storePurchaseAO.paySuccess(jourCode);
+                    System.out.println("**** 进入优店买单，微信APP支付服务器回调 end****");
+                } else if (EBizType.AJ_GMFLYK.getCode().equals(bizType)) {
+                    System.out.println("**** 进入购买福利月卡，微信APP支付服务器回调 start****");
+                    stockAO.paySuccess(jourCode);
+                    System.out.println("**** 进入购买福利月卡，微信APP支付服务器回调 end****");
                 }
             } catch (Exception e) {
                 logger.info("支付回调异常");

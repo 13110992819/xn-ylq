@@ -175,6 +175,7 @@
 		,status
 		
 		,remark
+		,pay_code
 		,system_code
 		)
 		VALUES(
@@ -191,6 +192,7 @@
 		,#{status}
 		
 		,#{remark}
+		,#{payCode}
 		,#{systemCode}
 		)
 	</insert>

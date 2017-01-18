@@ -14,7 +14,7 @@ package com.xnjr.mall.enums;
  * @history:
  */
 public enum EStorePurchaseStatus {
-    NEW("0", "待支付"), PAYED("1", "已支付"), CALCELED("2", "已取消");
+    TO_PAY("0", "待支付"), PAYED("1", "已支付"), CALCELED("2", "已取消");
 
     EStorePurchaseStatus(String code, String value) {
         this.code = code;

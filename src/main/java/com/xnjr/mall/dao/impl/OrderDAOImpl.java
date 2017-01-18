@@ -82,6 +82,14 @@ public class OrderDAOImpl extends AMybatisTemplate implements IOrderDAO {
     }
 
     /** 
+     * @see com.xnjr.mall.dao.IOrderDAO#updateOrderPayCode(com.xnjr.mall.domain.Order)
+     */
+    @Override
+    public int updateOrderPayCode(Order data) {
+        return super.update("update_orderPayCode", data);
+    }
+
+    /** 
      * @see com.xnjr.mall.dao.IOrderDAO#updateOrderApply(com.xnjr.mall.domain.Order)
      */
     @Override
