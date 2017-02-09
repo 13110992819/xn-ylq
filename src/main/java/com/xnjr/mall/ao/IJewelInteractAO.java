@@ -2,7 +2,6 @@ package com.xnjr.mall.ao;
 
 import java.util.List;
 
-import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.JewelInteract;
 
 /**
@@ -16,28 +15,16 @@ public interface IJewelInteractAO {
 
     /**
      * 新增互动
-     * @param data
+     * @param interacter
+     * @param jewelCode
+     * @param orderCode
+     * @param evaluateType
      * @return 
-     * @create: 2016年12月19日 下午8:21:52 shan
+     * @create: 2017年2月9日 下午4:36:36 xieyj
      * @history:
      */
-    public String addJewelInteract(String interacter, String jewelCode);
-
-    /**
-     * 修改互动
-     * @param data 
-     * @create: 2016年12月19日 下午8:21:57 shan
-     * @history:
-     */
-    public void editJewelInteract(JewelInteract data);
-
-    /**
-     * 删除互动
-     * @param data 
-     * @create: 2016年12月19日 下午8:22:01 shan
-     * @history:
-     */
-    public void dropJewelInteract(Long id);
+    public String addJewelInteract(String interacter, String jewelCode,
+            String orderCode, String evaluateType);
 
     /**
      * 分页查询互动
@@ -48,8 +35,8 @@ public interface IJewelInteractAO {
      * @create: 2016年12月19日 下午8:22:04 shan
      * @history:
      */
-    public Paginable<JewelInteract> queryJewelInteractPage(int start,
-            int limit, JewelInteract condition);
+    public Object queryJewelInteractPage(int start, int limit,
+            JewelInteract condition);
 
     /**
      * 查询所有互动

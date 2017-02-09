@@ -14,8 +14,8 @@ package com.xnjr.mall.enums;
  * @history:
  */
 public enum EInteractType {
-    // 1
-    HAOPING("1", "好评");
+    // 1宝贝，2商品
+    JEWEL("1", "宝贝"), PRODUCT("2", "商品");
 
     EInteractType(String code, String value) {
         this.code = code;

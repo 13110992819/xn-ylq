@@ -25,14 +25,14 @@ public class XN808320 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         jewelInteractAO.addJewelInteract(req.getInteracter(),
-            req.getJewelCode());
+            req.getJewelCode(), req.getOrderCode(), req.getEvaluateType());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN808320Req.class);
-        StringValidater.validateBlank(req.getJewelCode(), req.getInteracter());
+        StringValidater.validateBlank(req.getInteracter(), req.getJewelCode(),
+            req.getOrderCode(), req.getEvaluateType());
     }
-
 }

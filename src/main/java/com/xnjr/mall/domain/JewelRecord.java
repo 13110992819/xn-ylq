@@ -82,6 +82,17 @@ public class JewelRecord extends ABaseDO {
     // 我投资人次
     private String myInvestTimes;
 
+    // 是否已经评价(0 未评论 1 已评论)
+    private String isComment;
+
+    public String getIsComment() {
+        return isComment;
+    }
+
+    public void setIsComment(String isComment) {
+        this.isComment = isComment;
+    }
+
     public String getReceiver() {
         return receiver;
     }

@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.xnjr.mall.ao.IOrderAO;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.ICartBO;
+import com.xnjr.mall.bo.IJewelInteractBO;
 import com.xnjr.mall.bo.IOrderBO;
 import com.xnjr.mall.bo.IProductBO;
 import com.xnjr.mall.bo.IProductOrderBO;
@@ -43,6 +44,7 @@ import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.ProductOrder;
 import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.enums.EBizType;
+import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EOrderStatus;
@@ -83,6 +85,9 @@ public class OrderAOImpl implements IOrderAO {
 
     @Autowired
     private ISmsOutBO smsOutBO;
+
+    @Autowired
+    private IJewelInteractBO jewelInteractBO;
 
     /**
      * @see com.xnjr.mall.ao.IOrderAO#commitOrder(java.lang.String, java.lang.Integer, java.lang.Long, com.xnjr.mall.domain.Order)
@@ -352,6 +357,15 @@ public class OrderAOImpl implements IOrderAO {
                 List<ProductOrder> productOrderList = productOrderBO
                     .queryProductOrderList(imCondition);
                 order.setProductOrderList(productOrderList);
+                for (ProductOrder productOrder : productOrderList) {
+                    boolean result = jewelInteractBO.isComment(
+                        order.getApplyUser(), productOrder.getOrderCode(),
+                        productOrder.getProductCode());
+                    productOrder.setIsComment(EBoolean.NO.getCode());
+                    if (result) {
+                        productOrder.setIsComment(EBoolean.YES.getCode());
+                    }
+                }
             }
         }
         return page;
@@ -370,6 +384,15 @@ public class OrderAOImpl implements IOrderAO {
                 List<ProductOrder> productOrderList = productOrderBO
                     .queryProductOrderList(imCondition);
                 order.setProductOrderList(productOrderList);
+                for (ProductOrder productOrder : productOrderList) {
+                    boolean result = jewelInteractBO.isComment(
+                        order.getApplyUser(), productOrder.getOrderCode(),
+                        productOrder.getProductCode());
+                    productOrder.setIsComment(EBoolean.NO.getCode());
+                    if (result) {
+                        productOrder.setIsComment(EBoolean.YES.getCode());
+                    }
+                }
             }
         }
         return list;
@@ -381,6 +404,19 @@ public class OrderAOImpl implements IOrderAO {
     @Override
     public Order getOrder(String code) {
         Order order = orderBO.getOrder(code);
+        ProductOrder imCondition = new ProductOrder();
+        imCondition.setOrderCode(order.getCode());
+        List<ProductOrder> productOrderList = productOrderBO
+            .queryProductOrderList(imCondition);
+        order.setProductOrderList(productOrderList);
+        for (ProductOrder productOrder : productOrderList) {
+            boolean result = jewelInteractBO.isComment(order.getApplyUser(),
+                productOrder.getOrderCode(), productOrder.getProductCode());
+            productOrder.setIsComment(EBoolean.NO.getCode());
+            if (result) {
+                productOrder.setIsComment(EBoolean.YES.getCode());
+            }
+        }
         return order;
     }
 

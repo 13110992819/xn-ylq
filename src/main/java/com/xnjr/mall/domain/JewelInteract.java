@@ -22,6 +22,9 @@ public class JewelInteract extends ABaseDO {
     // 类型（1 好评）
     private String type;
 
+    // 好评类型(A 好评，B 中评，C差评)
+    private String evaluateType;
+
     // 互动人
     private String interacter;
 
@@ -31,10 +34,29 @@ public class JewelInteract extends ABaseDO {
     // 标的编号
     private String jewelCode;
 
+    // 订单编号
+    private String orderCode;
+
     // 系统编号
     private String systemCode;
 
     private User interacterUser;
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public String getEvaluateType() {
+        return evaluateType;
+    }
+
+    public void setEvaluateType(String evaluateType) {
+        this.evaluateType = evaluateType;
+    }
 
     public Long getId() {
         return id;

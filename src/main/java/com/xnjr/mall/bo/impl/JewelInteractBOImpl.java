@@ -36,6 +36,18 @@ public class JewelInteractBOImpl extends PaginableBOImpl<JewelInteract>
     }
 
     @Override
+    public boolean isComment(String userId, String orderCode, String jewelCode) {
+        JewelInteract condition = new JewelInteract();
+        condition.setInteracter(userId);
+        condition.setOrderCode(orderCode);
+        condition.setJewelCode(jewelCode);
+        if (jewelInteractDAO.selectTotalCount(condition) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public String saveJewelInteract(JewelInteract data) {
         String code = null;
         if (data != null) {
@@ -83,5 +95,4 @@ public class JewelInteractBOImpl extends PaginableBOImpl<JewelInteract>
     public List<JewelInteract> queryJewelInteractList(JewelInteract data) {
         return jewelInteractDAO.selectList(data);
     }
-
 }

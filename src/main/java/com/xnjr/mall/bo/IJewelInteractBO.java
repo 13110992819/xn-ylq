@@ -22,6 +22,16 @@ public interface IJewelInteractBO extends IPaginableBO<JewelInteract> {
     public boolean isJewelInteractExist(Long id);
 
     /**
+     * 是否评价
+     * @param orderCode
+     * @param jewelCode
+     * @return 
+     * @create: 2017年2月9日 下午4:46:26 xieyj
+     * @history:
+     */
+    public boolean isComment(String userId, String orderCode, String jewelCode);
+
+    /**
      * 保存新增互动
      * @param data
      * @return 
