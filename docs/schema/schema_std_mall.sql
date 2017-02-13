@@ -106,9 +106,11 @@ DROP TABLE IF EXISTS `tact_jewel_interact`;
 CREATE TABLE `tact_jewel_interact` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '序号',
   `type` varchar(4) DEFAULT NULL COMMENT '类型（1 好评）',
+  `evaluate_type` varchar(32) DEFAULT NULL COMMENT '评价类型(A 好评 B 中评 C 差评)',
   `interacter` varchar(32) DEFAULT NULL COMMENT '互动人',
   `interact_datetime` datetime DEFAULT NULL COMMENT '互动时间',
   `jewel_code` varchar(32) DEFAULT NULL COMMENT '标的编号',
+  `order_code` varchar(32) DEFAULT NULL COMMENT '订单编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

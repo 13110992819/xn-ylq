@@ -266,7 +266,7 @@ public class OrderAOImpl implements IOrderAO {
         if (!EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
             throw new BizException("xn000000", "订单不处于待支付状态");
         }
-        Long cnyAmount = order.getAmount1() + order.getYunfei(); // 人民币
+        Long cnyAmount = order.getAmount1();// 去除运费 order.getYunfei(); // 人民币
         Long gwAmount = order.getAmount2(); // 购物币
         Long qbAmount = order.getAmount3(); // 钱包币
         String systemCode = order.getSystemCode();
@@ -333,9 +333,13 @@ public class OrderAOImpl implements IOrderAO {
             } else if (EOrderStatus.SEND.getCode().equals(data.getStatus())) {
                 status = EOrderStatus.KDYC.getCode();
             }
-            // 退回各种币 待实现
-            // userBO.doTransfer(data.getApplyUser(), EDirection.PLUS.getCode(),
-            // payAmount, remark, code);
+            Long cnyAmount = data.getPayAmount1(); // 人民币
+            Long gwAmount = data.getPayAmount2(); // 购物币
+            Long qbAmount = data.getPayAmount3(); // 钱包币
+            // 系统退款，用户加钱
+            accountBO.doGwQbAndBalancePay(data.getSystemCode(),
+                ESysUser.SYS_USER.getCode(), data.getApplyUser(), gwAmount,
+                qbAmount, cnyAmount, EBizType.AJ_GWTK);
             // 发送短信
             String userId = data.getApplyUser();
             smsOutBO.sentContent(userId, userId, "尊敬的用户，您的订单[" + data.getCode()
@@ -465,8 +469,7 @@ public class OrderAOImpl implements IOrderAO {
             remark);
         Long cnyAmount = order.getPayAmount1();
         String systemCode = order.getSystemCode();
-        // 打款给商家分润账户
-        // 将人民币转出分润
+        // 打款给商家分润账户,将人民币转出分润
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
             null);
         Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
