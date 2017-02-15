@@ -2,6 +2,7 @@ package com.xnjr.mall.ao.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,9 @@ import com.xnjr.mall.ao.IJewelAO;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.IJewelBO;
 import com.xnjr.mall.bo.IJewelRecordBO;
+import com.xnjr.mall.bo.ISYSConfigBO;
 import com.xnjr.mall.bo.base.Paginable;
+import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.domain.Jewel;
 import com.xnjr.mall.domain.JewelRecord;
 import com.xnjr.mall.enums.EBizType;
@@ -39,6 +42,9 @@ public class JewelAOImpl implements IJewelAO {
 
     @Autowired
     IJewelRecordBO jewelRecordBO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Autowired
     IAccountBO accountBO;
@@ -148,6 +154,10 @@ public class JewelAOImpl implements IJewelAO {
      */
     @Transactional
     private void handleJewel(Jewel jewel) {
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(
+            jewel.getSystemCode(), null);
+        Double gxjl2cnyRate = Double
+            .valueOf(rateMap.get(SysConstants.GXJL2CNY));
         // 业务逻辑：判断是否满；不满金额全部退回，状态更新为到期流标；
         if (jewel.getTotalNum() > jewel.getInvestNum()) {
             jewelBO
@@ -159,11 +169,14 @@ public class JewelAOImpl implements IJewelAO {
             List<JewelRecord> jewelRecordList = jewelRecordBO
                 .queryJewelRecordList(condition);
             for (JewelRecord jewelRecord : jewelRecordList) {
+                // 人民币退贡献奖励,贡献奖励，钱包币
                 accountBO.doTransferAmountByUser(jewel.getSystemCode(),
                     ESysUser.SYS_USER.getCode(), jewelRecord.getUserId(),
-                    ECurrency.CNY.getCode(), jewelRecord.getPayAmount1(),
-                    EBizType.AJ_DBFLOW.getCode(), "单号[" + jewelRecord.getCode()
-                            + "]的" + jewel.getName() + "宝贝流标退款。");
+                    ECurrency.GXJL.getCode(),
+                    Double.valueOf(gxjl2cnyRate * jewelRecord.getPayAmount1())
+                        .longValue(), EBizType.AJ_DBFLOW.getCode(), "单号["
+                            + jewelRecord.getCode() + "]的" + jewel.getName()
+                            + "宝贝流标退款。");
                 accountBO.doTransferAmountByUser(jewel.getSystemCode(),
                     ESysUser.SYS_USER.getCode(), jewelRecord.getUserId(),
                     ECurrency.GWB.getCode(), jewelRecord.getPayAmount2(),

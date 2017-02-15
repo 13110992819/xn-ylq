@@ -17,6 +17,7 @@ import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.dao.IHzbYyDAO;
 import com.xnjr.mall.domain.HzbYy;
+import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EPrizeType;
 import com.xnjr.mall.exception.BizException;
@@ -93,31 +94,33 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
 
     /**
      * 判断是否第三次且前面两次没有摇到红包币
-     * @see com.xnjr.mall.bo.IHzbYyBO#isThirdYyNoHB(java.lang.String)
+     * @see com.xnjr.mall.bo.IHzbYyBO#isHaveHB(java.lang.String)
      */
     @Override
-    public boolean isThirdYyNoHB(String userId) {
-        boolean result = false;
+    public String isHaveHB(String userId) {
+        // 0 代表 无/1 代表有/-1 代表前面两次都没有红包
+        String haveHbb = "0";
         HzbYy condition = new HzbYy();
         condition.setUserId(userId);
         int count = hzbYyDAO.selectTotalCount(condition).intValue();
         int start = (count - 2) < 0 ? 0 : (count - 2);
         List<HzbYy> dataList = hzbYyDAO.selectList(condition, start, count);
         if (CollectionUtils.isNotEmpty(dataList)) {
-            if (count % 3 == 2) {
-                boolean haveHbb = false;
+            // 判断前面1次，2次是否有红包
+            if (count % 3 != 0) {
                 for (HzbYy hzbYy : dataList) {
                     if (EPrizeType.HBB.getCode().equals(hzbYy.getType())) {
-                        haveHbb = true;
+                        haveHbb = "1";
                         break;
                     }
                 }
-                if (!haveHbb) {
-                    result = true;
+                // 判断当前是否第三次，且前面两次无红包
+                if (count % 3 == 2 && haveHbb.equals(EBoolean.NO.getCode())) {
+                    haveHbb = "-1";
                 }
             }
         }
-        return result;
+        return haveHbb;
     }
 
     @Override

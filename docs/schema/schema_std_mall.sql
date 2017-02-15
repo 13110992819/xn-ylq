@@ -210,19 +210,6 @@ CREATE TABLE `tact_stock_hold` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Table structure for `tmall_cart`
--- ----------------------------
-DROP TABLE IF EXISTS `tmall_cart`;
-CREATE TABLE `tmall_cart` (
-  `code` varchar(32) NOT NULL COMMENT '购物车编号',
-  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
-  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
-  `quantity` int(11) DEFAULT NULL COMMENT '数量',
-  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
 --  Table structure for `tmall_category`
 -- ----------------------------
 DROP TABLE IF EXISTS `tmall_category`;
@@ -235,6 +222,51 @@ CREATE TABLE `tmall_category` (
   `order_no` int(11) DEFAULT NULL COMMENT '序号',
   `belong` varchar(32) DEFAULT NULL COMMENT '属于谁',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tmall_product`
+-- ----------------------------
+DROP TABLE IF EXISTS `tmall_product`;
+CREATE TABLE `tmall_product` (
+  `code` varchar(32) NOT NULL COMMENT '商品编号',
+  `category` varchar(32) DEFAULT NULL COMMENT '大类',
+  `type` varchar(32) DEFAULT NULL COMMENT '小类',
+  `name` varchar(255) DEFAULT NULL COMMENT '商品名称',
+  `adv_title` varchar(255) DEFAULT NULL COMMENT '广告语',
+  `adv_pic` varchar(255) DEFAULT NULL COMMENT '广告图',
+  `pic1` varchar(255) DEFAULT NULL COMMENT 'pic1',
+  `pic2` varchar(255) DEFAULT NULL COMMENT 'pic2',
+  `pic3` varchar(255) DEFAULT NULL COMMENT 'pic3',
+  `pic4` varchar(255) DEFAULT NULL COMMENT 'pic4',
+  `description` text COMMENT '图文描述',
+  `cost_price` bigint(20) DEFAULT NULL COMMENT '进货价',
+  `quantity` int(11) DEFAULT NULL COMMENT '库存量',
+  `status` varchar(4) DEFAULT NULL COMMENT '产品状态(上架，下架)',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `price1` bigint(20) DEFAULT NULL COMMENT '价格1（人民币）',
+  `price2` bigint(20) DEFAULT NULL COMMENT '价格2（虚拟币1）',
+  `price3` bigint(20) DEFAULT NULL COMMENT '价格3（虚拟币2）',
+  `location` varchar(32) DEFAULT NULL COMMENT '位置(0 普通 1 热门)',
+  `order_no` int(11) DEFAULT NULL COMMENT '相对位置编号',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '所属公司',
+  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Table structure for `tmall_cart`
+-- ----------------------------
+DROP TABLE IF EXISTS `tmall_cart`;
+CREATE TABLE `tmall_cart` (
+  `code` varchar(32) NOT NULL COMMENT '购物车编号',
+  `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
+  `product_code` varchar(32) DEFAULT NULL COMMENT '产品编号',
+  `quantity` int(11) DEFAULT NULL COMMENT '数量',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -274,38 +306,6 @@ CREATE TABLE `tmall_order` (
   `pdf` varchar(255) DEFAULT NULL COMMENT '物流单',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '第三方支付编号',
-  `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
---  Table structure for `tmall_product`
--- ----------------------------
-DROP TABLE IF EXISTS `tmall_product`;
-CREATE TABLE `tmall_product` (
-  `code` varchar(32) NOT NULL COMMENT '商品编号',
-  `category` varchar(32) DEFAULT NULL COMMENT '大类',
-  `type` varchar(32) DEFAULT NULL COMMENT '小类',
-  `name` varchar(255) DEFAULT NULL COMMENT '商品名称',
-  `adv_title` varchar(255) DEFAULT NULL COMMENT '广告语',
-  `adv_pic` varchar(255) DEFAULT NULL COMMENT '广告图',
-  `pic1` varchar(255) DEFAULT NULL COMMENT 'pic1',
-  `pic2` varchar(255) DEFAULT NULL COMMENT 'pic2',
-  `pic3` varchar(255) DEFAULT NULL COMMENT 'pic3',
-  `pic4` varchar(255) DEFAULT NULL COMMENT 'pic4',
-  `description` text COMMENT '图文描述',
-  `cost_price` bigint(20) DEFAULT NULL COMMENT '进货价',
-  `quantity` int(11) DEFAULT NULL COMMENT '库存量',
-  `status` varchar(4) DEFAULT NULL COMMENT '产品状态(上架，下架)',
-  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
-  `price1` bigint(20) DEFAULT NULL COMMENT '价格1（人民币）',
-  `price2` bigint(20) DEFAULT NULL COMMENT '价格2（虚拟币1）',
-  `price3` bigint(20) DEFAULT NULL COMMENT '价格3（虚拟币2）',
-  `location` varchar(32) DEFAULT NULL COMMENT '位置(0 普通 1 热门)',
-  `order_no` int(11) DEFAULT NULL COMMENT '相对位置编号',
-  `company_code` varchar(32) DEFAULT NULL COMMENT '所属公司',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

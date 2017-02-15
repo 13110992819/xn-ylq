@@ -33,9 +33,8 @@ public class PrizeUtil {
             for (Prize p : prizes) {
                 sumWeight += p.getWeight();
             }
-            // 产生随机数
-            double randomNumber;
-            randomNumber = Math.random();
+            // 产生一个小于1的随机数
+            double randomNumber = Math.random();
             // 根据随机数在所有奖品分布的区域并确定所抽奖品
             double d1 = 0;
             double d2 = 0;
@@ -61,10 +60,10 @@ public class PrizeUtil {
 
     public static void main(String[] args) {
         List<Prize> list = new ArrayList<Prize>();
-        Prize hbb = new Prize(EPrizeType.HBB.getCode(), (1 / 3D));
-        Prize qbb = new Prize(EPrizeType.QBB.getCode(), Math.random());
-        Prize gwb = new Prize(EPrizeType.GWB.getCode(), Math.random());
-        list.add(hbb);
+        // Prize hbb = new Prize(EPrizeType.HBB.getCode(), (1 / 3D));
+        Prize qbb = new Prize(EPrizeType.QBB.getCode(), 0.556);
+        Prize gwb = new Prize(EPrizeType.GWB.getCode(), 0.555);
+        // list.add(hbb);
         list.add(qbb);
         list.add(gwb);
         System.out.println(getPrizeIndex(list));

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum EPrizeType {
-    HBB("1", "红包币"), QBB("2", "钱包币"), GWB("3", "购物币");
+    QBB("1", "钱包币"), GWB("2", "购物币"), HBB("3", "红包");
 
     public static Map<String, EPrizeType> getResultMap() {
         Map<String, EPrizeType> map = new HashMap<String, EPrizeType>();

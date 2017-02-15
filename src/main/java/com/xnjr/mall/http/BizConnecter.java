@@ -43,7 +43,7 @@ public class BizConnecter {
             resJson = PostSimulater.requestPostForm(getPostUrl(code),
                 formProperties);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new BizException("Biz000", "链接请求超时，请联系管理员");
         }
         // 开始解析响应json
         String errorCode = RegexUtils.find(resJson, "errorCode\":\"(.+?)\"", 1);

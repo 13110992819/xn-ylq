@@ -28,4 +28,14 @@ public interface IAccountAO {
      */
     void approveExchangeAmount(String systemCode, String code, String bizType,
             String approveResult, String approver, String approveNote);
+
+    /**
+     * 获取余额
+     * @param systemCode
+     * @param userId
+     * @return 
+     * @create: 2017年2月15日 下午12:46:36 xieyj
+     * @history:
+     */
+    Long getBalanceByUser(String systemCode, String userId);
 }

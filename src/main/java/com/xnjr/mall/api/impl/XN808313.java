@@ -28,6 +28,7 @@ public class XN808313 extends AProcessor {
     public Object doBusiness() throws BizException {
         JewelRecord condition = new JewelRecord();
         condition.setUserId(req.getUserId());
+        condition.setStatus("payed");
         condition.getJewel().setStatus(req.getJewelStatus());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {

@@ -14,6 +14,7 @@ import com.xnjr.mall.bo.IHzbYyBO;
 import com.xnjr.mall.bo.ISYSConfigBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.bo.base.Paginable;
+import com.xnjr.mall.common.PropertiesUtil;
 import com.xnjr.mall.common.SysConstants;
 import com.xnjr.mall.domain.HzbHold;
 import com.xnjr.mall.dto.res.XN805901Res;
@@ -88,7 +89,7 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
             list = list.subList(0, hzbMaxNum);
         }
         for (HzbHold hzbHold : list) {
-            hzbHold.setShareUrl("http://www.sina.com.cn");
+            hzbHold.setShareUrl(PropertiesUtil.Config.SHARE_URL);
         }
         return list;
     }

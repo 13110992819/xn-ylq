@@ -198,6 +198,22 @@ public interface IAccountBO {
             EBizType bizType);
 
     /**
+     * 订单退货
+     * @param systemCode
+     * @param toUserId
+     * @param gwbPayAmount
+     * @param qbbPayAmount
+     * @param cnyPayAmount
+     * @param bizType
+     * @param remark 
+     * @create: 2017年2月15日 上午10:57:28 xieyj
+     * @history:
+     */
+    public void doOrderAmountBackBySysetm(String systemCode, String toUserId,
+            Long gwbPayAmount, Long qbbPayAmount, Long cnyPayAmount,
+            EBizType bizType, String remark);
+
+    /**
      * 微信支付
      * @param systemCode
      * @param userId

@@ -175,15 +175,12 @@ public class HzbAOImpl implements IHzbAO {
             // 查询是否已经购买摇钱树
             HzbHold condition = new HzbHold();
             condition.setUserId(userId);
+            condition.setStatus(EHzbHoldStatus.NONACTIVATED.getCode());
             List<HzbHold> list = hzbHoldBO.queryHzbHoldList(condition);
             if (CollectionUtils.isEmpty(list)) {
-                throw new BizException("xn0000", "该用户未购买过汇赚宝");
+                throw new BizException("xn0000", "您还未成功购买汇赚宝，无法激活");
             }
             HzbHold hzbHold = list.get(0);
-            if (!EHzbHoldStatus.NONACTIVATED.getCode().equals(
-                hzbHold.getStatus())) {
-                throw new BizException("xn0000", "该用户汇赚宝不处于未激活状态，不能进行激活操作");
-            }
             hzbHoldBO.refreshStatus(hzbHold.getId(),
                 EHzbHoldStatus.ACTIVATED.getCode());
         }

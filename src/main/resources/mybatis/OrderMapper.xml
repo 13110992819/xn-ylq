@@ -55,7 +55,17 @@
 				<![CDATA[AND t.apply_datetime <= #{applyDatetimeEnd}]]>
 			</if>
 			<if test="status != null and status != '' ">
-				AND t.status = #{status}
+				<choose>
+					<when test='status == "payed"'>
+						AND t.status not in(1)
+					</when>
+					<when test='status == "effect"'>
+						AND t.status not in(1,91)
+					</when>
+				    <otherwise>
+						AND t.status = #{status}
+					</otherwise>
+				</choose>
 			</if>
 			<if test="mobile != null and mobile != '' ">
 				AND tu.mobile like "%"#{mobile}"%"

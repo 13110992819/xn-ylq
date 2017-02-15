@@ -52,7 +52,7 @@ public class CallbackConroller {
     IHzbAO hzbAO;
 
     @RequestMapping("/zhpay/app/callback")
-    public void doCallbackZhpay(HttpServletRequest request,
+    public synchronized void doCallbackZhpay(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
         InputStream inStream = request.getInputStream();

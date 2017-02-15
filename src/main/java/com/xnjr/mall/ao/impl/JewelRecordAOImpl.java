@@ -132,17 +132,19 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             result = jewelRecordCode;
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
             // 检验购物币和钱包币是否充足
-            accountBO.checkGWBQBBAmount(systemCode, userId, jewel.getPrice2(),
-                jewel.getPrice3());
+            accountBO.checkGWBQBBAmount(systemCode, userId, jewel.getPrice2()
+                    * times, jewel.getPrice3());
             String bizNote = "宝贝单号：" + jewelRecordCode + "——一元夺宝";
             String body = "正汇钱包—一元夺宝";
             XN802180Res res = accountBO.doWeiXinPay(systemCode, userId,
-                EBizType.AJ_DUOBAO, bizNote, body, jewel.getPrice1(), ip);
+                EBizType.AJ_DUOBAO, bizNote, body, data.getPayAmount1(), ip);
             data.setStatus(EJewelRecordStatus.TO_PAY.getCode());
             data.setPayCode(res.getJourCode());
+            data.setRemark("宝贝待支付");
             jewelRecordBO.saveJewelRecord(data);
             result = res;
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
+
         }
         return result;
     }

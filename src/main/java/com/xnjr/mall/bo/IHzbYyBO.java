@@ -25,7 +25,7 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
 
     public HzbYy getHzbYy(String code);
 
-    // 判断该用户是否第三次摇没有红包
-    public boolean isThirdYyNoHB(String userId);
+    // 判断该用户是否摇到红包
+    public String isHaveHB(String userId);
 
 }

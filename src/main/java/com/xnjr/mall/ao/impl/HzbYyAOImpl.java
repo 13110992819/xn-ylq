@@ -28,6 +28,7 @@ import com.xnjr.mall.dto.res.XN805060Res;
 import com.xnjr.mall.dto.res.XN805901Res;
 import com.xnjr.mall.dto.res.XN808460Res;
 import com.xnjr.mall.enums.EBizType;
+import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.enums.EPrizeType;
 import com.xnjr.mall.enums.ESysUser;
@@ -53,7 +54,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
      * 业务逻辑：
      * 1、限制规则判断
      * 2、获取参数数据
-     * 3、判断是否是第三次且未领到红包，第三次就是红包；否则随机
+     * 3、判断三次只能有一次领到红包
      * 4、领到红包时，触发摇一摇分销规则
      * @see com.xnjr.mall.ao.IHzbYyAO#doHzbYy(java.lang.String, java.lang.String, java.lang.String)
      */
@@ -66,18 +67,24 @@ public class HzbYyAOImpl implements IHzbYyAO {
             deviceNo);
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(
             hzbHold.getSystemCode(), null);
-        // 默认第三次摇，且前面两次未摇到红包
-        String type = EPrizeType.HBB.getCode();
-        if (!hzbYyBO.isThirdYyNoHB(userId)) {
-            Double ycHbbWeight = Double.valueOf(rateMap
-                .get(SysConstants.YC_HBB));
-            Double ycQbbWeight = getWeight(rateMap, SysConstants.YC_QBB);
-            Double ycGwbWeight = getWeight(rateMap, SysConstants.YC_GWB);
+        String type = null;
+        Double ycQbbWeight = getWeight(rateMap, SysConstants.YC_QBB);
+        Double ycGwbWeight = getWeight(rateMap, SysConstants.YC_GWB);
+        Double ycHbbWeight = Double.valueOf(rateMap.get(SysConstants.YC_HBB));
+        String haveHb = hzbYyBO.isHaveHB(userId);
+        if (EBoolean.YES.getCode().equals(haveHb)) {
             List<Prize> prizeList = new ArrayList<Prize>();
-            prizeList.add(new Prize(EPrizeType.HBB.getCode(), ycHbbWeight));
             prizeList.add(new Prize(EPrizeType.QBB.getCode(), ycQbbWeight));
             prizeList.add(new Prize(EPrizeType.GWB.getCode(), ycGwbWeight));
             type = String.valueOf(PrizeUtil.getPrizeIndex(prizeList) + 1);
+        } else if (EBoolean.NO.getCode().equals(haveHb)) {
+            List<Prize> prizeList = new ArrayList<Prize>();
+            prizeList.add(new Prize(EPrizeType.QBB.getCode(), ycQbbWeight));
+            prizeList.add(new Prize(EPrizeType.GWB.getCode(), ycGwbWeight));
+            prizeList.add(new Prize(EPrizeType.HBB.getCode(), ycHbbWeight));
+            type = String.valueOf(PrizeUtil.getPrizeIndex(prizeList) + 1);
+        } else {
+            type = EPrizeType.HBB.getCode();
         }
         int quantity = getQuantity(rateMap);
         HzbYy data = new HzbYy();

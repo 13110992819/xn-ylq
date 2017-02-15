@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.Order;
+import com.xnjr.mall.dto.res.XN808051Res;
 
 /** 
  * @author: xieyj 
@@ -33,7 +34,7 @@ public interface IOrderAO {
      * @create: 2017年1月3日 下午8:16:11 xieyj
      * @history:
      */
-    public List<String> commitOrder(List<String> cartCodeList, Order data);
+    public XN808051Res commitOrder(List<String> cartCodeList, Order data);
 
     /**
      * 支付订单,待发货
@@ -53,6 +54,19 @@ public interface IOrderAO {
      * @history:
      */
     public Object toPayMixOrder(String code, String payType, String ip);
+
+    /**
+     * 支付订单,待发货
+     * @param codeList
+     * @param payType
+     * @param ip
+     * @param applyUser
+     * @return 
+     * @create: 2017年2月14日 下午4:52:12 xieyj
+     * @history:
+     */
+    public Object toPayMixOrderList(List<String> codeList, String payType,
+            String ip, String applyUser);
 
     /**
      * 批量支付订单，待发货

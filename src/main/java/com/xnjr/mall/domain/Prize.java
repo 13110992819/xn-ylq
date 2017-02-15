@@ -23,7 +23,7 @@ public class Prize extends ABaseDO {
      */
     private static final long serialVersionUID = 1L;
 
-    // 类型(1 红包，2 钱包 3 购物币)
+    // 类型(1 钱包 2 购物币 3 红包)
     private String type;
 
     // 奖品权重

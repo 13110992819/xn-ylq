@@ -32,5 +32,8 @@ public class PropertiesUtil {
         public static String ACCOUNT_URL = props.getProperty("ACCOUNT_URL");
 
         public static String USER_DB = props.getProperty("USER_DB");
+
+        public static String SHARE_URL = props.getProperty("SHARE_URL");
+
     }
 }

@@ -1,5 +1,6 @@
 package com.xnjr.mall.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -88,6 +89,11 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
         if (StringUtils.isNotBlank(ticketCode)) {
             // 扣除折扣券优惠
             UserTicket userTicket = userTicketBO.getUserTicket(ticketCode);
+            StoreTicket storeTicket = storeTicketBO.getStoreTicket(userTicket
+                .getTicketCode());
+            if (storeTicket.getValidateStart().after(new Date())) {
+                throw new BizException("xn0000", "该折扣券还未生效，请选择其他折扣券");
+            }
             if (!EUserTicketStatus.UNUSED.getCode().equals(
                 userTicket.getStatus())) {
                 throw new BizException("xn0000", "该折扣券不可用");
@@ -100,8 +106,6 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
                 // 扣减消费金额
                 yhAmount = amount - userTicket.getTicketKey2();
             }
-            StoreTicket storeTicket = storeTicketBO.getStoreTicket(userTicket
-                .getTicketCode());
             remark = remark + ",优惠后金额" + CalculationUtil.divi(yhAmount)
                     + "元，使用折扣券:[" + storeTicket.getName() + "]";
             if (EStoreTicketType.MANJIAN.getCode()
@@ -115,7 +119,6 @@ public class StorePurchaseAOImpl implements IStorePurchaseAO {
             // 余额支付业务规则：优先扣贡献奖励，其次扣分润
             Long gxjlAmount = 0L;
             Long frAmount = 0L;
-
             Double gxjl2cnyRate = Double.valueOf(sysConfigBO.getConfigValue(
                 systemCode, ECategoryType.QBHL.getCode(), null,
                 SysConstants.GXJL2CNY));

@@ -8,6 +8,8 @@
  */
 package com.xnjr.mall.ao.impl;
 
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,10 @@ import com.xnjr.mall.ao.IAccountAO;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.ISYSConfigBO;
 import com.xnjr.mall.common.SysConstants;
+import com.xnjr.mall.dto.res.XN802503Res;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.ECategoryType;
+import com.xnjr.mall.enums.ECurrency;
 import com.xnjr.mall.exception.BizException;
 
 /** 
@@ -57,5 +61,27 @@ public class AccountAOImpl implements IAccountAO {
         }
         accountBO.doExchangeAmount(systemCode, code, rate, approveResult,
             approver, approveNote);
+    }
+
+    /** 
+     * @see com.xnjr.mall.ao.IAccountAO#getBalanceByUser(java.lang.String, java.lang.String)
+     */
+    @Override
+    public Long getBalanceByUser(String systemCode, String userId) {
+        Long balance = 0L;
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
+            null);
+        // 查询用户贡献奖励账户
+        XN802503Res gxjlAccount = accountBO.getAccountByUserId(systemCode,
+            userId, ECurrency.GXJL.getCode());
+        // 查询用户分润账户
+        XN802503Res frAccount = accountBO.getAccountByUserId(systemCode,
+            userId, ECurrency.FRB.getCode());
+        Double gxjl2cny = Double.valueOf(rateMap.get(SysConstants.GXJL2CNY));
+        Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
+        balance = Double.valueOf(gxjlAccount.getAmount() / gxjl2cny)
+            .longValue()
+                + Double.valueOf(frAccount.getAmount() / fr2cny).longValue();
+        return balance;
     }
 }

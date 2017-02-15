@@ -43,6 +43,7 @@ import com.xnjr.mall.domain.Order;
 import com.xnjr.mall.domain.Product;
 import com.xnjr.mall.domain.ProductOrder;
 import com.xnjr.mall.dto.res.XN802180Res;
+import com.xnjr.mall.dto.res.XN808051Res;
 import com.xnjr.mall.enums.EBizType;
 import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.ECurrency;
@@ -140,7 +141,11 @@ public class OrderAOImpl implements IOrderAO {
      */
     @Override
     @Transactional
-    public List<String> commitOrder(List<String> cartCodeList, Order data) {
+    public XN808051Res commitOrder(List<String> cartCodeList, Order data) {
+        XN808051Res res = new XN808051Res();
+        Long cnyAmount = 0L;
+        Long gwAmount = 0L;
+        Long qbAmount = 0L;
         List<String> result = new ArrayList<String>();
         // 按公司编号进行拆单, 遍历获取公司编号列表
         Map<String, String> companyMap = new HashMap<String, String>();
@@ -160,11 +165,18 @@ public class OrderAOImpl implements IOrderAO {
                 if (company.equals(companyCode)) {
                     cartsCompany.add(cartCode);
                 }
+                cnyAmount += cart.getQuantity() * cart.getPrice1();
+                gwAmount += cart.getQuantity() * cart.getPrice2();
+                qbAmount += cart.getQuantity() * cart.getPrice3();
             }
             String orderCode = commitOneOrder(cartsCompany, data);
             result.add(orderCode);
         }
-        return result;
+        res.setCodeList(result);
+        res.setCnyAmount(cnyAmount);
+        res.setGwAmount(gwAmount);
+        res.setQbAmount(qbAmount);
+        return res;
     }
 
     private String commitOneOrder(List<String> cartCodeList, Order data) {
@@ -299,6 +311,68 @@ public class OrderAOImpl implements IOrderAO {
     }
 
     /** 
+     * @see com.xnjr.mall.ao.IOrderAO#toPayMixOrderList(java.util.List, java.lang.String, java.lang.String)
+     */
+    @Override
+    @Transactional
+    public Object toPayMixOrderList(List<String> codeList, String payType,
+            String ip, String applyUser) {
+        Long cnyAmount = 0L;// 人民币 去除运费 order.getYunfei();
+        Long gwAmount = 0L; // 购物币
+        Long qbAmount = 0L; // 钱包币
+        String systemCode = null;
+        for (String code : codeList) {
+            Order order = orderBO.getOrder(code);
+            if (!EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
+                throw new BizException("xn000000", "订单不处于待支付状态");
+            }
+            if (!order.getApplyUser().equals(applyUser)) {
+                throw new BizException("xn000000", "该订单不属于当前用户无法支付");
+            }
+            cnyAmount += order.getAmount1();// 人民币
+            gwAmount += order.getAmount2(); // 购物币
+            qbAmount += order.getAmount3(); // 钱包币
+            if (EPayType.YEZP.getCode().equals(payType)) {
+                orderBO.refreshOrderPayAmount(code, order.getAmount1(),
+                    order.getAmount2(), order.getAmount3());
+            }
+            if (StringUtils.isBlank(systemCode)) {
+                systemCode = order.getSystemCode();
+            }
+        }
+        // 人民币+购物币+钱包币
+        // 余额支付(余额支付)
+        if (EPayType.YEZP.getCode().equals(payType)) {
+            // 检验购物币和钱包币和余额是否充足
+            accountBO.checkGwQbAndBalance(systemCode, applyUser, gwAmount,
+                qbAmount, cnyAmount);
+            // 扣除金额
+            accountBO.doGwQbAndBalancePay(systemCode, applyUser,
+                ESysUser.SYS_USER.getCode(), gwAmount, qbAmount, cnyAmount,
+                EBizType.AJ_GW);
+        } else if (EPayType.WEIXIN.getCode().equals(payType)) {
+            // 检验购物币和钱包币是否充足
+            accountBO.checkGWBQBBAmount(systemCode, applyUser, gwAmount,
+                qbAmount);
+            String bizNote = null;
+            if (CollectionUtils.isNotEmpty(codeList) && codeList.size() <= 1) {
+                bizNote = "订单号：" + codeList.get(0) + "——购买尖货";
+            } else {
+                bizNote = "多订单支付——购买尖货";
+            }
+            String body = "正汇钱包—尖货";
+            XN802180Res res = accountBO.doWeiXinPay(systemCode, applyUser,
+                EBizType.AJ_GW, bizNote, body, cnyAmount, ip);
+            for (String code : codeList) {
+                orderBO.refreshOrderPayCode(code, res.getJourCode());
+            }
+            return res;
+        } else if (EPayType.ALIPAY.getCode().equals(payType)) {
+        }
+        return null;
+    }
+
+    /** 
      * @see com.xnjr.mall.ao.IOrderAO#cancelOrder(java.lang.String, java.lang.String)
      */
     @Override
@@ -336,10 +410,9 @@ public class OrderAOImpl implements IOrderAO {
             Long cnyAmount = data.getPayAmount1(); // 人民币
             Long gwAmount = data.getPayAmount2(); // 购物币
             Long qbAmount = data.getPayAmount3(); // 钱包币
-            // 系统退款，用户加钱
-            accountBO.doGwQbAndBalancePay(data.getSystemCode(),
-                ESysUser.SYS_USER.getCode(), data.getApplyUser(), gwAmount,
-                qbAmount, cnyAmount, EBizType.AJ_GWTK);
+            accountBO.doOrderAmountBackBySysetm(data.getSystemCode(),
+                data.getApplyUser(), gwAmount, qbAmount, cnyAmount,
+                EBizType.AJ_GWTK, " 订单号：[" + code + "]");
             // 发送短信
             String userId = data.getApplyUser();
             smsOutBO.sentContent(userId, userId, "尊敬的用户，您的订单[" + data.getCode()
@@ -499,25 +572,35 @@ public class OrderAOImpl implements IOrderAO {
      */
     @Override
     @Transactional
-    public void paySuccess(String payCode) {
+    public  void paySuccess(String payCode) {
         Order condition = new Order();
         condition.setPayCode(payCode);
         List<Order> result = orderBO.queryOrderList(condition);
         if (CollectionUtils.isEmpty(result)) {
             throw new BizException("XN000000", "找不到对应的消费记录");
         }
-        Order order = result.get(0);
-        if (EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
-            // 扣除金额(购物币和钱包币)
-            accountBO.doGWBQBBPay(order.getSystemCode(), order.getApplyUser(),
-                order.getCompanyCode(), order.getAmount2(), order.getAmount3(),
-                EBizType.AJ_GW);
-            // 更新支付金额
-            orderBO.refreshOrderPayAmount(order.getCode(), order.getAmount1(),
-                order.getAmount2(), order.getAmount3());
-        } else {
-            logger.info("订单号：" + order.getCode() + "已支付，重复回调");
+        String systemCode = null;
+        String applyUser = null;
+        Long gwAmount = 0L; // 购物币
+        Long qbAmount = 0L; // 钱包币
+        for (Order order : result) {
+            if (EOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
+                // 更新支付金额
+                orderBO.refreshOrderPayAmount(order.getCode(),
+                    order.getAmount1(), order.getAmount2(), order.getAmount3());
+            } else {
+                logger.info("订单号：" + order.getCode() + "已支付，重复回调");
+            }
+            gwAmount += order.getAmount2(); // 购物币
+            qbAmount += order.getAmount3(); // 钱包币
+            if (StringUtils.isBlank(applyUser)) {
+                applyUser = order.getApplyUser();
+                systemCode = order.getSystemCode();
+            }
         }
+        // 扣除金额(购物币和钱包币)
+        accountBO.doGWBQBBPay(systemCode, applyUser,
+            ESysUser.SYS_USER.getCode(), gwAmount, qbAmount, EBizType.AJ_GW);
     }
 
     /** 

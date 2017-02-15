@@ -306,6 +306,29 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     @Override
+    public void doOrderAmountBackBySysetm(String systemCode, String toUserId,
+            Long gwbPayAmount, Long qbbPayAmount, Long cnyPayAmount,
+            EBizType bizType, String remark) {
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
+            null);
+        Double gxjl2cnyRate = Double
+            .valueOf(rateMap.get(SysConstants.GXJL2CNY));
+        // 退购物币
+        doTransferAmountByUser(systemCode, ESysUser.SYS_USER.getCode(),
+            toUserId, ECurrency.GWB.getCode(), gwbPayAmount, bizType.getCode(),
+            bizType.getValue() + remark);
+        // 退钱包币
+        doTransferAmountByUser(systemCode, ESysUser.SYS_USER.getCode(),
+            toUserId, ECurrency.QBB.getCode(), qbbPayAmount, bizType.getCode(),
+            bizType.getValue() + remark);
+        // 退人民币
+        doTransferAmountByUser(systemCode, ESysUser.SYS_USER.getCode(),
+            toUserId, ECurrency.GXJL.getCode(),
+            Double.valueOf(gxjl2cnyRate * cnyPayAmount).longValue(),
+            bizType.getCode(), bizType.getValue() + remark);
+    }
+
+    @Override
     public XN802180Res doWeiXinPay(String systemCode, String userId,
             EBizType bizType, String bizNote, String body, Long cnyAmount,
             String ip) {
