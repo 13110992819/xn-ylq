@@ -23,6 +23,12 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_JewelTemplate" parameterType="JewelTemplate" resultMap="JewelTemplate_DB_Result">
@@ -114,14 +120,6 @@
 	<update id="update_status" parameterType="JewelTemplate">
 		UPDATE tact_jewel_template
 		SET
-		currency = #{currency}
-		,amount = #{amount}
-		,total_num = #{totalNum}
-		,price = #{price}
-		,max_invest_num = #{maxInvestNum}
-		,adv_text = #{advText}
-		,adv_pic = #{advPic}
-		,current_periods = #{currentPeriods}
 		,status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}

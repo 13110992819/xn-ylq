@@ -21,6 +21,15 @@ public interface IJewelTemplateAO {
 
     public JewelTemplate getJewelTemplate(String code);
 
-    public int putOnOff(String code);
+    /**
+     * 模板上下架
+     * @param code
+     * @param updater
+     * @param remark
+     * @return 
+     * @create: 2017年2月20日 下午2:47:34 haiqingzheng
+     * @history:
+     */
+    public int putOnOff(String code, String updater, String remark);
 
 }

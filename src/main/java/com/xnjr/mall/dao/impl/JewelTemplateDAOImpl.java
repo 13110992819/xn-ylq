@@ -52,4 +52,9 @@ public class JewelTemplateDAOImpl extends AMybatisTemplate implements
         return super.update(NAMESPACE.concat("update_JewelTemplate"), data);
     }
 
+    @Override
+    public int updateStatus(JewelTemplate data) {
+        return super.update(NAMESPACE.concat("update_status"), data);
+    }
+
 }

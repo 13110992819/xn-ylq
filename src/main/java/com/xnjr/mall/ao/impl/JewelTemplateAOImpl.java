@@ -56,7 +56,7 @@ public class JewelTemplateAOImpl implements IJewelTemplateAO {
     }
 
     @Override
-    public int putOnOff(String code) {
+    public int putOnOff(String code, String updater, String remark) {
         JewelTemplate jewelTemplate = JewelTemplateBO.getJewelTemplate(code);
         EJewelTemplateStatus status = null;
         if (EJewelTemplateStatus.NEW.getCode()
@@ -68,6 +68,7 @@ public class JewelTemplateAOImpl implements IJewelTemplateAO {
             jewelTemplate.getStatus())) {
             status = EJewelTemplateStatus.PUTOFF;
         }
-        return 0;
+        return JewelTemplateBO.refreshStatus(code, status.getCode(), updater,
+            remark);
     }
 }

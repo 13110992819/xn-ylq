@@ -7,4 +7,6 @@ public interface IJewelTemplateDAO extends IBaseDAO<JewelTemplate> {
     String NAMESPACE = IJewelTemplateDAO.class.getName().concat(".");
 
     public int update(JewelTemplate data);
+
+    public int updateStatus(JewelTemplate data);
 }
