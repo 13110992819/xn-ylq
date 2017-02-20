@@ -2,12 +2,9 @@ package com.xnjr.mall.ao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.HzbMgift;
 
-@Component
 public interface IHzbMgiftAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 

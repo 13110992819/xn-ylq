@@ -104,7 +104,7 @@
 		<property name="paginableDAO" ref="hzbYyDAOImpl"/>
 	</bean>
 	
-	<bean id="hzbMgitBO" class="com.xnjr.mall.bo.impl.HzbMgiftBOImpl">
+    <bean id="hzbMgiftBO" class="com.xnjr.mall.bo.impl.HzbMgiftBOImpl">
 		<property name="paginableDAO" ref="hzbMgiftDAOImpl"/>
 	</bean>
 </beans>
