@@ -39,6 +39,7 @@ public class XN808354 extends AProcessor {
     public Object doBusiness() throws BizException {
         JewelTemplate condition = new JewelTemplate();
         condition.setStatus(req.getStatus());
+        condition.setUpdater(req.getUpdater());
         condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
@@ -56,6 +57,7 @@ public class XN808354 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN808354Req.class);
-        StringValidater.validateBlank(req.getStart(), req.getLimit());
+        StringValidater.validateBlank(req.getStart(), req.getLimit(),
+            req.getSystemCode());
     }
 }

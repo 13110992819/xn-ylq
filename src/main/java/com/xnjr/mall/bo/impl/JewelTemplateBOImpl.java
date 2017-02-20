@@ -13,8 +13,14 @@ import com.xnjr.mall.core.OrderNoGenerater;
 import com.xnjr.mall.dao.IJewelTemplateDAO;
 import com.xnjr.mall.domain.JewelTemplate;
 import com.xnjr.mall.enums.EGeneratePrefix;
+import com.xnjr.mall.enums.EJewelTemplateStatus;
 import com.xnjr.mall.exception.BizException;
 
+/**
+ * @author: haiqingzheng 
+ * @since: 2017年2月20日 下午3:10:26 
+ * @history:
+ */
 @Component
 public class JewelTemplateBOImpl extends PaginableBOImpl<JewelTemplate>
         implements IJewelTemplateBO {
@@ -40,6 +46,7 @@ public class JewelTemplateBOImpl extends PaginableBOImpl<JewelTemplate>
                 .getCode());
             data.setCode(code);
             data.setUpdateDatetime(new Date());
+            data.setStatus(EJewelTemplateStatus.NEW.getCode());
             JewelTemplateDAO.insert(data);
         }
         return code;
@@ -60,6 +67,7 @@ public class JewelTemplateBOImpl extends PaginableBOImpl<JewelTemplate>
     public int refreshJewelTemplate(JewelTemplate data) {
         int count = 0;
         if (StringUtils.isNotBlank(data.getCode())) {
+            data.setUpdateDatetime(new Date());
             count = JewelTemplateDAO.update(data);
         }
         return count;
@@ -96,6 +104,18 @@ public class JewelTemplateBOImpl extends PaginableBOImpl<JewelTemplate>
             data.setUpdateDatetime(new Date());
             data.setRemark(remark);
             count = JewelTemplateDAO.updateStatus(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshPeriods(String code, Integer periods) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            JewelTemplate data = new JewelTemplate();
+            data.setCode(code);
+            data.setCurrentPeriods(periods);
+            count = JewelTemplateDAO.updatePeriods(data);
         }
         return count;
     }

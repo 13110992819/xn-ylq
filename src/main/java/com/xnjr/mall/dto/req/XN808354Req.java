@@ -15,8 +15,11 @@ package com.xnjr.mall.dto.req;
  */
 public class XN808354Req extends APageReq {
 
-    // 状态（必填）
+    // 状态（选填）
     private String status;
+
+    // 更新人（选填）
+    private String updater;
 
     // 系统编号（必填）
     private String systemCode;
@@ -27,6 +30,14 @@ public class XN808354Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 
     public String getSystemCode() {

@@ -8,7 +8,7 @@ import com.xnjr.mall.dao.IJewelTemplateDAO;
 import com.xnjr.mall.dao.base.support.AMybatisTemplate;
 import com.xnjr.mall.domain.JewelTemplate;
 
-@Repository("JewelTemplateDAOImpl")
+@Repository("jewelTemplateDAOImpl")
 public class JewelTemplateDAOImpl extends AMybatisTemplate implements
         IJewelTemplateDAO {
 
@@ -55,6 +55,11 @@ public class JewelTemplateDAOImpl extends AMybatisTemplate implements
     @Override
     public int updateStatus(JewelTemplate data) {
         return super.update(NAMESPACE.concat("update_status"), data);
+    }
+
+    @Override
+    public int updatePeriods(JewelTemplate data) {
+        return super.update(NAMESPACE.concat("update_periods"), data);
     }
 
 }

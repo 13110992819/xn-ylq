@@ -22,4 +22,6 @@ public interface IJewelTemplateBO extends IPaginableBO<JewelTemplate> {
     public int refreshStatus(String code, String status, String updater,
             String remark);
 
+    public int refreshPeriods(String code, Integer periods);
+
 }

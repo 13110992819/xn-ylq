@@ -27,35 +27,20 @@ public class JewelRecord extends ABaseDO {
     // 宝贝编号
     private String jewelCode;
 
-    // 创建时间
-    private Date createDatetime;
+    // 投资时间
+    private Date investDatetime;
 
     // 参与次数
     private Integer times;
 
-    // 支付金额(人民币)
-    private Long payAmount1;
-
-    // 支付金额(购物币)
-    private Long payAmount2;
-
-    // 支付金额(钱包币)
-    private Long payAmount3;
+    // 支付金额
+    private Long payAmount;
 
     // 支付时间
     private Date payDatetime;
 
     // 状态(0待开奖，1已中奖，2未中奖)
     private String status;
-
-    // 收件人
-    private String receiver;
-
-    // 收件人手机号
-    private String reMobile;
-
-    // 收件地址
-    private String reAddress;
 
     // 备注
     private String remark;
@@ -85,105 +70,9 @@ public class JewelRecord extends ABaseDO {
     // 是否已经评价(0 未评论 1 已评论)
     private String isComment;
 
-    public String getIsComment() {
-        return isComment;
-    }
-
-    public void setIsComment(String isComment) {
-        this.isComment = isComment;
-    }
-
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
-    }
-
-    public String getReMobile() {
-        return reMobile;
-    }
-
-    public void setReMobile(String reMobile) {
-        this.reMobile = reMobile;
-    }
-
-    public String getReAddress() {
-        return reAddress;
-    }
-
-    public void setReAddress(String reAddress) {
-        this.reAddress = reAddress;
-    }
-
     public JewelRecord() {
         Jewel jewel = new Jewel();
         this.jewel = jewel;
-    }
-
-    public String getMyInvestTimes() {
-        return myInvestTimes;
-    }
-
-    public void setMyInvestTimes(String myInvestTimes) {
-        this.myInvestTimes = myInvestTimes;
-    }
-
-    public Date getPayDatetime() {
-        return payDatetime;
-    }
-
-    public void setPayDatetime(Date payDatetime) {
-        this.payDatetime = payDatetime;
-    }
-
-    public Long getPayAmount1() {
-        return payAmount1;
-    }
-
-    public void setPayAmount1(Long payAmount1) {
-        this.payAmount1 = payAmount1;
-    }
-
-    public Long getPayAmount2() {
-        return payAmount2;
-    }
-
-    public void setPayAmount2(Long payAmount2) {
-        this.payAmount2 = payAmount2;
-    }
-
-    public Long getPayAmount3() {
-        return payAmount3;
-    }
-
-    public void setPayAmount3(Long payAmount3) {
-        this.payAmount3 = payAmount3;
-    }
-
-    public String getPayCode() {
-        return payCode;
-    }
-
-    public void setPayCode(String payCode) {
-        this.payCode = payCode;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
 
     public String getCode() {
@@ -210,12 +99,12 @@ public class JewelRecord extends ABaseDO {
         this.jewelCode = jewelCode;
     }
 
-    public Date getCreateDatetime() {
-        return createDatetime;
+    public Date getInvestDatetime() {
+        return investDatetime;
     }
 
-    public void setCreateDatetime(Date createDatetime) {
-        this.createDatetime = createDatetime;
+    public void setInvestDatetime(Date investDatetime) {
+        this.investDatetime = investDatetime;
     }
 
     public Integer getTimes() {
@@ -224,6 +113,22 @@ public class JewelRecord extends ABaseDO {
 
     public void setTimes(Integer times) {
         this.times = times;
+    }
+
+    public Long getPayAmount() {
+        return payAmount;
+    }
+
+    public void setPayAmount(Long payAmount) {
+        this.payAmount = payAmount;
+    }
+
+    public Date getPayDatetime() {
+        return payDatetime;
+    }
+
+    public void setPayDatetime(Date payDatetime) {
+        this.payDatetime = payDatetime;
     }
 
     public String getStatus() {
@@ -242,12 +147,36 @@ public class JewelRecord extends ABaseDO {
         this.remark = remark;
     }
 
+    public String getPayCode() {
+        return payCode;
+    }
+
+    public void setPayCode(String payCode) {
+        this.payCode = payCode;
+    }
+
     public String getSystemCode() {
         return systemCode;
     }
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public List<JewelRecordNumber> getJewelRecordNumberList() {
@@ -266,4 +195,21 @@ public class JewelRecord extends ABaseDO {
     public void setJewel(Jewel jewel) {
         this.jewel = jewel;
     }
+
+    public String getMyInvestTimes() {
+        return myInvestTimes;
+    }
+
+    public void setMyInvestTimes(String myInvestTimes) {
+        this.myInvestTimes = myInvestTimes;
+    }
+
+    public String getIsComment() {
+        return isComment;
+    }
+
+    public void setIsComment(String isComment) {
+        this.isComment = isComment;
+    }
+
 }

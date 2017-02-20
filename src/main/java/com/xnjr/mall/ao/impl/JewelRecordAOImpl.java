@@ -76,8 +76,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             String payType, String ip) {
         Object result = null;
         Jewel jewel = jewelBO.getJewel(jewelCode);
-        if (!EJewelStatus.PUT_ON.getCode().equals(jewel.getStatus())) {
-            throw new BizException("xn0000", "夺宝标的不处于上架状态，不能进行购买操作");
+        if (!EJewelStatus.RUNNING.getCode().equals(jewel.getStatus())) {
+            throw new BizException("xn0000", "夺宝标的不处于募集中状态，不能进行购买操作");
         }
         // 判断是否大于剩余购买份数
         if (jewel.getTotalNum() - jewel.getInvestNum() < times) {
@@ -92,19 +92,16 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         data.setTimes(times);
         data.setRemark("已分配夺宝号，待开奖");
         data.setSystemCode(jewel.getSystemCode());
-        data.setPayAmount1(jewel.getPrice1() * times);
-        data.setPayAmount2(jewel.getPrice2() * times);
-        data.setPayAmount3(jewel.getPrice3() * times);
+        data.setPayAmount(jewel.getPrice() * times);
         String jewelRecordCode = OrderNoGenerater
             .generateM(EGeneratePrefix.IEWEL_RECORD.getCode());
         data.setCode(jewelRecordCode);
         String systemCode = userRes.getSystemCode();
         // 余额支付(余额支付)
         if (EPayType.YEZP.getCode().equals(payType)) {
-            // 检验购物币和钱包币和余额是否充足
-            accountBO.checkGwQbAndBalance(systemCode, userId,
-                data.getPayAmount2(), data.getPayAmount3(),
-                data.getPayAmount1());
+            // 检验分润和贡献奖励是否充足
+            accountBO.checkBalanceAmount(systemCode, userId,
+                data.getPayAmount());
             String status = EJewelRecordStatus.LOTTERY.getCode();
             Date createDatetime = new Date();
             // 分配号码
@@ -122,22 +119,20 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
                 }
             }
             data.setStatus(status);
-            data.setCreateDatetime(createDatetime);
+            data.setInvestDatetime(createDatetime);
             data.setPayDatetime(createDatetime);
             jewelRecordBO.saveJewelRecord(data);
             // 扣除余额
-            accountBO.doGwQbAndBalancePay(systemCode, userId,
-                ESysUser.SYS_USER.getCode(), data.getPayAmount2(),
-                data.getPayAmount3(), data.getPayAmount1(), EBizType.AJ_DUOBAO);
+            accountBO.doBalancePay(systemCode, userId,
+                ESysUser.SYS_USER.getCode(), data.getPayAmount(),
+                EBizType.AJ_DUOBAO);
             result = jewelRecordCode;
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
             // 检验购物币和钱包币是否充足
-            accountBO.checkGWBQBBAmount(systemCode, userId, jewel.getPrice2()
-                    * times, jewel.getPrice3());
-            String bizNote = "宝贝单号：" + jewelRecordCode + "——一元夺宝";
-            String body = "正汇钱包—一元夺宝";
+            String bizNote = "宝贝单号：" + jewelRecordCode + "——小目标";
+            String body = "正汇钱包—小目标支付";
             XN802180Res res = accountBO.doWeiXinPay(systemCode, userId,
-                EBizType.AJ_DUOBAO, bizNote, body, data.getPayAmount1(), ip);
+                EBizType.AJ_DUOBAO, bizNote, body, data.getPayAmount(), ip);
             data.setStatus(EJewelRecordStatus.TO_PAY.getCode());
             data.setPayCode(res.getJourCode());
             data.setRemark("宝贝待支付");
@@ -251,49 +246,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             }
             jewelRecordBO.refreshPaySuccess(jewelRecord.getCode(), status,
                 remark);
-            // 扣除金额(购物币和钱包币)
-            accountBO.doGWBQBBPay(jewelRecord.getSystemCode(),
-                jewelRecord.getUserId(), ESysUser.SYS_USER.getCode(),
-                jewelRecord.getPayAmount2(), jewelRecord.getPayAmount3(),
-                EBizType.AJ_DUOBAO);
         } else {
             logger.info("订单号：" + jewelRecord.getCode() + "已支付，重复回调");
         }
-    }
-
-    @Override
-    public void fulReAddress(String code, String receiver, String reMobile,
-            String reAddress) {
-        JewelRecord jewelRecord = jewelRecordBO.getJewelRecord(code);
-        if (!EJewelRecordStatus.WINNING.getCode().equals(
-            jewelRecord.getStatus())) {
-            throw new BizException("xn0000", "该记录状态不是中奖状态，无法填写地址");
-        }
-        jewelRecordBO.refreshReAddress(code, receiver, reMobile, reAddress);
-    }
-
-    @Override
-    public void sendJewel(String code, String updater, String remark) {
-        JewelRecord jewelRecord = jewelRecordBO.getJewelRecord(code);
-        if (!EJewelRecordStatus.TO_SEND.getCode().equals(
-            jewelRecord.getStatus())) {
-            throw new BizException("xn0000", "该记录状态不是待发货状态，无法发货");
-        }
-        jewelRecordBO.refreshStatus(code, EJewelRecordStatus.SENT.getCode(),
-            remark);
-        Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
-        smsOutBO.sentContent(jewelRecord.getUserId(), jewelRecord.getUserId(),
-            "尊敬的用户，您的夺宝宝贝[" + jewel.getName() + "]已发货,请注意查收。");
-    }
-
-    @Override
-    public void signJewel(String code) {
-        JewelRecord jewelRecord = jewelRecordBO.getJewelRecord(code);
-        if (!EJewelRecordStatus.SENT.getCode().equals(jewelRecord.getStatus())) {
-            throw new BizException("xn0000", "该记录状态不是已发货状态，无法签收");
-        }
-        jewelRecordBO.refreshStatus(code, EJewelRecordStatus.SIGN.getCode(),
-            EJewelRecordStatus.SIGN.getValue());
     }
 
     @Override
@@ -326,21 +281,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     @Override
     public Paginable<JewelRecord> queryMyJewelRecordPage(int start, int limit,
             JewelRecord condition) {
-        Paginable<JewelRecord> page = jewelRecordBO.queryMyJewelRecordPage(
-            start, limit, condition);
-        if (page != null && CollectionUtils.isNotEmpty(page.getList())) {
-            for (JewelRecord jewelRecord : page.getList()) {
-                // 判断是否评论
-                boolean result = jewelInteractBO.isComment(
-                    jewelRecord.getUserId(), jewelRecord.getCode(),
-                    jewelRecord.getJewelCode());
-                jewelRecord.setIsComment(EBoolean.NO.getCode());
-                if (result) {
-                    jewelRecord.setIsComment(EBoolean.YES.getCode());
-                }
-            }
-        }
-        return page;
+        return jewelRecordBO.queryMyJewelRecordPage(start, limit, condition);
 
     }
 

@@ -9,4 +9,6 @@ public interface IJewelTemplateDAO extends IBaseDAO<JewelTemplate> {
     public int update(JewelTemplate data);
 
     public int updateStatus(JewelTemplate data);
+
+    public int updatePeriods(JewelTemplate data);
 }

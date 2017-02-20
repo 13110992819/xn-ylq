@@ -12,29 +12,29 @@ public class XN808311Req extends APageReq {
      */
     private static final long serialVersionUID = 1L;
 
-    // 商铺编号
-    public String storeCode;
+    // 模板编号
+    private String templateCode;
 
-    // 宝贝名称
-    public String name;
+    // 状态
+    private String status;
 
     // 系统编号
-    public String systemCode;
+    private String systemCode;
 
-    public String getStoreCode() {
-        return storeCode;
+    public String getTemplateCode() {
+        return templateCode;
     }
 
-    public void setStoreCode(String storeCode) {
-        this.storeCode = storeCode;
+    public void setTemplateCode(String templateCode) {
+        this.templateCode = templateCode;
     }
 
-    public String getName() {
-        return name;
+    public String getStatus() {
+        return status;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getSystemCode() {

@@ -37,36 +37,6 @@ public interface IJewelRecordAO {
     public void paySuccess(String payCode);
 
     /**
-     * 填写收货地址
-     * @param code
-     * @param receiver
-     * @param reMobile
-     * @param reAddress 
-     * @create: 2017年1月13日 下午2:24:57 xieyj
-     * @history:
-     */
-    public void fulReAddress(String code, String receiver, String reMobile,
-            String reAddress);
-
-    /**
-     * 发货 
-     * @param code
-     * @param updater
-     * @param remark 
-     * @create: 2017年1月13日 下午2:31:00 xieyj
-     * @history:
-     */
-    public void sendJewel(String code, String updater, String remark);
-
-    /**
-     * 签收
-     * @param code 
-     * @create: 2017年1月13日 下午2:25:28 xieyj
-     * @history:
-     */
-    public void signJewel(String code);
-
-    /**
      * 标的购买记录分页
      * @param start
      * @param limit

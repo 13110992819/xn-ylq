@@ -31,24 +31,6 @@ public interface IJewelBO extends IPaginableBO<Jewel> {
     public String saveJewel(Jewel data);
 
     /**
-     * 删除夺宝商品
-     * @param code
-     * @return 
-     * @create: 2016年12月19日 下午3:49:39 shan
-     * @history:
-     */
-    public int removeJewwl(String code);
-
-    /**
-     * 重提夺宝商品
-     * @param data
-     * @return 
-     * @create: 2016年12月19日 下午3:49:43 shan
-     * @history:
-     */
-    public int refreshJewel(Jewel data);
-
-    /**
      * 查询夺宝商品详情
      * @param code
      * @return 
@@ -70,18 +52,11 @@ public interface IJewelBO extends IPaginableBO<Jewel> {
      * 更新状态
      * @param code
      * @param status
-     * @param remark
      * @return 
      * @create: 2017年1月12日 下午5:20:58 xieyj
      * @history:
      */
-    public int refreshStatus(String code, String status, String remark);
-
-    public int refreshApprove(Jewel data);
-
-    public int refreshPutOn(Jewel data);
-
-    public int refreshPutOff(String code, String updater, String remark);
+    public int refreshStatus(String code, String status);
 
     public int refreshInvestInfo(String code, Integer investNum);
 

@@ -26,6 +26,9 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
+			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
@@ -78,7 +81,6 @@
 		,status
 		,updater
 		,update_datetime
-		,remark
 		,system_code
 		)
 		VALUES(
@@ -94,7 +96,6 @@
 		,#{status}
 		,#{updater}
 		,#{updateDatetime}
-		,#{remark}
 		,#{systemCode}
 		)
 	</insert>
@@ -110,20 +111,25 @@
 		,adv_text = #{advText}
 		,adv_pic = #{advPic}
 		,current_periods = #{currentPeriods}
-		,status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	
 	<update id="update_status" parameterType="JewelTemplate">
 		UPDATE tact_jewel_template
 		SET
-		,status = #{status}
+		status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_periods" parameterType="JewelTemplate">
+		UPDATE tact_jewel_template
+		SET
+		current_periods = #{currentPeriods}
 		WHERE code = #{code}
 	</update>
 

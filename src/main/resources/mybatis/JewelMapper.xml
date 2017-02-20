@@ -4,66 +4,42 @@
 <mapper namespace="com.xnjr.mall.dao.IJewelDAO">
 	<resultMap id="jewel_DB_Result" type="jewel">
 		<result column="code" property="code" />
-		<result column="store_code" property="storeCode" />
-		<result column="name" property="name" />
-		<result column="slogan" property="slogan" />
-		<result column="adv_pic" property="advPic" />
-		
-		<result column="description_text" property="descriptionText" />
-		<result column="description_pic" property="descriptionPic" />
-		<result column="price1" property="price1" />
-		<result column="price2" property="price2" />
-		<result column="price3" property="price3" />
+		<result column="template_code" property="templateCode" />
+		<result column="periods" property="periods" />
+		<result column="currency" property="currency" />
+		<result column="amount" property="amount" />
 		
 		<result column="total_num" property="totalNum" />
-		<result column="invest_num" property="investNum" />
-		<result column="start_datetime" property="startDatetime" />
-		<result column="raise_days" property="raiseDays" />
-		<result column="lottery_datetime" property="lotteryDatetime" />
+		<result column="price" property="price" />
+		<result column="max_invest_num" property="maxInvestNum" />
+		<result column="adv_text" property="advText" />
+		<result column="adv_pic" property="advPic" />
 		
+		<result column="invest_num" property="investNum" />
+		<result column="create_datetime" property="createDatetime" />
 		<result column="win_number" property="winNumber" />
-		<result column="win_user_id" property="winUserId" />
-		<result column="lot_alg" property="lotAlg" />
+		<result column="win_user" property="winUser" />
+		<result column="win_datetime" property="winDatetime" />
 		<result column="status" property="status" />
 		<result column="system_code" property="systemCode" />
 		
-		<result column="approver" property="approver" />
-		<result column="approve_datetime" property="approveDatetime" />
-		<result column="updater" property="updater" />
-		<result column="update_datetime" property="updateDatetime" />
-		<result column="remark" property="remark" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-			<if test="storeCode != null and storeCode != '' ">
-				AND t.store_code = #{storeCode}
-			</if>
-			<if test="name != null and name != '' ">
-				AND t.name = #{name}
+			<if test="templateCode != null and templateCode != '' ">
+				AND t.template_code = #{templateCode}
 			</if>
 			<if test="nameForQuery != null and nameForQuery != '' ">
 				AND t.name like "%"#{nameForQuery}"%"
 			</if>
-			<if test="slogan != null and slogan != '' ">
-				AND t.slogan = #{slogan}
-			</if>
-			<if test="advPic != null and advPic != '' ">
-				AND t.adv_pic = #{advPic}
-			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
-			<if test="startDatetime != null and startDatetime != '' ">
-				<![CDATA[AND t.start_datetime <= #{startDatetime}]]>
-			</if>
-			<if test="lotteryDatetimeStart != null and lotteryDatetimeStart != '' ">
-				<![CDATA[AND t.lottery_datetime >= #{lotteryDatetimeStart}]]>
-			</if>
-			<if test="lotteryDatetimeEnd != null and lotteryDatetimeEnd != '' ">
-				<![CDATA[AND t.lottery_datetime <= #{lotteryDatetimeEnd}]]>
+			<if test="createDatetime != null and createDatetime != '' ">
+				AND t.create_datetime = #{createDatetime}
 			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
@@ -73,34 +49,25 @@
 	<select id="select_jewel" parameterType="jewel" resultMap="jewel_DB_Result">
 		SELECT
 		code
-		,store_code
-		,name
-		,slogan
+		,template_code
+		,periods
+		,currency
+		,amount
+		
+		,total_num
+		,price
+		,max_invest_num
+		,adv_text
 		,adv_pic
 		
-		,description_text
-		,description_pic
-		,price1
-		,price2
-		,price3
-		,total_num
-		
 		,invest_num
-		,start_datetime
-		,raise_days
-		,lottery_datetime
+		,create_datetime
 		,win_number
-		,win_user_id
+		,win_user
+		,win_datetime
 		
-		,lot_alg
 		,status
 		,system_code
-		,approver
-		,approve_datetime
-		
-		,updater
-		,update_datetime
-		,remark
 		FROM
 		tact_jewel t
 		<include refid="where_condition" />
@@ -121,26 +88,36 @@
 		INSERT INTO
 		tact_jewel(
 		code
-		,store_code
-		,name
-		,slogan
+		,template_code
+		,periods
+		,currency
+		,amount
+		,total_num
+		
+		,price
+		,max_invest_num
+		,adv_text
 		,adv_pic
-		,description_text
-		,description_pic
+		,create_datetime
+		
 		,status
-		,remark
 		,system_code
 		)
 		VALUES(
 		#{code}
-		,#{storeCode}
-		,#{name}
-		,#{slogan}
+		,#{templateCode}
+		,#{periods}
+		,#{currency}
+		,#{amount}
+		,#{totalNum}
+		
+		,#{price}
+		,#{maxInvestNum}
+		,#{advText}
 		,#{advPic}
-		,#{descriptionText}
-		,#{descriptionPic}
+		,#{createDatetime}
+		
 		,#{status}
-		,#{remark}
 		,#{systemCode}
 		)
 	</insert>
@@ -149,45 +126,6 @@
 		UPDATE tact_jewel
 		SET
 		status=#{status}
-		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
-		WHERE code = #{code}
-	</update>
-	
-	<update id="update_approve" parameterType="jewel">
-		UPDATE tact_jewel
-		SET
-		status = #{status}
-		,approver = #{approver}
-		,approve_datetime = #{approveDatetime}
-		,remark = #{remark}
-		WHERE code = #{code}
-	</update>
-	
-	<update id="update_putOn" parameterType="jewel">
-		UPDATE tact_jewel
-		SET
-		price1 = #{price1}
-		,price2 = #{price2}
-		,price3 = #{price3}
-		,total_num = #{totalNum}
-		,start_datetime = #{startDatetime}
-		,raise_days = #{raiseDays}
-		,lottery_datetime = #{lotteryDatetime}
-		,status = #{status}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
-		WHERE code = #{code}
-	</update>
-	
-	<update id="update_putOff" parameterType="jewel">
-		UPDATE tact_jewel
-		SET
-		status = #{status}
-		,updater = #{updater}
-		,update_datetime = #{updateDatetime}
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	
@@ -208,18 +146,6 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_jewel" parameterType="jewel">
-		UPDATE tact_jewel
-		SET
-		name = #{name}
-		,slogan = #{slogan}
-    	,adv_pic = #{advPic}
-    	,description_text = #{descriptionText}
-    	,description_pic = #{descriptionPic}
-    	,status = #{status}
-    	,remark = #{remark}
-		WHERE code = #{code}
-	</update>
 	
 	<delete id="delete_jewel" parameterType="jewel">
 		DELETE FROM

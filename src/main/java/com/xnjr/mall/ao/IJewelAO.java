@@ -6,75 +6,20 @@ import com.xnjr.mall.bo.base.Paginable;
 import com.xnjr.mall.domain.Jewel;
 
 /**
- * 
- * @author: shan 
- * @since: 2016年12月19日 下午4:37:00 
+ * @author: haiqingzheng 
+ * @since: 2017年2月20日 下午4:11:27 
  * @history:
  */
 public interface IJewelAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     /**
-     * 申请宝贝
-     * @param data
-     * @return 
-     * @create: 2016年12月19日 下午4:50:55 shan
+     * 根据模板编号，如果没有正在募集中的项目，则发布下一期
+     * @param templateCode 
+     * @create: 2017年2月20日 下午4:27:36 haiqingzheng
      * @history:
      */
-    public String applyJewel(Jewel data);
-
-    /**
-     * 审批宝贝
-     * @param code
-     * @param approveResult 1或0
-     * @param approver
-     * @param approveNote 
-     * @create: 2016年12月19日 下午4:52:25 shan
-     * @history:
-     */
-    public void approveJewel(String code, String approveResult,
-            String approver, String approveNote);
-
-    /**
-     * 批量审批宝贝
-     * @param codeList
-     * @param approveResult 1或0
-     * @param approver
-     * @param approveNote 
-     * @create: 2016年12月19日 下午4:52:25 shan
-     * @history:
-     */
-    public void approveJewelList(List<String> codeList, String approveResult,
-            String approver, String approveNote);
-
-    /**
-     * 重新提交宝贝
-     * @param data
-     * @return 
-     * @create: 2016年12月19日 下午4:50:55 shan
-     * @history:
-     */
-    public void reApplyJewel(Jewel data);
-
-    /**
-     * 宝贝上架
-     * @param data
-     * @return 
-     * @create: 2017年1月10日 下午6:28:25 haiqingzheng
-     * @history:
-     */
-    public void putOn(Jewel data);
-
-    /**
-     * 宝贝下架
-     * @param code
-     * @param updater
-     * @param remark
-     * @return 
-     * @create: 2017年1月10日 下午7:52:02 haiqingzheng
-     * @history:
-     */
-    public void putOff(String code, String updater, String remark);
+    public void publishNextPeriods(String templateCode);
 
     /**
      * 判断宝贝是否已到开奖时间,到则判断是否满标，满标则抽奖，未满标则流标

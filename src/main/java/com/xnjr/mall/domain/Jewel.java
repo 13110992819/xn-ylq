@@ -19,77 +19,53 @@ public class Jewel extends ABaseDO {
     // 编号
     private String code;
 
-    // 商家编号
-    private String storeCode;
+    // 模板编号
+    private String templateCode;
 
-    // 名称
-    private String name;
+    // 期号
+    private Integer periods;
 
-    // 标语
-    private String slogan;
+    // 中奖币种
+    private String currency;
 
-    // 广告图
-    private String advPic;
-
-    // 详情文本
-    private String descriptionText;
-
-    // 详情图片
-    private String descriptionPic;
-
-    // 单价1(人民币)
-    private Long price1;
-
-    // 单价2(购物币)
-    private Long price2;
-
-    // 单价3(钱包币)
-    private Long price3;
+    // 中奖金额
+    private Long amount;
 
     // 所需总人次
     private Integer totalNum;
 
+    // 人次单价
+    private Long price;
+
+    // 单人最大投资次数
+    private Integer maxInvestNum;
+
+    // 宣传文字
+    private String advText;
+
+    // 宣传图
+    private String advPic;
+
     // 已投人次
     private Integer investNum;
 
-    // 夺宝开始时间
-    private Date startDatetime;
-
-    // 夺宝开奖时间
-    private Date lotteryDatetime;
-
-    // 募集天数
-    private Integer raiseDays;
+    // 创建时间
+    private Date createDatetime;
 
     // 中奖号码
     private String winNumber;
 
     // 中奖人编号
-    private String winUserId;
+    private String winUser;
 
-    // 抽奖算法
-    private String lotAlg;
+    // 中奖时间
+    private Date winDatetime;
 
-    // 状态（0 待审批，1 募集中，2 审批不通过，3 到期，4 待发货，5 已发货）
+    // 状态（0 募集中，1 已揭晓）
     private String status;
 
     // 系统编号
     private String systemCode;
-
-    // 审批人
-    private String approver;
-
-    // 审批时间
-    private Date approveDatetime;
-
-    // 审批人
-    private String updater;
-
-    // 审批时间
-    private Date updateDatetime;
-
-    // 备注
-    private String remark;
 
     // **********db properties ******************
     // 开奖时间起
@@ -101,38 +77,6 @@ public class Jewel extends ABaseDO {
     // 名称模糊查询
     private String nameForQuery;
 
-    public String getNameForQuery() {
-        return nameForQuery;
-    }
-
-    public void setNameForQuery(String nameForQuery) {
-        this.nameForQuery = nameForQuery;
-    }
-
-    public Date getLotteryDatetimeStart() {
-        return lotteryDatetimeStart;
-    }
-
-    public void setLotteryDatetimeStart(Date lotteryDatetimeStart) {
-        this.lotteryDatetimeStart = lotteryDatetimeStart;
-    }
-
-    public Date getLotteryDatetimeEnd() {
-        return lotteryDatetimeEnd;
-    }
-
-    public void setLotteryDatetimeEnd(Date lotteryDatetimeEnd) {
-        this.lotteryDatetimeEnd = lotteryDatetimeEnd;
-    }
-
-    public Date getLotteryDatetime() {
-        return lotteryDatetime;
-    }
-
-    public void setLotteryDatetime(Date lotteryDatetime) {
-        this.lotteryDatetime = lotteryDatetime;
-    }
-
     public String getCode() {
         return code;
     }
@@ -141,76 +85,36 @@ public class Jewel extends ABaseDO {
         this.code = code;
     }
 
-    public String getStoreCode() {
-        return storeCode;
+    public String getTemplateCode() {
+        return templateCode;
     }
 
-    public void setStoreCode(String storeCode) {
-        this.storeCode = storeCode;
+    public void setTemplateCode(String templateCode) {
+        this.templateCode = templateCode;
     }
 
-    public String getName() {
-        return name;
+    public Integer getPeriods() {
+        return periods;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPeriods(Integer periods) {
+        this.periods = periods;
     }
 
-    public String getSlogan() {
-        return slogan;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setSlogan(String slogan) {
-        this.slogan = slogan;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
-    public String getAdvPic() {
-        return advPic;
+    public Long getAmount() {
+        return amount;
     }
 
-    public void setAdvPic(String advPic) {
-        this.advPic = advPic;
-    }
-
-    public String getDescriptionText() {
-        return descriptionText;
-    }
-
-    public void setDescriptionText(String descriptionText) {
-        this.descriptionText = descriptionText;
-    }
-
-    public String getDescriptionPic() {
-        return descriptionPic;
-    }
-
-    public void setDescriptionPic(String descriptionPic) {
-        this.descriptionPic = descriptionPic;
-    }
-
-    public Long getPrice1() {
-        return price1;
-    }
-
-    public void setPrice1(Long price1) {
-        this.price1 = price1;
-    }
-
-    public Long getPrice2() {
-        return price2;
-    }
-
-    public void setPrice2(Long price2) {
-        this.price2 = price2;
-    }
-
-    public Long getPrice3() {
-        return price3;
-    }
-
-    public void setPrice3(Long price3) {
-        this.price3 = price3;
+    public void setAmount(Long amount) {
+        this.amount = amount;
     }
 
     public Integer getTotalNum() {
@@ -221,6 +125,38 @@ public class Jewel extends ABaseDO {
         this.totalNum = totalNum;
     }
 
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+
+    public Integer getMaxInvestNum() {
+        return maxInvestNum;
+    }
+
+    public void setMaxInvestNum(Integer maxInvestNum) {
+        this.maxInvestNum = maxInvestNum;
+    }
+
+    public String getAdvText() {
+        return advText;
+    }
+
+    public void setAdvText(String advText) {
+        this.advText = advText;
+    }
+
+    public String getAdvPic() {
+        return advPic;
+    }
+
+    public void setAdvPic(String advPic) {
+        this.advPic = advPic;
+    }
+
     public Integer getInvestNum() {
         return investNum;
     }
@@ -229,20 +165,12 @@ public class Jewel extends ABaseDO {
         this.investNum = investNum;
     }
 
-    public Date getStartDatetime() {
-        return startDatetime;
+    public Date getCreateDatetime() {
+        return createDatetime;
     }
 
-    public void setStartDatetime(Date startDatetime) {
-        this.startDatetime = startDatetime;
-    }
-
-    public Integer getRaiseDays() {
-        return raiseDays;
-    }
-
-    public void setRaiseDays(Integer raiseDays) {
-        this.raiseDays = raiseDays;
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
     }
 
     public String getWinNumber() {
@@ -253,20 +181,20 @@ public class Jewel extends ABaseDO {
         this.winNumber = winNumber;
     }
 
-    public String getWinUserId() {
-        return winUserId;
+    public String getWinUser() {
+        return winUser;
     }
 
-    public void setWinUserId(String winUserId) {
-        this.winUserId = winUserId;
+    public void setWinUser(String winUser) {
+        this.winUser = winUser;
     }
 
-    public String getLotAlg() {
-        return lotAlg;
+    public Date getWinDatetime() {
+        return winDatetime;
     }
 
-    public void setLotAlg(String lotAlg) {
-        this.lotAlg = lotAlg;
+    public void setWinDatetime(Date winDatetime) {
+        this.winDatetime = winDatetime;
     }
 
     public String getStatus() {
@@ -285,44 +213,28 @@ public class Jewel extends ABaseDO {
         this.systemCode = systemCode;
     }
 
-    public String getApprover() {
-        return approver;
+    public Date getLotteryDatetimeStart() {
+        return lotteryDatetimeStart;
     }
 
-    public void setApprover(String approver) {
-        this.approver = approver;
+    public void setLotteryDatetimeStart(Date lotteryDatetimeStart) {
+        this.lotteryDatetimeStart = lotteryDatetimeStart;
     }
 
-    public Date getApproveDatetime() {
-        return approveDatetime;
+    public Date getLotteryDatetimeEnd() {
+        return lotteryDatetimeEnd;
     }
 
-    public void setApproveDatetime(Date approveDatetime) {
-        this.approveDatetime = approveDatetime;
+    public void setLotteryDatetimeEnd(Date lotteryDatetimeEnd) {
+        this.lotteryDatetimeEnd = lotteryDatetimeEnd;
     }
 
-    public String getUpdater() {
-        return updater;
+    public String getNameForQuery() {
+        return nameForQuery;
     }
 
-    public void setUpdater(String updater) {
-        this.updater = updater;
-    }
-
-    public Date getUpdateDatetime() {
-        return updateDatetime;
-    }
-
-    public void setUpdateDatetime(Date updateDatetime) {
-        this.updateDatetime = updateDatetime;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setNameForQuery(String nameForQuery) {
+        this.nameForQuery = nameForQuery;
     }
 
 }

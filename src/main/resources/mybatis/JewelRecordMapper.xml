@@ -9,41 +9,38 @@
 		<result column="photo" property="photo" />
 		<result column="jewel_code" property="jewelCode" />
 		
-		<result column="create_datetime" property="createDatetime" />
+		<result column="invest_datetime" property="investDatetime" />
 		<result column="my_invest_times" property="myInvestTimes" />
 		<result column="times" property="times" />
-		
-		<result column="pay_amount1" property="payAmount1" />
-		<result column="pay_amount2" property="payAmount2" />
-		<result column="pay_amount3" property="payAmount3" />
+		<result column="pay_amount" property="payAmount" />
+		<result column="pay_datetime" property="payDatetime" />
 		
 		<result column="status" property="status" />
-		<result column="receiver" property="receiver" />
-		<result column="re_mobile" property="reMobile" />
-		<result column="re_address" property="reAddress" />
 		<result column="remark" property="remark" />
 		<result column="pay_code" property="payCode" />
 		<result column="system_code" property="systemCode" />
 		
 		<result column="jewel_code" property="jewel.code" />
-		<result column="jewel_start_datetime" property="jewel.startDatetime" />
-		<result column="jewel_name" property="jewel.name" />
-		<result column="jewel_slogan" property="jewel.slogan" />
-		<result column="jewel_adv_pic" property="jewel.advPic" />
-		
-		<result column="jewel_price1" property="jewel.price1" />
-		<result column="jewel_price2" property="jewel.price2" />
-		<result column="jewel_price3" property="jewel.price3" />
+		<result column="jewel_template_code" property="jewel.templateCode" />
+		<result column="jewel_periods" property="jewel.periods" />
+		<result column="jewel_currency" property="jewel.currency" />
+		<result column="jewel_amount" property="jewel.amount" />
 		
 		<result column="jewel_total_num" property="jewel.totalNum" />
-		<result column="jewel_invest_num" property="jewel.investNum" />
-		<result column="jewel_raise_days" property="jewel.raiseDays" />
-		<result column="jewel_win_number" property="jewel.winNumber" />
+		<result column="jewel_price" property="jewel.price" />
+		<result column="jewel_max_invest_num" property="jewel.maxInvestNum" />
+		<result column="jewel_adv_text" property="jewel.advText" />
+		<result column="jewel_adv_pic" property="jewel.advPic" />
 		
-		<result column="jewel_win_user_id" property="jewel.winUserId" />
-		<result column="jewel_lot_alg" property="jewel.lotAlg" />
+		<result column="jewel_invest_num" property="jewel.investNum" />
+		<result column="jewel_create_datetime" property="jewel.createDatetime" />
+		<result column="jewel_win_number" property="jewel.winNumber" />
+		<result column="jewel_win_user" property="jewel.winUser" />
+		<result column="jewel_win_datetime" property="jewel.winDatetime" />
+		
 		<result column="jewel_status" property="jewel.status" />
 		<result column="jewel_remark" property="jewel.remark" />
+		<result column="jewel_system_code" property="jewel.systemCode" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -132,25 +129,26 @@
 		t.user_id
         ,sum(t.times) as my_invest_times
 		,t.jewel_code
+		
 		,tj.code jewel_code
-		,tj.name jewel_name
-		,tj.start_datetime as jewel_start_datetime
-		,tj.slogan jewel_slogan
+		,tj.template_code jewel_template_code
+		,tj.periods  jewel_periods
+		,tj.currency jewel_currency
+		,tj.amount jewel_amount
+		
+		,tj.total_num jewel_total_num
+		,tj.price jewel_price
+		,tj.max_invest_num jewel_max_invest_num
+		,tj.adv_text jewel_adv_text
 		,tj.adv_pic jewel_adv_pic
 		
-		,tj.price1 jewel_price1
-		,tj.price2 jewel_price2
-		,tj.price3 jewel_price3
-		,tj.total_num jewel_total_num
-		
 		,tj.invest_num jewel_invest_num
-		,tj.raise_days jewel_raise_days
+		,tj.create_datetime jewel_create_datetime
 		,tj.win_number jewel_win_number
-		,tj.win_user_id jewel_win_user_id
+		,tj.win_user jewel_win_user
+		,tj.win_datetime jewel_win_datetime
 		
-		,tj.lot_alg jewel_lot_alg
 		,tj.status jewel_status
-		,tj.remark jewel_remark
 		FROM
 		tact_jewel_record t 
 		LEFT JOIN tact_jewel tj ON t.jewel_code = tj.code
@@ -168,34 +166,30 @@
 		code
 		,user_id
 		,jewel_code
-		,create_datetime
+		,invest_datetime
 		,times
 		
-		,pay_amount1
-		,pay_amount2
-		,pay_amount3
+		,pay_amount
 		,pay_datetime
 		,status
-		
 		,remark
 		,pay_code
+		
 		,system_code
 		)
 		VALUES(
 		#{code}
 		,#{userId}
 		,#{jewelCode}
-		,#{createDatetime}
+		,#{investDatetime}
 		,#{times}
 		
-		,#{payAmount1}
-		,#{payAmount2}
-		,#{payAmount3}
+		,#{payAmount}
 		,#{payDatetime}
 		,#{status}
-		
 		,#{remark}
 		,#{payCode}
+		
 		,#{systemCode}
 		)
 	</insert>
@@ -220,16 +214,6 @@
 		,pay_amount3 = #{payAmount3}
 		,pay_datetime = #{payDatetime}
 		,remark=#{remark}
-		WHERE code = #{code}
-	</update>
-	
-	<update id="update_jewelRecordReAddress" parameterType="jewelRecord">
-		UPDATE tact_jewel_record
-		SET
-		status=#{status}
-		,receiver=#{receiver}
-		,re_mobile=#{reMobile}
-		,re_address=#{reAddress}
 		WHERE code = #{code}
 	</update>
 	

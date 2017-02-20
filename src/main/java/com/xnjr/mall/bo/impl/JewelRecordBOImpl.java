@@ -123,22 +123,6 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     }
 
     @Override
-    public int refreshReAddress(String code, String receiver, String reMobile,
-            String reAddress) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            JewelRecord data = new JewelRecord();
-            data.setCode(code);
-            data.setStatus(EJewelRecordStatus.TO_SEND.getCode());
-            data.setReceiver(receiver);
-            data.setReMobile(reMobile);
-            data.setReAddress(reAddress);
-            count = jewelRecordDAO.updateReAddress(data);
-        }
-        return count;
-    }
-
-    @Override
     public List<JewelRecord> queryMyJewelRecordList(JewelRecord condition) {
         return jewelRecordDAO.selectMyList(condition);
     }
@@ -178,7 +162,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
         List<JewelRecord> list = jewelRecordDAO.selectList(condition,
             start.intValue(), timesNum.intValue());
         for (JewelRecord jewelRecord : list) {
-            outRandomA += jewelRecord.getCreateDatetime().getTime();
+            outRandomA += jewelRecord.getInvestDatetime().getTime();
             System.out.println("outRandomA:" + String.valueOf(outRandomA));
         }
         System.out.println("totalOutRandomA:" + String.valueOf(outRandomA));

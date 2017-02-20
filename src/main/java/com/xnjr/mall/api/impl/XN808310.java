@@ -3,7 +3,6 @@ package com.xnjr.mall.api.impl;
 import org.apache.commons.lang3.StringUtils;
 
 import com.xnjr.mall.ao.IJewelAO;
-import com.xnjr.mall.ao.IProductAO;
 import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.common.DateUtil;
 import com.xnjr.mall.core.StringValidater;
@@ -28,17 +27,16 @@ public class XN808310 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Jewel condition = new Jewel();
-        condition.setStoreCode(req.getStoreCode());
-        condition.setNameForQuery(req.getName());
-        condition.setStartDatetime(DateUtil.getFrontDate(req.getDateStart(),
+        condition.setTemplateCode(req.getTemplateCode());
+        condition.setCreateDatetime(DateUtil.getFrontDate(req.getDateStart(),
             false));
-        condition
-            .setStartDatetime(DateUtil.getFrontDate(req.getDateEnd(), true));
+        condition.setCreateDatetime(DateUtil.getFrontDate(req.getDateEnd(),
+            true));
         condition.setStatus(req.getStatus());
         condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
-            orderColumn = IProductAO.DEFAULT_ORDER_COLUMN;
+            orderColumn = IJewelAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());

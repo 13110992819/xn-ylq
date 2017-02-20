@@ -66,19 +66,6 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
             String remark);
 
     /**
-     * 填写收件地址
-     * @param code
-     * @param receiver
-     * @param reMobile
-     * @param reAddress
-     * @return 
-     * @create: 2017年1月13日 下午2:20:31 xieyj
-     * @history:
-     */
-    public int refreshReAddress(String code, String receiver, String reMobile,
-            String reAddress);
-
-    /**
      * 
      * @param code
      * @return 

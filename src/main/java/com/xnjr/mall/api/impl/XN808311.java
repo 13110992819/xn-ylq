@@ -25,11 +25,13 @@ public class XN808311 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Jewel condition = new Jewel();
-        condition.setNameForQuery(req.getName());
-        condition.setStoreCode(req.getStoreCode());
+        condition.setStatus(req.getStatus());
+        condition.setTemplateCode(req.getTemplateCode());
         condition.setSystemCode(req.getSystemCode());
-        condition.setStartDatetime(DateUtil.strToDate(req.getDateStart(),
-            DateUtil.FRONT_DATE_FORMAT_STRING));
+        condition.setCreateDatetime(DateUtil.getFrontDate(req.getDateStart(),
+            false));
+        condition.setCreateDatetime(DateUtil.getFrontDate(req.getDateEnd(),
+            true));
         return jewelAO.queryJewelList(condition);
     }
 
