@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xnjr.mall.dao.IJewelTemplateDAO">
+	<resultMap id="JewelTemplate_DB_Result" type="JewelTemplate">
+		<result column="code" property="code" />
+		<result column="currency" property="currency" />
+		<result column="amount" property="amount" />
+		<result column="total_num" property="totalNum" />
+		<result column="price" property="price" />
+		<result column="max_invest_num" property="maxInvestNum" />
+		<result column="adv_text" property="advText" />
+		<result column="adv_pic" property="advPic" />
+		<result column="current_periods" property="currentPeriods" />
+		<result column="status" property="status" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+		<result column="system_code" property="systemCode" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_JewelTemplate" parameterType="JewelTemplate" resultMap="JewelTemplate_DB_Result">
+		SELECT
+		t.code
+		,t.currency
+		,t.amount
+		,t.total_num
+		,t.price
+		,t.max_invest_num
+		,t.adv_text
+		,t.adv_pic
+		,t.current_periods
+		,t.status
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,t.system_code
+		FROM
+		tact_jewel_template t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_JewelTemplate_count" parameterType="JewelTemplate"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM tact_jewel_template t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_JewelTemplate" parameterType="JewelTemplate">
+		INSERT INTO
+		tact_jewel_template(
+		code
+		,currency
+		,amount
+		,total_num
+		,price
+		,max_invest_num
+		,adv_text
+		,adv_pic
+		,current_periods
+		,status
+		,updater
+		,update_datetime
+		,remark
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{currency}
+		,#{amount}
+		,#{totalNum}
+		,#{price}
+		,#{maxInvestNum}
+		,#{advText}
+		,#{advPic}
+		,#{currentPeriods}
+		,#{status}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		,#{systemCode}
+		)
+	</insert>
+
+	<update id="update_JewelTemplate" parameterType="JewelTemplate">
+		UPDATE tact_jewel_template
+		SET
+		currency = #{currency}
+		,amount = #{amount}
+		,total_num = #{totalNum}
+		,price = #{price}
+		,max_invest_num = #{maxInvestNum}
+		,adv_text = #{advText}
+		,adv_pic = #{advPic}
+		,current_periods = #{currentPeriods}
+		,status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_status" parameterType="JewelTemplate">
+		UPDATE tact_jewel_template
+		SET
+		currency = #{currency}
+		,amount = #{amount}
+		,total_num = #{totalNum}
+		,price = #{price}
+		,max_invest_num = #{maxInvestNum}
+		,adv_text = #{advText}
+		,adv_pic = #{advPic}
+		,current_periods = #{currentPeriods}
+		,status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+    <delete id="delete_JewelTemplate" parameterType="jewel">
+		DELETE FROM
+		tact_jewel_template
+		WHERE
+		code = #{code}
+	</delete>
+
+</mapper>
