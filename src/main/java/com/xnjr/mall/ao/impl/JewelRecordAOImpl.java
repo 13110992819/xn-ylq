@@ -17,7 +17,6 @@ import com.xnjr.mall.ao.IJewelAO;
 import com.xnjr.mall.ao.IJewelRecordAO;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.IJewelBO;
-import com.xnjr.mall.bo.IJewelInteractBO;
 import com.xnjr.mall.bo.IJewelRecordBO;
 import com.xnjr.mall.bo.IJewelRecordNumberBO;
 import com.xnjr.mall.bo.ISmsOutBO;
@@ -32,7 +31,6 @@ import com.xnjr.mall.domain.JewelRecordNumber;
 import com.xnjr.mall.dto.res.XN802180Res;
 import com.xnjr.mall.dto.res.XN805901Res;
 import com.xnjr.mall.enums.EBizType;
-import com.xnjr.mall.enums.EBoolean;
 import com.xnjr.mall.enums.EGeneratePrefix;
 import com.xnjr.mall.enums.EJewelRecordStatus;
 import com.xnjr.mall.enums.EJewelStatus;
@@ -64,9 +62,6 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
 
     @Autowired
     private IJewelRecordNumberBO jewelRecordNumberBO;
-
-    @Autowired
-    private IJewelInteractBO jewelInteractBO;
 
     @Autowired
     private ISmsOutBO smsOutBO;
@@ -289,14 +284,6 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
                 jewelRecord.setJewelRecordNumberList(recordNumberList);
                 Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
                 jewelRecord.setJewel(jewel);
-                // 判断是否评论
-                boolean result = jewelInteractBO.isComment(
-                    jewelRecord.getUserId(), jewelRecord.getCode(),
-                    jewelRecord.getJewelCode());
-                jewelRecord.setIsComment(EBoolean.NO.getCode());
-                if (result) {
-                    jewelRecord.setIsComment(EBoolean.YES.getCode());
-                }
             }
         }
         return page;
@@ -341,13 +328,6 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         List<JewelRecordNumber> jewelRecordNumberList = jewelRecordNumberBO
             .queryJewelRecordNumberList(jewelRecordNumber);
         jewelRecord.setJewelRecordNumberList(jewelRecordNumberList);
-        // 判断是否评论
-        boolean result = jewelInteractBO.isComment(jewelRecord.getUserId(),
-            jewelRecord.getCode(), jewelRecord.getJewelCode());
-        jewelRecord.setIsComment(EBoolean.NO.getCode());
-        if (result) {
-            jewelRecord.setIsComment(EBoolean.YES.getCode());
-        }
         return jewelRecord;
     }
 }

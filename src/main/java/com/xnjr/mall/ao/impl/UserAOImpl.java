@@ -16,12 +16,8 @@ import org.springframework.stereotype.Service;
 
 import com.xnjr.mall.ao.IUserAO;
 import com.xnjr.mall.bo.IHzbHoldBO;
-import com.xnjr.mall.bo.IStockHoldBO;
-import com.xnjr.mall.bo.IStoreBO;
 import com.xnjr.mall.bo.IUserBO;
 import com.xnjr.mall.domain.HzbHold;
-import com.xnjr.mall.domain.StockHold;
-import com.xnjr.mall.domain.Store;
 import com.xnjr.mall.domain.UserExt;
 import com.xnjr.mall.dto.res.XN805060Res;
 import com.xnjr.mall.dto.res.XN805901Res;
@@ -39,13 +35,7 @@ import com.xnjr.mall.exception.BizException;
 public class UserAOImpl implements IUserAO {
 
     @Autowired
-    private IStoreBO storeBO;
-
-    @Autowired
     private IHzbHoldBO hzbHoldBO;
-
-    @Autowired
-    private IStockHoldBO stockHoldBO;
 
     @Autowired
     private IUserBO userBO;
@@ -73,20 +63,10 @@ public class UserAOImpl implements IUserAO {
                 bUserList.add(bUser.getUserId());
             }
         }
-        Store storeCondition = new Store();
-        storeCondition.setProvinceForQuery(userExt.getProvince());
-        storeCondition.setCityForQuery(userExt.getCity());
-        storeCondition.setAreaForQuery(userExt.getArea());
-        storeCondition.setStatus(EDiviFlag.EFFECT.getCode());
-        long storeNum = storeBO.getTotalCount(storeCondition);
-        StockHold stockHoldCondition = new StockHold();
-        stockHoldCondition.setUserList(cUserList);
-        stockHoldCondition.setStatus(EDiviFlag.EFFECT.getCode());
-        long stockNum = stockHoldBO.getTotalCount(stockHoldCondition);
         HzbHold hzbHoldCondition = new HzbHold();
         hzbHoldCondition.setUserList(cUserList);
         hzbHoldCondition.setStatus(EDiviFlag.EFFECT.getCode());
         long hzbNum = hzbHoldBO.getTotalCount(hzbHoldCondition);
-        return new XN808800Res(storeNum, stockNum, hzbNum);
+        return new XN808800Res(hzbNum);
     }
 }
