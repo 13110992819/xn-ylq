@@ -93,17 +93,11 @@
 		,tu.nickname
 		,tue.photo
 		,t.jewel_code
-		,t.create_datetime
+		,t.invest_datetime
 		,t.times
-		
-		,t.pay_amount1
-		,t.pay_amount2
-		,t.pay_amount3
+		,t.pay_amount
+		,t.pay_datetime
 		,t.status
-		,t.receiver
-		,t.re_mobile
-		
-		,t.re_address
 		,t.remark
 		,t.pay_code 
 		,t.system_code
@@ -201,18 +195,6 @@
 		<if test="payDatetime != null and payDatetime != '' ">
 			 ,pay_datetime = #{payDatetime}
 		</if>
-		,remark=#{remark}
-		WHERE code = #{code}
-	</update>
-	
-	<update id="update_jewelRecordPayAmount" parameterType="jewelRecord">
-		UPDATE tact_jewel_record
-		SET
-		status=#{status}
-		,pay_amount1 = #{payAmount1}
-		,pay_amount2 = #{payAmount2}
-		,pay_amount3 = #{payAmount3}
-		,pay_datetime = #{payDatetime}
 		,remark=#{remark}
 		WHERE code = #{code}
 	</update>

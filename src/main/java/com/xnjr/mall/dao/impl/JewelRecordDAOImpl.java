@@ -74,12 +74,6 @@ public class JewelRecordDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
-    public int updatePayAmount(JewelRecord data) {
-        return super.update(NAMESPACE.concat("update_jewelRecordPayAmount"),
-            data);
-    }
-
-    @Override
     public JewelRecord selectMy(JewelRecord condition) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.select(NAMESPACE.concat("select_my_jewelRecord"),
