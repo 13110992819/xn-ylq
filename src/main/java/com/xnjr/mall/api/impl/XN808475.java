@@ -3,7 +3,6 @@ package com.xnjr.mall.api.impl;
 import org.apache.commons.lang3.StringUtils;
 
 import com.xnjr.mall.ao.IHzbMgiftAO;
-import com.xnjr.mall.ao.ISYSDictAO;
 import com.xnjr.mall.api.AProcessor;
 import com.xnjr.mall.common.DateUtil;
 import com.xnjr.mall.common.JsonUtil;
@@ -45,7 +44,7 @@ public class XN808475 extends AProcessor {
             req.getReceiveDatetimeEnd(), true));
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
-            orderColumn = ISYSDictAO.DEFAULT_ORDER_COLUMN;
+            orderColumn = IHzbMgiftAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());

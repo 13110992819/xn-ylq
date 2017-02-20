@@ -126,5 +126,5 @@ public class SysConstants {
 
     public static final String HZB_RECEIVE_AMOUNT = "hzbReceiveAmount"; // 领取金额
 
-    public static final String DAY_RECEVIE_NUMBER = "dayRecevieNumber"; // 单人每天红包领取数量
+    public static final String DAY_RECEVIE_NUMBER = "dayReceiveNumber"; // 单人每天红包领取数量
 }

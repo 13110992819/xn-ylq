@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,7 @@ import com.xnjr.mall.exception.BizException;
  */
 @Service
 public class HzbMgiftAOImpl implements IHzbMgiftAO {
+    private static Logger logger = Logger.getLogger(HzbMgiftAOImpl.class);
 
     @Autowired
     private IHzbMgiftBO hzbMgiftBO;
@@ -56,6 +58,7 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
     @Transactional
     public void doDailyHzbMgift() {
         Date today = DateUtil.getTodayStart();
+        logger.info("**** 定时红包扫描开始 " + today + " ****");
         Date yesterday = DateUtil.getRelativeDateOfDays(today, -1);
         HzbMgift condition = new HzbMgift();
         condition.setStatus(EHzbMgiftStatus.TO_INVALID.getCode());
@@ -69,7 +72,7 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         HzbMgift hmCondition = new HzbMgift();
         hmCondition.setCreateDatetime(today);
         List<HzbMgift> todayList = hzbMgiftBO.queryHzbMgiftList(condition);
-        if (CollectionUtils.isEmpty(todayList)) {
+        if (CollectionUtils.isNotEmpty(todayList)) {
             throw new BizException("xn0000", "今天已经发放红包，无法继续发放!");
         }
         // 发放红包
@@ -98,6 +101,7 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
                 hzbMgiftBO.saveHzbMgift(data);
             }
         }
+        logger.info("**** 定时红包扫描结束 " + today + " ****");
     }
 
     @Override
@@ -106,8 +110,8 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         if (!hzbMgift.getOwner().equals(userId)) {
             throw new BizException("xn0000", "该红包不属于当前用户");
         }
-        if (!EHzbMgiftStatus.TO_SEND.getCode().equals(hzbMgift.getCode())
-                && !EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getCode())) {
+        if (!EHzbMgiftStatus.TO_SEND.getCode().equals(hzbMgift.getStatus())
+                && !EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
             throw new BizException("xn0000", "该红包不是待发送或已发送待领取状态，无法发送!");
         }
         hzbMgiftBO.refreshHzbMgiftStatus(hzbMgiftCode, EHzbMgiftStatus.SENT);
@@ -116,10 +120,24 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
     @Override
     @Transactional
     public void doReceiveHzbMgift(String userId, String hzbMgiftCode) {
-        userBO.getRemoteUser(userId, userId);
         HzbMgift hzbMgift = hzbMgiftBO.getHzbMgift(hzbMgiftCode);
-        if (!EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getCode())) {
+        if (!EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
             throw new BizException("xn0000", "该红包不是发送状态，无法领取!");
+        }
+        if (hzbMgift.getOwner().equals(userId)) {
+            throw new BizException("xn0000", "自己发出的红包无法自己领取!");
+        }
+        // 判断当前人员每天领取次数是否超限
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(
+            ESystemCode.ZHPAY.getCode(), null);
+        Long dayRecevieNumber = Long.valueOf(rateMap
+            .get(SysConstants.DAY_RECEVIE_NUMBER));
+        HzbMgift hmCondition = new HzbMgift();
+        hmCondition.setReceiver(userId);
+        hmCondition.setCreateDatetime(DateUtil.getTodayStart());
+        long totalCount = hzbMgiftBO.getTotalCount(hmCondition);
+        if (totalCount > dayRecevieNumber) {
+            throw new BizException("xn0000", "已超过每天最大领取次数，无法领取!");
         }
         hzbMgiftBO.refreshHzbMgiftReciever(hzbMgiftCode, userId);
         // 汇赚宝主人

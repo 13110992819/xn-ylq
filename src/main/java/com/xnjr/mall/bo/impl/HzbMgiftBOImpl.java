@@ -36,7 +36,7 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
     public String saveHzbMgift(HzbMgift data) {
         String code = null;
         if (data != null) {
-            code = OrderNoGenerater.generateM("HM");
+            code = OrderNoGenerater.generateME("HM");
             data.setCode(code);
             data.setStatus(EHzbMgiftStatus.TO_SEND.getCode());
             hzbMgiftDAO.insert(data);
