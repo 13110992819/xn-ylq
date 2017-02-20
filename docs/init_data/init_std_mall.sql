@@ -34,6 +34,20 @@ INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`b
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('C','C1','一个汇赚宝每天摇最大次数','hzbYyDayMaxCount','900','一个汇赚宝每天摇最大次数',0,NULL,'CD-CZH000001');
 
 /*
+-- Query: SELECT `category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code` FROM std_mall.tsys_config where id >56
+LIMIT 0, 10000
+
+-- Date: 2017-02-20 21:12
+*/
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('F','F1','广告语','advTitle','小小心意','',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('F','F1','红包主人每天红包数','dayNumber','5','',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('F','F1','红包主人得到币种','hzbOwnerCurrency','HBYJ','',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('F','F1','红包主人得到金额','hzbOwnerAmount','5000','',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('F','F1','红包金额币种','hzbReceiveCurrency','GXJL','',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('F','F1','红包金额','hzbReceiveAmount','5000','',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('F','F1','单人每天红包领取数量','dayReceiveNumber','1','',0,NULL,'CD-CZH000001');
+
+/*
 -- Query: SELECT * FROM std_mall.tact_hzb
 -- Date: 2017-01-08 19:32
 */
