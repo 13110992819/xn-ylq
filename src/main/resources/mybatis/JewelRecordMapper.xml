@@ -93,17 +93,11 @@
 		,tu.nickname
 		,tue.photo
 		,t.jewel_code
-		,t.create_datetime
+		,t.invest_datetime
 		,t.times
-		
-		,t.pay_amount1
-		,t.pay_amount2
-		,t.pay_amount3
+		,t.pay_amount
+		,t.pay_datetime
 		,t.status
-		,t.receiver
-		,t.re_mobile
-		
-		,t.re_address
 		,t.remark
 		,t.pay_code 
 		,t.system_code
