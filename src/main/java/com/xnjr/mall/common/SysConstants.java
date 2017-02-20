@@ -112,5 +112,19 @@ public class SysConstants {
 
     public static final int HZB_YY_DAY_MAX_COUNT_DEF = 900; // 一个汇赚宝每天摇摇的最大次数
 
-    public static final Long JEWEL_NUM_RADIX = 10000000L; // 一个汇赚宝每天摇摇的最大次数
+    public static final Long JEWEL_NUM_RADIX = 10000000L; // 一元夺宝初始值
+
+    public static final String ADV_TITLE = "advTitle"; // 广告语
+
+    public static final String DAY_NUMBER = "dayNumber"; // 每天红包数
+
+    public static final String HZB_OWNER_CURRENCY = "hzbOwnerCurrency"; // 树主人币种
+
+    public static final String HZB_OWNER_AMOUNT = "hzbOwnerAmount"; // 树主人金额
+
+    public static final String HZB_RECEIVE_CURRENCY = "hzbReceiveCurrency"; // 领取币种
+
+    public static final String HZB_RECEIVE_AMOUNT = "hzbReceiveAmount"; // 领取金额
+
+    public static final String DAY_RECEVIE_NUMBER = "dayRecevieNumber"; // 单人每天红包领取数量
 }
