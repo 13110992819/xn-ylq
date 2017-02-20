@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.xnjr.mall.ao.IJewelAO;
 import com.xnjr.mall.ao.IJewelRecordAO;
 import com.xnjr.mall.bo.IAccountBO;
 import com.xnjr.mall.bo.IJewelBO;
@@ -70,6 +71,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     @Autowired
     private ISmsOutBO smsOutBO;
 
+    @Autowired
+    private IJewelAO jewelAO;
+
     @Override
     @Transactional
     public Object buyJewel(String userId, String jewelCode, Integer times,
@@ -116,6 +120,11 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
                 } else {
                     status = EJewelRecordStatus.WINNING.getCode();
                     data.setRemark("已中奖，中奖号码" + resultMap.get("luckyNumber"));
+                    // 中奖者加上奖金
+                    accountBO.doTransferAmountByUser(jewel.getSystemCode(),
+                        ESysUser.SYS_USER.getCode(), userId,
+                        jewel.getCurrency(), jewel.getAmount(),
+                        EBizType.AJ_XMB.getCode(), "小目标获得奖励");
                 }
             }
             data.setStatus(status);
@@ -203,15 +212,25 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
                             + "已中奖");
                 userId = jewelRecord.getUserId();
                 jewelRecordCode = jewelRecord.getCode();
+
+                // 中奖者加上奖金
+                accountBO.doTransferAmountByUser(jewel.getSystemCode(),
+                    ESysUser.SYS_USER.getCode(), userId, jewel.getCurrency(),
+                    jewel.getAmount(), EBizType.AJ_XMB.getCode(), "小目标获得奖励");
             }
             // 更新夺宝标的中奖人信息,其他记录状态更改
             jewelRecordBO.refreshLostInfo(jewelRecordCode, jewelCode,
                 EJewelRecordStatus.LOST.getCode(), "很遗憾，本次未中奖");
             jewelBO.refreshWinInfo(jewelCode, luckyNumber, userId);
+
+            // 自动开始下一期
+            jewelAO.publishNextPeriods(jewel.getTemplateCode());
+
             // 新增和修改根据如下两个字段判断是否开奖
             resultMap = new HashMap<String, String>();
             resultMap.put("winJewelRecordCode", jewelRecordCode);
             resultMap.put("luckyNumber", luckyNumber);
+
         }
         return resultMap;
     }
@@ -234,7 +253,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
                 jewelRecord.getCode(), null);
             String status = EJewelRecordStatus.LOTTERY.getCode();
             String remark = null;
-            // 未开奖
+            // 已开奖
             if (resultMap != null) {
                 String winJewelRecordCode = resultMap.get("winJewelRecordCode");
                 if (!winJewelRecordCode.equals(jewelRecord.getJewelCode())) {
@@ -242,6 +261,11 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
                 } else {
                     status = EJewelRecordStatus.WINNING.getCode();
                     remark = "已中奖，中奖号码" + resultMap.get("luckyNumber");
+                    // 中奖者加上奖金
+                    accountBO.doTransferAmountByUser(jewel.getSystemCode(),
+                        ESysUser.SYS_USER.getCode(), jewelRecord.getUserId(),
+                        jewel.getCurrency(), jewel.getAmount(),
+                        EBizType.AJ_XMB.getCode(), "小目标获得奖励");
                 }
             }
             jewelRecordBO.refreshPaySuccess(jewelRecord.getCode(), status,

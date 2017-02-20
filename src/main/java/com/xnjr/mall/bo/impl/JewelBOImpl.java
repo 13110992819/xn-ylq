@@ -1,5 +1,6 @@
 package com.xnjr.mall.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -98,6 +99,7 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
             data.setCode(code);
             data.setWinNumber(winNumber);
             data.setWinUser(winUserId);
+            data.setWinDatetime(new Date());
             data.setStatus(EJewelStatus.END.getCode());
             count = jewelDAO.updateWinInfo(data);
         }

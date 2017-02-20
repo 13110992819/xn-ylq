@@ -199,18 +199,6 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_jewelRecordPayAmount" parameterType="jewelRecord">
-		UPDATE tact_jewel_record
-		SET
-		status=#{status}
-		,pay_amount1 = #{payAmount1}
-		,pay_amount2 = #{payAmount2}
-		,pay_amount3 = #{payAmount3}
-		,pay_datetime = #{payDatetime}
-		,remark=#{remark}
-		WHERE code = #{code}
-	</update>
-	
 	<update id="update_lostInfo" parameterType="jewelRecord">
 		UPDATE tact_jewel_record
 		SET

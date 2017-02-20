@@ -140,9 +140,9 @@
 		UPDATE tact_jewel
 		SET
 		win_number = #{winNumber}
-		,win_user_id = #{winUserId}
+		,win_user = #{winUser}
+		,win_datetime = #{winDatetime}
 		,status = #{status}
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	
