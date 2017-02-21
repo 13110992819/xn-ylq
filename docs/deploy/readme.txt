@@ -11,7 +11,7 @@
   cd /home/wwwroot/zhpay/tomcat_zhpay_biz/webapps
   cp ./xn-zhpay/WEB-INF/classes/application.properties .
   cp ./xn-zhpay/WEB-INF/classes/config.properties .
-  rm -rf std-mall*
+  rm -rf xn-zhpay*
   mv /home/xn-zhpay.war .
    
 4. 已备份配置文件放回原处,重启tomcat

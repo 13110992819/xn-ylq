@@ -78,7 +78,7 @@ public class HzbAOImpl implements IHzbAO {
             HzbHold hzbHold = new HzbHold();
             hzbHold.setUserId(userId);
             hzbHold.setHzbCode(hzbCode);
-            hzbHold.setStatus(EHzbHoldStatus.NONACTIVATED.getCode());
+            hzbHold.setStatus(EHzbHoldStatus.ACTIVATED.getCode());
             hzbHold.setPrice(hzb.getPrice());
             hzbHold.setCurrency(hzb.getCurrency());
             hzbHold.setPeriodRockNum(0);
@@ -275,7 +275,7 @@ public class HzbAOImpl implements IHzbAO {
         }
         // 更新状态
         hzbHoldBO.refreshStatus(result.get(0).getId(),
-            EHzbHoldStatus.NONACTIVATED.getCode());
+            EHzbHoldStatus.ACTIVATED.getCode());
         // 分成
         distributeAmount(result.get(0));
     }
