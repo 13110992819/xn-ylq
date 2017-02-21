@@ -51,5 +51,5 @@ INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`b
 -- Query: SELECT * FROM std_mall.tact_hzb
 -- Date: 2017-01-08 19:32
 */
-INSERT INTO `tact_hzb` (`code`,`name`,`pic`,`description`,`price`,`currency`,`system_code`) VALUES ('HZB001','汇赚宝','http://123.33.33.33/default.jpg','汇赚宝玩法，摇一摇，摇出你的美',2000000,'CNY','CD-CZH000001');
+INSERT INTO `tact_hzb` (`code`,`name`,`pic`,`description`,`price`,`currency`,`system_code`) VALUES ('HZB001','汇赚宝','','汇赚宝玩法，摇一摇，摇出你的美',2000000,'CNY','CD-CZH000001');
 
