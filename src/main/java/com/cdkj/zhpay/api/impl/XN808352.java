@@ -20,6 +20,7 @@ import com.cdkj.zhpay.http.JsonUtils;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /** 
+ * 修改宝贝模板
  * @author: haiqingzheng 
  * @since: 2017年2月20日 下午1:52:05 
  * @history:

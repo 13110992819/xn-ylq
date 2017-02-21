@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.domain.JewelTemplate;
+import com.cdkj.zhpay.enums.EJewelTemplateStatus;
 
 public interface IJewelTemplateBO extends IPaginableBO<JewelTemplate> {
 
@@ -19,8 +20,8 @@ public interface IJewelTemplateBO extends IPaginableBO<JewelTemplate> {
 
     public JewelTemplate getJewelTemplate(String code);
 
-    public int refreshStatus(String code, String status, String updater,
-            String remark);
+    public String refreshStatus(String code, EJewelTemplateStatus status,
+            String updater, String remark);
 
     public int refreshPeriods(String code, Integer periods);
 

@@ -65,20 +65,20 @@ public class LuckyNumberGenerator {
      * 一次生成多个随机抽奖号码
      * @param initialValue 初始值
      * @param headcount 总人数
-     * @param existValues 已存在号码，不能包含重复值，否则会出错
+     * @param existNumbers 已存在号码，不能包含重复值，否则会出错
      * @param count 生成几个随机号码
      * @return 
      * @create: 2017年1月9日 上午10:40:56 haiqingzheng
      * @history:
      */
     public static List<String> generateLuckyNumbers(Long initialValue,
-            Long headcount, List<String> existValues, Long count) {
+            Long headcount, List<String> existNumbers, Long count) {
         List<String> luckNumbers = new ArrayList<String>();
         for (int i = 0; i < count; i++) {
             String luckNumber = generateLuckyNumber(initialValue, headcount,
-                existValues);
+                existNumbers);
             luckNumbers.add(luckNumber);
-            existValues.add(luckNumber);
+            existNumbers.add(luckNumber);
         }
         Collections.sort(luckNumbers);
         return luckNumbers;

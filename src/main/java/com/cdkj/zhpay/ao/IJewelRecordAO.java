@@ -67,6 +67,6 @@ public interface IJewelRecordAO {
      * @create: 2016年12月20日 下午12:14:53 shan
      * @history:
      */
-    public JewelRecord getJewelRecord(String code, String userId);
+    public JewelRecord getJewelRecord(String code);
 
 }

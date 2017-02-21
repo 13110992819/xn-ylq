@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import com.cdkj.zhpay.bo.IAccountBO;
 import com.cdkj.zhpay.bo.IJewelBO;
 import com.cdkj.zhpay.bo.IJewelRecordBO;
 import com.cdkj.zhpay.bo.IJewelRecordNumberBO;
+import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.ISmsOutBO;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
@@ -37,6 +37,7 @@ import com.cdkj.zhpay.enums.EJewelRecordStatus;
 import com.cdkj.zhpay.enums.EJewelStatus;
 import com.cdkj.zhpay.enums.EPayType;
 import com.cdkj.zhpay.enums.ESysUser;
+import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
 /**
@@ -70,6 +71,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     @Autowired
     private IJewelAO jewelAO;
 
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
+
     @Override
     @Transactional
     public Object buyJewel(String userId, String jewelCode, Integer times,
@@ -79,11 +83,29 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         if (!EJewelStatus.RUNNING.getCode().equals(jewel.getStatus())) {
             throw new BizException("xn0000", "夺宝标的不处于募集中状态，不能进行购买操作");
         }
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(
+            ESystemCode.ZHPAY.getCode(), null);
+        // 验证最大投资人次
+        Long maxInvestTimes = Long.valueOf(rateMap
+            .get(SysConstants.JEWEL_MAX_INVEST));
+        JewelRecord condition = new JewelRecord();
+        condition.setUserId(userId);
+        condition.setJewelCode(jewelCode);
+        condition.setStatus(EJewelRecordStatus.LOTTERY.getCode());
+        List<JewelRecord> list = jewelRecordBO.queryJewelRecordList(condition);
+        long totalTimes = 0l;
+        for (JewelRecord jewelRecord : list) {
+            totalTimes += jewelRecord.getTimes();
+        }
+        if (maxInvestTimes != null && maxInvestTimes > (totalTimes + times)) {
+            throw new BizException("xn0000", "投资人次超限，每个用户最多投资" + maxInvestTimes
+                    + "人次");
+        }
         // 判断是否大于剩余购买份数
         if (jewel.getTotalNum() - jewel.getInvestNum() < times) {
-            throw new BizException("xn0000", "购买数量需不大于剩余份数");
-
+            throw new BizException("xn0000", "剩余份数不足");
         }
+
         XN805901Res userRes = userBO.getRemoteUser(userId, userId);
         // 夺宝记录落地
         JewelRecord data = new JewelRecord();
@@ -94,7 +116,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         data.setSystemCode(jewel.getSystemCode());
         data.setPayAmount(jewel.getPrice() * times);
         String jewelRecordCode = OrderNoGenerater
-            .generateM(EGeneratePrefix.IEWEL_RECORD.getCode());
+            .generateM(EGeneratePrefix.JEWEL_RECORD.getCode());
         data.setCode(jewelRecordCode);
         String systemCode = userRes.getSystemCode();
         // 余额支付(余额支付)
@@ -181,8 +203,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         // 如果已投满，产生中奖名单
         String luckyNumber = null;
         if (investNum == jewel.getTotalNum()) {
+            // 假定当前用户中奖
             String result = EBoolean.YES.getCode();
-            // 取最后投资五条记录的时间
+            // 取最后投资五条记录的时间之和
             Long randomA = jewelRecordBO.getLastRecordsTimes(jewelCode,
                 curInvestDatetime);
             // 产生中奖号码
@@ -308,19 +331,15 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     }
 
     @Override
-    public JewelRecord getJewelRecord(String code, String userId) {
+    public JewelRecord getJewelRecord(String code) {
+        // 夺宝记录
         JewelRecord jewelRecord = jewelRecordBO.getJewelRecord(code);
-        if (StringUtils.isNotBlank(userId)) {
-            if (!jewelRecord.getUserId().equals(userId)) {
-                throw new BizException("xn0000", "您没有这个号码");
-            }
-        }
+        // 宝贝
         Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
-        jewelRecord.setJewel(jewel);
-        JewelRecordNumber jewelRecordNumber = new JewelRecordNumber();
-        jewelRecordNumber.setRecordCode(code);
+        // 参与号码
         List<JewelRecordNumber> jewelRecordNumberList = jewelRecordNumberBO
-            .queryJewelRecordNumberList(jewelRecordNumber);
+            .queryJewelRecordNumberList(code);
+        jewelRecord.setJewel(jewel);
         jewelRecord.setJewelRecordNumberList(jewelRecordNumberList);
         return jewelRecord;
     }

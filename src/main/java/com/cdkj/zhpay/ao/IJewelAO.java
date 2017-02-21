@@ -14,12 +14,12 @@ public interface IJewelAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     /**
-     * 根据模板编号，如果没有正在募集中的项目，则发布下一期
+     * 根据模板，如果没有正在募集中的项目，则发布下一期
      * @param templateCode 
      * @create: 2017年2月20日 下午4:27:36 haiqingzheng
      * @history:
      */
-    public void publishNextPeriods(String templateCode);
+    public void publishNextPeriods(String jewelTemplateCode);
 
     /**
      * 分页查询

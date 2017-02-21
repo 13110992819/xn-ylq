@@ -150,12 +150,12 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
         condition.setStatus(EJewelRecordStatus.LOTTERY.getCode());
         Long totalCount = jewelRecordDAO.selectTotalCount(condition);
         Long start = 0L;
-        Long lastInvestTimes = Long
-            .valueOf(PropertiesUtil.Config.LAST_INVEST_TIMES);
-        if (lastInvestTimes == null || lastInvestTimes == 0L) {
-            lastInvestTimes = 5L;
+        Long lastInvestRecords = Long
+            .valueOf(PropertiesUtil.Config.LAST_INVEST_RECORDS);
+        if (lastInvestRecords == null || lastInvestRecords == 0L) {
+            lastInvestRecords = 5L;
         }
-        Long timesNum = lastInvestTimes - 1;
+        Long timesNum = lastInvestRecords - 1;
         if (totalCount >= timesNum) {
             start = totalCount - timesNum;
         } else {

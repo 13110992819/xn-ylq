@@ -10,7 +10,7 @@ import com.cdkj.zhpay.http.JsonUtils;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
- * 宝贝查询详情
+ * 宝贝查询详情（含中奖号码，不含本宝贝的参与记录）
  * @author: asus 
  * @since: 2016年12月21日 下午4:48:41 
  * @history:

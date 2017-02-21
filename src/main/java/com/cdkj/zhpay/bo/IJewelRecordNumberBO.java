@@ -59,6 +59,9 @@ public interface IJewelRecordNumberBO extends IPaginableBO<JewelRecordNumber> {
      * @history:
      */
     public List<JewelRecordNumber> queryJewelRecordNumberList(
+            String jewelRecordCode);
+
+    public List<JewelRecordNumber> queryJewelRecordNumberList(
             JewelRecordNumber data);
 
     public List<String> queryExistNumbers(String jewelCode);

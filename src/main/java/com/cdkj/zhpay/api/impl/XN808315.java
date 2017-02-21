@@ -21,7 +21,7 @@ import com.cdkj.zhpay.http.JsonUtils;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
- * 夺宝进度分页查询
+ * 参与记录分页查询
  * @author: xieyj 
  * @since: 2017年1月11日 下午5:53:04 
  * @history:

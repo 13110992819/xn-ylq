@@ -35,7 +35,9 @@ public class PropertiesUtil {
 
         public static String SHARE_URL = props.getProperty("SHARE_URL");
 
-        public static String LAST_INVEST_TIMES = props
-            .getProperty("LAST_INVEST_TIMES");
+        public static String LAST_INVEST_RECORDS = props
+            .getProperty("LAST_INVEST_RECORDS");
+
+        public static String INIT_PERIODS = props.getProperty("INIT_PERIODS");
     }
 }

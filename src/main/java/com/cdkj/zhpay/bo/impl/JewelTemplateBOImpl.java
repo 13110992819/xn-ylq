@@ -93,19 +93,20 @@ public class JewelTemplateBOImpl extends PaginableBOImpl<JewelTemplate>
     }
 
     @Override
-    public int refreshStatus(String code, String status, String updater,
-            String remark) {
-        int count = 0;
+    public String refreshStatus(String code, EJewelTemplateStatus eStatus,
+            String updater, String remark) {
+        String status = null;
         if (StringUtils.isNotBlank(code)) {
             JewelTemplate data = new JewelTemplate();
             data.setCode(code);
-            data.setStatus(status);
+            data.setStatus(eStatus.getCode());
             data.setUpdater(updater);
             data.setUpdateDatetime(new Date());
             data.setRemark(remark);
-            count = JewelTemplateDAO.updateStatus(data);
+            JewelTemplateDAO.updateStatus(data);
+            status = eStatus.getCode();
         }
-        return count;
+        return status;
     }
 
     @Override

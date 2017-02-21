@@ -82,6 +82,17 @@ public class JewelRecordNumberBOImpl extends PaginableBOImpl<JewelRecordNumber>
         return jewelRecordNumberDAO.selectList(data);
     }
 
+    /** （）
+     * @see com.cdkj.zhpay.bo.IJewelRecordNumberBO#queryJewelRecordNumberList(java.lang.String)
+     */
+    @Override
+    public List<JewelRecordNumber> queryJewelRecordNumberList(
+            String jewelRecordCode) {
+        JewelRecordNumber data = new JewelRecordNumber();
+        data.setRecordCode(jewelRecordCode);
+        return jewelRecordNumberDAO.selectList(data);
+    }
+
     @Override
     public List<String> queryExistNumbers(String jewelCode) {
         return jewelRecordNumberDAO.selectExistNumbers(jewelCode);

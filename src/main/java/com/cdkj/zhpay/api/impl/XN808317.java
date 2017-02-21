@@ -26,7 +26,7 @@ public class XN808317 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return jewelRecordAO.getJewelRecord(req.getCode(), null);
+        return jewelRecordAO.getJewelRecord(req.getCode());
     }
 
     /** 

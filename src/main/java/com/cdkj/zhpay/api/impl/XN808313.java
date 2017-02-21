@@ -13,7 +13,7 @@ import com.cdkj.zhpay.http.JsonUtils;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
- * 我的夺宝分页查询
+ * “我的”宝贝分页查询
  * @author: asus 
  * @since: 2016年12月21日 下午4:56:49 
  * @history:

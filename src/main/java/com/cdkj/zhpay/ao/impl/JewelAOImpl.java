@@ -1,6 +1,5 @@
 package com.cdkj.zhpay.ao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -13,9 +12,12 @@ import com.cdkj.zhpay.ao.IJewelAO;
 import com.cdkj.zhpay.bo.IJewelBO;
 import com.cdkj.zhpay.bo.IJewelTemplateBO;
 import com.cdkj.zhpay.bo.base.Paginable;
+import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelTemplate;
 import com.cdkj.zhpay.enums.EJewelStatus;
+import com.cdkj.zhpay.enums.EJewelTemplateStatus;
+import com.cdkj.zhpay.exception.BizException;
 
 /**
  * @author: xieyj 
@@ -53,31 +55,24 @@ public class JewelAOImpl implements IJewelAO {
     public void publishNextPeriods(String templateCode) {
         JewelTemplate jewelTemplate = jewelTemplateBO
             .getJewelTemplate(templateCode);
-        Jewel condition = new Jewel();
-        condition.setTemplateCode(templateCode);
-        condition.setStatus(EJewelStatus.RUNNING.getCode());
+        if (!EJewelTemplateStatus.PUTON.getCode().equals(
+            jewelTemplate.getStatus())) {
+            // 模板必须属于上架状态
+            throw new BizException("xn0000", "模板不处于上架状态，不能发布标的");
+        }
         // 如果没有正在募集中的项目
-        if (jewelBO.getTotalCount(condition) <= 0) {
-            // 发布下一期项目
-            Jewel jewel = new Jewel();
-            jewel.setTemplateCode(templateCode);
+        if (jewelBO.getJewelTotalCount(templateCode, EJewelStatus.RUNNING) <= 0) {
+            Integer nextPeriods = null;
             if (jewelTemplate.getCurrentPeriods() == null) {
-                jewel.setPeriods(1000000001);
+                nextPeriods = Integer
+                    .valueOf(PropertiesUtil.Config.INIT_PERIODS);
             } else {
-                jewel.setPeriods(jewelTemplate.getCurrentPeriods() + 1);
+                nextPeriods = jewelTemplate.getCurrentPeriods() + 1;
             }
-            jewel.setCurrency(jewelTemplate.getCurrency());
-            jewel.setAmount(jewelTemplate.getAmount());
-            jewel.setTotalNum(jewelTemplate.getTotalNum());
-            jewel.setPrice(jewelTemplate.getPrice());
-            jewel.setMaxInvestNum(jewelTemplate.getMaxInvestNum());
-            jewel.setAdvText(jewelTemplate.getAdvText());
-            jewel.setAdvPic(jewelTemplate.getAdvPic());
-            jewel.setCreateDatetime(new Date());
-            jewel.setSystemCode(jewelTemplate.getSystemCode());
-            jewelBO.saveJewel(jewel);
+            jewelTemplate.setCurrentPeriods(nextPeriods);
+            jewelBO.saveJewel(jewelTemplate);
             // 更新模板当前发布期号
-            jewelTemplateBO.refreshPeriods(templateCode, jewel.getPeriods());
+            jewelTemplateBO.refreshPeriods(templateCode, nextPeriods);
         }
     }
 }

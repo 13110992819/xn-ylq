@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.domain.Jewel;
+import com.cdkj.zhpay.domain.JewelTemplate;
+import com.cdkj.zhpay.enums.EJewelStatus;
 
 /**
  * 
@@ -28,7 +30,7 @@ public interface IJewelBO extends IPaginableBO<Jewel> {
      * @create: 2016年12月19日 下午3:49:36 shan
      * @history:
      */
-    public String saveJewel(Jewel data);
+    public String saveJewel(JewelTemplate jewelTemplate);
 
     /**
      * 查询夺宝商品详情
@@ -38,6 +40,15 @@ public interface IJewelBO extends IPaginableBO<Jewel> {
      * @history:
      */
     public Jewel getJewel(String code);
+
+    /**
+     * 查询夺宝商品详情
+     * @param code
+     * @return 
+     * @create: 2016年12月19日 下午3:49:48 shan
+     * @history:
+     */
+    public Long getJewelTotalCount(String templateCode, EJewelStatus status);
 
     /**
      * 查询所有商品

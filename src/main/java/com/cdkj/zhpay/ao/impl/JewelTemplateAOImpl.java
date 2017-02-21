@@ -1,7 +1,5 @@
 package com.cdkj.zhpay.ao.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,18 +49,13 @@ public class JewelTemplateAOImpl implements IJewelTemplateAO {
     }
 
     @Override
-    public List<JewelTemplate> queryJewelTemplateList(JewelTemplate condition) {
-        return jewelTemplateBO.queryJewelTemplateList(condition);
-    }
-
-    @Override
     public JewelTemplate getJewelTemplate(String code) {
         return jewelTemplateBO.getJewelTemplate(code);
     }
 
     @Override
     @Transactional
-    public int putOnOff(String code, String updater, String remark) {
+    public String putOnOff(String code, String updater, String remark) {
         JewelTemplate jewelTemplate = jewelTemplateBO.getJewelTemplate(code);
         EJewelTemplateStatus status = null;
         if (EJewelTemplateStatus.NEW.getCode()
@@ -70,13 +63,10 @@ public class JewelTemplateAOImpl implements IJewelTemplateAO {
                 || EJewelTemplateStatus.PUTOFF.getCode().equals(
                     jewelTemplate.getStatus())) {
             status = EJewelTemplateStatus.PUTON;
-            // 上架立即发布宝贝
-            jewelAO.publishNextPeriods(code);
         } else if (EJewelTemplateStatus.PUTON.getCode().equals(
             jewelTemplate.getStatus())) {
             status = EJewelTemplateStatus.PUTOFF;
         }
-        return jewelTemplateBO.refreshStatus(code, status.getCode(), updater,
-            remark);
+        return jewelTemplateBO.refreshStatus(code, status, updater, remark);
     }
 }

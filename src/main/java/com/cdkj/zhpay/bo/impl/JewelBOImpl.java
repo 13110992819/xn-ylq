@@ -12,6 +12,7 @@ import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IJewelDAO;
 import com.cdkj.zhpay.domain.Jewel;
+import com.cdkj.zhpay.domain.JewelTemplate;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EJewelStatus;
 import com.cdkj.zhpay.exception.BizException;
@@ -37,13 +38,25 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
     }
 
     @Override
-    public String saveJewel(Jewel data) {
+    public String saveJewel(JewelTemplate data) {
         String code = null;
         if (data != null) {
-            code = OrderNoGenerater.generateM(EGeneratePrefix.IEWEL.getCode());
-            data.setCode(code);
-            data.setStatus(EJewelStatus.RUNNING.getCode());
-            jewelDAO.insert(data);
+            Jewel jewel = new Jewel();
+            code = OrderNoGenerater.generateM(EGeneratePrefix.JEWEL.getCode());
+            jewel.setCode(code);
+            jewel.setTemplateCode(data.getCode());
+            jewel.setPeriods(data.getCurrentPeriods());
+            jewel.setCurrency(data.getCurrency());
+            jewel.setAmount(data.getAmount());
+            jewel.setTotalNum(data.getTotalNum());
+            jewel.setPrice(data.getPrice());
+            jewel.setMaxInvestNum(data.getMaxInvestNum());
+            jewel.setAdvText(data.getAdvText());
+            jewel.setAdvPic(data.getAdvPic());
+            jewel.setStatus(EJewelStatus.RUNNING.getCode());
+            jewel.setCreateDatetime(new Date());
+            jewel.setSystemCode(data.getSystemCode());
+            jewelDAO.insert(jewel);
         }
         return code;
     }
@@ -60,6 +73,17 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
             }
         }
         return data;
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IJewelBO#getJewelTotalCount(java.lang.String, com.cdkj.zhpay.enums.EJewelStatus)
+     */
+    @Override
+    public Long getJewelTotalCount(String templateCode, EJewelStatus status) {
+        Jewel condition = new Jewel();
+        condition.setTemplateCode(templateCode);
+        condition.setStatus(EJewelStatus.RUNNING.getCode());
+        return jewelDAO.selectTotalCount(condition);
     }
 
     @Override
@@ -105,5 +129,4 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
         }
         return count;
     }
-
 }

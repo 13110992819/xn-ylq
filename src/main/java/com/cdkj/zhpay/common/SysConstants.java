@@ -2,24 +2,6 @@ package com.cdkj.zhpay.common;
 
 public class SysConstants {
 
-    public static final String SP_BYJE = "spByje"; // 包邮金额
-
-    public static final String SP_YUNFEI = "spYunfei"; // 订单运费，全系统统一
-
-    public static final String O2O_YWY = "o2oYwy"; // o2o业务员
-
-    public static final String O2O_PROVINCE = "o2oProvince"; // o2o辖区省
-
-    public static final String O2O_CITY = "o2oCity"; // o2o辖区市
-
-    public static final String O2O_AREA = "o2oArea"; // o2o辖区县
-
-    public static final String O2O_CUSER = "o2oCUser"; // o2oC用户
-
-    public static final String O2O_BUSER = "o2oBUser"; // o2oB用户
-
-    public static final String O2O_AUSER = "o2oAUser"; // o2oA用户
-
     public static final String HB2FR = "hb2Fr"; // 红包兑分润
 
     public static final String HBYJ2FR = "hbyj2Fr"; // 红包业绩兑分润
@@ -29,32 +11,6 @@ public class SysConstants {
     public static final String FR2CNY = "fr2Cny"; // 分润兑人民币
 
     public static final String GXJL2CNY = "gxjl2Cny"; // 贡献奖励兑人民币
-
-    public static final String ST_AREA = "stArea"; // 福利月卡辖区县
-
-    public static final String ST_CITY = "stCity"; // 福利月卡辖区市
-
-    public static final String ST_PROVINCE = "stProvince"; // 福利月卡辖区省
-
-    public static final String ST_AREA_NOTA1 = "stAreaNotA1"; // A1未买福利月卡辖区县
-
-    public static final String ST_CITY_NOTA1 = "stCityNotA1"; // A1未买福利月卡辖区市
-
-    public static final String ST_PROVINCE_NOTA1 = "stProvinceNotA1"; // A1未买福利月卡辖区省
-
-    public static final String ST_A10 = "stA10"; // A1未购买福利月卡
-
-    public static final String ST_A12000 = "stA12000"; // A1购买2000福利月卡
-
-    public static final String ST_A110000 = "stA110000"; // A1购买10000福利月卡
-
-    public static final String ST_A130000 = "stA130000"; // A1购买30000福利月卡
-
-    public static final String ST_A150000 = "stA150000"; // A1购买50000福利月卡
-
-    public static final String ST_BACKNUM = "stBackNum"; // 福利月卡返还期数
-
-    public static final String ST_BACKNUM_DEF = "10"; // 福利月卡默认返还期数
 
     public static final String HZB_PROVINCE = "hzbProvince"; // hzb辖区省
 
@@ -113,6 +69,8 @@ public class SysConstants {
     public static final int HZB_YY_DAY_MAX_COUNT_DEF = 900; // 一个汇赚宝每天摇摇的最大次数
 
     public static final Long JEWEL_NUM_RADIX = 10000000L; // 一元夺宝初始值
+
+    public static final String JEWEL_MAX_INVEST = "jewelMaxInvest"; // 宝贝每人投资最大次数
 
     public static final String ADV_TITLE = "advTitle"; // 广告语
 
