@@ -22,13 +22,6 @@ public interface IJewelAO {
     public void publishNextPeriods(String templateCode);
 
     /**
-     * 判断宝贝是否已到开奖时间,到则判断是否满标，满标则抽奖，未满标则流标
-     * @create: 2017年1月12日 下午4:35:51 xieyj
-     * @history:
-     */
-    public void doChangeStatusDaily();
-
-    /**
      * 分页查询
      * @param start
      * @param limit
@@ -40,7 +33,7 @@ public interface IJewelAO {
     public Paginable<Jewel> queryJewelPage(int start, int limit, Jewel condition);
 
     /**
-     * 列表
+     * 列表查询
      * @param condition
      * @return 
      * @create: 2016年12月21日 下午4:45:57 asus

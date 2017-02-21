@@ -84,28 +84,8 @@ public class LuckyNumberGenerator {
         return luckNumbers;
     }
 
-    // /**
-    // * 抽中一个幸运号码
-    // * @param initialValue 初始值
-    // * @param headcount 总人数
-    // * @param outRandom 外部随机数
-    // * @return
-    // * @create: 2017年1月9日 上午10:53:10 haiqingzheng
-    // * @history:
-    // */
-    // public static String getLuckyNumber(Long initialValue, Long headcount,
-    // Long outRandom) {
-    // String luckyNumber = null;
-    // // 生成一个内部5位随机数
-    // int random = (int) (Math.random() * 90000 + 10000);
-    // // 内部随机数和外部随机数求和，取余，结果范围是 0 到 headcount-1(初始值100000000开始)
-    // Long remainder = (random + outRandom) % headcount;
-    // luckyNumber = Long.valueOf(initialValue + remainder + 1).toString();
-    // return luckyNumber;
-    // }
-
     /**
-     * 抽中一个幸运号码
+     * 产生一个中奖号码
      * @param initialValue 初始化值
      * @param headcount 投资总人次
      * @param outRandomA 随机数A
@@ -117,9 +97,9 @@ public class LuckyNumberGenerator {
     public static String getLuckyNumber(Long initialValue, Long headcount,
             Long outRandomA, Long outRandomB) {
         String luckyNumber = null;
-        // 内部随机数和外部随机数求和，取余，结果范围是 0 到 headcount-1(初始值100000000开始)
-        Long remainder = (outRandomA + outRandomB) % headcount;
-        luckyNumber = Long.valueOf(initialValue + remainder + 1).toString();
+        // 内部随机数和外部随机数求和之后取余，结果范围是 0 到 headcount-1(初始值100000000开始)
+        Long remainNum = (outRandomA + outRandomB) % headcount;
+        luckyNumber = Long.valueOf(initialValue + remainNum + 1).toString();
         return luckyNumber;
     }
 

@@ -31,7 +31,7 @@ public class JewelTemplateAOImpl implements IJewelTemplateAO {
     @Override
     public int editJewelTemplate(JewelTemplate data) {
         if (!jewelTemplateBO.isJewelTemplateExist(data.getCode())) {
-            throw new BizException("xn0000", "记录编号不存在");
+            throw new BizException("xn0000", "宝贝模板不存在");
         }
         return jewelTemplateBO.refreshJewelTemplate(data);
     }
@@ -39,7 +39,7 @@ public class JewelTemplateAOImpl implements IJewelTemplateAO {
     @Override
     public int dropJewelTemplate(String code) {
         if (!jewelTemplateBO.isJewelTemplateExist(code)) {
-            throw new BizException("xn0000", "记录编号不存在");
+            throw new BizException("xn0000", "宝贝模板不存在");
         }
         return jewelTemplateBO.removeJewelTemplate(code);
     }
@@ -70,6 +70,7 @@ public class JewelTemplateAOImpl implements IJewelTemplateAO {
                 || EJewelTemplateStatus.PUTOFF.getCode().equals(
                     jewelTemplate.getStatus())) {
             status = EJewelTemplateStatus.PUTON;
+            // 上架立即发布宝贝
             jewelAO.publishNextPeriods(code);
         } else if (EJewelTemplateStatus.PUTON.getCode().equals(
             jewelTemplate.getStatus())) {

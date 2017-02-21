@@ -20,7 +20,7 @@ import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /** 
- * 周边汇赚宝分页列表查询
+ * 周边汇赚宝列表查询
  * @author: haiqingzheng 
  * @since: 2016年12月21日 下午4:19:09 
  * @history:

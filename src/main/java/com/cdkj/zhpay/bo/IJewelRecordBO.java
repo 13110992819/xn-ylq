@@ -45,12 +45,14 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
      * 支付成功之后更新状态
      * @param code
      * @param status
+     * @param payDatetime
      * @param remark
      * @return 
-     * @create: 2017年1月12日 下午9:52:10 xieyj
+     * @create: 2017年2月21日 上午11:36:52 xieyj
      * @history:
      */
-    public int refreshPaySuccess(String code, String status, String remark);
+    public int refreshPaySuccess(String code, String status, Date payDatetime,
+            String remark);
 
     /**
      * 将所有未中奖记录修改状态

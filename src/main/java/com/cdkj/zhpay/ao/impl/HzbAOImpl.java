@@ -51,6 +51,14 @@ public class HzbAOImpl implements IHzbAO {
     private IUserBO userBO;
 
     @Override
+    public void editHzb(Hzb data) {
+        if (!hzbBO.isHzbExist(data.getCode())) {
+            throw new BizException("xn0000", "汇赚宝记录不存在");
+        }
+        hzbBO.refreshHzb(data);
+    }
+
+    @Override
     @Transactional
     public Object buyHzb(String userId, String hzbCode, String payType,
             String ip) {
@@ -115,77 +123,6 @@ public class HzbAOImpl implements IHzbAO {
         return result;
     }
 
-    // private void transAmount(String systemCode, String userId, Long price,
-    // EBizType bizType) {
-    // Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
-    // null);
-    // // 余额支付业务规则：优先扣贡献奖励，其次扣分润
-    // Long gxjlCnyAmount = 0L;
-    // Long frCnyAmount = 0L;
-    // // 查询用户贡献奖励账户
-    // XN802503Res gxjlAccount = accountBO.getAccountByUserId(systemCode,
-    // userId, ECurrency.GXJL.getCode());
-    // // 查询用户分润账户
-    // XN802503Res frAccount = accountBO.getAccountByUserId(systemCode,
-    // userId, ECurrency.FRB.getCode());
-    // Double gxjl2cny = Double.valueOf(rateMap.get(SysConstants.GXJL2CNY));
-    // Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
-    // gxjlCnyAmount = Double.valueOf(gxjlAccount.getAmount() / gxjl2cny)
-    // .longValue();
-    // frCnyAmount = Double.valueOf(frAccount.getAmount() / fr2cny)
-    // .longValue();
-    // // 1、贡献奖励+分润<价格 余额不足
-    // if (gxjlCnyAmount + frCnyAmount < price) {
-    // throw new BizException("xn0000", "余额不足");
-    // }
-    // // 2、贡献奖励=0 直接扣分润
-    // if (gxjlAccount.getAmount() <= 0L) {
-    // Long frPrice = Double.valueOf(price * fr2cny).longValue();
-    // // 扣除分润
-    // accountBO.doTransferAmount(systemCode,
-    // frAccount.getAccountNumber(), ESysAccount.FRB.getCode(),
-    // frPrice, bizType.getCode(), bizType.getValue());
-    // }
-    // // 3、0<贡献奖励<price 先扣贡献奖励，再扣分润
-    // if (gxjlCnyAmount > 0L && gxjlCnyAmount < price) {
-    // // 扣除贡献奖励
-    // accountBO.doTransferAmount(systemCode,
-    // gxjlAccount.getAccountNumber(), ESysAccount.GXJL.getCode(),
-    // gxjlAccount.getAmount(), bizType.getCode(), bizType.getValue());
-    // // 再扣除分润
-    // Long frPrice = Double.valueOf((price - gxjlCnyAmount) * fr2cny)
-    // .longValue();
-    // accountBO.doTransferAmount(systemCode,
-    // frAccount.getAccountNumber(), ESysAccount.FRB.getCode(),
-    // frPrice, bizType.getCode(), bizType.getValue());
-    // }
-    // // 4、贡献奖励>=price 直接扣贡献奖励
-    // if (gxjlCnyAmount >= price) {
-    // Long gxjlPrice = Double.valueOf(price * gxjl2cny).longValue();
-    // // 扣除贡献奖励
-    // accountBO.doTransferAmount(systemCode,
-    // gxjlAccount.getAccountNumber(), ESysAccount.GXJL.getCode(),
-    // gxjlPrice, bizType.getCode(), bizType.getValue());
-    // }
-    // }
-
-    @Override
-    public void activateHzb(String userId) {
-        if (StringUtils.isNotBlank(userId)) {
-            // 查询是否已经购买摇钱树
-            HzbHold condition = new HzbHold();
-            condition.setUserId(userId);
-            condition.setStatus(EHzbHoldStatus.NONACTIVATED.getCode());
-            List<HzbHold> list = hzbHoldBO.queryHzbHoldList(condition);
-            if (CollectionUtils.isEmpty(list)) {
-                throw new BizException("xn0000", "您还未成功购买汇赚宝，无法激活");
-            }
-            HzbHold hzbHold = list.get(0);
-            hzbHoldBO.refreshStatus(hzbHold.getId(),
-                EHzbHoldStatus.ACTIVATED.getCode());
-        }
-    }
-
     @Override
     public void putOnOffHzb(String userId) {
         if (StringUtils.isNotBlank(userId)) {
@@ -197,10 +134,6 @@ public class HzbAOImpl implements IHzbAO {
                 throw new BizException("xn0000", "该用户未购买过汇赚宝");
             }
             HzbHold hzbHold = list.get(0);
-            if (EHzbHoldStatus.NONACTIVATED.getCode().equals(
-                hzbHold.getStatus())) {
-                throw new BizException("xn0000", "该用户汇赚宝处于未激活状态，不能进行冻结/解冻操作");
-            }
             if (EHzbHoldStatus.ACTIVATED.getCode().equals(hzbHold.getStatus())) {
                 hzbHoldBO.refreshStatus(hzbHold.getId(),
                     EHzbHoldStatus.OFFLINE.getCode());
@@ -224,37 +157,6 @@ public class HzbAOImpl implements IHzbAO {
             hzbHold = list.get(0);
         }
         return hzbHold;
-    }
-
-    @Override
-    public void editHzb(Hzb data) {
-        if (!hzbBO.isHzbExist(data.getCode())) {
-            throw new BizException("xn0000", "汇赚宝记录不存在");
-        }
-        hzbBO.refreshHzb(data);
-    }
-
-    @Override
-    public void dropHzb(String code) {
-        if (!hzbBO.isHzbExist(code)) {
-            throw new BizException("xn0000", "汇赚宝记录不存在");
-        }
-        hzbBO.removeHzb(code);
-    }
-
-    @Override
-    public Paginable<Hzb> queryHzbPage(int start, int limit, Hzb condition) {
-        return hzbBO.getPaginable(start, limit, condition);
-    }
-
-    @Override
-    public List<Hzb> queryHzbList(Hzb condition) {
-        return hzbBO.queryHzbList(condition);
-    }
-
-    @Override
-    public Hzb getHzb(String code) {
-        return hzbBO.getHzb(code);
     }
 
     /**
@@ -382,5 +284,20 @@ public class HzbAOImpl implements IHzbAO {
                 ECurrency.FRB.getCode(), transAmount,
                 EBizType.AJ_GMHZBFC.getCode(), bizNote);
         }
+    }
+
+    @Override
+    public Paginable<Hzb> queryHzbPage(int start, int limit, Hzb condition) {
+        return hzbBO.getPaginable(start, limit, condition);
+    }
+
+    @Override
+    public List<Hzb> queryHzbList(Hzb condition) {
+        return hzbBO.queryHzbList(condition);
+    }
+
+    @Override
+    public Hzb getHzb(String code) {
+        return hzbBO.getHzb(code);
     }
 }

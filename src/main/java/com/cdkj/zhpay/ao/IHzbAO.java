@@ -9,6 +9,8 @@ import com.cdkj.zhpay.domain.HzbHold;
 public interface IHzbAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
+    public void editHzb(Hzb data);
+
     public Object buyHzb(String userId, String hzbCode, String payType,
             String fromIp);
 
@@ -21,15 +23,9 @@ public interface IHzbAO {
      */
     public void paySuccess(String jourCode);
 
-    public void activateHzb(String userId);
-
     public void putOnOffHzb(String userId);
 
     public HzbHold myHzb(String userId);
-
-    public void dropHzb(String code);
-
-    public void editHzb(Hzb data);
 
     public Paginable<Hzb> queryHzbPage(int start, int limit, Hzb condition);
 

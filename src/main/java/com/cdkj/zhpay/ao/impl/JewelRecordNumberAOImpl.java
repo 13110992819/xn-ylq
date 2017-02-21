@@ -36,7 +36,7 @@ public class JewelRecordNumberAOImpl implements IJewelRecordNumberAO {
     @Override
     public JewelRecordNumber getJewelRecordNumber(Long id) {
         if (!jewelRecordNumberBO.isJewelRecordNumberExist(id)) {
-            throw new BizException("xn0000", "没有该记录");
+            throw new BizException("xn0000", "号码不存在");
         }
         return jewelRecordNumberBO.getJewelRecordNumber(id);
     }

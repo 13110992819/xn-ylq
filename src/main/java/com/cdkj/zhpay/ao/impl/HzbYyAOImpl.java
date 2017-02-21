@@ -72,20 +72,18 @@ public class HzbYyAOImpl implements IHzbYyAO {
         Double ycGwbWeight = getWeight(rateMap, SysConstants.YC_GWB);
         Double ycHbbWeight = Double.valueOf(rateMap.get(SysConstants.YC_HBB));
         String haveHb = hzbYyBO.isHaveHB(userId);
+        List<Prize> prizeList = new ArrayList<Prize>();
+        prizeList.add(new Prize(EPrizeType.QBB.getCode(), ycQbbWeight));
+        prizeList.add(new Prize(EPrizeType.GWB.getCode(), ycGwbWeight));
         if (EBoolean.YES.getCode().equals(haveHb)) {
-            List<Prize> prizeList = new ArrayList<Prize>();
-            prizeList.add(new Prize(EPrizeType.QBB.getCode(), ycQbbWeight));
-            prizeList.add(new Prize(EPrizeType.GWB.getCode(), ycGwbWeight));
             type = String.valueOf(PrizeUtil.getPrizeIndex(prizeList) + 1);
         } else if (EBoolean.NO.getCode().equals(haveHb)) {
-            List<Prize> prizeList = new ArrayList<Prize>();
-            prizeList.add(new Prize(EPrizeType.QBB.getCode(), ycQbbWeight));
-            prizeList.add(new Prize(EPrizeType.GWB.getCode(), ycGwbWeight));
             prizeList.add(new Prize(EPrizeType.HBB.getCode(), ycHbbWeight));
             type = String.valueOf(PrizeUtil.getPrizeIndex(prizeList) + 1);
         } else {
             type = EPrizeType.HBB.getCode();
         }
+        // 获取数量
         int quantity = getQuantity(rateMap);
         HzbYy data = new HzbYy();
         data.setUserId(userId);

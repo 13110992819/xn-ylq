@@ -12,6 +12,7 @@ import com.cdkj.zhpay.bo.IJewelRecordNumberBO;
 import com.cdkj.zhpay.bo.base.Page;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
+import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.dao.IJewelRecordDAO;
 import com.cdkj.zhpay.domain.JewelRecord;
 import com.cdkj.zhpay.enums.EJewelRecordStatus;
@@ -94,13 +95,14 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     }
 
     @Override
-    public int refreshPaySuccess(String code, String status, String remark) {
+    public int refreshPaySuccess(String code, String status, Date payDatetime,
+            String remark) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             JewelRecord data = new JewelRecord();
             data.setCode(code);
             data.setStatus(status);
-            data.setPayDatetime(new Date());
+            data.setPayDatetime(payDatetime);
             data.setRemark(remark);
             count = jewelRecordDAO.update(data);
         }
@@ -140,20 +142,20 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     }
 
     @Override
-    public Long getLastRecordsTimes(String jewelCode, Date curCreateDatetime) {
+    public Long getLastRecordsTimes(String jewelCode, Date curInvestDatetime) {
         Long outRandomA = 0L;
-        Long curCount = 0L;
-        if (curCreateDatetime != null) {
-            curCount = 1L;
-            outRandomA = curCreateDatetime.getTime();
-            System.out.println("outRandomA:" + curCreateDatetime.getTime());
-        }
+        outRandomA = curInvestDatetime.getTime();
         JewelRecord condition = new JewelRecord();
         condition.setJewelCode(jewelCode);
         condition.setStatus(EJewelRecordStatus.LOTTERY.getCode());
         Long totalCount = jewelRecordDAO.selectTotalCount(condition);
         Long start = 0L;
-        Long timesNum = 5 - curCount;
+        Long lastInvestTimes = Long
+            .valueOf(PropertiesUtil.Config.LAST_INVEST_TIMES);
+        if (lastInvestTimes == null || lastInvestTimes == 0L) {
+            lastInvestTimes = 5L;
+        }
+        Long timesNum = lastInvestTimes - 1;
         if (totalCount >= timesNum) {
             start = totalCount - timesNum;
         } else {
@@ -163,9 +165,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             start.intValue(), timesNum.intValue());
         for (JewelRecord jewelRecord : list) {
             outRandomA += jewelRecord.getInvestDatetime().getTime();
-            System.out.println("outRandomA:" + String.valueOf(outRandomA));
         }
-        System.out.println("totalOutRandomA:" + String.valueOf(outRandomA));
         return outRandomA;
     }
 }

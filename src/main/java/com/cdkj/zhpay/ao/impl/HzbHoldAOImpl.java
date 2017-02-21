@@ -77,14 +77,14 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
             periodRockNum = Integer.valueOf(periodRockNumString);
         }
         condition.setPeriodRockNum(periodRockNum);
-        // 设置数量
+        List<HzbHold> list = hzbHoldBO.queryDistanceHzbHoldList(condition);
+        // 截取数量
         String hzbMaxNumStr = sysConfigBO.getConfigValue(null, null, null,
             SysConstants.HZB_MAX_NUM);
         int hzbMaxNum = SysConstants.HZB_MAX_NUM_DEF;
         if (StringUtils.isNotBlank(hzbMaxNumStr)) {
             hzbMaxNum = Integer.valueOf(hzbMaxNumStr);
         }
-        List<HzbHold> list = hzbHoldBO.queryDistanceHzbHoldList(condition);
         if (CollectionUtils.isNotEmpty(list) && list.size() > hzbMaxNum) {
             list = list.subList(0, hzbMaxNum);
         }
