@@ -8,12 +8,12 @@ public class XNOther extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        throw new BizException("702xxx", "无效API功能号");
+        throw new BizException("808xxx", "无效API功能号");
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        throw new ParaException("702xxx", "无效API功能号");
+        throw new ParaException("808xxx", "无效API功能号");
 
     }
 

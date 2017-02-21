@@ -10,7 +10,7 @@ import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
- * 统计辖区的店铺数据，福利月卡和汇赚宝数量
+ * 统计辖区的汇赚宝数量
  * @author: xieyj 
  * @since: 2017年1月15日 下午5:44:58 
  * @history:
