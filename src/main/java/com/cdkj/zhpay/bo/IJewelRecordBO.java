@@ -25,11 +25,13 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
      * 验证是否大于最大次数
      * @param userId
      * @param jewelCode
+     * @param maxInvesttimes
      * @param times 
-     * @create: 2017年2月21日 下午5:24:57 xieyj
+     * @create: 2017年2月21日 下午8:08:01 haiqingzheng
      * @history:
      */
-    public void checkMaxTimes(String userId, String jewelCode, Integer times);
+    public void checkMaxTimes(String userId, String jewelCode,
+            Integer maxInvestTimes, Integer times);
 
     /**
      * @param data

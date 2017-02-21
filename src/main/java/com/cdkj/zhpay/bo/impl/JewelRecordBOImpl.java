@@ -2,7 +2,6 @@ package com.cdkj.zhpay.bo.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +14,10 @@ import com.cdkj.zhpay.bo.base.Page;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.common.PropertiesUtil;
-import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.dao.IJewelRecordDAO;
 import com.cdkj.zhpay.domain.JewelRecord;
 import com.cdkj.zhpay.domain.JewelRecordNumber;
 import com.cdkj.zhpay.enums.EJewelRecordStatus;
-import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
 /**
@@ -180,12 +177,9 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
      * @see com.cdkj.zhpay.bo.IJewelRecordBO#checkMaxTimes(java.lang.String, java.lang.String)
      */
     @Override
-    public void checkMaxTimes(String userId, String jewelCode, Integer times) {
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(
-            ESystemCode.ZHPAY.getCode(), null);
+    public void checkMaxTimes(String userId, String jewelCode,
+            Integer maxInvestTimes, Integer times) {
         // 验证最大投资人次
-        Long maxInvestTimes = Long.valueOf(rateMap
-            .get(SysConstants.JEWEL_MAX_INVEST));
         JewelRecord condition = new JewelRecord();
         condition.setUserId(userId);
         condition.setJewelCode(jewelCode);
@@ -195,7 +189,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
         for (JewelRecord jewelRecord : list) {
             totalTimes += jewelRecord.getTimes();
         }
-        if (maxInvestTimes != null && maxInvestTimes > (totalTimes + times)) {
+        if (maxInvestTimes != null && maxInvestTimes < (totalTimes + times)) {
             throw new BizException("xn0000", "投资人次超限，每个用户最多投资" + maxInvestTimes
                     + "人次");
         }

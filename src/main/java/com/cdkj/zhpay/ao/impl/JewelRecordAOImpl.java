@@ -26,6 +26,7 @@ import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelRecord;
 import com.cdkj.zhpay.domain.JewelRecordNumber;
+import com.cdkj.zhpay.dto.res.BooleanRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
@@ -77,7 +78,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         if (!EJewelStatus.RUNNING.getCode().equals(jewel.getStatus())) {
             throw new BizException("xn0000", "夺宝标的不处于募集中状态，不能进行购买操作");
         }
-        jewelRecordBO.checkMaxTimes(userId, jewelCode, times);
+        jewelRecordBO.checkMaxTimes(userId, jewelCode, jewel.getMaxInvestNum(),
+            times);
         // 判断是否大于剩余购买份数
         if (jewel.getTotalNum() - jewel.getInvestNum() < times) {
             throw new BizException("xn0000", "剩余份数不足");
@@ -91,6 +93,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
                 lotteryJewel(jewel);
                 jewelAO.publishNextPeriods(jewel.getTemplateCode());
             }
+            result = new BooleanRes(true);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
             result = doWeixinPay(userId, times, jewel, ip);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
