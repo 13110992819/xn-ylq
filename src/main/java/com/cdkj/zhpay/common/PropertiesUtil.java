@@ -37,7 +37,5 @@ public class PropertiesUtil {
 
         public static String LAST_INVEST_RECORDS = props
             .getProperty("LAST_INVEST_RECORDS");
-
-        public static String INIT_PERIODS = props.getProperty("INIT_PERIODS");
     }
 }
