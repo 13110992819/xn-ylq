@@ -110,7 +110,6 @@
 		,max_invest_num = #{maxInvestNum}
 		,adv_text = #{advText}
 		,adv_pic = #{advPic}
-		,current_periods = #{currentPeriods}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		WHERE code = #{code}

@@ -36,6 +36,21 @@ import com.google.gson.reflect.TypeToken;
 public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     /** 
+     * @see com.cdkj.zhpay.bo.IUserBO#doCheckUser(java.lang.String)
+     */
+    @Override
+    public void doCheckUser(String userId) {
+        XN805901Req req = new XN805901Req();
+        req.setTokenId(userId);
+        req.setUserId(userId);
+        XN805901Res res = BizConnecter.getBizData("805901",
+            JsonUtils.object2Json(req), XN805901Res.class);
+        if (res == null) {
+            throw new BizException("XN000000", "编号为" + userId + "的用户不存在");
+        }
+    }
+
+    /** 
      * @see com.cdkj.zhpay.bo.IUserBO#getRemoteUser(java.lang.String)
      */
     @Override

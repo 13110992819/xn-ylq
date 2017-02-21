@@ -48,7 +48,7 @@ public interface IJewelBO extends IPaginableBO<Jewel> {
      * @create: 2016年12月19日 下午3:49:48 shan
      * @history:
      */
-    public Long getJewelTotalCount(String templateCode, EJewelStatus status);
+    public boolean isExist(String templateCode, EJewelStatus status);
 
     /**
      * 查询所有商品

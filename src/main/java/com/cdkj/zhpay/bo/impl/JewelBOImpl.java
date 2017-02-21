@@ -75,15 +75,17 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
         return data;
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.IJewelBO#getJewelTotalCount(java.lang.String, com.cdkj.zhpay.enums.EJewelStatus)
-     */
     @Override
-    public Long getJewelTotalCount(String templateCode, EJewelStatus status) {
+    public boolean isExist(String templateCode, EJewelStatus status) {
         Jewel condition = new Jewel();
         condition.setTemplateCode(templateCode);
-        condition.setStatus(EJewelStatus.RUNNING.getCode());
-        return jewelDAO.selectTotalCount(condition);
+        condition.setStatus(status.getCode());
+        Long count = jewelDAO.selectTotalCount(condition);
+        if (count > 0) {
+            return true;
+        }
+        return false;
+
     }
 
     @Override

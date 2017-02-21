@@ -2,6 +2,7 @@ package com.cdkj.zhpay.bo.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +10,17 @@ import org.springframework.stereotype.Component;
 
 import com.cdkj.zhpay.bo.IJewelRecordBO;
 import com.cdkj.zhpay.bo.IJewelRecordNumberBO;
+import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.Page;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.common.PropertiesUtil;
+import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.dao.IJewelRecordDAO;
 import com.cdkj.zhpay.domain.JewelRecord;
+import com.cdkj.zhpay.domain.JewelRecordNumber;
 import com.cdkj.zhpay.enums.EJewelRecordStatus;
+import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
 /**
@@ -26,6 +31,9 @@ import com.cdkj.zhpay.exception.BizException;
 @Component
 public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
         IJewelRecordBO {
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
+
     @Autowired
     private IJewelRecordDAO jewelRecordDAO;
 
@@ -142,9 +150,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     }
 
     @Override
-    public Long getLastRecordsTimes(String jewelCode, Date curInvestDatetime) {
-        Long outRandomA = 0L;
-        outRandomA = curInvestDatetime.getTime();
+    public Long getLastRecordsTimes(String jewelCode) {
         JewelRecord condition = new JewelRecord();
         condition.setJewelCode(jewelCode);
         condition.setStatus(EJewelRecordStatus.LOTTERY.getCode());
@@ -155,7 +161,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
         if (lastInvestRecords == null || lastInvestRecords == 0L) {
             lastInvestRecords = 5L;
         }
-        Long timesNum = lastInvestRecords - 1;
+        Long timesNum = lastInvestRecords;
         if (totalCount >= timesNum) {
             start = totalCount - timesNum;
         } else {
@@ -163,9 +169,51 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
         }
         List<JewelRecord> list = jewelRecordDAO.selectList(condition,
             start.intValue(), timesNum.intValue());
+        Long outRandomA = 0L;
         for (JewelRecord jewelRecord : list) {
             outRandomA += jewelRecord.getInvestDatetime().getTime();
         }
         return outRandomA;
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IJewelRecordBO#checkMaxTimes(java.lang.String, java.lang.String)
+     */
+    @Override
+    public void checkMaxTimes(String userId, String jewelCode, Integer times) {
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(
+            ESystemCode.ZHPAY.getCode(), null);
+        // 验证最大投资人次
+        Long maxInvestTimes = Long.valueOf(rateMap
+            .get(SysConstants.JEWEL_MAX_INVEST));
+        JewelRecord condition = new JewelRecord();
+        condition.setUserId(userId);
+        condition.setJewelCode(jewelCode);
+        condition.setStatus(EJewelRecordStatus.LOTTERY.getCode());
+        List<JewelRecord> list = jewelRecordDAO.selectList(condition);
+        long totalTimes = 0l;
+        for (JewelRecord jewelRecord : list) {
+            totalTimes += jewelRecord.getTimes();
+        }
+        if (maxInvestTimes != null && maxInvestTimes > (totalTimes + times)) {
+            throw new BizException("xn0000", "投资人次超限，每个用户最多投资" + maxInvestTimes
+                    + "人次");
+        }
+    }
+
+    /**
+     * @see com.cdkj.zhpay.bo.IJewelRecordBO#getWinJewelRecord(java.lang.String, java.lang.String)
+     */
+    @Override
+    public JewelRecord getWinJewelRecord(String jewelCode, String luckyNumber) {
+        // 根据幸运号码找到夺宝记录
+        JewelRecordNumber condition = new JewelRecordNumber();
+        condition.setJewelCode(jewelCode);
+        condition.setNumber(luckyNumber);
+        JewelRecordNumber jewelRecordNumber = jewelRecordNumberBO
+            .queryJewelRecordNumberList(condition).get(0);
+        JewelRecord jrCondition = new JewelRecord();
+        jrCondition.setCode(jewelRecordNumber.getRecordCode());
+        return jewelRecordDAO.select(jrCondition);
     }
 }

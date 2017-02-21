@@ -46,6 +46,7 @@ public class JewelTemplateBOImpl extends PaginableBOImpl<JewelTemplate>
                 .getCode());
             data.setCode(code);
             data.setUpdateDatetime(new Date());
+            data.setCurrentPeriods(0);
             data.setStatus(EJewelTemplateStatus.NEW.getCode());
             JewelTemplateDAO.insert(data);
         }

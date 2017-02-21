@@ -12,7 +12,6 @@ import com.cdkj.zhpay.ao.IJewelAO;
 import com.cdkj.zhpay.bo.IJewelBO;
 import com.cdkj.zhpay.bo.IJewelTemplateBO;
 import com.cdkj.zhpay.bo.base.Paginable;
-import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelTemplate;
 import com.cdkj.zhpay.enums.EJewelStatus;
@@ -61,14 +60,8 @@ public class JewelAOImpl implements IJewelAO {
             throw new BizException("xn0000", "模板不处于上架状态，不能发布标的");
         }
         // 如果没有正在募集中的项目
-        if (jewelBO.getJewelTotalCount(templateCode, EJewelStatus.RUNNING) <= 0) {
-            Integer nextPeriods = null;
-            if (jewelTemplate.getCurrentPeriods() == null) {
-                nextPeriods = Integer
-                    .valueOf(PropertiesUtil.Config.INIT_PERIODS);
-            } else {
-                nextPeriods = jewelTemplate.getCurrentPeriods() + 1;
-            }
+        if (!jewelBO.isExist(templateCode, EJewelStatus.RUNNING)) {
+            Integer nextPeriods = jewelTemplate.getCurrentPeriods() + 1;
             jewelTemplate.setCurrentPeriods(nextPeriods);
             jewelBO.saveJewel(jewelTemplate);
             // 更新模板当前发布期号

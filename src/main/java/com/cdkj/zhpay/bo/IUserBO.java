@@ -12,6 +12,15 @@ import com.cdkj.zhpay.dto.res.XN805901Res;
  * @history:
  */
 public interface IUserBO {
+
+    /**
+     * 验证用户
+     * @param userId 
+     * @create: 2017年2月21日 下午6:28:40 xieyj
+     * @history:
+     */
+    public void doCheckUser(String userId);
+
     /**
      * 获取远程用户信息
      * @param tokenId
