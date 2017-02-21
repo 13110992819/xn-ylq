@@ -65,7 +65,7 @@ public class HzbAOImpl implements IHzbAO {
         condition.setUserId(userId);
         condition.setStatus(EDiviFlag.EFFECT.getCode());
         if (hzbHoldBO.getTotalCount(condition) > 0) {
-            throw new BizException("xn0000", "该用户已经购买过汇赚宝");
+            throw new BizException("xn0000", "您已经购买过汇赚宝");
         }
         // 落地汇赚宝购买记录
         Hzb hzb = hzbBO.getHzb(hzbCode);
