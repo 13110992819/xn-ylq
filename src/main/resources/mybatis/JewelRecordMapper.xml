@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xnjr.mall.dao.IJewelRecordDAO">
+<mapper namespace="com.cdkj.zhpay.dao.IJewelRecordDAO">
 	<resultMap id="jewelRecord_DB_Result" type="jewelRecord">
 		<result column="code" property="code" />
 		<result column="user_id" property="userId" />

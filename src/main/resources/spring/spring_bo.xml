@@ -12,43 +12,43 @@
 
 	
 	<!-- 分页BO层注入paginableDao -->
-	<bean id="sysDictBO" class="com.xnjr.mall.bo.impl.SYSDictBOImpl">
+	<bean id="sysDictBO" class="com.cdkj.zhpay.bo.impl.SYSDictBOImpl">
 		<property name="paginableDAO" ref="sysDictDAOImpl"/>
 	</bean>	
 	
-	<bean id="sysConfigBO" class="com.xnjr.mall.bo.impl.SYSConfigBOImpl">
+	<bean id="sysConfigBO" class="com.cdkj.zhpay.bo.impl.SYSConfigBOImpl">
 		<property name="paginableDAO" ref="sysConfigDAOImpl"/>
 	</bean>	
 	
-	<bean id="jewelTemplateBO" class="com.xnjr.mall.bo.impl.JewelTemplateBOImpl">
+	<bean id="jewelTemplateBO" class="com.cdkj.zhpay.bo.impl.JewelTemplateBOImpl">
 		<property name="paginableDAO" ref="jewelTemplateDAOImpl"/>
 	</bean>	
 	
-	<bean id="jewelBO" class="com.xnjr.mall.bo.impl.JewelBOImpl">
+	<bean id="jewelBO" class="com.cdkj.zhpay.bo.impl.JewelBOImpl">
 		<property name="paginableDAO" ref="jewelDAOImpl"/>
 	</bean>	
 	
-	<bean id="jewelRecordBO" class="com.xnjr.mall.bo.impl.JewelRecordBOImpl">
+	<bean id="jewelRecordBO" class="com.cdkj.zhpay.bo.impl.JewelRecordBOImpl">
 		<property name="paginableDAO" ref="jewelRecordDAOImpl"/>
 	</bean>	
 	
-	<bean id="jewelRecordNumberBO" class="com.xnjr.mall.bo.impl.JewelRecordNumberBOImpl">
+	<bean id="jewelRecordNumberBO" class="com.cdkj.zhpay.bo.impl.JewelRecordNumberBOImpl">
 		<property name="paginableDAO" ref="jewelRecordNumberDAOImpl"/>
 	</bean>	
 
-	<bean id="hzbBO" class="com.xnjr.mall.bo.impl.HzbBOImpl">
+	<bean id="hzbBO" class="com.cdkj.zhpay.bo.impl.HzbBOImpl">
 		<property name="paginableDAO" ref="hzbDAOImpl"/>
 	</bean>
 	
-	<bean id="hzbHoldBO" class="com.xnjr.mall.bo.impl.HzbHoldBOImpl">
+	<bean id="hzbHoldBO" class="com.cdkj.zhpay.bo.impl.HzbHoldBOImpl">
 		<property name="paginableDAO" ref="hzbHoldDAOImpl"/>
 	</bean>
 	
-	<bean id="hzbYyBO" class="com.xnjr.mall.bo.impl.HzbYyBOImpl">
+	<bean id="hzbYyBO" class="com.cdkj.zhpay.bo.impl.HzbYyBOImpl">
 		<property name="paginableDAO" ref="hzbYyDAOImpl"/>
 	</bean>
 	
-    <bean id="hzbMgiftBO" class="com.xnjr.mall.bo.impl.HzbMgiftBOImpl">
+    <bean id="hzbMgiftBO" class="com.cdkj.zhpay.bo.impl.HzbMgiftBOImpl">
 		<property name="paginableDAO" ref="hzbMgiftDAOImpl"/>
 	</bean>
 </beans>

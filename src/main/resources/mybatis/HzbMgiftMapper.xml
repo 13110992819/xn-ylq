@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xnjr.mall.dao.IHzbMgiftDAO">
+<mapper namespace="com.cdkj.zhpay.dao.IHzbMgiftDAO">
 	<resultMap id="hzbMgift_DB_Result" type="hzbMgift">
 		<result column="code" property="code" />
 		<result column="adv_title" property="advTitle" />

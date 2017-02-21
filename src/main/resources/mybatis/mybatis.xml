@@ -2,18 +2,18 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>	
-		<typeAlias alias="sysDict" type="com.xnjr.mall.domain.SYSDict" />
-	    <typeAlias alias="sysConfig" type="com.xnjr.mall.domain.SYSConfig" />
-	    <typeAlias alias="jewelTemplate" type="com.xnjr.mall.domain.JewelTemplate" />
-	    <typeAlias alias="jewel" type="com.xnjr.mall.domain.Jewel" />
-	    <typeAlias alias="jewelRecord" type="com.xnjr.mall.domain.JewelRecord" />
+		<typeAlias alias="sysDict" type="com.cdkj.zhpay.domain.SYSDict" />
+	    <typeAlias alias="sysConfig" type="com.cdkj.zhpay.domain.SYSConfig" />
+	    <typeAlias alias="jewelTemplate" type="com.cdkj.zhpay.domain.JewelTemplate" />
+	    <typeAlias alias="jewel" type="com.cdkj.zhpay.domain.Jewel" />
+	    <typeAlias alias="jewelRecord" type="com.cdkj.zhpay.domain.JewelRecord" />
 	    
-	    <typeAlias alias="jewelRecordNumber" type="com.xnjr.mall.domain.JewelRecordNumber" />
-	    <typeAlias alias="hzb" type="com.xnjr.mall.domain.Hzb" />
-	    <typeAlias alias="hzbHold" type="com.xnjr.mall.domain.HzbHold" />
-	    <typeAlias alias="hzbYy" type="com.xnjr.mall.domain.HzbYy" />
+	    <typeAlias alias="jewelRecordNumber" type="com.cdkj.zhpay.domain.JewelRecordNumber" />
+	    <typeAlias alias="hzb" type="com.cdkj.zhpay.domain.Hzb" />
+	    <typeAlias alias="hzbHold" type="com.cdkj.zhpay.domain.HzbHold" />
+	    <typeAlias alias="hzbYy" type="com.cdkj.zhpay.domain.HzbYy" />
 	    
-	    <typeAlias alias="hzbMgift" type="com.xnjr.mall.domain.HzbMgift" />
+	    <typeAlias alias="hzbMgift" type="com.cdkj.zhpay.domain.HzbMgift" />
 	</typeAliases>	
 </configuration>
 
