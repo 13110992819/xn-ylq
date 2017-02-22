@@ -46,6 +46,7 @@ CREATE TABLE `tact_hzb_hold` (
   `pay_amount1` bigint(20) DEFAULT NULL COMMENT '支付人民币',
   `pay_amount2` bigint(20) DEFAULT NULL COMMENT '支付虚拟币1',
   `pay_amount3` bigint(20) DEFAULT NULL COMMENT '支付虚拟币2',
+  `ip` varchar(255) DEFAULT NULL COMMENT '购买IP地址',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
@@ -125,6 +126,7 @@ CREATE TABLE `tact_jewel_record` (
   `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
   `status` varchar(4) DEFAULT NULL COMMENT '状态(0待开奖，1已中奖，2未中奖)',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `ip` varchar(255) DEFAULT NULL COMMENT '购买IP地址',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)
