@@ -55,6 +55,9 @@ public class JewelRecord extends ABaseDO {
     // 昵称
     private String nickname;
 
+    // 手机号
+    private String mobile;
+
     // 照片
     private String photo;
 
@@ -66,6 +69,14 @@ public class JewelRecord extends ABaseDO {
 
     // 我投资人次
     private String myInvestTimes;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public JewelRecord() {
         Jewel jewel = new Jewel();
