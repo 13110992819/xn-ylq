@@ -18,6 +18,7 @@
 		
 		<result column="status" property="status" />
 		<result column="remark" property="remark" />
+		<result column="ip" property="ip" />
 		<result column="pay_code" property="payCode" />
 		<result column="system_code" property="systemCode" />
 		
@@ -69,14 +70,7 @@
 				</choose>
 			</if>
 			<if test="jewel != null and jewel.status != null and jewel.status != '' ">
-				<choose>
-					<when test='jewel.status == "all"'>
-						AND tj.status in (3,5,7)
-					</when>
-				    <otherwise>
-						AND tj.status = #{jewel.status}
-					</otherwise>
-				</choose>
+				AND tj.status = #{jewel.status}
 			</if>
 			<if test="payCode != null and payCode != '' ">
 				AND t.pay_code = #{payCode}
@@ -91,7 +85,6 @@
 		t.code
 		,t.user_id
 		,tu.mobile
-		,(select sum(tjr.times) from tact_jewel_record tjr where tjr.user_id=t.user_id and tjr.jewel_code = t.jewel_code) as my_invest_times
 		,tu.nickname
 		,tue.photo
 		,t.jewel_code
@@ -101,6 +94,7 @@
 		,t.pay_datetime
 		,t.status
 		,t.remark
+		,t.ip
 		,t.pay_code 
 		,t.system_code
 		FROM
@@ -169,8 +163,9 @@
 		,pay_datetime
 		,status
 		,remark
-		,pay_code
+		,ip
 		
+		,pay_code
 		,system_code
 		)
 		VALUES(
@@ -184,13 +179,14 @@
 		,#{payDatetime}
 		,#{status}
 		,#{remark}
-		,#{payCode}
+		,#{ip}
 		
+		,#{payCode}
 		,#{systemCode}
 		)
 	</insert>
 	
-	<update id="update_jewelRecord" parameterType="jewelRecord">
+	<update id="update_status" parameterType="jewelRecord">
 		UPDATE tact_jewel_record
 		SET
 		status=#{status}

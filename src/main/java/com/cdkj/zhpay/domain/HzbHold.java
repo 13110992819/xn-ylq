@@ -47,6 +47,9 @@ public class HzbHold extends ABaseDO {
     // 支付价格3人民币
     private Long payAmount3;
 
+    // 支付ip
+    private Long ip;
+
     // 支付编号
     private String payCode;
 

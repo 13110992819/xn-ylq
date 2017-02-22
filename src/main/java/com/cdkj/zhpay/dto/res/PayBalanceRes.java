@@ -23,6 +23,10 @@ public class PayBalanceRes {
     public PayBalanceRes() {
     }
 
+    public PayBalanceRes(Long frAmount) {
+        this.frAmount = frAmount;
+    }
+
     public PayBalanceRes(Long gxjlAmount, Long frAmount) {
         this.gxjlAmount = gxjlAmount;
         this.frAmount = frAmount;

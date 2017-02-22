@@ -45,6 +45,9 @@ public class JewelRecord extends ABaseDO {
     // 备注
     private String remark;
 
+    // ip
+    private String ip;
+
     // 支付编号
     private String payCode;
 
@@ -69,6 +72,14 @@ public class JewelRecord extends ABaseDO {
 
     // 我投资人次
     private String myInvestTimes;
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 
     public String getMobile() {
         return mobile;

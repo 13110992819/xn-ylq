@@ -13,6 +13,7 @@
 		<result column="period_rock_num" property="periodRockNum" />
 		<result column="total_rock_num" property="totalRockNum" />
 		<result column="distance" property="distance" />
+		<result column="ip" property="ip" />
 		<result column="pay_code" property="payCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
@@ -24,7 +25,7 @@
 			<if test="status != null and status != '' ">
 				<choose>
 					<when test='status == "effect"'>
-						AND t.status in(1,2,3)
+						AND t.status in(1,2)
 					</when>
 				    <otherwise>
 						AND t.status = #{status}
@@ -65,6 +66,7 @@
 		,t.currency
 		,t.period_rock_num
 		,t.total_rock_num
+		,t.ip
 		,t.pay_code
 		,t.system_code
 		FROM
@@ -123,6 +125,7 @@
 		,pay_amount1
 		,pay_amount2
 		,pay_amount3
+		,ip
 		,pay_code
 		,system_code
 		)
@@ -137,6 +140,7 @@
 		,#{payAmount1}
 		,#{payAmount2}
 		,#{payAmount3}
+		,#{ip}
 		,#{payCode}
 		,#{systemCode}
 		)
@@ -152,7 +156,6 @@
 		,currency = #{currency}
 		,period_rock_num = #{periodRockNum}
 		,total_rock_num = #{totalRockNum}
-		,system_code = #{systemCode}
 		WHERE code = #{code}
 	</update>
 	

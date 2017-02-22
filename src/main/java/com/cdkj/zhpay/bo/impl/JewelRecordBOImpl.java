@@ -94,7 +94,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             data.setCode(code);
             data.setStatus(status);
             data.setRemark(remark);
-            count = jewelRecordDAO.update(data);
+            count = jewelRecordDAO.updateStatus(data);
         }
         return count;
     }
@@ -109,7 +109,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             data.setStatus(status);
             data.setPayDatetime(payDatetime);
             data.setRemark(remark);
-            count = jewelRecordDAO.update(data);
+            count = jewelRecordDAO.updateStatus(data);
         }
         return count;
     }
@@ -174,11 +174,14 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     }
 
     /** 
-     * @see com.cdkj.zhpay.bo.IJewelRecordBO#checkMaxTimes(java.lang.String, java.lang.String)
+     * @see com.cdkj.zhpay.bo.IJewelRecordBO#checkTimes(java.lang.String, java.lang.String)
      */
     @Override
-    public void checkMaxTimes(String userId, String jewelCode,
+    public void checkTimes(String userId, String jewelCode,
             Integer maxInvestTimes, Integer times) {
+        if (times <= 0) {
+            throw new BizException("xn0000", "购买人次请选择");
+        }
         // 验证最大投资人次
         JewelRecord condition = new JewelRecord();
         condition.setUserId(userId);

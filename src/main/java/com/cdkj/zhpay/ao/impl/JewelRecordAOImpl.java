@@ -78,7 +78,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         if (!EJewelStatus.RUNNING.getCode().equals(jewel.getStatus())) {
             throw new BizException("xn0000", "夺宝标的不处于募集中状态，不能进行购买操作");
         }
-        jewelRecordBO.checkMaxTimes(userId, jewelCode, jewel.getMaxInvestNum(),
+        jewelRecordBO.checkTimes(userId, jewelCode, jewel.getMaxInvestNum(),
             times);
         // 判断是否大于剩余购买份数
         if (jewel.getTotalNum() - jewel.getInvestNum() < times) {
@@ -86,8 +86,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         }
         userBO.doCheckUser(userId);
         // 余额支付(余额支付)
-        if (EPayType.YEZP.getCode().equals(payType)) {
-            boolean resultByBalance = doBalancePay(userId, times, jewel);
+        if (EPayType.YEFR.getCode().equals(payType)) {
+            boolean resultByBalance = doBalancePay(userId, times, jewel, ip);
             // 是否可以开奖，开奖自动开始下一期
             if (resultByBalance) {
                 lotteryJewel(jewel);
@@ -103,16 +103,17 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
 
     /**
      * 余额支付
-     * @param systemCode
      * @param userId
      * @param times
      * @param jewel
+     * @param ip
      * @return 
-     * @create: 2017年2月21日 下午6:20:37 xieyj
+     * @create: 2017年2月22日 下午3:21:45 xieyj
      * @history:
      */
     @Transactional
-    private boolean doBalancePay(String userId, Integer times, Jewel jewel) {
+    private boolean doBalancePay(String userId, Integer times, Jewel jewel,
+            String ip) {
         JewelRecord jewelRecord = new JewelRecord();
         String jewelRecordCode = OrderNoGenerater
             .generateM(EGeneratePrefix.JEWEL_RECORD.getCode());
@@ -121,8 +122,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         jewelRecord.setJewelCode(jewel.getCode());
         jewelRecord.setTimes(times);
         jewelRecord.setRemark("已分配号码，待开奖");
-        jewelRecord.setSystemCode(jewel.getSystemCode());
         jewelRecord.setPayAmount(jewel.getPrice() * times);
+        jewelRecord.setIp(ip);
         // 检验分润和贡献奖励是否充足
         accountBO.checkBalanceAmount(jewel.getSystemCode(), userId,
             jewelRecord.getPayAmount());
@@ -130,6 +131,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         Date payDatetime = new Date();
         jewelRecord.setInvestDatetime(payDatetime);
         jewelRecord.setPayDatetime(payDatetime);
+        jewelRecord.setSystemCode(jewel.getSystemCode());
         jewelRecordBO.saveJewelRecord(jewelRecord);
         // 分配号码
         boolean result = distributeNumber(userId, jewel, times, jewelRecordCode);
@@ -161,8 +163,6 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         jewelRecord.setUserId(userId);
         jewelRecord.setJewelCode(jewel.getCode());
         jewelRecord.setTimes(times);
-        jewelRecord.setRemark("已分配号码，待开奖");
-        jewelRecord.setSystemCode(jewel.getSystemCode());
         jewelRecord.setPayAmount(jewel.getPrice() * times);
         String bizNote = "宝贝单号：" + jewelRecordCode + "——小目标";
         String body = "正汇钱包—小目标支付";
@@ -171,6 +171,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         jewelRecord.setStatus(EJewelRecordStatus.TO_PAY.getCode());
         jewelRecord.setPayCode(res.getJourCode());
         jewelRecord.setRemark("小目标待支付");
+        jewelRecord.setIp(ip);
+        jewelRecord.setSystemCode(jewel.getSystemCode());
         jewelRecordBO.saveJewelRecord(jewelRecord);
         return res;
     }
@@ -281,11 +283,6 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             condition);
         if (page != null && CollectionUtils.isNotEmpty(page.getList())) {
             for (JewelRecord jewelRecord : page.getList()) {
-                JewelRecordNumber imCondition = new JewelRecordNumber();
-                imCondition.setRecordCode(jewelRecord.getCode());
-                List<JewelRecordNumber> recordNumberList = jewelRecordNumberBO
-                    .queryJewelRecordNumberList(imCondition);
-                jewelRecord.setJewelRecordNumberList(recordNumberList);
                 Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
                 jewelRecord.setJewel(jewel);
             }
@@ -305,11 +302,6 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         List<JewelRecord> list = jewelRecordBO.queryJewelRecordList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             for (JewelRecord jewelRecord : list) {
-                JewelRecordNumber imCondition = new JewelRecordNumber();
-                imCondition.setRecordCode(jewelRecord.getCode());
-                List<JewelRecordNumber> recordNumberList = jewelRecordNumberBO
-                    .queryJewelRecordNumberList(imCondition);
-                jewelRecord.setJewelRecordNumberList(recordNumberList);
                 Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
                 jewelRecord.setJewel(jewel);
             }

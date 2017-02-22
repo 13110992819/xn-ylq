@@ -77,50 +77,77 @@ public class HzbAOImpl implements IHzbAO {
         }
         // 落地汇赚宝购买记录
         Hzb hzb = hzbBO.getHzb(hzbCode);
-        String systemCode = hzb.getSystemCode();
-        Long price = hzb.getPrice();
-        if (EPayType.YEZP.getCode().equals(payType)) {
-            // 余额支付
-            PayBalanceRes payRes = accountBO.doBalancePay(systemCode, userId,
-                ESysUser.SYS_USER.getCode(), price, EBizType.AJ_GMHZB);
-            HzbHold hzbHold = new HzbHold();
-            hzbHold.setUserId(userId);
-            hzbHold.setHzbCode(hzbCode);
-            hzbHold.setStatus(EHzbHoldStatus.ACTIVATED.getCode());
-            hzbHold.setPrice(hzb.getPrice());
-            hzbHold.setCurrency(hzb.getCurrency());
-            hzbHold.setPeriodRockNum(0);
-            hzbHold.setTotalRockNum(0);
-            hzbHold.setPayAmount1(0L);
-            hzbHold.setPayAmount2(payRes.getGxjlAmount());
-            hzbHold.setPayAmount3(payRes.getFrAmount());
-            hzbHold.setSystemCode(hzb.getSystemCode());
-            result = hzbHoldBO.saveHzbHold(hzbHold);
-            // 分销规则
-            distributeAmount(hzbHold);
+        if (EPayType.YEFR.getCode().equals(payType)) {
+            result = doFRPay(userId, hzbCode, hzb);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-            // 获取微信APP支付信息
-            String bizNote = hzb.getName() + "——汇赚宝购买";
-            String body = "正汇钱包—汇赚宝";
-            XN802180Res res = accountBO.doWeiXinPay(systemCode, userId,
-                EBizType.AJ_GMHZB, bizNote, body, price, ip);
-            // 落地本地系统消费记录，状态为未支付
-            HzbHold data = new HzbHold();
-            data.setUserId(userId);
-            data.setHzbCode(hzbCode);
-            data.setStatus(EHzbHoldStatus.TO_PAY.getCode());
-            data.setPrice(hzb.getPrice());
-            data.setCurrency(hzb.getCurrency());
-            data.setPeriodRockNum(0);
-            data.setTotalRockNum(0);
-            data.setPayCode(res.getJourCode());
-            data.setSystemCode(hzb.getSystemCode());
-            hzbHoldBO.saveHzbHold(data);
-            result = res;
+            result = doWeixinPay(userId, hzbCode, ip, hzb);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
             return null;
         }
         return result;
+    }
+
+    /** 
+     * 分润支付
+     * @param userId
+     * @param hzbCode
+     * @param hzb
+     * @return 
+     * @create: 2017年2月22日 下午4:45:09 xieyj
+     * @history: 
+     */
+    private Object doFRPay(String userId, String hzbCode, Hzb hzb) {
+        // 余额支付
+        PayBalanceRes payRes = accountBO.doFRPay(hzb.getSystemCode(), userId,
+            ESysUser.SYS_USER.getCode(), hzb.getPrice(), EBizType.AJ_GMHZB);
+        HzbHold hzbHold = new HzbHold();
+        hzbHold.setUserId(userId);
+        hzbHold.setHzbCode(hzbCode);
+        hzbHold.setStatus(EHzbHoldStatus.ACTIVATED.getCode());
+        hzbHold.setPrice(hzb.getPrice());
+        hzbHold.setCurrency(hzb.getCurrency());
+        hzbHold.setPeriodRockNum(0);
+        hzbHold.setTotalRockNum(0);
+        hzbHold.setPayAmount1(0L);
+        hzbHold.setPayAmount2(0L);
+        hzbHold.setPayAmount3(payRes.getFrAmount());
+        hzbHold.setSystemCode(hzb.getSystemCode());
+        Object result = hzbHoldBO.saveHzbHold(hzbHold);
+        // 分销规则
+        distributeAmount(hzbHold);
+        return result;
+    }
+
+    /** 
+     * 微信支付
+     * @param userId
+     * @param hzbCode
+     * @param ip
+     * @param hzb
+     * @return 
+     * @create: 2017年2月22日 下午4:43:17 xieyj
+     * @history: 
+     */
+    private XN802180Res doWeixinPay(String userId, String hzbCode, String ip,
+            Hzb hzb) {
+        // 获取微信APP支付信息
+        String bizNote = hzb.getName() + "——汇赚宝购买";
+        String body = "正汇钱包—汇赚宝";
+        XN802180Res res = accountBO.doWeiXinPay(hzb.getSystemCode(), userId,
+            EBizType.AJ_GMHZB, bizNote, body, hzb.getPrice(), ip);
+        // 落地本地系统消费记录，状态为未支付
+        HzbHold data = new HzbHold();
+        data.setUserId(userId);
+        data.setHzbCode(hzbCode);
+        data.setStatus(EHzbHoldStatus.TO_PAY.getCode());
+        data.setPrice(hzb.getPrice());
+        data.setCurrency(hzb.getCurrency());
+        data.setPeriodRockNum(0);
+        data.setTotalRockNum(0);
+        data.setPayCode(res.getJourCode());
+        data.setSystemCode(hzb.getSystemCode());
+        hzbHoldBO.saveHzbHold(data);
+        return res;
     }
 
     @Override

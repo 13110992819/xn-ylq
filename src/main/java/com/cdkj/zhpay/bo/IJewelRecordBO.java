@@ -30,7 +30,7 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
      * @create: 2017年2月21日 下午8:08:01 haiqingzheng
      * @history:
      */
-    public void checkMaxTimes(String userId, String jewelCode,
+    public void checkTimes(String userId, String jewelCode,
             Integer maxInvestTimes, Integer times);
 
     /**
@@ -50,6 +50,7 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
     public int removeJewelRecord(String code);
 
     /**
+     * 更新状态
      * @param code
      * @param status
      * @param remark

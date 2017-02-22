@@ -239,6 +239,32 @@ public class AccountBOImpl implements IAccountBO {
         return new PayBalanceRes(gxjlPrice, frPrice);
     }
 
+    /** 
+     * @see com.cdkj.zhpay.bo.IAccountBO#doBalancePay(com.cdkj.zhpay.enums.EBizType)
+     */
+    @Override
+    public PayBalanceRes doFRPay(String systemCode, String fromUserId,
+            String toUserId, Long price, EBizType bizType) {
+        Long frPrice = 0L;
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
+            null);
+        // 查询用户分润账户
+        XN802503Res frAccount = this.getAccountByUserId(systemCode, fromUserId,
+            ECurrency.FRB.getCode());
+        Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
+        Long frCnyAmount = Double.valueOf(frAccount.getAmount() / fr2cny)
+            .longValue();
+        // 1、分润<价格 分润币不足
+        if (frCnyAmount < price) {
+            throw new BizException("xn0000", "分润币不足");
+        }
+        // 扣除分润
+        doTransferAmountByUser(systemCode, fromUserId, toUserId,
+            ECurrency.FRB.getCode(), frPrice, bizType.getCode(),
+            bizType.getValue());
+        return new PayBalanceRes(frPrice);
+    }
+
     @Override
     public void checkGWBQBBAmount(String systemCode, String userId,
             Long gwbPrice, Long qbbPrice) {

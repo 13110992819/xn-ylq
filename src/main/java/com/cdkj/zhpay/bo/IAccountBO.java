@@ -168,6 +168,9 @@ public interface IAccountBO {
     public PayBalanceRes doBalancePay(String systemCode, String fromUserId,
             String toUserId, Long price, EBizType bizType);
 
+    public PayBalanceRes doFRPay(String systemCode, String fromUserId,
+            String toUserId, Long price, EBizType bizType);
+
     /**
      * 检查购物币和钱包币和余额
      * @param systemCode

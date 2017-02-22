@@ -13,9 +13,7 @@ import com.cdkj.zhpay.domain.JewelRecord;
 public interface IJewelRecordDAO extends IBaseDAO<JewelRecord> {
     String NAMESPACE = IJewelRecordDAO.class.getName().concat(".");
 
-    public int update(JewelRecord data);
-
-    public int updateReAddress(JewelRecord data);
+    public int updateStatus(JewelRecord data);
 
     public int updateLostInfo(JewelRecord data);
 

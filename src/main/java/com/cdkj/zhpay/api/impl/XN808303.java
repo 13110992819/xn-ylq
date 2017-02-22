@@ -33,6 +33,6 @@ public class XN808303 extends AProcessor {
         req = JsonUtils.json2Bean(inputparams, XN808303Req.class);
         StringValidater.validateNumber(req.getTimes());
         StringValidater.validateBlank(req.getUserId(), req.getJewelCode(),
-            req.getPayType());
+            req.getPayType(), req.getIp());
     }
 }
