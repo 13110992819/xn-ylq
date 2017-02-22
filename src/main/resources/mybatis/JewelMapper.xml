@@ -63,7 +63,7 @@
 		,invest_num
 		,create_datetime
 		,win_number
-		,win_user
+		,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.win_user) as win_user
 		,win_datetime
 		
 		,status
