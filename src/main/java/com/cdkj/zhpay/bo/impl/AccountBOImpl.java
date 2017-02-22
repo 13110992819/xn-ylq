@@ -258,6 +258,7 @@ public class AccountBOImpl implements IAccountBO {
         if (frCnyAmount < price) {
             throw new BizException("xn0000", "分润币不足");
         }
+        frPrice = Double.valueOf(price * fr2cny).longValue();
         // 扣除分润
         doTransferAmountByUser(systemCode, fromUserId, toUserId,
             ECurrency.FRB.getCode(), frPrice, bizType.getCode(),
