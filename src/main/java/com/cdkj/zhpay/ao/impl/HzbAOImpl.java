@@ -13,6 +13,7 @@ import com.cdkj.zhpay.ao.IHzbAO;
 import com.cdkj.zhpay.bo.IAccountBO;
 import com.cdkj.zhpay.bo.IHzbBO;
 import com.cdkj.zhpay.bo.IHzbHoldBO;
+import com.cdkj.zhpay.bo.IHzbMgiftBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
@@ -49,6 +50,9 @@ public class HzbAOImpl implements IHzbAO {
 
     @Autowired
     private IUserBO userBO;
+
+    @Autowired
+    private IHzbMgiftBO hzbMgiftBO;
 
     @Override
     public void editHzb(Hzb data) {
@@ -96,6 +100,7 @@ public class HzbAOImpl implements IHzbAO {
      * @create: 2017年2月22日 下午4:45:09 xieyj
      * @history: 
      */
+    @Transactional
     private Object doFRPay(String userId, String hzbCode, Hzb hzb) {
         // 余额支付
         PayBalanceRes payRes = accountBO.doFRPay(hzb.getSystemCode(), userId,
@@ -115,6 +120,8 @@ public class HzbAOImpl implements IHzbAO {
         Object result = hzbHoldBO.saveHzbHold(hzbHold);
         // 分销规则
         distributeAmount(hzbHold);
+        // 产生红包
+        hzbMgiftBO.sendHzbMgift(userId);
         return result;
     }
 
@@ -202,11 +209,14 @@ public class HzbAOImpl implements IHzbAO {
         if (CollectionUtils.isEmpty(result)) {
             throw new BizException("XN000000", "找不到对应的消费记录");
         }
+        HzbHold hzbHold = result.get(0);
         // 更新状态
-        hzbHoldBO.refreshStatus(result.get(0).getId(),
+        hzbHoldBO.refreshStatus(hzbHold.getId(),
             EHzbHoldStatus.ACTIVATED.getCode());
-        // 分成
-        distributeAmount(result.get(0));
+        // 分配分成
+        distributeAmount(hzbHold);
+        // 产生红包
+        hzbMgiftBO.sendHzbMgift(hzbHold.getUserId());
     }
 
     // 汇赚宝分成:

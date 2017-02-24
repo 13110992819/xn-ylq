@@ -182,4 +182,16 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
         }
         checkHzbYyCondition(systemCode, userId, deviceNo);
     }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IHzbYyBO#getTotalHzbYyCount(java.util.Date, java.util.Date, java.lang.String)
+     */
+    @Override
+    public Long getTotalHzbYyCount(Date startDate, Date endDate, Long hzbHoldId) {
+        HzbYy condition = new HzbYy();
+        condition.setHzbHoldId(hzbHoldId);
+        condition.setCreateDatetimeStart(startDate);
+        condition.setCreateDatetimeEnd(endDate);
+        return hzbYyDAO.selectTotalCount(condition);
+    }
 }

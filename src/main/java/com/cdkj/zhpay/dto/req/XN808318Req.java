@@ -14,11 +14,22 @@ public class XN808318Req extends APageReq {
     // 夺宝标的编号(必填)
     private String jewelCode;
 
+    // 用户编号(选填)
+    private String userId;
+
     public String getJewelCode() {
         return jewelCode;
     }
 
     public void setJewelCode(String jewelCode) {
         this.jewelCode = jewelCode;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

@@ -31,4 +31,6 @@ public interface IHzbHoldBO extends IPaginableBO<HzbHold> {
             HzbHold condition);
 
     public HzbHold getHzbHold(Long id);
+
+    public HzbHold getHzbHold(String userId);
 }

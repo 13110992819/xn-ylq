@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.HzbHold;
+import com.cdkj.zhpay.dto.res.XN808802Res;
 
 public interface IHzbHoldAO {
     static final String DEFAULT_ORDER_COLUMN = "id";
@@ -21,11 +22,5 @@ public interface IHzbHoldAO {
 
     public HzbHold getHzbHold(Long id);
 
-    /**
-     * 重置用户汇赚宝周期内被摇次数（暂定周期为一天）
-     *  
-     * @create: 2017年1月15日 下午3:52:47 haiqingzheng
-     * @history:
-     */
-    public void doResetRockNumDaily();
+    public XN808802Res doGetHzbTotalData(String systemCode, String userId);
 }

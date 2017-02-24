@@ -22,6 +22,9 @@
 			<if test="number != null and number != '' ">
 				AND t.number = #{number}
 			</if>
+			<if test="userId != null and userId != '' ">
+				AND tjr.user_id = #{userId}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_jewelRecordNumber" parameterType="jewelRecordNumber" resultMap="jewelRecordNumber_DB_Result">
@@ -31,7 +34,7 @@
 		,t.record_code
 		,t.number 
 		FROM
-		tact_jewel_record_number t 
+		tact_jewel_record_number t inner join tact_jewel_record tjr on t.record_code = tjr.code
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -42,7 +45,7 @@
 
 	<select id="select_jewelRecordNumber_count" parameterType="jewelRecordNumber"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tact_jewel_record_number t 
+		SELECT count(1) FROM tact_jewel_record_number t inner join tact_jewel_record tjr on t.record_code = tjr.code
 		<include refid="where_condition" />
 	</select>
  

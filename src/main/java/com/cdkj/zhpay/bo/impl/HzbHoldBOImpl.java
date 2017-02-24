@@ -2,6 +2,7 @@ package com.cdkj.zhpay.bo.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -71,6 +72,20 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
         if (id != null) {
             HzbHold condition = new HzbHold();
             condition.setId(id);
+            data = hzbHoldDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "汇赚宝购买记录不存在");
+            }
+        }
+        return data;
+    }
+
+    @Override
+    public HzbHold getHzbHold(String userId) {
+        HzbHold data = null;
+        if (StringUtils.isNotBlank(userId)) {
+            HzbHold condition = new HzbHold();
+            condition.setUserId(userId);
             data = hzbHoldDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "汇赚宝购买记录不存在");

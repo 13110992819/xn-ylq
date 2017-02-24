@@ -31,6 +31,7 @@ public class XN808318 extends AProcessor {
     public Object doBusiness() throws BizException {
         JewelRecordNumber condition = new JewelRecordNumber();
         condition.setJewelCode(req.getJewelCode());
+        condition.setUserId(req.getUserId());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IJewelRecordNumberAO.DEFAULT_ORDER_COLUMN;

@@ -2,22 +2,30 @@ package com.cdkj.zhpay.bo.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cdkj.zhpay.bo.IHzbMgiftBO;
+import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
+import com.cdkj.zhpay.common.DateUtil;
+import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IHzbMgiftDAO;
 import com.cdkj.zhpay.domain.HzbMgift;
 import com.cdkj.zhpay.enums.EHzbMgiftStatus;
+import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
 @Component
 public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
         IHzbMgiftBO {
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Autowired
     private IHzbMgiftDAO hzbMgiftDAO;
@@ -33,15 +41,39 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
     }
 
     @Override
-    public String saveHzbMgift(HzbMgift data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generateME("HM");
-            data.setCode(code);
-            data.setStatus(EHzbMgiftStatus.TO_SEND.getCode());
-            hzbMgiftDAO.insert(data);
+    public void sendHzbMgift(String userId) {
+        if (StringUtils.isNotBlank(userId)) {
+            // 发放红包
+            Map<String, String> rateMap = sysConfigBO.getConfigsMap(
+                ESystemCode.ZHPAY.getCode(), null);
+            Long dayNumbers = Long
+                .valueOf(rateMap.get(SysConstants.DAY_NUMBER));
+            String advTitle = rateMap.get(SysConstants.ADV_TITLE);
+            String hzbOwnerCurrency = rateMap
+                .get(SysConstants.HZB_OWNER_CURRENCY);
+            Long hzbOwnerAmount = Long.valueOf(rateMap
+                .get(SysConstants.HZB_OWNER_AMOUNT))
+                    * SysConstants.AMOUNT_RADIX;
+            String hzbReceiveCurrency = rateMap
+                .get(SysConstants.HZB_RECEIVE_CURRENCY);
+            Long hzbReceiveAmount = Long.valueOf(rateMap
+                .get(SysConstants.HZB_RECEIVE_AMOUNT))
+                    * SysConstants.AMOUNT_RADIX;
+            Date today = DateUtil.getTodayStart();
+            for (int i = 0; i < dayNumbers; i++) {
+                HzbMgift data = new HzbMgift();
+                data.setCode(OrderNoGenerater.generateME("HM"));
+                data.setAdvTitle(advTitle);
+                data.setOwner(userId);
+                data.setOwnerCurrency(hzbOwnerCurrency);
+                data.setOwnerAmount(hzbOwnerAmount);
+                data.setReceiveAmount(hzbReceiveAmount);
+                data.setReceiveCurrency(hzbReceiveCurrency);
+                data.setStatus(EHzbMgiftStatus.TO_SEND.getCode());
+                data.setCreateDatetime(today);
+                hzbMgiftDAO.insert(data);
+            }
         }
-        return code;
     }
 
     @Override
@@ -89,4 +121,29 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
         return data;
     }
 
+    @Override
+    public List<HzbMgift> queryReceiveHzbMgift(Date startDate, Date endDate,
+            String userId) {
+        HzbMgift condition = new HzbMgift();
+        condition.setCreateDatetimeStart(startDate);
+        condition.setCreateDatetimeEnd(endDate);
+        condition.setOwner(userId);
+        condition.setStatus(EHzbMgiftStatus.RECEIVE.getCode());
+        return hzbMgiftDAO.selectList(condition);
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IHzbMgiftBO#getReceiveHzbMgiftCount(java.util.Date, java.util.Date, java.lang.String)
+     */
+    @Override
+    public Long getReceiveHzbMgiftCount(Date startDate, Date endDate,
+            String userId) {
+        HzbMgift condition = new HzbMgift();
+        condition.setCreateDatetimeStart(startDate);
+        condition.setCreateDatetimeEnd(endDate);
+        condition.setOwner(userId);
+        condition.setStatus(EHzbMgiftStatus.RECEIVE.getCode());
+        return hzbMgiftDAO.selectTotalCount(condition);
+
+    }
 }

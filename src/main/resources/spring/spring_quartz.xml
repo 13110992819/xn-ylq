@@ -15,7 +15,7 @@
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 	
-  <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
        <property name="triggers">  
            <list>
               <ref bean="hzbMgiftTrigger"/>
@@ -28,6 +28,7 @@
        <property name="jobDetail" ref="hzbMgiftJobDetail"/>  
        <property name="cronExpression" value="0 10 0 * * ?"/><!-- 每天凌晨0点10分触发一次    -->
 	</bean>
+	
 	<bean id="hzbMgiftJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
 	        <property name="targetObject" ref="hzbMgiftAOImpl"/>  
 	        <property name="targetMethod" value="doDailyHzbMgift"/>  

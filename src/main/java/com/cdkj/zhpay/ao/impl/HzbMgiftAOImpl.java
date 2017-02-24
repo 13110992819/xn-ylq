@@ -76,30 +76,9 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
             throw new BizException("xn0000", "今天已经发放红包，无法继续发放!");
         }
         // 发放红包
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(
-            ESystemCode.ZHPAY.getCode(), null);
-        String advTitle = rateMap.get(SysConstants.ADV_TITLE);
-        Long dayNumber = Long.valueOf(rateMap.get(SysConstants.DAY_NUMBER));
-        String hzbOwnerCurrency = rateMap.get(SysConstants.HZB_OWNER_CURRENCY);
-        Long hzbOwnerAmount = Long.valueOf(rateMap
-            .get(SysConstants.HZB_OWNER_AMOUNT)) * SysConstants.AMOUNT_RADIX;
-        String hzbReceiveCurrency = rateMap
-            .get(SysConstants.HZB_RECEIVE_CURRENCY);
-        Long hzbReceiveAmount = Long.valueOf(rateMap
-            .get(SysConstants.HZB_RECEIVE_AMOUNT)) * SysConstants.AMOUNT_RADIX;
         List<HzbHold> hzbHoldlist = hzbHoldBO.queryHzbHoldList(new HzbHold());
         for (HzbHold hzbHold : hzbHoldlist) {
-            for (int i = 0; i < dayNumber.intValue(); i++) {
-                HzbMgift data = new HzbMgift();
-                data.setAdvTitle(advTitle);
-                data.setOwner(hzbHold.getUserId());
-                data.setOwnerCurrency(hzbOwnerCurrency);
-                data.setOwnerAmount(hzbOwnerAmount);
-                data.setReceiveAmount(hzbReceiveAmount);
-                data.setReceiveCurrency(hzbReceiveCurrency);
-                data.setCreateDatetime(today);
-                hzbMgiftBO.saveHzbMgift(data);
-            }
+            hzbMgiftBO.sendHzbMgift(hzbHold.getUserId());
         }
         logger.info("**** 定时红包扫描结束 " + today + " ****");
     }

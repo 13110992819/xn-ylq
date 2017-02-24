@@ -12,7 +12,7 @@
 		<result column="receive_currency" property="receiveCurrency" />
 		<result column="receive_amount" property="receiveAmount" />
 		<result column="receiver" property="receiver" />
-		<result column="receiverMobile" property="receiverMobile" />
+		<result column="receiver_mobile" property="receiverMobile" />
 		<result column="receive_datetime" property="receiveDatetime" />
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />

@@ -16,16 +16,19 @@ public class JewelRecordNumber extends ABaseDO {
     private static final long serialVersionUID = 1L;
 
     // 序号
-    public Long id;
+    private Long id;
 
     // 夺宝标的编号
-    public String jewelCode;
+    private String jewelCode;
 
     // 记录编号
-    public String recordCode;
+    private String recordCode;
 
     // 号码
-    public String number;
+    private String number;
+
+    // 用户编号
+    private String userId;
 
     public Long getId() {
         return id;
@@ -57,5 +60,13 @@ public class JewelRecordNumber extends ABaseDO {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

@@ -1,5 +1,6 @@
 package com.cdkj.zhpay.bo;
 
+import java.util.Date;
 import java.util.List;
 
 import com.cdkj.zhpay.bo.base.IPaginableBO;
@@ -22,6 +23,8 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
     public int refreshHzbYy(HzbYy data);
 
     public List<HzbYy> queryHzbYyList(HzbYy condition);
+
+    public Long getTotalHzbYyCount(Date startDate, Date endDate, Long hzbHoldId);
 
     public HzbYy getHzbYy(String code);
 

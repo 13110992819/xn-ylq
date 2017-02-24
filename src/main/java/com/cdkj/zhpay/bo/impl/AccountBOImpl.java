@@ -19,9 +19,11 @@ import com.cdkj.zhpay.dto.req.XN802512Req;
 import com.cdkj.zhpay.dto.req.XN802517Req;
 import com.cdkj.zhpay.dto.req.XN802519Req;
 import com.cdkj.zhpay.dto.req.XN802525Req;
+import com.cdkj.zhpay.dto.req.XN802527Req;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
 import com.cdkj.zhpay.dto.res.XN802503Res;
+import com.cdkj.zhpay.dto.res.XN802527Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.ESysUser;
@@ -375,5 +377,20 @@ public class AccountBOImpl implements IAccountBO {
         XN802180Res res = BizConnecter.getBizData("802180",
             JsonUtil.Object2Json(req), XN802180Res.class);
         return res;
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IAccountBO#doGetBizTotalAmount(java.lang.String,java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public XN802527Res doGetBizTotalAmount(String systemCode, String userId,
+            String currency, String bizType) {
+        XN802527Req req = new XN802527Req();
+        req.setSystemCode(systemCode);
+        req.setUserId(userId);
+        req.setCurrency(currency);
+        req.setBizType(bizType);
+        return BizConnecter.getBizData("802527", JsonUtil.Object2Json(req),
+            XN802527Res.class);
     }
 }

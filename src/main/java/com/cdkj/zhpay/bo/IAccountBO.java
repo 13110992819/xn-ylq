@@ -13,6 +13,7 @@ import java.util.Map;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
 import com.cdkj.zhpay.dto.res.XN802503Res;
+import com.cdkj.zhpay.dto.res.XN802527Res;
 import com.cdkj.zhpay.enums.EBizType;
 
 /** 
@@ -232,4 +233,16 @@ public interface IAccountBO {
     public XN802180Res doWeiXinPay(String systemCode, String userId,
             EBizType bizType, String bizNote, String body, Long cnyAmount,
             String ip);
+
+    /**
+     * 获取biztype统计金额接口
+     * @param userId
+     * @param currency
+     * @param bizType
+     * @return 
+     * @create: 2017年2月23日 下午5:36:39 xieyj
+     * @history:
+     */
+    public XN802527Res doGetBizTotalAmount(String systemCode, String userId,
+            String currency, String bizType);
 }
