@@ -28,6 +28,7 @@ import com.cdkj.zhpay.domain.JewelRecord;
 import com.cdkj.zhpay.domain.JewelRecordNumber;
 import com.cdkj.zhpay.dto.res.BooleanRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
+import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EJewelRecordStatus;
@@ -74,6 +75,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     public Object buyJewel(String userId, String jewelCode, Integer times,
             String payType, String ip) {
         Object result = null;
+        XN805901Res userRes = userBO.getRemoteUser(userId, userId);
         Jewel jewel = jewelBO.getJewel(jewelCode);
         if (!EJewelStatus.RUNNING.getCode().equals(jewel.getStatus())) {
             throw new BizException("xn0000", "夺宝标的不处于募集中状态，不能进行购买操作");
@@ -87,7 +89,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         userBO.doCheckUser(userId);
         // 余额支付(余额支付)
         if (EPayType.YEFR.getCode().equals(payType)) {
-            boolean resultByBalance = doBalancePay(userId, times, jewel, ip);
+            boolean resultByBalance = doBalancePay(userRes, times, jewel, ip);
             // 是否可以开奖，开奖自动开始下一期
             if (resultByBalance) {
                 lotteryJewel(jewel);
@@ -112,8 +114,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
      * @history:
      */
     @Transactional
-    private boolean doBalancePay(String userId, Integer times, Jewel jewel,
-            String ip) {
+    private boolean doBalancePay(XN805901Res userRes, Integer times,
+            Jewel jewel, String ip) {
+        String userId = userRes.getUserId();
         JewelRecord jewelRecord = new JewelRecord();
         String jewelRecordCode = OrderNoGenerater
             .generateM(EGeneratePrefix.JEWEL_RECORD.getCode());
@@ -136,7 +139,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         // 分配号码
         boolean result = distributeNumber(userId, jewel, times, jewelRecordCode);
         // 扣除余额
-        accountBO.doBalancePay(jewel.getSystemCode(), userId,
+        accountBO.doBalancePay(jewel.getSystemCode(), userRes,
             ESysUser.SYS_USER.getCode(), jewelRecord.getPayAmount(),
             EBizType.AJ_DUOBAO);
         return result;

@@ -19,8 +19,10 @@ import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.SysConstants;
+import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.domain.HzbHold;
 import com.cdkj.zhpay.domain.HzbMgift;
+import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.EHzbMgiftStatus;
 import com.cdkj.zhpay.enums.ESysUser;
@@ -99,6 +101,7 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
     @Override
     @Transactional
     public void doReceiveHzbMgift(String userId, String hzbMgiftCode) {
+        XN805901Res userRes = userBO.getRemoteUser(userId, userId);
         HzbMgift hzbMgift = hzbMgiftBO.getHzbMgift(hzbMgiftCode);
         if (!EHzbMgiftStatus.TO_SEND.getCode().equals(hzbMgift.getStatus())
                 || !EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
@@ -121,15 +124,21 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         }
         hzbMgiftBO.refreshHzbMgiftReciever(hzbMgiftCode, userId);
         // 汇赚宝主人
+        String ownerToBizNote = EBizType.AJ_FSDHB.getValue();
+        String ownerFromBizNote = UserUtil.getUserMobile(userRes.getMobile())
+                + ownerToBizNote;
         accountBO.doTransferAmountByUser(ESystemCode.ZHPAY.getCode(),
             ESysUser.SYS_USER.getCode(), hzbMgift.getOwner(),
             hzbMgift.getOwnerCurrency(), hzbMgift.getOwnerAmount(),
-            EBizType.AJ_FSDHB.getCode(), EBizType.AJ_FSDHB.getValue());
+            EBizType.AJ_FSDHB.getCode(), ownerFromBizNote, ownerToBizNote);
         // 领取用户
+        String reToBizNote = EBizType.AJ_LQHB.getValue();
+        String reFromBizNote = UserUtil.getUserMobile(userRes.getMobile())
+                + reToBizNote;
         accountBO.doTransferAmountByUser(ESystemCode.ZHPAY.getCode(),
             ESysUser.SYS_USER.getCode(), userId, hzbMgift.getReceiveCurrency(),
             hzbMgift.getReceiveAmount(), EBizType.AJ_LQHB.getCode(),
-            EBizType.AJ_LQHB.getValue());
+            reFromBizNote, reToBizNote);
     }
 
     @Override
