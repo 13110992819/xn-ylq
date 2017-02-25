@@ -6,7 +6,7 @@
 		<result column="code" property="code" />
 		<result column="adv_title" property="advTitle" />
 		<result column="owner" property="owner" />
-		<result column="ownerMobile" property="ownerMobile" />
+		<result column="owner_mobile" property="ownerMobile" />
 		<result column="owner_currency" property="ownerCurrency" />
 		<result column="owner_amount" property="ownerAmount" />
 		<result column="receive_currency" property="receiveCurrency" />

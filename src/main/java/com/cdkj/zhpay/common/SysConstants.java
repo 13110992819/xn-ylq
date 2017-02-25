@@ -12,6 +12,8 @@ public class SysConstants {
 
     public static final String GXJL2CNY = "gxjl2Cny"; // 贡献奖励兑人民币
 
+    public static final String HZB_PRICE = "hzbPrice"; // hzb价格
+
     public static final String HZB_PROVINCE = "hzbProvince"; // hzb辖区省
 
     public static final String HZB_CITY = "hzbCity"; // hzb辖区市

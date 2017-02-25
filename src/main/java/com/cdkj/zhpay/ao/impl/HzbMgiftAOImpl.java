@@ -100,8 +100,9 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
     @Transactional
     public void doReceiveHzbMgift(String userId, String hzbMgiftCode) {
         HzbMgift hzbMgift = hzbMgiftBO.getHzbMgift(hzbMgiftCode);
-        if (!EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
-            throw new BizException("xn0000", "该红包不是发送状态，无法领取!");
+        if (!EHzbMgiftStatus.TO_SEND.getCode().equals(hzbMgift.getStatus())
+                || !EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
+            throw new BizException("xn0000", "该红包已领取或已失效，无法操作!");
         }
         if (hzbMgift.getOwner().equals(userId)) {
             throw new BizException("xn0000", "自己发出的红包无法自己领取!");

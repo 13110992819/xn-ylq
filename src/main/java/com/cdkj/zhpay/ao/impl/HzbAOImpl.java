@@ -82,9 +82,9 @@ public class HzbAOImpl implements IHzbAO {
         // 落地汇赚宝购买记录
         Hzb hzb = hzbBO.getHzb(hzbCode);
         if (EPayType.YEFR.getCode().equals(payType)) {
-            result = doFRPay(userId, hzbCode, hzb);
+            result = doFRPay(userId, hzb);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-            result = doWeixinPay(userId, hzbCode, ip, hzb);
+            result = doWeixinPay(userId, hzb, ip);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
             return null;
         }
@@ -94,20 +94,18 @@ public class HzbAOImpl implements IHzbAO {
     /** 
      * 分润支付
      * @param userId
-     * @param hzbCode
      * @param hzb
      * @return 
      * @create: 2017年2月22日 下午4:45:09 xieyj
      * @history: 
      */
     @Transactional
-    private Object doFRPay(String userId, String hzbCode, Hzb hzb) {
+    private Object doFRPay(String userId, Hzb hzb) {
         // 余额支付
         PayBalanceRes payRes = accountBO.doFRPay(hzb.getSystemCode(), userId,
             ESysUser.SYS_USER.getCode(), hzb.getPrice(), EBizType.AJ_GMHZB);
         HzbHold hzbHold = new HzbHold();
         hzbHold.setUserId(userId);
-        hzbHold.setHzbCode(hzbCode);
         hzbHold.setStatus(EHzbHoldStatus.ACTIVATED.getCode());
         hzbHold.setPrice(hzb.getPrice());
         hzbHold.setCurrency(hzb.getCurrency());
@@ -128,15 +126,13 @@ public class HzbAOImpl implements IHzbAO {
     /** 
      * 微信支付
      * @param userId
-     * @param hzbCode
-     * @param ip
      * @param hzb
+     * @param ip
      * @return 
      * @create: 2017年2月22日 下午4:43:17 xieyj
      * @history: 
      */
-    private XN802180Res doWeixinPay(String userId, String hzbCode, String ip,
-            Hzb hzb) {
+    private XN802180Res doWeixinPay(String userId, Hzb hzb, String ip) {
         // 获取微信APP支付信息
         String bizNote = hzb.getName() + "——汇赚宝购买";
         String body = "正汇钱包—汇赚宝";
@@ -145,7 +141,7 @@ public class HzbAOImpl implements IHzbAO {
         // 落地本地系统消费记录，状态为未支付
         HzbHold data = new HzbHold();
         data.setUserId(userId);
-        data.setHzbCode(hzbCode);
+        data.setHzbCode(hzb.getCode());
         data.setStatus(EHzbHoldStatus.TO_PAY.getCode());
         data.setPrice(hzb.getPrice());
         data.setCurrency(hzb.getCurrency());

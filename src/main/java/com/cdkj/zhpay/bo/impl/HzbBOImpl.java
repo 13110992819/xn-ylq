@@ -1,15 +1,19 @@
 package com.cdkj.zhpay.bo.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cdkj.zhpay.bo.IHzbBO;
+import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
+import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.dao.IHzbDAO;
 import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
 @Component
@@ -17,6 +21,9 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
 
     @Autowired
     private IHzbDAO hzbDAO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Override
     public boolean isHzbExist(String code) {
@@ -63,6 +70,12 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
             if (data == null) {
                 throw new BizException("xn0000", "汇赚宝不存在");
             }
+            // hzb价格设置为系统参数
+            Map<String, String> rateMap = sysConfigBO.getConfigsMap(
+                ESystemCode.ZHPAY.getCode(), null);
+            Long hzbPrice = Long.valueOf(rateMap.get(SysConstants.HZB_PRICE))
+                    * SysConstants.AMOUNT_RADIX;
+            data.setPrice(hzbPrice);
         }
         return data;
     }

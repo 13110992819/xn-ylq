@@ -20,7 +20,7 @@ import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.dto.res.XN802503Res;
 import com.cdkj.zhpay.enums.EBizType;
-import com.cdkj.zhpay.enums.ECategoryType;
+import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.exception.BizException;
 
@@ -46,7 +46,6 @@ public class AccountAOImpl implements IAccountAO {
             String bizType, String approveResult, String approver,
             String approveNote) {
         String rate = null;
-        String type = ECategoryType.QBHL.getCode();
         String ckey = null;
         if (EBizType.AJ_HB2FR.getCode().equals(bizType)) {
             ckey = SysConstants.HB2FR;
@@ -55,9 +54,12 @@ public class AccountAOImpl implements IAccountAO {
         } else if (EBizType.AJ_HBYJ2GXJL.getCode().equals(bizType)) {
             ckey = SysConstants.HBYJ2GXJL;
         }
-        rate = sysConfigBO.getConfigValue(systemCode, type, null, ckey);
+        rate = sysConfigBO.getConfigValue(systemCode, null, null, ckey);
         if (StringUtils.isBlank(rate)) {
             throw new BizException("xn000000", "兑换比例不存在，请检查钱包汇率规则参数");
+        }
+        if (rate.equals(EBoolean.NO.getCode())) {
+            throw new BizException("xn000000", "兑换比例为0，不能兑换");
         }
         accountBO.doExchangeAmount(systemCode, code, rate, approveResult,
             approver, approveNote);
