@@ -21,6 +21,7 @@ import com.cdkj.zhpay.bo.ISmsOutBO;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.common.SysConstants;
+import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.core.LuckyNumberGenerator;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.domain.Jewel;
@@ -240,10 +241,14 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             EJewelRecordStatus.LOST.getCode(), "很遗憾，本次未中奖");
         // 更新宝贝中奖号码
         jewelBO.refreshWinInfo(jewelCode, luckyNumber, userId);
+        XN805901Res userRes = userBO.getRemoteUser(userId, userId);
         // 中奖者加上奖金
-        accountBO.doTransferAmountByUser(jewel.getSystemCode(),
-            ESysUser.SYS_USER.getCode(), userId, jewel.getCurrency(),
-            jewel.getAmount(), EBizType.AJ_XMB.getCode(), "小目标获得奖励");
+        String toBizNote = EBizType.AJ_XMB.getValue();
+        String fromBizNote = UserUtil.getUserMobile(userRes.getMobile())
+                + toBizNote;
+        accountBO.doTransferFcBySystem(jewel.getSystemCode(), userId,
+            jewel.getCurrency(), jewel.getAmount(), EBizType.AJ_XMB.getCode(),
+            fromBizNote, toBizNote);
     }
 
     @Override
