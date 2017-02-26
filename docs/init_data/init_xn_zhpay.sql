@@ -46,7 +46,9 @@ INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`b
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('E','E1','红包金额','hzbReceiveAmount','5000','',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('E','E1','单人每天红包领取数量','dayReceiveNumber','1','',0,NULL,'CD-CZH000001');
 
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('O','','宝贝每人最大投资次数','jewelMaxInvest','5','',0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('O','O1','ios链接','iosDownUrl','www.baidu.com',NULL,0,NULL,'CD-CZH000001');
+INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('O','O1','android链接','androidDownUrl','www.sina.com',NULL,0,NULL,'CD-CZH000001');
+
 /*
 -- Query: SELECT * FROM std_mall.tact_hzb
 -- Date: 2017-01-08 19:32

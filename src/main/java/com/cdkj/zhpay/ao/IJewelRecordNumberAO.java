@@ -34,14 +34,4 @@ public interface IJewelRecordNumberAO {
      */
     public List<JewelRecordNumber> queryJewelRecordNumberList(
             JewelRecordNumber condition);
-
-    /**
-     * 
-     * @param id
-     * @return 
-     * @create: 2016年12月20日 下午12:18:36 shan
-     * @history:
-     */
-    public JewelRecordNumber getJewelRecordNumber(Long id);
-
 }

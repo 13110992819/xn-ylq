@@ -183,16 +183,9 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             throw new BizException("xn0000", "购买人次请选择");
         }
         // 验证最大投资人次
-        JewelRecord condition = new JewelRecord();
-        condition.setUserId(userId);
-        condition.setJewelCode(jewelCode);
-        condition.setStatus(EJewelRecordStatus.LOTTERY.getCode());
-        List<JewelRecord> list = jewelRecordDAO.selectList(condition);
-        long totalTimes = 0l;
-        for (JewelRecord jewelRecord : list) {
-            totalTimes += jewelRecord.getTimes();
-        }
-        if (maxInvestTimes != null && maxInvestTimes < (totalTimes + times)) {
+        Long numberTimes = jewelRecordNumberBO.getJewelNumberTotalCount(userId,
+            jewelCode);
+        if (maxInvestTimes != null && maxInvestTimes < (numberTimes + times)) {
             throw new BizException("xn0000", "投资人次超限，每个用户最多投资" + maxInvestTimes
                     + "人次");
         }

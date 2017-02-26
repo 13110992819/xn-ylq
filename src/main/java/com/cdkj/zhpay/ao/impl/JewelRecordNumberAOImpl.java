@@ -9,7 +9,6 @@ import com.cdkj.zhpay.ao.IJewelRecordNumberAO;
 import com.cdkj.zhpay.bo.IJewelRecordNumberBO;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.JewelRecordNumber;
-import com.cdkj.zhpay.exception.BizException;
 
 /**
  * @author: xieyj 
@@ -32,13 +31,4 @@ public class JewelRecordNumberAOImpl implements IJewelRecordNumberAO {
             JewelRecordNumber condition) {
         return jewelRecordNumberBO.queryJewelRecordNumberList(condition);
     }
-
-    @Override
-    public JewelRecordNumber getJewelRecordNumber(Long id) {
-        if (!jewelRecordNumberBO.isJewelRecordNumberExist(id)) {
-            throw new BizException("xn0000", "号码不存在");
-        }
-        return jewelRecordNumberBO.getJewelRecordNumber(id);
-    }
-
 }
