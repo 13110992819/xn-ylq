@@ -34,7 +34,7 @@ public class SysConstants {
 
     public static final Integer HZB_MAX_NUM_DEF = 100; // 默认汇赚宝摇出数量
 
-    public static final String YY_PROVINCE = "hzbProvince"; // hzb辖区省
+    public static final String YY_PROVINCE = "yyProvince"; // yy辖区省
 
     public static final String YY_CITY = "yyCity"; // yy辖区市
 
