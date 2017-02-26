@@ -24,6 +24,7 @@ import com.cdkj.zhpay.domain.HzbHold;
 import com.cdkj.zhpay.domain.HzbMgift;
 import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.enums.EBizType;
+import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EHzbMgiftStatus;
 import com.cdkj.zhpay.enums.ESysUser;
 import com.cdkj.zhpay.enums.ESystemCode;
@@ -59,30 +60,36 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
     @Override
     @Transactional
     public void doDailyHzbMgift() {
-        Date today = DateUtil.getTodayStart();
-        logger.info("**** 定时红包扫描开始 " + today + " ****");
-        Date yesterday = DateUtil.getRelativeDateOfDays(today, -1);
+        Date todayStart = DateUtil.getTodayStart();
+        Date todayEnd = DateUtil.getTodayEnd();
+        logger.info("**** 定时红包扫描开始 " + todayStart + " ****");
+        // 将未领取的红包状态更改为已失效
+        Date yesterdayEnd = DateUtil.getRelativeDateOfDays(todayEnd, -1);
         HzbMgift condition = new HzbMgift();
         condition.setStatus(EHzbMgiftStatus.TO_INVALID.getCode());
-        condition.setCreateDatetime(yesterday);
+        condition.setCreateDatetimeEnd(yesterdayEnd);
         List<HzbMgift> list = hzbMgiftBO.queryHzbMgiftList(condition);
         for (HzbMgift hzbMgift : list) {
             hzbMgiftBO.refreshHzbMgiftStatus(hzbMgift.getCode(),
                 EHzbMgiftStatus.INVALID);
         }
-        // 定时器一天只能跑一次
+
+        // 定时器一天跑一次
         HzbMgift hmCondition = new HzbMgift();
-        hmCondition.setCreateDatetime(today);
-        List<HzbMgift> todayList = hzbMgiftBO.queryHzbMgiftList(condition);
+        hmCondition.setCreateDatetime(todayStart);
+        List<HzbMgift> todayList = hzbMgiftBO.queryHzbMgiftList(hmCondition);
         if (CollectionUtils.isNotEmpty(todayList)) {
             throw new BizException("xn0000", "今天已经发放红包，无法继续发放!");
         }
-        // 发放红包
-        List<HzbHold> hzbHoldlist = hzbHoldBO.queryHzbHoldList(new HzbHold());
+
+        // 查询已购买汇赚宝记录，发放红包
+        HzbHold hhCondition = new HzbHold();
+        hhCondition.setStatus(EDiviFlag.EFFECT.getCode());
+        List<HzbHold> hzbHoldlist = hzbHoldBO.queryHzbHoldList(hhCondition);
         for (HzbHold hzbHold : hzbHoldlist) {
             hzbMgiftBO.sendHzbMgift(hzbHold.getUserId());
         }
-        logger.info("**** 定时红包扫描结束 " + today + " ****");
+        logger.info("**** 定时红包扫描结束 " + todayStart + " ****");
     }
 
     @Override
@@ -104,7 +111,7 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         XN805901Res userRes = userBO.getRemoteUser(userId, userId);
         HzbMgift hzbMgift = hzbMgiftBO.getHzbMgift(hzbMgiftCode);
         if (!EHzbMgiftStatus.TO_SEND.getCode().equals(hzbMgift.getStatus())
-                || !EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
+                && !EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
             throw new BizException("xn0000", "该红包已领取或已失效，无法操作!");
         }
         if (hzbMgift.getOwner().equals(userId)) {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.dao.IHzbYyDAO;
 import com.cdkj.zhpay.dao.base.support.AMybatisTemplate;
 import com.cdkj.zhpay.domain.HzbYy;
@@ -23,26 +24,29 @@ public class HzbYyDAOImpl extends AMybatisTemplate implements IHzbYyDAO {
 
     @Override
     public HzbYy select(HzbYy condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.select(NAMESPACE.concat("select_hzbYy"), condition,
             HzbYy.class);
     }
 
     @Override
     public Long selectTotalCount(HzbYy condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectTotalCount(NAMESPACE.concat("select_hzbYy_count"),
             condition);
     }
 
     @Override
     public List<HzbYy> selectList(HzbYy condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_hzbYy"), condition,
             HzbYy.class);
     }
 
     @Override
     public List<HzbYy> selectList(HzbYy condition, int start, int count) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_hzbYy"), start, count,
             condition, HzbYy.class);
     }
-
 }

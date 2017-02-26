@@ -243,12 +243,12 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         jewelBO.refreshWinInfo(jewelCode, luckyNumber, userId);
         XN805901Res userRes = userBO.getRemoteUser(userId, userId);
         // 中奖者加上奖金
-        String toBizNote = EBizType.AJ_XMB.getValue();
+        String toBizNote = EBizType.AJ_DUOBAO_PRIZE.getValue();
         String fromBizNote = UserUtil.getUserMobile(userRes.getMobile())
                 + toBizNote;
         accountBO.doTransferFcBySystem(jewel.getSystemCode(), userId,
-            jewel.getCurrency(), jewel.getAmount(), EBizType.AJ_XMB.getCode(),
-            fromBizNote, toBizNote);
+            jewel.getCurrency(), jewel.getAmount(),
+            EBizType.AJ_DUOBAO_PRIZE.getCode(), fromBizNote, toBizNote);
     }
 
     @Override

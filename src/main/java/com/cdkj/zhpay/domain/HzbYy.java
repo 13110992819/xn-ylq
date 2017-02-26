@@ -34,6 +34,16 @@ public class HzbYy extends ABaseDO {
 
     private Date createDatetimeEnd;
 
+    private String mobile;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public Date getCreateDatetimeStart() {
         return createDatetimeStart;
     }

@@ -49,12 +49,6 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
     @Autowired
     private IAccountBO accountBO;
 
-    @Override
-    public Paginable<HzbHold> queryHzbHoldPage(int start, int limit,
-            HzbHold condition) {
-        return hzbHoldBO.getPaginable(start, limit, condition);
-    }
-
     // 分页无法统计，暂时不用
     @Override
     public Paginable<HzbHold> queryDistanceHzbHoldPage(int start, int limit,
@@ -107,6 +101,12 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
             hzbHold.setShareUrl(PropertiesUtil.Config.SHARE_URL);
         }
         return list;
+    }
+
+    @Override
+    public Paginable<HzbHold> queryHzbHoldPage(int start, int limit,
+            HzbHold condition) {
+        return hzbHoldBO.getPaginable(start, limit, condition);
     }
 
     @Override

@@ -12,6 +12,11 @@ import com.cdkj.zhpay.domain.JewelTemplate;
 import com.cdkj.zhpay.enums.EJewelTemplateStatus;
 import com.cdkj.zhpay.exception.BizException;
 
+/**
+ * @author: xieyj 
+ * @since: 2017年2月26日 下午7:32:11 
+ * @history:
+ */
 @Service
 public class JewelTemplateAOImpl implements IJewelTemplateAO {
 
