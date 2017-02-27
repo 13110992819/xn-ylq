@@ -47,6 +47,9 @@
 			<if test="distance != null and distance != '' ">
 				<![CDATA[ having distance <= #{distance}]]>
 			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
 			<if test="payCode != null and payCode != '' ">
 				AND t.pay_code = #{payCode}
 			</if>
@@ -183,7 +186,7 @@
 	
 	<select id="select_totalAmount" parameterType="hzbHold"
 		resultType="java.lang.Long">
-		SELECT sum(price) FROM tact_hzb_hold
+		SELECT sum(price) FROM tact_hzb_hold t
 		<include refid="where_condition" />
 	</select>
 </mapper>
