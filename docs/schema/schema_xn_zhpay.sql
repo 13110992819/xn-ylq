@@ -123,10 +123,11 @@ CREATE TABLE `tact_jewel_record` (
   `invest_datetime` datetime DEFAULT NULL COMMENT '投资时间',
   `times` int(11) DEFAULT NULL COMMENT '参与次数',
   `pay_amount` bigint(20) DEFAULT NULL COMMENT '支付金额',
-  `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
+  `pay_datetime` varchar(32) DEFAULT NULL COMMENT '支付时间(格式化到毫秒)',
   `status` varchar(4) DEFAULT NULL COMMENT '状态(0待开奖，1已中奖，2未中奖)',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `ip` varchar(255) DEFAULT NULL COMMENT '购买IP地址',
+  `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`)

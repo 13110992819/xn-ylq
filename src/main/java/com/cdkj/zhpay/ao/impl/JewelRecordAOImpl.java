@@ -20,6 +20,7 @@ import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.ISmsOutBO;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
+import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.core.LuckyNumberGenerator;
@@ -134,7 +135,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         jewelRecord.setStatus(EJewelRecordStatus.LOTTERY.getCode());
         Date payDatetime = new Date();
         jewelRecord.setInvestDatetime(payDatetime);
-        jewelRecord.setPayDatetime(payDatetime);
+        jewelRecord.setPayDatetime(DateUtil.dateToStr(payDatetime,
+            DateUtil.DATA_TIME_PATTERN_7));
         jewelRecord.setSystemCode(jewel.getSystemCode());
         jewelRecordBO.saveJewelRecord(jewelRecord);
         // 分配号码
@@ -276,9 +278,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
 
     @Transactional
     private boolean payJewelRecord(JewelRecord jewelRecord, Jewel jewel) {
-        Date payDatetime = new Date();
         jewelRecordBO.refreshPaySuccess(jewelRecord.getCode(),
-            EJewelRecordStatus.LOTTERY.getCode(), payDatetime, "待开奖");
+            EJewelRecordStatus.LOTTERY.getCode(), "待开奖");
         // 分配号码
         return distributeNumber(jewelRecord.getUserId(), jewel,
             jewelRecord.getTimes(), jewelRecord.getCode());
