@@ -92,7 +92,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             data.setStatus(EJewelRecordStatus.LOTTERY.getCode());
             Date payDatetime = new Date();
             data.setInvestDatetime(payDatetime);
-            data.setPayDatetime(payDatetime);
+            data.setPayDatetime(DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7));
             data.setSystemCode(systemCode);
             jewelRecordDAO.insert(data);
         }
