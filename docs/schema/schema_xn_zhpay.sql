@@ -47,6 +47,7 @@ CREATE TABLE `tact_hzb_hold` (
   `pay_amount2` bigint(20) DEFAULT NULL COMMENT '支付虚拟币1',
   `pay_amount3` bigint(20) DEFAULT NULL COMMENT '支付虚拟币2',
   `ip` varchar(255) DEFAULT NULL COMMENT 'ip',
+  `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
