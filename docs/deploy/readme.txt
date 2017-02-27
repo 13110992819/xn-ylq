@@ -7,6 +7,7 @@
 
 3. 备份原先配置(如果第一次部署，跳过此步骤)
   ssh root@121.43.101.148 -p 22
+  T6dh%$%$ss1
 
   cd /home/wwwroot/zhpay/tomcat_zhpay_biz/webapps
   cp ./xn-zhpay/WEB-INF/classes/application.properties .

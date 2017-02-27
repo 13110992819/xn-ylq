@@ -6,9 +6,9 @@ package com.cdkj.zhpay.enums;
  * @history:
  */
 public enum ECategoryConfig {
-    // 分类(B 分销规则，C摇一摇规则，D虚拟币规则，E定位规则)
-    FXGZ("B", "分销规则"), YYYGZ("C", "摇一摇规则"), XNBGZ("D", "虚拟币规则"), DWGZ("E",
-            "定位规则"), Other("O", "系统参数");
+    // 分类(B 汇赚宝规则，C摇一摇规则，D虚拟币规则，E定位规则，O其他规则)
+    HZB("B", "汇赚宝规则"), YY("C", "摇一摇规则"), XNB("D", "虚拟币规则"), DW("E", "定位规则"), OTHER(
+            "O", "系统参数");
 
     ECategoryConfig(String code, String value) {
         this.code = code;

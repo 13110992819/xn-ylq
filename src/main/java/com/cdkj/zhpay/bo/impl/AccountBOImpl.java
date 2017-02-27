@@ -13,17 +13,19 @@ import com.cdkj.zhpay.bo.IAccountBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.common.SysConstants;
+import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.dto.req.XN802180Req;
 import com.cdkj.zhpay.dto.req.XN802503Req;
 import com.cdkj.zhpay.dto.req.XN802512Req;
 import com.cdkj.zhpay.dto.req.XN802517Req;
 import com.cdkj.zhpay.dto.req.XN802519Req;
-import com.cdkj.zhpay.dto.req.XN802525Req;
 import com.cdkj.zhpay.dto.req.XN802527Req;
+import com.cdkj.zhpay.dto.req.XN802530Req;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
 import com.cdkj.zhpay.dto.res.XN802503Res;
 import com.cdkj.zhpay.dto.res.XN802527Res;
+import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.ESysUser;
@@ -40,9 +42,6 @@ public class AccountBOImpl implements IAccountBO {
     @Autowired
     private ISYSConfigBO sysConfigBO;
 
-    /** 
-     * @see com.cdkj.zhpay.bo.IAccountBO#getAccountByUserId(java.lang.String)
-     */
     @Override
     public XN802503Res getAccountByUserId(String systemCode, String userId,
             String currency) {
@@ -55,9 +54,6 @@ public class AccountBOImpl implements IAccountBO {
         return result;
     }
 
-    /**
-     * @see com.cdkj.zhpay.bo.IAccountBO#getAccountsByUser(java.lang.String, java.lang.String)
-     */
     @Override
     public Map<String, XN802503Res> getAccountsByUser(String systemCode,
             String userId) {
@@ -77,9 +73,6 @@ public class AccountBOImpl implements IAccountBO {
         return resultMap;
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.IAccountBO#doTransferAmount(java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.String, java.lang.String)
-     */
     @Override
     public void doTransferAmount(String systemCode, String fromAccountNumber,
             String toAccountNumber, Long amount, String bizType, String bizNote) {
@@ -96,9 +89,6 @@ public class AccountBOImpl implements IAccountBO {
         }
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.IAccountBO#doTransferAmountByUser(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.String, java.lang.String)
-     */
     @Override
     public void doTransferAmountByUser(String systemCode, String fromUserId,
             String toUserId, String currency, Long amount, String bizType,
@@ -118,32 +108,33 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     @Override
+    public void doTransferAmountByUser(String systemCode, String fromUserId,
+            String toUserId, String currency, Long amount, String bizType,
+            String fromBizNote, String toBizNote) {
+        if (amount != null && amount != 0) {
+            XN802530Req req = new XN802530Req();
+            req.setSystemCode(systemCode);
+            req.setFromUserId(fromUserId);
+            req.setToUserId(toUserId);
+            req.setCurrency(currency);
+            req.setTransAmount(String.valueOf(amount));
+            req.setBizType(bizType);
+            req.setFromBizNote(fromBizNote);
+            req.setToBizNote(toBizNote);
+            BizConnecter.getBizData("802530", JsonUtils.object2Json(req),
+                Object.class);
+        }
+    }
+
+    @Override
     public void doTransferFcBySystem(String systemCode, String userId,
-            String currency, Long transAmount, String bizType, String bizNote) {
+            String currency, Long transAmount, String bizType,
+            String fromBizNote, String toBizNote) {
         if (transAmount == null || transAmount == 0) {
             return;
         }
         this.doTransferAmountByUser(systemCode, ESysUser.SYS_USER.getCode(),
-            userId, currency, transAmount, bizType, bizNote);
-    }
-
-    /**
-     * @see com.cdkj.zhpay.bo.IAccountBO#doTransferAmountOnRate(java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Double, java.lang.String, java.lang.String)
-     */
-    @Override
-    public void doTransferAmountOnRate(String systemCode,
-            String fromAccountNumber, String toAccountNumber, Long amount,
-            Double rate, String bizType, String bizNote) {
-        XN802525Req req = new XN802525Req();
-        req.setSystemCode(systemCode);
-        req.setFromAccountNumber(fromAccountNumber);
-        req.setToAccountNumber(toAccountNumber);
-        req.setTransAmount(String.valueOf(amount));
-        req.setRate(String.valueOf(rate));
-        req.setBizType(bizType);
-        req.setBizNote(bizNote);
-        BizConnecter.getBizData("802525", JsonUtils.object2Json(req),
-            Object.class);
+            userId, currency, transAmount, bizType, fromBizNote, toBizNote);
     }
 
     /**
@@ -188,12 +179,11 @@ public class AccountBOImpl implements IAccountBO {
         }
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.IAccountBO#doBalancePay(com.cdkj.zhpay.enums.EBizType)
-     */
     @Override
-    public PayBalanceRes doBalancePay(String systemCode, String fromUserId,
-            String toUserId, Long price, EBizType bizType) {
+    public PayBalanceRes doBalancePay(String systemCode,
+            XN805901Res fromUserRes, String toUserId, Long price,
+            EBizType bizType) {
+        String fromUserId = fromUserRes.getUserId();
         Long gxjlPrice = 0L;
         Long frPrice = 0L;
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
@@ -231,28 +221,37 @@ public class AccountBOImpl implements IAccountBO {
             gxjlPrice = Double.valueOf(price * gxjl2cny).longValue();
         }
         // 扣除贡献奖励
-        doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ECurrency.GXJL.getCode(), gxjlPrice, bizType.getCode(),
-            bizType.getValue());
+        doTransferAmountByUser(
+            systemCode,
+            fromUserId,
+            toUserId,
+            ECurrency.GXJL.getCode(),
+            gxjlPrice,
+            bizType.getCode(),
+            UserUtil.getUserMobile(fromUserRes.getMobile())
+                    + bizType.getValue(), bizType.getValue());
         // 扣除分润
-        doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ECurrency.FRB.getCode(), frPrice, bizType.getCode(),
-            bizType.getValue());
+        doTransferAmountByUser(
+            systemCode,
+            fromUserId,
+            toUserId,
+            ECurrency.FRB.getCode(),
+            frPrice,
+            bizType.getCode(),
+            UserUtil.getUserMobile(fromUserRes.getMobile())
+                    + bizType.getValue(), bizType.getValue());
         return new PayBalanceRes(gxjlPrice, frPrice);
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.IAccountBO#doBalancePay(com.cdkj.zhpay.enums.EBizType)
-     */
     @Override
-    public PayBalanceRes doFRPay(String systemCode, String fromUserId,
+    public PayBalanceRes doFRPay(String systemCode, XN805901Res userRes,
             String toUserId, Long price, EBizType bizType) {
         Long frPrice = 0L;
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
             null);
         // 查询用户分润账户
-        XN802503Res frAccount = this.getAccountByUserId(systemCode, fromUserId,
-            ECurrency.FRB.getCode());
+        XN802503Res frAccount = this.getAccountByUserId(systemCode,
+            userRes.getUserId(), ECurrency.FRB.getCode());
         Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
         Long frCnyAmount = Double.valueOf(frAccount.getAmount() / fr2cny)
             .longValue();
@@ -261,100 +260,13 @@ public class AccountBOImpl implements IAccountBO {
             throw new BizException("xn0000", "分润币不足");
         }
         frPrice = Double.valueOf(price * fr2cny).longValue();
+        String fromBizNote = bizType.getValue();
+        String toBizNote = "用户[" + userRes.getMobile() + "] " + fromBizNote;
         // 扣除分润
-        doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ECurrency.FRB.getCode(), frPrice, bizType.getCode(),
-            bizType.getValue());
+        doTransferAmountByUser(systemCode, userRes.getUserId(), toUserId,
+            ECurrency.FRB.getCode(), frPrice, bizType.getCode(), fromBizNote,
+            toBizNote);
         return new PayBalanceRes(frPrice);
-    }
-
-    @Override
-    public void checkGWBQBBAmount(String systemCode, String userId,
-            Long gwbPrice, Long qbbPrice) {
-        XN802503Res gwbRes = getAccountByUserId(systemCode, userId,
-            ECurrency.GWB.getCode());
-        if (gwbPrice > gwbRes.getAmount()) {
-            throw new BizException("xn0000", "购物币余额不足");
-        }
-        XN802503Res qbbRes = getAccountByUserId(systemCode, userId,
-            ECurrency.QBB.getCode());
-        if (qbbPrice > qbbRes.getAmount()) {
-            throw new BizException("xn0000", "钱包币余额不足");
-        }
-    }
-
-    /**
-     * @see com.cdkj.zhpay.bo.IAccountBO#doGWBQBBPay(java.lang.String, java.lang.String, java.lang.String, java.lang.Long, java.lang.Long, com.cdkj.zhpay.enums.EBizType)
-     */
-    @Override
-    public void doGWBQBBPay(String systemCode, String fromUserId,
-            String toUserId, Long gwbPrice, Long qbbPrice, EBizType bizType) {
-        // 校验购物币和钱包币
-        checkGWBQBBAmount(systemCode, fromUserId, gwbPrice, qbbPrice);
-        // 扣除购物币
-        doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ECurrency.GWB.getCode(), gwbPrice, bizType.getCode(),
-            bizType.getValue());
-        // 扣除钱包币
-        doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ECurrency.QBB.getCode(), qbbPrice, bizType.getCode(),
-            bizType.getValue());
-    }
-
-    /**
-     * @see com.cdkj.zhpay.bo.IAccountBO#checkGwQbAndBalance(java.lang.String, java.lang.String, java.lang.Long, java.lang.Long, java.lang.Long)
-     */
-    @Override
-    public void checkGwQbAndBalance(String systemCode, String userId,
-            Long gwbPrice, Long qbbPrice, Long cnyPrice) {
-        // 检验购物币和钱包币和余额是否充足
-        checkGWBQBBAmount(systemCode, userId, gwbPrice, qbbPrice);
-        checkBalanceAmount(systemCode, userId, cnyPrice);
-    }
-
-    /** 
-     * @see com.cdkj.zhpay.bo.IAccountBO#doGwQbAndBalancePay(java.lang.String, java.lang.String, java.lang.String, java.lang.Long, com.cdkj.zhpay.enums.EBizType)
-     */
-    @Override
-    public void doGwQbAndBalancePay(String systemCode, String fromUserId,
-            String toUserId, Long gwbPrice, Long qbbPrice, Long cnyPrice,
-            EBizType bizType) {
-        // 检验购物币和钱包币和余额是否充足
-        checkGwQbAndBalance(systemCode, fromUserId, gwbPrice, qbbPrice,
-            cnyPrice);
-        // 扣除购物币
-        doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ECurrency.GWB.getCode(), gwbPrice, bizType.getCode(),
-            bizType.getValue());
-        // 扣除钱包币
-        doTransferAmountByUser(systemCode, fromUserId, toUserId,
-            ECurrency.QBB.getCode(), qbbPrice, bizType.getCode(),
-            bizType.getValue());
-        // 扣除余额
-        doBalancePay(systemCode, fromUserId, toUserId, cnyPrice, bizType);
-    }
-
-    @Override
-    public void doOrderAmountBackBySysetm(String systemCode, String toUserId,
-            Long gwbPayAmount, Long qbbPayAmount, Long cnyPayAmount,
-            EBizType bizType, String remark) {
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
-            null);
-        Double gxjl2cnyRate = Double
-            .valueOf(rateMap.get(SysConstants.GXJL2CNY));
-        // 退购物币
-        doTransferAmountByUser(systemCode, ESysUser.SYS_USER.getCode(),
-            toUserId, ECurrency.GWB.getCode(), gwbPayAmount, bizType.getCode(),
-            bizType.getValue() + remark);
-        // 退钱包币
-        doTransferAmountByUser(systemCode, ESysUser.SYS_USER.getCode(),
-            toUserId, ECurrency.QBB.getCode(), qbbPayAmount, bizType.getCode(),
-            bizType.getValue() + remark);
-        // 退人民币
-        doTransferAmountByUser(systemCode, ESysUser.SYS_USER.getCode(),
-            toUserId, ECurrency.GXJL.getCode(),
-            Double.valueOf(gxjl2cnyRate * cnyPayAmount).longValue(),
-            bizType.getCode(), bizType.getValue() + remark);
     }
 
     @Override

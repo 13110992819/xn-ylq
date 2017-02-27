@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ECategoryType {
-    HZB("B3", "买汇赚宝分润"), YYY("B4", "摇一摇红包业绩"), YYYGZ("C1", "摇一摇规则"), QBHL("D1",
-            "钱币汇率规则"), YYJL("E2", "汇赚宝定位");
+    HZB_PRICE("B1", "汇赚宝价格"), HZB_FC("B2", "汇赚宝分成"), HZB_YY("B3", "汇赚宝摇一摇"), YY_FC(
+            "C1", "摇一摇规则分成"), YY_GV("C2", "摇一摇概率"), QBHL("D1", "钱币汇率规则"), HB_GZ(
+            "E1", "发红包规则");
 
     public static Map<String, ECategoryType> getResultMap() {
         Map<String, ECategoryType> map = new HashMap<String, ECategoryType>();

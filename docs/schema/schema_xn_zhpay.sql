@@ -4,12 +4,12 @@
  Source Server         : 148
  Source Server Version : 50545
  Source Host           : 121.43.101.148
- Source Database       : std_mall
+ Source Database       : xn_zhpay
 
  Target Server Version : 50545
  File Encoding         : utf-8
 
- Date: 02/20/2017 20:57:46 PM
+ Date: 02/24/2017 20:31:24 PM
 */
 
 SET NAMES utf8;
@@ -46,7 +46,7 @@ CREATE TABLE `tact_hzb_hold` (
   `pay_amount1` bigint(20) DEFAULT NULL COMMENT '支付人民币',
   `pay_amount2` bigint(20) DEFAULT NULL COMMENT '支付虚拟币1',
   `pay_amount3` bigint(20) DEFAULT NULL COMMENT '支付虚拟币2',
-  `ip` varchar(255) DEFAULT NULL COMMENT '购买IP地址',
+  `ip` varchar(255) DEFAULT NULL COMMENT 'ip',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)

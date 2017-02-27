@@ -7,16 +7,6 @@ import com.cdkj.zhpay.domain.JewelRecordNumber;
 
 public interface IJewelRecordNumberBO extends IPaginableBO<JewelRecordNumber> {
     /**
-     * 
-     * @param id
-     * @return 
-     * @create: 2016年12月20日 下午12:49:22 shan
-     * @history:
-     */
-    public boolean isJewelRecordNumberExist(Long id);
-
-    /**
-     * 
      * @param data
      * @return 
      * @create: 2016年12月20日 下午12:49:26 shan
@@ -25,25 +15,6 @@ public interface IJewelRecordNumberBO extends IPaginableBO<JewelRecordNumber> {
     public String saveJewelRecordNumber(JewelRecordNumber data);
 
     /**
-     * 
-     * @param id
-     * @return 
-     * @create: 2016年12月20日 下午12:49:29 shan
-     * @history:
-     */
-    public int removeJewelRecordNumber(Long id);
-
-    /**
-     * 
-     * @param data
-     * @return 
-     * @create: 2016年12月20日 下午12:49:32 shan
-     * @history:
-     */
-    public int refreshJewelRecordNumber(JewelRecordNumber data);
-
-    /**
-     * 
      * @param id
      * @return 
      * @create: 2016年12月20日 下午12:49:35 shan
@@ -65,4 +36,6 @@ public interface IJewelRecordNumberBO extends IPaginableBO<JewelRecordNumber> {
             JewelRecordNumber data);
 
     public List<String> queryExistNumbers(String jewelCode);
+
+    public Long getJewelNumberTotalCount(String userId, String jewelCode);
 }

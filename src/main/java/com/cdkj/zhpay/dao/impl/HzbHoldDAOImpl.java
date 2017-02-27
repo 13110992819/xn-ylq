@@ -24,24 +24,28 @@ public class HzbHoldDAOImpl extends AMybatisTemplate implements IHzbHoldDAO {
 
     @Override
     public HzbHold select(HzbHold condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.select(NAMESPACE.concat("select_hzbHold"), condition,
             HzbHold.class);
     }
 
     @Override
     public Long selectTotalCount(HzbHold condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectTotalCount(NAMESPACE.concat("select_hzbHold_count"),
             condition);
     }
 
     @Override
     public List<HzbHold> selectList(HzbHold condition) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_hzbHold"), condition,
             HzbHold.class);
     }
 
     @Override
     public List<HzbHold> selectList(HzbHold condition, int start, int count) {
+        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_hzbHold"), start,
             count, condition, HzbHold.class);
     }

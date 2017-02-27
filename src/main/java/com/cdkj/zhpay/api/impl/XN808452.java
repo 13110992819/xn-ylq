@@ -32,7 +32,7 @@ public class XN808452 extends AProcessor {
      * @see com.cdkj.zhpay.api.IProcessor#doBusiness()
      */
     @Override
-    public Object doBusiness() throws BizException {
+    public synchronized Object doBusiness() throws BizException {
         return hzbAO.buyHzb(req.getUserId(), req.getHzbCode(),
             req.getPayType(), req.getIp());
     }

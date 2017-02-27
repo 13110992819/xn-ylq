@@ -69,7 +69,7 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
             condition.setCode(code);
             data = jewelDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "编号不存在");
+                throw new BizException("xn0000", "小目标不存在");
             }
         }
         return data;

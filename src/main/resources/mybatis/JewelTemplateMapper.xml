@@ -81,6 +81,7 @@
 		,status
 		,updater
 		,update_datetime
+		,remark
 		,system_code
 		)
 		VALUES(
@@ -96,6 +97,7 @@
 		,#{status}
 		,#{updater}
 		,#{updateDatetime}
+		,#{remark}
 		,#{systemCode}
 		)
 	</insert>
@@ -112,6 +114,7 @@
 		,adv_pic = #{advPic}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	

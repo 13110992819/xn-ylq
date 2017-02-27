@@ -24,42 +24,12 @@ public class JewelRecordNumberBOImpl extends PaginableBOImpl<JewelRecordNumber>
     private IJewelRecordNumberDAO jewelRecordNumberDAO;
 
     @Override
-    public boolean isJewelRecordNumberExist(Long id) {
-        JewelRecordNumber condition = new JewelRecordNumber();
-        condition.setId(id);
-        if (jewelRecordNumberDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public String saveJewelRecordNumber(JewelRecordNumber data) {
         String code = null;
         if (data != null) {
             jewelRecordNumberDAO.insert(data);
         }
         return code;
-    }
-
-    @Override
-    public int removeJewelRecordNumber(Long id) {
-        int count = 0;
-        if (StringUtils.isNotBlank(String.valueOf(id))) {
-            JewelRecordNumber data = new JewelRecordNumber();
-            data.setId(id);
-            count = jewelRecordNumberDAO.delete(data);
-        }
-        return count;
-    }
-
-    @Override
-    public int refreshJewelRecordNumber(JewelRecordNumber data) {
-        int count = 0;
-        if (StringUtils.isNotBlank(String.valueOf(data.getId()))) {
-            count = jewelRecordNumberDAO.update(data);
-        }
-        return count;
     }
 
     @Override
@@ -96,6 +66,17 @@ public class JewelRecordNumberBOImpl extends PaginableBOImpl<JewelRecordNumber>
     @Override
     public List<String> queryExistNumbers(String jewelCode) {
         return jewelRecordNumberDAO.selectExistNumbers(jewelCode);
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IJewelRecordNumberBO#getJewelNumberTotalCount(java.lang.String)
+     */
+    @Override
+    public Long getJewelNumberTotalCount(String userId, String jewelCode) {
+        JewelRecordNumber condition = new JewelRecordNumber();
+        condition.setUserId(userId);
+        condition.setJewelCode(jewelCode);
+        return jewelRecordNumberDAO.selectTotalCount(condition);
     }
 
 }

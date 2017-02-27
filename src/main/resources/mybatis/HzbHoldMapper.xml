@@ -60,6 +60,7 @@
 		SELECT
 		t.id
 		,t.user_id
+		,tu.mobile
 		,t.hzb_code
 		,t.status
 		,t.price
@@ -70,7 +71,7 @@
 		,t.pay_code
 		,t.system_code
 		FROM
-		tact_hzb_hold t
+		tact_hzb_hold t INNER JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
