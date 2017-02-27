@@ -3,6 +3,7 @@ package com.cdkj.zhpay.bo.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -57,7 +58,18 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
 
     @Override
     public List<Hzb> queryHzbList(Hzb condition) {
-        return hzbDAO.selectList(condition);
+        List<Hzb> list = hzbDAO.selectList(condition);
+        if (CollectionUtils.isNotEmpty(list)) {
+            // hzb价格设置为系统参数
+            Map<String, String> rateMap = sysConfigBO.getConfigsMap(
+                ESystemCode.ZHPAY.getCode(), null);
+            for (Hzb data : list) {
+                Long hzbPrice = Long.valueOf(rateMap
+                    .get(SysConstants.HZB_PRICE)) * SysConstants.AMOUNT_RADIX;
+                data.setPrice(hzbPrice);
+            }
+        }
+        return list;
     }
 
     @Override
