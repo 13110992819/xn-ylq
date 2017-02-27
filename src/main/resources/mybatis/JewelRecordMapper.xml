@@ -209,7 +209,7 @@
 	
 	<select id="select_totalAmount" parameterType="jewelRecord"
 		resultType="java.lang.Long">
-		SELECT sum(pay_amount) FROM tact_jewel_record
+		SELECT sum(pay_amount) FROM tact_jewel_record t
 		<include refid="where_condition" />
 	</select>
 </mapper>
