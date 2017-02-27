@@ -30,16 +30,17 @@ public class XN802180Req {
     // 业务备注（必填）
     private String bizNote;
 
-    // 商品描述（必填）
-    // 商品描述交易字段格式根据不同的应用场景按照以下格式：
-    // APP——需传入应用市场上的APP名字-实际商品名称，天天爱消除-游戏充值。
-    private String body;
+    // 划转资金(必填)
+    private String transAmount;
 
-    // 总金额（必填）—— 订单总金额，单位为分
-    private String totalFee;
+    // 币种(必填)
+    private String currency;
+
+    // 支付组号(必填)
+    private String payGroup;
 
     // 终端IP（必填）—— 用户端实际ip
-    private String spbillCreateIp;
+    private String ip;
 
     public String getSystemCode() {
         return systemCode;
@@ -81,28 +82,36 @@ public class XN802180Req {
         this.bizNote = bizNote;
     }
 
-    public String getBody() {
-        return body;
+    public String getTransAmount() {
+        return transAmount;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setTransAmount(String transAmount) {
+        this.transAmount = transAmount;
     }
 
-    public String getTotalFee() {
-        return totalFee;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setTotalFee(String totalFee) {
-        this.totalFee = totalFee;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
-    public String getSpbillCreateIp() {
-        return spbillCreateIp;
+    public String getPayGroup() {
+        return payGroup;
     }
 
-    public void setSpbillCreateIp(String spbillCreateIp) {
-        this.spbillCreateIp = spbillCreateIp;
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
 }

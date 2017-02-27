@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.bo.base.Paginable;
+import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbHold;
 
 public interface IHzbHoldBO extends IPaginableBO<HzbHold> {
@@ -12,7 +13,27 @@ public interface IHzbHoldBO extends IPaginableBO<HzbHold> {
 
     public boolean isHzbHoldExistByUser(String userId);
 
-    public int saveHzbHold(HzbHold data);
+    /**
+     * 微信支付落地汇赚宝记录
+     * @param userId
+     * @param hzb
+     * @param payGroup
+     * @return 
+     * @create: 2017年2月27日 下午4:10:24 haiqingzheng
+     * @history:
+     */
+    public int saveHzbHold(String userId, Hzb hzb, String payGroup);
+
+    /**
+     * 余额支付落地汇赚宝记录
+     * @param userId
+     * @param hzb
+     * @param amount
+     * @return 
+     * @create: 2017年2月27日 下午4:12:54 haiqingzheng
+     * @history:
+     */
+    public int saveHzbHold(String userId, Hzb hzb, Long amount);
 
     public int removeHzbHold(Long id);
 
@@ -33,4 +54,6 @@ public interface IHzbHoldBO extends IPaginableBO<HzbHold> {
     public HzbHold getHzbHold(Long id);
 
     public HzbHold getHzbHold(String userId);
+
+    public Long getTotalAmount(String payGroup);
 }

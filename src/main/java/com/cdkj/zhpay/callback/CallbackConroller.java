@@ -34,8 +34,8 @@ public class CallbackConroller {
     public synchronized void doCallbackZhpay(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
         boolean isSuccess = Boolean.valueOf(request.getParameter("isSuccess"));
-        String jourCode = request.getParameter("jourCode");
         String payGroup = request.getParameter("payGroup");
+        Long amount = Long.valueOf(request.getParameter("transAmount"));
         String bizType = request.getParameter("bizType");
         // 支付成功，商户处理后同步返回给微信参数
         if (!isSuccess) {
@@ -46,14 +46,13 @@ public class CallbackConroller {
             // 处理业务开始
             // ------------------------------
             try {
-                logger.info("流水编号为：" + jourCode);
                 if (EBizType.AJ_DUOBAO.getCode().equals(bizType)) {
                     System.out.println("**** 进入一元夺宝，微信APP支付服务器回调 start****");
-                    jewelRecordAO.paySuccess(jourCode);
+                    jewelRecordAO.paySuccess(payGroup, amount);
                     System.out.println("**** 进入一元夺宝，微信APP支付服务器回调 end****");
                 } else if (EBizType.AJ_GMHZB.getCode().equals(bizType)) {
                     System.out.println("**** 进入购买汇赚宝，微信APP支付服务器回调 start****");
-                    hzbAO.paySuccess(jourCode);
+                    hzbAO.paySuccess(payGroup, amount);
                     System.out.println("**** 进入购买汇赚宝，微信APP支付服务器回调 end****");
                 }
             } catch (Exception e) {

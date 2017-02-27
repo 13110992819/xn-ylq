@@ -48,6 +48,9 @@ public class JewelRecord extends ABaseDO {
     // ip
     private String ip;
 
+    // 支付组号
+    private String payGroup;
+
     // 支付编号
     private String payCode;
 
@@ -156,6 +159,14 @@ public class JewelRecord extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getPayGroup() {
+        return payGroup;
+    }
+
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
     }
 
     public String getRemark() {

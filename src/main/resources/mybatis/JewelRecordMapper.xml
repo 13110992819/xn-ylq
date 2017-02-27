@@ -19,6 +19,7 @@
 		<result column="status" property="status" />
 		<result column="remark" property="remark" />
 		<result column="ip" property="ip" />
+		<result column="pay_group" property="payGroup" />
 		<result column="pay_code" property="payCode" />
 		<result column="system_code" property="systemCode" />
 		
@@ -69,6 +70,9 @@
 			<if test="jewel != null and jewel.status != null and jewel.status != '' ">
 				AND tj.status = #{jewel.status}
 			</if>
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
 			<if test="payCode != null and payCode != '' ">
 				AND t.pay_code = #{payCode}
 			</if>
@@ -92,6 +96,7 @@
 		,t.status
 		,t.remark
 		,t.ip
+		,t.pay_group
 		,t.pay_code 
 		,t.system_code
 		FROM
@@ -162,7 +167,7 @@
 		,remark
 		,ip
 		
-		,pay_code
+		,pay_group
 		,system_code
 		)
 		VALUES(
@@ -178,7 +183,7 @@
 		,#{remark}
 		,#{ip}
 		
-		,#{payCode}
+		,#{payGroup}
 		,#{systemCode}
 		)
 	</insert>
@@ -201,4 +206,10 @@
 		,remark=#{remark}
 		WHERE jewel_code = #{jewelCode} and code != #{code}
 	</update>
+	
+	<select id="select_totalAmount" parameterType="jewelRecord"
+		resultType="java.lang.Long">
+		SELECT sum(pay_amount) FROM tact_jewel_record
+		<include refid="where_condition" />
+	</select>
 </mapper>

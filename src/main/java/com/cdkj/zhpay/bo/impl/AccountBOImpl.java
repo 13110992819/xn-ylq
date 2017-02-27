@@ -271,8 +271,7 @@ public class AccountBOImpl implements IAccountBO {
 
     @Override
     public XN802180Res doWeiXinPay(String systemCode, String userId,
-            EBizType bizType, String bizNote, String body, Long cnyAmount,
-            String ip) {
+            String payGroup, EBizType bizType, Long cnyAmount, String ip) {
         if (StringUtils.isBlank(ip)) {
             throw new BizException("xn0000", "微信支付，ip地址不能为空");
         }
@@ -281,11 +280,12 @@ public class AccountBOImpl implements IAccountBO {
         req.setSystemCode(systemCode);
         req.setCompanyCode(systemCode);
         req.setUserId(userId);
+        req.setPayGroup(payGroup);
         req.setBizType(bizType.getCode());
-        req.setBizNote(bizNote);
-        req.setBody(body);
-        req.setTotalFee(String.valueOf(cnyAmount));
-        req.setSpbillCreateIp(ip);
+        req.setBizNote(bizType.getValue());
+        req.setCurrency(ECurrency.CNY.getCode());
+        req.setTransAmount(String.valueOf(cnyAmount));
+        req.setIp(ip);
         XN802180Res res = BizConnecter.getBizData("802180",
             JsonUtil.Object2Json(req), XN802180Res.class);
         return res;

@@ -33,13 +33,12 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
     public void checkTimes(String userId, String jewelCode,
             Integer maxInvestTimes, Integer times);
 
-    /**
-     * @param data
-     * @return 
-     * @create: 2016年12月20日 下午12:26:45 shan
-     * @history:
-     */
-    public String saveJewelRecord(JewelRecord data);
+    public String saveJewelRecord(String userId, String jewelCode,
+            Integer times, Long amount, String ip, String payGroup,
+            String systemCode);
+
+    public String saveJewelRecord(String userId, String jewelCode,
+            Integer times, Long amount, String ip, String systemCode);
 
     /**
      * @param code
@@ -117,4 +116,6 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
     public Long getLastRecordsTimes(String jewelCode);
 
     public JewelRecord getWinJewelRecord(String jewelCode, String luckyNumber);
+
+    public Long getTotalAmount(String payGroup);
 }

@@ -118,31 +118,17 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     private boolean doBalancePay(XN805901Res userRes, Integer times,
             Jewel jewel, String ip) {
         String userId = userRes.getUserId();
-        JewelRecord jewelRecord = new JewelRecord();
-        String jewelRecordCode = OrderNoGenerater
-            .generateM(EGeneratePrefix.JEWEL_RECORD.getCode());
-        jewelRecord.setCode(jewelRecordCode);
-        jewelRecord.setUserId(userId);
-        jewelRecord.setJewelCode(jewel.getCode());
-        jewelRecord.setTimes(times);
-        jewelRecord.setRemark("已分配号码，待开奖");
-        jewelRecord.setPayAmount(jewel.getPrice() * times);
-        jewelRecord.setIp(ip);
+        Long amount = jewel.getPrice() * times;
         // 检验分润和贡献奖励是否充足
-        accountBO.checkBalanceAmount(jewel.getSystemCode(), userId,
-            jewelRecord.getPayAmount());
-        jewelRecord.setStatus(EJewelRecordStatus.LOTTERY.getCode());
-        Date payDatetime = new Date();
-        jewelRecord.setInvestDatetime(payDatetime);
-        jewelRecord.setPayDatetime(payDatetime);
-        jewelRecord.setSystemCode(jewel.getSystemCode());
-        jewelRecordBO.saveJewelRecord(jewelRecord);
+        accountBO.checkBalanceAmount(jewel.getSystemCode(), userId, amount);
+        String jewelRecordCode = jewelRecordBO.saveJewelRecord(
+            userRes.getUserId(), jewel.getCode(), times, amount, ip,
+            jewel.getSystemCode());
         // 分配号码
         boolean result = distributeNumber(userId, jewel, times, jewelRecordCode);
         // 扣除余额
         accountBO.doBalancePay(jewel.getSystemCode(), userRes,
-            ESysUser.SYS_USER.getCode(), jewelRecord.getPayAmount(),
-            EBizType.AJ_DUOBAO);
+            ESysUser.SYS_USER.getCode(), amount, EBizType.AJ_DUOBAO);
         return result;
     }
 
@@ -160,24 +146,14 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     @Transactional
     private XN802180Res doWeixinPay(String userId, Integer times, Jewel jewel,
             String ip) {
-        JewelRecord jewelRecord = new JewelRecord();
-        String jewelRecordCode = OrderNoGenerater
-            .generateM(EGeneratePrefix.JEWEL_RECORD.getCode());
-        jewelRecord.setCode(jewelRecordCode);
-        jewelRecord.setUserId(userId);
-        jewelRecord.setJewelCode(jewel.getCode());
-        jewelRecord.setTimes(times);
-        jewelRecord.setPayAmount(jewel.getPrice() * times);
-        String bizNote = "宝贝单号：" + jewelRecordCode + "——小目标";
-        String body = "正汇钱包—小目标支付";
+        // 生成支付组号
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        // 落地小目标购买记录
+        jewelRecordBO.saveJewelRecord(userId, jewel.getCode(), times,
+            jewel.getPrice() * times, ip, payGroup, jewel.getSystemCode());
         XN802180Res res = accountBO.doWeiXinPay(jewel.getSystemCode(), userId,
-            EBizType.AJ_DUOBAO, bizNote, body, jewelRecord.getPayAmount(), ip);
-        jewelRecord.setStatus(EJewelRecordStatus.TO_PAY.getCode());
-        jewelRecord.setPayCode(res.getJourCode());
-        jewelRecord.setRemark("小目标待支付");
-        jewelRecord.setIp(ip);
-        jewelRecord.setSystemCode(jewel.getSystemCode());
-        jewelRecordBO.saveJewelRecord(jewelRecord);
+            payGroup, EBizType.AJ_DUOBAO, jewel.getPrice() * times, ip);
         return res;
     }
 
@@ -252,13 +228,16 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     }
 
     @Override
-    public void paySuccess(String payCode) {
+    public void paySuccess(String payGroup, Long transAmount) {
         JewelRecord condition = new JewelRecord();
-        condition.setPayCode(payCode);
+        condition.setPayGroup(payGroup);
         List<JewelRecord> result = jewelRecordBO
             .queryJewelRecordList(condition);
         if (CollectionUtils.isEmpty(result)) {
             throw new BizException("XN000000", "找不到对应的消费记录");
+        }
+        if (jewelRecordBO.getTotalAmount(payGroup) != transAmount) {
+            throw new BizException("XN000000", "金额校验错误，非正常调用");
         }
         JewelRecord jewelRecord = result.get(0);
         if (EJewelRecordStatus.TO_PAY.getCode().equals(jewelRecord.getStatus())) {

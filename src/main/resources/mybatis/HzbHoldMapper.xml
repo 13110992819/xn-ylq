@@ -180,4 +180,10 @@
 		status = #{status}
 		WHERE id = #{id}
 	</update>
+	
+	<select id="select_totalAmount" parameterType="hzbHold"
+		resultType="java.lang.Long">
+		SELECT sum(price) FROM tact_hzb_hold
+		<include refid="where_condition" />
+	</select>
 </mapper>

@@ -20,4 +20,6 @@ public interface IHzbHoldDAO extends IBaseDAO<HzbHold> {
 
     public List<HzbHold> selectDistanceList(HzbHold condition, int start,
             int count);
+
+    public Long getTotalAmount(HzbHold condition);
 }

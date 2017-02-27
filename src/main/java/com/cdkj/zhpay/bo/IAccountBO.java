@@ -148,18 +148,16 @@ public interface IAccountBO {
      * 微信支付
      * @param systemCode
      * @param userId
+     * @param payGroup
      * @param bizType
-     * @param bizNote
-     * @param body
      * @param cnyAmount
      * @param ip
      * @return 
-     * @create: 2017年1月11日 上午11:10:19 xieyj
+     * @create: 2017年2月27日 下午3:52:09 haiqingzheng
      * @history:
      */
     public XN802180Res doWeiXinPay(String systemCode, String userId,
-            EBizType bizType, String bizNote, String body, Long cnyAmount,
-            String ip);
+            String payGroup, EBizType bizType, Long cnyAmount, String ip);
 
     /**
      * 获取biztype统计金额接口

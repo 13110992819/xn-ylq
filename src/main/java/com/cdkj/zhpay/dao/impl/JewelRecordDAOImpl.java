@@ -88,4 +88,10 @@ public class JewelRecordDAOImpl extends AMybatisTemplate implements
         return super.selectList(NAMESPACE.concat("select_my_jewelRecord"),
             start, count, condition, JewelRecord.class);
     }
+
+    @Override
+    public Long getTotalAmount(JewelRecord condition) {
+        return super.select(NAMESPACE.concat("select_totalAmount"), condition,
+            Long.class);
+    }
 }
