@@ -1,6 +1,5 @@
 package com.cdkj.zhpay.ao.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -255,9 +254,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
 
     @Transactional
     private boolean payJewelRecord(JewelRecord jewelRecord, Jewel jewel) {
-        Date payDatetime = new Date();
         jewelRecordBO.refreshPaySuccess(jewelRecord.getCode(),
-            EJewelRecordStatus.LOTTERY.getCode(), payDatetime, "待开奖");
+            EJewelRecordStatus.LOTTERY.getCode(), "待开奖");
         // 分配号码
         return distributeNumber(jewelRecord.getUserId(), jewel,
             jewelRecord.getTimes(), jewelRecord.getCode());

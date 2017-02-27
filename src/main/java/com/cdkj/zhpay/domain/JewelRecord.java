@@ -37,7 +37,7 @@ public class JewelRecord extends ABaseDO {
     private Long payAmount;
 
     // 支付时间
-    private Date payDatetime;
+    private String payDatetime;
 
     // 状态(0待开奖，1已中奖，2未中奖)
     private String status;
@@ -75,6 +75,14 @@ public class JewelRecord extends ABaseDO {
 
     // 我投资人次
     private String myInvestTimes;
+
+    public String getPayDatetime() {
+        return payDatetime;
+    }
+
+    public void setPayDatetime(String payDatetime) {
+        this.payDatetime = payDatetime;
+    }
 
     public String getIp() {
         return ip;
@@ -143,14 +151,6 @@ public class JewelRecord extends ABaseDO {
 
     public void setPayAmount(Long payAmount) {
         this.payAmount = payAmount;
-    }
-
-    public Date getPayDatetime() {
-        return payDatetime;
-    }
-
-    public void setPayDatetime(Date payDatetime) {
-        this.payDatetime = payDatetime;
     }
 
     public String getStatus() {

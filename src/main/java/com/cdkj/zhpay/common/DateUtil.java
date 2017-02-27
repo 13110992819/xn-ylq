@@ -23,6 +23,8 @@ public class DateUtil {
 
     public static final String DATA_TIME_PATTERN_6 = "yyyy年MM月dd日";
 
+    public static final String DATA_TIME_PATTERN_7 = "yyyy-MM-dd HH:mm:ss:SSS";
+
     public static final String TIME_BEGIN = " 00:00:00";
 
     public static final String TIME_MIDDLE = " 12:00:00";
@@ -244,8 +246,7 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        // int a = DateUtil.daysBetweenDate(new Date(),
-        // DateUtil.getTomorrowStart(new Date()));
-        // System.out.println(a);
+        String pay = getToday(DateUtil.DATA_TIME_PATTERN_7);
+        System.out.println(pay);
     }
 }

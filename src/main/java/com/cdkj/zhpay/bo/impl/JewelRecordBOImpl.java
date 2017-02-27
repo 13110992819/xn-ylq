@@ -13,6 +13,7 @@ import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.Page;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
+import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IJewelRecordDAO;
@@ -142,14 +143,13 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     }
 
     @Override
-    public int refreshPaySuccess(String code, String status, Date payDatetime,
-            String remark) {
+    public int refreshPaySuccess(String code, String status, String remark) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             JewelRecord data = new JewelRecord();
             data.setCode(code);
             data.setStatus(status);
-            data.setPayDatetime(payDatetime);
+            data.setPayDatetime(DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7));
             data.setRemark(remark);
             count = jewelRecordDAO.updateStatus(data);
         }
@@ -210,7 +210,12 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             start.intValue(), timesNum.intValue());
         Long outRandomA = 0L;
         for (JewelRecord jewelRecord : list) {
-            outRandomA += jewelRecord.getInvestDatetime().getTime();
+            // 获取时分秒毫秒的合集
+            String payDate = jewelRecord.getPayDatetime();
+            Date payDatetime = DateUtil.strToDate(payDate,
+                DateUtil.DATA_TIME_PATTERN_7);
+            outRandomA += Long.valueOf(DateUtil.dateToStr(payDatetime,
+                DateUtil.DATA_TIME_PATTERN_5).substring(8));
         }
         return outRandomA;
     }
