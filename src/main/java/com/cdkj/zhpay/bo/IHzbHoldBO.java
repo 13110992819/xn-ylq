@@ -39,6 +39,8 @@ public interface IHzbHoldBO extends IPaginableBO<HzbHold> {
 
     public int refreshStatus(Long id, String status);
 
+    public int refreshPayStatus(Long id, String status, String payCode);
+
     public int refreshRockNum(Long id, Integer periodRockNum,
             Integer totalRockNum);
 

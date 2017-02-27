@@ -49,6 +49,7 @@ CREATE TABLE `tact_hzb_hold` (
   `ip` varchar(255) DEFAULT NULL COMMENT 'ip',
   `pay_group` varchar(32) DEFAULT NULL COMMENT '支付组号',
   `pay_code` varchar(32) DEFAULT NULL COMMENT '支付编号',
+  `pay_datetime` datetime DEFAULT NULL COMMENT '支付时间',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

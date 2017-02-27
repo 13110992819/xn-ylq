@@ -161,7 +161,7 @@ public class AccountBOImpl implements IAccountBO {
     public void checkBalanceAmount(String systemCode, String userId, Long price) {
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
             null);
-        // 余额支付业务规则：优先扣贡献奖励，其次扣分润
+        // 余额支付业务规则：优先扣贡献值，其次扣分润
         XN802503Res gxjlAccount = this.getAccountByUserId(systemCode, userId,
             ECurrency.GXJL.getCode());
         // 查询用户分润账户
@@ -173,7 +173,7 @@ public class AccountBOImpl implements IAccountBO {
             .longValue();
         Long frCnyAmount = Double.valueOf(frAccount.getAmount() / fr2cny)
             .longValue();
-        // 1、贡献奖励+分润<价格 余额不足
+        // 1、贡献值+分润<价格 余额不足
         if (gxjlCnyAmount + frCnyAmount < price) {
             throw new BizException("xn0000", "余额不足");
         }
@@ -188,7 +188,7 @@ public class AccountBOImpl implements IAccountBO {
         Long frPrice = 0L;
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
             null);
-        // 余额支付业务规则：优先扣贡献奖励，其次扣分润
+        // 余额支付业务规则：优先扣贡献值，其次扣分润
         XN802503Res gxjlAccount = this.getAccountByUserId(systemCode,
             fromUserId, ECurrency.GXJL.getCode());
         // 查询用户分润账户
@@ -200,27 +200,27 @@ public class AccountBOImpl implements IAccountBO {
             .longValue();
         Long frCnyAmount = Double.valueOf(frAccount.getAmount() / fr2cny)
             .longValue();
-        // 1、贡献奖励+分润<价格 余额不足
+        // 1、贡献值+分润<价格 余额不足
         if (gxjlCnyAmount + frCnyAmount < price) {
             throw new BizException("xn0000", "余额不足");
         }
-        // 2、贡献奖励=0 直接扣分润
+        // 2、贡献值=0 直接扣分润
         if (gxjlAccount.getAmount() <= 0L) {
             frPrice = Double.valueOf(price * fr2cny).longValue();
         }
-        // 3、0<贡献奖励<price 先扣贡献奖励，再扣分润
+        // 3、0<贡献值<price 先扣贡献值，再扣分润
         if (gxjlCnyAmount > 0L && gxjlCnyAmount < price) {
-            // 扣除贡献奖励
+            // 扣除贡献值
             gxjlPrice = gxjlCnyAmount;
             // 再扣除分润
             frPrice = Double.valueOf((price - gxjlCnyAmount) * fr2cny)
                 .longValue();
         }
-        // 4、贡献奖励>=price 直接扣贡献奖励
+        // 4、贡献值>=price 直接扣贡献值
         if (gxjlCnyAmount >= price) {
             gxjlPrice = Double.valueOf(price * gxjl2cny).longValue();
         }
-        // 扣除贡献奖励
+        // 扣除贡献值
         doTransferAmountByUser(
             systemCode,
             fromUserId,

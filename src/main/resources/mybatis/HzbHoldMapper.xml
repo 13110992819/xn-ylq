@@ -14,7 +14,9 @@
 		<result column="total_rock_num" property="totalRockNum" />
 		<result column="distance" property="distance" />
 		<result column="ip" property="ip" />
+		<result column="pay_group" property="payGroup" />
 		<result column="pay_code" property="payCode" />
+		<result column="pay_datetime" property="payDatetime" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -71,7 +73,9 @@
 		,t.period_rock_num
 		,t.total_rock_num
 		,t.ip
+		,t.pay_group
 		,t.pay_code
+		,t.pay_datetime
 		,t.system_code
 		FROM
 		tact_hzb_hold t INNER JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id 
@@ -130,7 +134,7 @@
 		,pay_amount2
 		,pay_amount3
 		,ip
-		,pay_code
+		,pay_group
 		,system_code
 		)
 		VALUES(
@@ -145,7 +149,7 @@
 		,#{payAmount2}
 		,#{payAmount3}
 		,#{ip}
-		,#{payCode}
+		,#{payGroup}
 		,#{systemCode}
 		)
 	</insert>
@@ -181,6 +185,15 @@
 		UPDATE tact_hzb_hold
 		SET
 		status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="update_pay_status" parameterType="hzbHold">
+		UPDATE tact_hzb_hold
+		SET
+		status = #{status}
+		,pay_code = #{payCode}
+		,pay_datetime = #{payDatetime}
 		WHERE id = #{id}
 	</update>
 	

@@ -183,7 +183,7 @@ public class HzbAOImpl implements IHzbAO {
      */
     @Override
     @Transactional
-    public void paySuccess(String payGroup, Long transAmount) {
+    public void paySuccess(String payGroup, String payCode, Long transAmount) {
         HzbHold condition = new HzbHold();
         condition.setPayCode(payGroup);
         List<HzbHold> result = hzbHoldBO.queryHzbHoldList(condition);
@@ -196,8 +196,8 @@ public class HzbAOImpl implements IHzbAO {
         }
         for (HzbHold hzbHold : result) {
             // 更新状态
-            hzbHoldBO.refreshStatus(hzbHold.getId(),
-                EHzbHoldStatus.ACTIVATED.getCode());
+            hzbHoldBO.refreshPayStatus(hzbHold.getId(),
+                EHzbHoldStatus.ACTIVATED.getCode(), payCode);
             // 分配分成
             distributeAmount(hzbHold.getSystemCode(), hzbHold.getUserId(),
                 hzbHold.getPrice());

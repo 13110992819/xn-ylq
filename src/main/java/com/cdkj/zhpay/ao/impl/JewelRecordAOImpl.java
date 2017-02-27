@@ -118,7 +118,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             Jewel jewel, String ip) {
         String userId = userRes.getUserId();
         Long amount = jewel.getPrice() * times;
-        // 检验分润和贡献奖励是否充足
+        // 检验分润和贡献值是否充足
         accountBO.checkBalanceAmount(jewel.getSystemCode(), userId, amount);
         String jewelRecordCode = jewelRecordBO.saveJewelRecord(
             userRes.getUserId(), jewel.getCode(), times, amount, ip,
@@ -227,7 +227,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     }
 
     @Override
-    public void paySuccess(String payGroup, Long transAmount) {
+    public void paySuccess(String payGroup, String payCode, Long transAmount) {
         JewelRecord condition = new JewelRecord();
         condition.setPayGroup(payGroup);
         List<JewelRecord> result = jewelRecordBO
@@ -241,7 +241,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         JewelRecord jewelRecord = result.get(0);
         if (EJewelRecordStatus.TO_PAY.getCode().equals(jewelRecord.getStatus())) {
             Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
-            boolean isLottery = payJewelRecord(jewelRecord, jewel);
+            boolean isLottery = payJewelRecord(jewelRecord, jewel, payCode);
             // 是否可以开奖，开奖自动开始下一期
             if (isLottery) {
                 lotteryJewel(jewel);
@@ -253,9 +253,10 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     }
 
     @Transactional
-    private boolean payJewelRecord(JewelRecord jewelRecord, Jewel jewel) {
-        jewelRecordBO.refreshPaySuccess(jewelRecord.getCode(),
-            EJewelRecordStatus.LOTTERY.getCode(), "待开奖");
+    private boolean payJewelRecord(JewelRecord jewelRecord, Jewel jewel,
+            String payCode) {
+        jewelRecordBO.refreshPayStatus(jewelRecord.getCode(),
+            EJewelRecordStatus.LOTTERY.getCode(), payCode, "待开奖");
         // 分配号码
         return distributeNumber(jewelRecord.getUserId(), jewel,
             jewelRecord.getTimes(), jewelRecord.getCode());

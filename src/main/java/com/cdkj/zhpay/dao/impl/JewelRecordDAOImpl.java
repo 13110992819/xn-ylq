@@ -63,6 +63,11 @@ public class JewelRecordDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
+    public int updatePayStatus(JewelRecord data) {
+        return super.update(NAMESPACE.concat("update_pay_status"), data);
+    }
+
+    @Override
     public int updateLostInfo(JewelRecord data) {
         return super.update(NAMESPACE.concat("update_lostInfo"), data);
     }

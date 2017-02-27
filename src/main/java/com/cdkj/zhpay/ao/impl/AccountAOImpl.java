@@ -73,7 +73,7 @@ public class AccountAOImpl implements IAccountAO {
         Long balance = 0L;
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
             null);
-        // 查询用户贡献奖励账户
+        // 查询用户贡献值账户
         XN802503Res gxjlAccount = accountBO.getAccountByUserId(systemCode,
             userId, ECurrency.GXJL.getCode());
         // 查询用户分润账户

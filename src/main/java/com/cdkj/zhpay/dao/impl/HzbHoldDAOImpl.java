@@ -55,6 +55,11 @@ public class HzbHoldDAOImpl extends AMybatisTemplate implements IHzbHoldDAO {
         return super.update(NAMESPACE.concat("update_status"), data);
     }
 
+    @Override
+    public int updatePayStatus(HzbHold data) {
+        return super.update(NAMESPACE.concat("update_pay_status"), data);
+    }
+
     /** 
      * @see com.cdkj.zhpay.dao.IHzbHoldDAO#selectDistanceTotalCount(com.cdkj.zhpay.domain.HzbHold)
      */

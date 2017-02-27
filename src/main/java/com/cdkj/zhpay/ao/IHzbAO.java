@@ -14,7 +14,7 @@ public interface IHzbAO {
     public Object buyHzb(String userId, String hzbCode, String payType,
             String fromIp);
 
-    public void paySuccess(String payGroup, Long transAmount);
+    public void paySuccess(String payGroup, String payCode, Long transAmount);
 
     public void putOnOffHzb(String userId);
 
