@@ -11,7 +11,9 @@ import com.cdkj.zhpay.bo.base.Page;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.dao.IHzbHoldDAO;
+import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbHold;
+import com.cdkj.zhpay.enums.EHzbHoldStatus;
 import com.cdkj.zhpay.exception.BizException;
 
 @Component
@@ -42,12 +44,43 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
     }
 
     @Override
-    public int saveHzbHold(HzbHold data) {
+    public int saveHzbHold(String userId, Hzb hzb, String payGroup) {
         int count = 0;
-        if (data != null) {
+        if (StringUtils.isNotBlank(userId)) {
+            HzbHold data = new HzbHold();
+            data.setUserId(userId);
+            data.setHzbCode(hzb.getCode());
+            data.setStatus(EHzbHoldStatus.TO_PAY.getCode());
+            data.setPrice(hzb.getPrice());
+            data.setCurrency(hzb.getCurrency());
+            data.setPeriodRockNum(0);
+            data.setTotalRockNum(0);
+            data.setPayGroup(payGroup);
+            data.setSystemCode(hzb.getSystemCode());
             count = hzbHoldDAO.insert(data);
         }
         return count;
+    }
+
+    @Override
+    public int saveHzbHold(String userId, Hzb hzb, Long amount) {
+        int count = 0;
+        if (StringUtils.isNotBlank(userId)) {
+            HzbHold data = new HzbHold();
+            data.setUserId(userId);
+            data.setStatus(EHzbHoldStatus.ACTIVATED.getCode());
+            data.setPrice(hzb.getPrice());
+            data.setCurrency(hzb.getCurrency());
+            data.setPeriodRockNum(0);
+            data.setTotalRockNum(0);
+            data.setPayAmount1(0L);
+            data.setPayAmount2(0L);
+            data.setPayAmount3(amount);
+            data.setSystemCode(hzb.getSystemCode());
+            count = hzbHoldDAO.insert(data);
+        }
+        return count;
+
     }
 
     @Override
@@ -143,4 +176,12 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
     public void resetPeriodRockNum() {
         hzbHoldDAO.resetPeriodRockNum();
     }
+
+    @Override
+    public Long getTotalAmount(String payGroup) {
+        HzbHold data = new HzbHold();
+        data.setPayGroup(payGroup);
+        return hzbHoldDAO.getTotalAmount(data);
+    }
+
 }

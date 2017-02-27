@@ -15,9 +15,11 @@ import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.PropertiesUtil;
+import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IJewelRecordDAO;
 import com.cdkj.zhpay.domain.JewelRecord;
 import com.cdkj.zhpay.domain.JewelRecordNumber;
+import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EJewelRecordStatus;
 import com.cdkj.zhpay.exception.BizException;
 
@@ -49,9 +51,49 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     }
 
     @Override
-    public String saveJewelRecord(JewelRecord data) {
+    public String saveJewelRecord(String userId, String jewelCode,
+            Integer times, Long amount, String ip, String payGroup,
+            String systemCode) {
         String code = null;
-        if (data != null) {
+        if (StringUtils.isNotBlank(userId)) {
+            JewelRecord data = new JewelRecord();
+            code = OrderNoGenerater.generateM(EGeneratePrefix.JEWEL_RECORD
+                .getCode());
+            data.setCode(code);
+            data.setUserId(userId);
+            data.setJewelCode(jewelCode);
+            data.setTimes(times);
+            data.setPayAmount(amount);
+            data.setStatus(EJewelRecordStatus.TO_PAY.getCode());
+            data.setRemark("小目标待支付");
+            data.setIp(ip);
+            data.setPayGroup(payGroup);
+            data.setSystemCode(systemCode);
+            jewelRecordDAO.insert(data);
+        }
+        return code;
+    }
+
+    @Override
+    public String saveJewelRecord(String userId, String jewelCode,
+            Integer times, Long amount, String ip, String systemCode) {
+        String code = null;
+        if (StringUtils.isNotBlank(userId)) {
+            JewelRecord data = new JewelRecord();
+            code = OrderNoGenerater.generateM(EGeneratePrefix.JEWEL_RECORD
+                .getCode());
+            data.setCode(code);
+            data.setUserId(userId);
+            data.setJewelCode(jewelCode);
+            data.setTimes(times);
+            data.setRemark("已分配号码，待开奖");
+            data.setPayAmount(amount);
+            data.setIp(ip);
+            data.setStatus(EJewelRecordStatus.LOTTERY.getCode());
+            Date payDatetime = new Date();
+            data.setInvestDatetime(payDatetime);
+            data.setPayDatetime(DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7));
+            data.setSystemCode(systemCode);
             jewelRecordDAO.insert(data);
         }
         return code;
@@ -210,5 +252,12 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
         JewelRecord jrCondition = new JewelRecord();
         jrCondition.setCode(jewelRecordNumber.getRecordCode());
         return jewelRecordDAO.select(jrCondition);
+    }
+
+    @Override
+    public Long getTotalAmount(String payGroup) {
+        JewelRecord data = new JewelRecord();
+        data.setPayGroup(payGroup);
+        return jewelRecordDAO.getTotalAmount(data);
     }
 }

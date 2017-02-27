@@ -23,4 +23,6 @@ public interface IJewelRecordDAO extends IBaseDAO<JewelRecord> {
 
     public List<JewelRecord> selectMyList(JewelRecord condition, int start,
             int count);
+
+    public Long getTotalAmount(JewelRecord condition);
 }

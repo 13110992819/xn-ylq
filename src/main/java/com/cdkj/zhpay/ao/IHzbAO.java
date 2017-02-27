@@ -14,14 +14,7 @@ public interface IHzbAO {
     public Object buyHzb(String userId, String hzbCode, String payType,
             String fromIp);
 
-    /**
-     * 根据流水编号，找到对应购买记录，更新支付状态并分成
-     * @param jourCode
-     * @return 
-     * @create: 2017年1月18日 下午5:16:27 xieyj
-     * @history:
-     */
-    public void paySuccess(String jourCode);
+    public void paySuccess(String payGroup, Long transAmount);
 
     public void putOnOffHzb(String userId);
 

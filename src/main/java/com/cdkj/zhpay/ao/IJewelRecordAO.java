@@ -28,13 +28,13 @@ public interface IJewelRecordAO {
             String payType, String ip);
 
     /**
-     * 根据流水编号，找到对应消费记录，更新支付状态
-     * @param payCode
-     * @return 
-     * @create: 2017年1月10日 下午7:48:09 xieyj
+     * 根据支付组号，找到对应消费记录，更新支付状态
+     * @param payGroup
+     * @param transAmount 
+     * @create: 2017年2月27日 下午4:51:56 haiqingzheng
      * @history:
      */
-    public void paySuccess(String payCode);
+    public void paySuccess(String payGroup, Long transAmount);
 
     /**
      * 标的购买记录分页

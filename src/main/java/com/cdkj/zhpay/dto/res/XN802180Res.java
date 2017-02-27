@@ -15,9 +15,6 @@ package com.cdkj.zhpay.dto.res;
  */
 public class XN802180Res {
 
-    // 橙账本流水编号
-    private String jourCode;
-
     // 公众号id
     private String appId;
 
@@ -38,14 +35,6 @@ public class XN802180Res {
 
     // 签名
     private String sign;
-
-    public String getJourCode() {
-        return jourCode;
-    }
-
-    public void setJourCode(String jourCode) {
-        this.jourCode = jourCode;
-    }
 
     public String getAppId() {
         return appId;

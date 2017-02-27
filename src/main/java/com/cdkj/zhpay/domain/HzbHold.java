@@ -50,7 +50,10 @@ public class HzbHold extends ABaseDO {
     // 支付ip
     private Long ip;
 
-    // 支付编号
+    // 支付组号
+    private String payGroup;
+
+    // 橙账本流水号
     private String payCode;
 
     // 系统编号
@@ -225,6 +228,22 @@ public class HzbHold extends ABaseDO {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public Long getIp() {
+        return ip;
+    }
+
+    public void setIp(Long ip) {
+        this.ip = ip;
+    }
+
+    public String getPayGroup() {
+        return payGroup;
+    }
+
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
     }
 
 }

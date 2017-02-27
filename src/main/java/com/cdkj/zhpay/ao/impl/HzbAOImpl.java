@@ -19,6 +19,7 @@ import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
+import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbHold;
 import com.cdkj.zhpay.domain.UserExt;
@@ -30,6 +31,7 @@ import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EDiviFlag;
+import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EHzbHoldStatus;
 import com.cdkj.zhpay.enums.EPayType;
 import com.cdkj.zhpay.enums.ESysUser;
@@ -105,20 +107,11 @@ public class HzbAOImpl implements IHzbAO {
         // 余额支付
         PayBalanceRes payRes = accountBO.doFRPay(hzb.getSystemCode(), userRes,
             ESysUser.SYS_USER.getCode(), hzb.getPrice(), EBizType.AJ_GMHZB);
-        HzbHold hzbHold = new HzbHold();
-        hzbHold.setUserId(userRes.getUserId());
-        hzbHold.setStatus(EHzbHoldStatus.ACTIVATED.getCode());
-        hzbHold.setPrice(hzb.getPrice());
-        hzbHold.setCurrency(hzb.getCurrency());
-        hzbHold.setPeriodRockNum(0);
-        hzbHold.setTotalRockNum(0);
-        hzbHold.setPayAmount1(0L);
-        hzbHold.setPayAmount2(0L);
-        hzbHold.setPayAmount3(payRes.getFrAmount());
-        hzbHold.setSystemCode(hzb.getSystemCode());
-        Object result = hzbHoldBO.saveHzbHold(hzbHold);
+        Object result = hzbHoldBO.saveHzbHold(userRes.getUserId(), hzb,
+            payRes.getFrAmount());
         // 分销规则
-        distributeAmount(hzbHold);
+        distributeAmount(hzb.getSystemCode(), userRes.getUserId(),
+            hzb.getPrice());
         // 产生红包
         hzbMgiftBO.sendHzbMgift(userRes.getUserId());
         return result;
@@ -133,24 +126,15 @@ public class HzbAOImpl implements IHzbAO {
      * @create: 2017年2月22日 下午4:43:17 xieyj
      * @history: 
      */
+    @Transactional
     private XN802180Res doWeixinPay(String userId, Hzb hzb, String ip) {
-        // 获取微信APP支付信息
-        String bizNote = hzb.getName() + "——汇赚宝购买";
-        String body = "正汇钱包—汇赚宝";
-        XN802180Res res = accountBO.doWeiXinPay(hzb.getSystemCode(), userId,
-            EBizType.AJ_GMHZB, bizNote, body, hzb.getPrice(), ip);
+        // 生成支付组号
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
         // 落地本地系统消费记录，状态为未支付
-        HzbHold data = new HzbHold();
-        data.setUserId(userId);
-        data.setHzbCode(hzb.getCode());
-        data.setStatus(EHzbHoldStatus.TO_PAY.getCode());
-        data.setPrice(hzb.getPrice());
-        data.setCurrency(hzb.getCurrency());
-        data.setPeriodRockNum(0);
-        data.setTotalRockNum(0);
-        data.setPayCode(res.getJourCode());
-        data.setSystemCode(hzb.getSystemCode());
-        hzbHoldBO.saveHzbHold(data);
+        hzbHoldBO.saveHzbHold(userId, hzb, payGroup);
+        XN802180Res res = accountBO.doWeiXinPay(hzb.getSystemCode(), userId,
+            payGroup, EBizType.AJ_GMHZB, hzb.getPrice(), ip);
         return res;
     }
 
@@ -199,30 +183,33 @@ public class HzbAOImpl implements IHzbAO {
      */
     @Override
     @Transactional
-    public void paySuccess(String payCode) {
+    public void paySuccess(String payGroup, Long transAmount) {
         HzbHold condition = new HzbHold();
-        condition.setPayCode(payCode);
+        condition.setPayCode(payGroup);
         List<HzbHold> result = hzbHoldBO.queryHzbHoldList(condition);
         if (CollectionUtils.isEmpty(result)) {
             throw new BizException("XN000000", "找不到对应的消费记录");
         }
-        HzbHold hzbHold = result.get(0);
-        // 更新状态
-        hzbHoldBO.refreshStatus(hzbHold.getId(),
-            EHzbHoldStatus.ACTIVATED.getCode());
-        // 分配分成
-        distributeAmount(hzbHold);
-        // 产生红包
-        hzbMgiftBO.sendHzbMgift(hzbHold.getUserId());
+
+        if (hzbHoldBO.getTotalAmount(payGroup) != transAmount) {
+            throw new BizException("XN000000", "金额校验错误，非正常调用");
+        }
+        for (HzbHold hzbHold : result) {
+            // 更新状态
+            hzbHoldBO.refreshStatus(hzbHold.getId(),
+                EHzbHoldStatus.ACTIVATED.getCode());
+            // 分配分成
+            distributeAmount(hzbHold.getSystemCode(), hzbHold.getUserId(),
+                hzbHold.getPrice());
+            // 产生红包
+            hzbMgiftBO.sendHzbMgift(hzbHold.getUserId());
+        }
     }
 
     // 汇赚宝分成:
     // 1、数据准备
     // 2、计算分成:针对用户_已购买汇赚宝的一级二级推荐人和所在辖区用户
-    private void distributeAmount(HzbHold hzbHold) {
-        String systemCode = hzbHold.getSystemCode();
-        String userId = hzbHold.getUserId();
-        Long price = hzbHold.getPrice();
+    private void distributeAmount(String systemCode, String userId, Long price) {
         XN805901Res ownerUser = userBO.getRemoteUser(userId, userId);
         // 用户分成
         String cUserId = ownerUser.getUserReferee();
