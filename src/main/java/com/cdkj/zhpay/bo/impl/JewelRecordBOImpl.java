@@ -63,6 +63,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             data.setUserId(userId);
             data.setJewelCode(jewelCode);
             data.setTimes(times);
+            data.setInvestDatetime(new Date());
             data.setPayAmount(amount);
             data.setStatus(EJewelRecordStatus.TO_PAY.getCode());
             data.setRemark("小目标待支付");
