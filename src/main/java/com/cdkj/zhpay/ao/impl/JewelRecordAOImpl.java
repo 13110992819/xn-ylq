@@ -235,7 +235,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         if (CollectionUtils.isEmpty(result)) {
             throw new BizException("XN000000", "找不到对应的消费记录");
         }
-        if (transAmount == jewelRecordBO.getTotalAmount(payGroup)) {
+        if (transAmount.equals(jewelRecordBO.getTotalAmount(payGroup))) {
             throw new BizException("XN000000", "金额校验错误，非正常调用");
         }
         JewelRecord jewelRecord = result.get(0);

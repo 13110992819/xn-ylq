@@ -191,7 +191,7 @@ public class HzbAOImpl implements IHzbAO {
             throw new BizException("XN000000", "找不到对应的消费记录");
         }
 
-        if (transAmount == hzbHoldBO.getTotalAmount(payGroup)) {
+        if (transAmount.equals(hzbHoldBO.getTotalAmount(payGroup))) {
             throw new BizException("XN000000", "金额校验错误，非正常调用");
         }
         for (HzbHold hzbHold : result) {
