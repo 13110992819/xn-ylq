@@ -192,6 +192,9 @@
 		UPDATE tact_hzb_hold
 		SET
 		status = #{status}
+		,pay_amount1 = #{payAmount1}
+		,pay_amount2 = #{payAmount2}
+		,pay_amount3 = #{payAmount3}
 		,pay_code = #{payCode}
 		,pay_datetime = #{payDatetime}
 		WHERE id = #{id}

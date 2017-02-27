@@ -144,12 +144,16 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
     }
 
     @Override
-    public int refreshPayStatus(Long id, String status, String payCode) {
+    public int refreshPayStatus(Long id, String status, String payCode,
+            Long payAmount) {
         int count = 0;
         if (id != null) {
             HzbHold data = new HzbHold();
             data.setId(id);
             data.setStatus(status);
+            data.setPayAmount1(0L);
+            data.setPayAmount2(0L);
+            data.setPayAmount3(payAmount);
             data.setPayCode(payCode);
             data.setPayDatetime(new Date());
             count = hzbHoldDAO.updatePayStatus(data);

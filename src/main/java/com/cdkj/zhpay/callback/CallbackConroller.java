@@ -57,7 +57,7 @@ public class CallbackConroller {
                     System.out.println("**** 进入购买汇赚宝，微信APP支付服务器回调 end****");
                 }
             } catch (Exception e) {
-                logger.info("支付回调异常");
+                logger.info("支付回调异常,原因：" + e.getMessage());
             }
         }
     }

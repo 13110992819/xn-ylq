@@ -185,7 +185,7 @@ public class HzbAOImpl implements IHzbAO {
     @Transactional
     public void paySuccess(String payGroup, String payCode, Long transAmount) {
         HzbHold condition = new HzbHold();
-        condition.setPayCode(payGroup);
+        condition.setPayGroup(payGroup);
         List<HzbHold> result = hzbHoldBO.queryHzbHoldList(condition);
         if (CollectionUtils.isEmpty(result)) {
             throw new BizException("XN000000", "找不到对应的消费记录");
@@ -197,7 +197,7 @@ public class HzbAOImpl implements IHzbAO {
         for (HzbHold hzbHold : result) {
             // 更新状态
             hzbHoldBO.refreshPayStatus(hzbHold.getId(),
-                EHzbHoldStatus.ACTIVATED.getCode(), payCode);
+                EHzbHoldStatus.ACTIVATED.getCode(), payCode, transAmount);
             // 分配分成
             distributeAmount(hzbHold.getSystemCode(), hzbHold.getUserId(),
                 hzbHold.getPrice());
