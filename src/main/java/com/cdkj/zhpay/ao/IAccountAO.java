@@ -38,4 +38,16 @@ public interface IAccountAO {
      * @history:
      */
     Long getBalanceByUser(String systemCode, String userId);
+
+    /**
+     * 获取分润/贡献奖励相应的人民币价格
+     * @param systemCode
+     * @param userId
+     * @param currency
+     * @return 
+     * @create: 2017年2月27日 下午10:20:46 xieyj
+     * @history:
+     */
+    public Long getSingleBZByUser(String systemCode, String userId,
+            String currency);
 }

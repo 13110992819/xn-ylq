@@ -86,4 +86,25 @@ public class AccountAOImpl implements IAccountAO {
                 + Double.valueOf(frAccount.getAmount() / fr2cny).longValue();
         return balance;
     }
+
+    @Override
+    public Long getSingleBZByUser(String systemCode, String userId,
+            String currency) {
+        if (!ECurrency.FRB.getCode().equals(currency)
+                && !ECurrency.GXJL.getCode().equals(currency)) {
+            throw new BizException("xn000000", "现只有人民币和贡献奖励支持转人民币");
+        }
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
+            null);
+        // 查询用户分润账户
+        XN802503Res account = accountBO.getAccountByUserId(systemCode, userId,
+            currency);
+        Double rate = 0.00D;
+        if (currency.equals(ECurrency.FRB.getCode())) {
+            rate = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
+        } else {
+            rate = Double.valueOf(rateMap.get(SysConstants.GXJL2CNY));
+        }
+        return Double.valueOf(account.getAmount() / rate).longValue();
+    }
 }
