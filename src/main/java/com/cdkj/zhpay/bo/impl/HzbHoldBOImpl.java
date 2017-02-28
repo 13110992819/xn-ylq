@@ -39,6 +39,7 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
     public boolean isHzbHoldExistByUser(String userId) {
         HzbHold condition = new HzbHold();
         condition.setUserId(userId);
+        condition.setStatus(EDiviFlag.EFFECT.getCode());
         if (hzbHoldDAO.selectTotalCount(condition) > 0) {
             return true;
         }
