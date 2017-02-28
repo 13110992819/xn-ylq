@@ -19,6 +19,7 @@ import com.cdkj.zhpay.bo.IAccountBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.dto.res.XN802503Res;
+import com.cdkj.zhpay.dto.res.XN808803Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
@@ -88,7 +89,7 @@ public class AccountAOImpl implements IAccountAO {
     }
 
     @Override
-    public Long getSingleBZByUser(String systemCode, String userId,
+    public XN808803Res getSingleBZByUser(String systemCode, String userId,
             String currency) {
         if (!ECurrency.FRB.getCode().equals(currency)
                 && !ECurrency.GXJL.getCode().equals(currency)) {
@@ -105,6 +106,7 @@ public class AccountAOImpl implements IAccountAO {
         } else {
             rate = Double.valueOf(rateMap.get(SysConstants.GXJL2CNY));
         }
-        return Double.valueOf(account.getAmount() / rate).longValue();
+        Long cnyAmount = Double.valueOf(account.getAmount() / rate).longValue();
+        return new XN808803Res(account.getAmount(), rate, cnyAmount);
     }
 }

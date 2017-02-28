@@ -8,6 +8,8 @@
  */
 package com.cdkj.zhpay.ao;
 
+import com.cdkj.zhpay.dto.res.XN808803Res;
+
 /** 
  * @author: xieyj 
  * @since: 2017年1月4日 下午9:11:54 
@@ -48,6 +50,6 @@ public interface IAccountAO {
      * @create: 2017年2月27日 下午10:20:46 xieyj
      * @history:
      */
-    public Long getSingleBZByUser(String systemCode, String userId,
+    public XN808803Res getSingleBZByUser(String systemCode, String userId,
             String currency);
 }
