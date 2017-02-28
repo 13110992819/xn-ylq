@@ -154,19 +154,6 @@
 		)
 	</insert>
 
-	<update id="update_hzbHold" parameterType="hzbHold">
-		UPDATE tact_hzb_hold
-		SET
-		user_id = #{userId}
-		,hzb_code = #{hzbCode}
-		,status = #{status}
-		,price = #{price}
-		,currency = #{currency}
-		,period_rock_num = #{periodRockNum}
-		,total_rock_num = #{totalRockNum}
-		WHERE code = #{code}
-	</update>
-	
 	<update id="update_rockNum" parameterType="hzbHold">
 		UPDATE tact_hzb_hold
 		SET

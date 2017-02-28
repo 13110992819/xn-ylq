@@ -190,9 +190,14 @@ public class HzbAOImpl implements IHzbAO {
         if (CollectionUtils.isEmpty(result)) {
             throw new BizException("XN000000", "找不到对应的消费记录");
         }
-
         if (!transAmount.equals(hzbHoldBO.getTotalAmount(payGroup))) {
             throw new BizException("XN000000", "金额校验错误，非正常调用");
+        }
+        for (HzbHold hzbHold : result) {
+            if (!EHzbHoldStatus.TO_PAY.getCode().equals(hzbHold.getStatus())) {
+                throw new BizException("XN000000", "汇赚宝号：" + hzbHold.getId()
+                        + "已支付，重复回调");
+            }
         }
         for (HzbHold hzbHold : result) {
             // 更新状态
