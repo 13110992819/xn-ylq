@@ -211,7 +211,7 @@
 		SET
 		status=#{status}
 		,remark=#{remark}
-		WHERE jewel_code = #{jewelCode} and code != #{code}
+		WHERE jewel_code = #{jewelCode} and code != #{code} and status != 0
 	</update>
 	
 	<select id="select_totalAmount" parameterType="jewelRecord"
