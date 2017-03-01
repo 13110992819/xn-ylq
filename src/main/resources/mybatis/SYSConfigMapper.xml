@@ -62,7 +62,7 @@
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
-				${order}
+				t.id
 			</if>
 		</trim>	
 	</select>

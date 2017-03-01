@@ -8,6 +8,8 @@
  */
 package com.cdkj.zhpay.ao;
 
+import com.cdkj.zhpay.dto.res.XN808803Res;
+
 /** 
  * @author: xieyj 
  * @since: 2017年1月4日 下午9:11:54 
@@ -38,4 +40,16 @@ public interface IAccountAO {
      * @history:
      */
     Long getBalanceByUser(String systemCode, String userId);
+
+    /**
+     * 获取分润/贡献奖励相应的人民币价格
+     * @param systemCode
+     * @param userId
+     * @param currency
+     * @return 
+     * @create: 2017年2月27日 下午10:20:46 xieyj
+     * @history:
+     */
+    public XN808803Res getSingleBZByUser(String systemCode, String userId,
+            String currency);
 }

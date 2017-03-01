@@ -63,6 +63,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             data.setUserId(userId);
             data.setJewelCode(jewelCode);
             data.setTimes(times);
+            data.setInvestDatetime(new Date());
             data.setPayAmount(amount);
             data.setStatus(EJewelRecordStatus.TO_PAY.getCode());
             data.setRemark("小目标待支付");
@@ -143,15 +144,17 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     }
 
     @Override
-    public int refreshPaySuccess(String code, String status, String remark) {
+    public int refreshPayStatus(String code, String status, String payCode,
+            String remark) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             JewelRecord data = new JewelRecord();
             data.setCode(code);
             data.setStatus(status);
+            data.setPayCode(payCode);
             data.setPayDatetime(DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7));
             data.setRemark(remark);
-            count = jewelRecordDAO.updateStatus(data);
+            count = jewelRecordDAO.updatePayStatus(data);
         }
         return count;
     }

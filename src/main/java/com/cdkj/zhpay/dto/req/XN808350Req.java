@@ -38,8 +38,19 @@ public class XN808350Req {
     // 更新人（必填）
     private String updater;
 
+    // 备注（必填）
+    private String remark;
+
     // 系统编号（必填）
     private String systemCode;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public String getCurrency() {
         return currency;

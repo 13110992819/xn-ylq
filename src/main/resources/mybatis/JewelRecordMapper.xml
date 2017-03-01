@@ -192,10 +192,17 @@
 		UPDATE tact_jewel_record
 		SET
 		status=#{status}
-		<if test="payDatetime != null and payDatetime != '' ">
-			 ,pay_datetime = #{payDatetime}
-		</if>
 		,remark=#{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_pay_status" parameterType="jewelRecord">
+		UPDATE tact_jewel_record
+		SET
+		status = #{status}
+		,pay_code = #{payCode}
+		,pay_datetime = #{payDatetime}
+		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	
@@ -204,7 +211,7 @@
 		SET
 		status=#{status}
 		,remark=#{remark}
-		WHERE jewel_code = #{jewelCode} and code != #{code}
+		WHERE jewel_code = #{jewelCode} and code != #{code} and status != 0
 	</update>
 	
 	<select id="select_totalAmount" parameterType="jewelRecord"

@@ -124,9 +124,10 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
             .get(SysConstants.DAY_RECEVIE_NUMBER));
         HzbMgift hmCondition = new HzbMgift();
         hmCondition.setReceiver(userId);
-        hmCondition.setCreateDatetime(DateUtil.getTodayStart());
+        hmCondition.setReceiveDatetimeStart(DateUtil.getTodayStart());
+        hmCondition.setReceiveDatetimeEnd(DateUtil.getTodayEnd());
         long totalCount = hzbMgiftBO.getTotalCount(hmCondition);
-        if (totalCount > dayRecevieNumber) {
+        if ((totalCount + 1) > dayRecevieNumber) {
             throw new BizException("xn0000", "已超过每天最大领取次数，无法领取!");
         }
         hzbMgiftBO.refreshHzbMgiftReciever(hzbMgiftCode, userId);

@@ -159,4 +159,9 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
         res.setFfTotalHbAmount(ffTotalHbAmount);
         return res;
     }
+
+    @Override
+    public void doResetRockNumDaily() {
+        hzbHoldBO.resetPeriodRockNum();
+    }
 }

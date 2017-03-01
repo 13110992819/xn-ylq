@@ -30,11 +30,12 @@ public interface IJewelRecordAO {
     /**
      * 根据支付组号，找到对应消费记录，更新支付状态
      * @param payGroup
+     * @param payCode
      * @param transAmount 
-     * @create: 2017年2月27日 下午4:51:56 haiqingzheng
+     * @create: 2017年2月27日 下午8:32:54 xieyj
      * @history:
      */
-    public void paySuccess(String payGroup, Long transAmount);
+    public void paySuccess(String payGroup, String payCode, Long transAmount);
 
     /**
      * 标的购买记录分页

@@ -64,8 +64,10 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
             Map<String, String> rateMap = sysConfigBO.getConfigsMap(
                 ESystemCode.ZHPAY.getCode(), null);
             for (Hzb data : list) {
-                Long hzbPrice = Long.valueOf(rateMap
-                    .get(SysConstants.HZB_PRICE)) * SysConstants.AMOUNT_RADIX;
+                Long hzbPrice = Double
+                    .valueOf(
+                        (Double.valueOf(rateMap.get(SysConstants.HZB_PRICE)) * SysConstants.AMOUNT_RADIX))
+                    .longValue();
                 data.setPrice(hzbPrice);
             }
         }
@@ -85,8 +87,10 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
             // hzb价格设置为系统参数
             Map<String, String> rateMap = sysConfigBO.getConfigsMap(
                 ESystemCode.ZHPAY.getCode(), null);
-            Long hzbPrice = Long.valueOf(rateMap.get(SysConstants.HZB_PRICE))
-                    * SysConstants.AMOUNT_RADIX;
+            Long hzbPrice = Double
+                .valueOf(
+                    (Double.valueOf(rateMap.get(SysConstants.HZB_PRICE)) * SysConstants.AMOUNT_RADIX))
+                .longValue();
             data.setPrice(hzbPrice);
         }
         return data;

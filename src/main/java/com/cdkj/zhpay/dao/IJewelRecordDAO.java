@@ -15,6 +15,8 @@ public interface IJewelRecordDAO extends IBaseDAO<JewelRecord> {
 
     public int updateStatus(JewelRecord data);
 
+    public int updatePayStatus(JewelRecord data);
+
     public int updateLostInfo(JewelRecord data);
 
     public JewelRecord selectMy(JewelRecord condition);

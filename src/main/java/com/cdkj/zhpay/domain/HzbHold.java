@@ -1,5 +1,6 @@
 package com.cdkj.zhpay.domain;
 
+import java.util.Date;
 import java.util.List;
 
 import com.cdkj.zhpay.dao.base.ABaseDO;
@@ -55,6 +56,9 @@ public class HzbHold extends ABaseDO {
 
     // 橙账本流水号
     private String payCode;
+
+    // 支付时间
+    private Date payDatetime;
 
     // 系统编号
     private String systemCode;
@@ -244,6 +248,14 @@ public class HzbHold extends ABaseDO {
 
     public void setPayGroup(String payGroup) {
         this.payGroup = payGroup;
+    }
+
+    public Date getPayDatetime() {
+        return payDatetime;
+    }
+
+    public void setPayDatetime(Date payDatetime) {
+        this.payDatetime = payDatetime;
     }
 
 }

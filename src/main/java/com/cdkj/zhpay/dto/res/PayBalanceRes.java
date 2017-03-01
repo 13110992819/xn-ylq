@@ -14,7 +14,7 @@ package com.cdkj.zhpay.dto.res;
  * @history:
  */
 public class PayBalanceRes {
-    // 贡献奖励
+    // 贡献值
     private Long gxjlAmount;
 
     // 分润

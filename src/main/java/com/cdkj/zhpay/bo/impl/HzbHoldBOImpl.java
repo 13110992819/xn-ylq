@@ -1,5 +1,6 @@
 package com.cdkj.zhpay.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,7 @@ import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.dao.IHzbHoldDAO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbHold;
+import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EHzbHoldStatus;
 import com.cdkj.zhpay.exception.BizException;
 
@@ -37,6 +39,7 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
     public boolean isHzbHoldExistByUser(String userId) {
         HzbHold condition = new HzbHold();
         condition.setUserId(userId);
+        condition.setStatus(EDiviFlag.EFFECT.getCode());
         if (hzbHoldDAO.selectTotalCount(condition) > 0) {
             return true;
         }
@@ -68,6 +71,7 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
         if (StringUtils.isNotBlank(userId)) {
             HzbHold data = new HzbHold();
             data.setUserId(userId);
+            data.setHzbCode(hzb.getCode());
             data.setStatus(EHzbHoldStatus.ACTIVATED.getCode());
             data.setPrice(hzb.getPrice());
             data.setCurrency(hzb.getCurrency());
@@ -119,6 +123,7 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
         if (StringUtils.isNotBlank(userId)) {
             HzbHold condition = new HzbHold();
             condition.setUserId(userId);
+            condition.setStatus(EDiviFlag.EFFECT.getCode());
             data = hzbHoldDAO.select(condition);
             if (data == null) {
                 throw new BizException("xn0000", "汇赚宝购买记录不存在");
@@ -135,6 +140,24 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
             data.setId(id);
             data.setStatus(status);
             count = hzbHoldDAO.updateStatus(data);
+        }
+        return count;
+    }
+
+    @Override
+    public int refreshPayStatus(Long id, String status, String payCode,
+            Long payAmount) {
+        int count = 0;
+        if (id != null) {
+            HzbHold data = new HzbHold();
+            data.setId(id);
+            data.setStatus(status);
+            data.setPayAmount1(0L);
+            data.setPayAmount2(0L);
+            data.setPayAmount3(payAmount);
+            data.setPayCode(payCode);
+            data.setPayDatetime(new Date());
+            count = hzbHoldDAO.updatePayStatus(data);
         }
         return count;
     }

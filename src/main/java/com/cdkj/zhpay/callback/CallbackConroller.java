@@ -35,6 +35,7 @@ public class CallbackConroller {
             HttpServletResponse response) throws IOException {
         boolean isSuccess = Boolean.valueOf(request.getParameter("isSuccess"));
         String payGroup = request.getParameter("payGroup");
+        String payCode = request.getParameter("payCode");
         Long amount = Long.valueOf(request.getParameter("transAmount"));
         String bizType = request.getParameter("bizType");
         // 支付成功，商户处理后同步返回给微信参数
@@ -48,15 +49,15 @@ public class CallbackConroller {
             try {
                 if (EBizType.AJ_DUOBAO.getCode().equals(bizType)) {
                     System.out.println("**** 进入一元夺宝，微信APP支付服务器回调 start****");
-                    jewelRecordAO.paySuccess(payGroup, amount);
+                    jewelRecordAO.paySuccess(payGroup, payCode, amount);
                     System.out.println("**** 进入一元夺宝，微信APP支付服务器回调 end****");
                 } else if (EBizType.AJ_GMHZB.getCode().equals(bizType)) {
                     System.out.println("**** 进入购买汇赚宝，微信APP支付服务器回调 start****");
-                    hzbAO.paySuccess(payGroup, amount);
+                    hzbAO.paySuccess(payGroup, payCode, amount);
                     System.out.println("**** 进入购买汇赚宝，微信APP支付服务器回调 end****");
                 }
             } catch (Exception e) {
-                logger.info("支付回调异常");
+                logger.info("支付回调异常,原因：" + e.getMessage());
             }
         }
     }

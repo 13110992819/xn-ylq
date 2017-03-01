@@ -23,4 +23,6 @@ public interface IHzbHoldAO {
     public HzbHold getHzbHold(Long id);
 
     public XN808802Res doGetHzbTotalData(String systemCode, String userId);
+
+    public void doResetRockNumDaily();
 }

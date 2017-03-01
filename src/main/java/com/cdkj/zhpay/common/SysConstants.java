@@ -6,11 +6,11 @@ public class SysConstants {
 
     public static final String HBYJ2FR = "hbyj2Fr"; // 红包业绩兑分润
 
-    public static final String HBYJ2GXJL = "hbyj2Gxjl"; // 红包业绩兑贡献奖励
+    public static final String HBYJ2GXJL = "hbyj2Gxjl"; // 红包业绩兑贡献值
 
     public static final String FR2CNY = "fr2Cny"; // 分润兑人民币
 
-    public static final String GXJL2CNY = "gxjl2Cny"; // 贡献奖励兑人民币
+    public static final String GXJL2CNY = "gxjl2Cny"; // 贡献值兑人民币
 
     public static final String HZB_PRICE = "hzbPrice"; // hzb价格
 
