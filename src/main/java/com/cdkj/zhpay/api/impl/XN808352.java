@@ -46,6 +46,7 @@ public class XN808352 extends AProcessor {
         data.setAdvText(req.getAdvText());
         data.setAdvPic(req.getAdvPic());
         data.setUpdater(req.getUpdater());
+        data.setRemark(req.getRemark());
         jewelTemplateAO.editJewelTemplate(data);
         return new BooleanRes(true);
     }

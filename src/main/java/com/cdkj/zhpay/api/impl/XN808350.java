@@ -45,6 +45,7 @@ public class XN808350 extends AProcessor {
         data.setAdvText(req.getAdvText());
         data.setAdvPic(req.getAdvPic());
         data.setUpdater(req.getUpdater());
+        data.setRemark(req.getRemark());
         data.setSystemCode(req.getSystemCode());
         return new PKCodeRes(jewelTemplateAO.addJewelTemplate(data));
     }

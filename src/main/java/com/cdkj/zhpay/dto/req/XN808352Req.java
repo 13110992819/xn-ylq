@@ -41,6 +41,17 @@ public class XN808352Req {
     // 更新人（必填）
     private String updater;
 
+    // 备注
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public String getCode() {
         return code;
     }

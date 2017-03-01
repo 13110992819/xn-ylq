@@ -52,7 +52,7 @@ public class JewelRecordNumberBOImpl extends PaginableBOImpl<JewelRecordNumber>
         return jewelRecordNumberDAO.selectList(data);
     }
 
-    /** （）
+    /**
      * @see com.cdkj.zhpay.bo.IJewelRecordNumberBO#queryJewelRecordNumberList(java.lang.String)
      */
     @Override
