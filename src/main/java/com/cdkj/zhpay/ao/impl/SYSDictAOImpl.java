@@ -10,7 +10,6 @@ package com.cdkj.zhpay.ao.impl;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +17,6 @@ import com.cdkj.zhpay.ao.ISYSDictAO;
 import com.cdkj.zhpay.bo.ISYSDictBO;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.SYSDict;
-import com.cdkj.zhpay.enums.EDictType;
-import com.cdkj.zhpay.exception.BizException;
 
 /** 
  * @author: haiqingzheng 
@@ -31,75 +28,21 @@ public class SYSDictAOImpl implements ISYSDictAO {
     @Autowired
     ISYSDictBO sysDictBO;
 
-    /** 
-     * @see com.cdkj.zhpay.ao.ISYSDictAO#addSYSDict(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
-    public Long addSYSDict(String type, String parentKey, String key,
-            String value, String remark, String systemCode) {
-        if (EDictType.SECOND.getCode().equals(type)) {
-            if (StringUtils.isBlank(parentKey)) {
-                throw new BizException("xn000000", "第二层字典数据，parentKey不能为空");
-            }
-            // 查看父节点是否存在
-            SYSDict fDict = new SYSDict();
-            fDict.setDkey(parentKey);
-            fDict.setType(EDictType.FIRST.getCode());
-            if (sysDictBO.getTotalCount(fDict) <= 0) {
-                throw new BizException("xn000000", "parentKey不存在");
-            }
-            // 第二层数据字典 在当前父节点下key不能重复
-            SYSDict condition = new SYSDict();
-            condition.setDkey(key);
-            condition.setParentKey(parentKey);
-            condition.setType(EDictType.SECOND.getCode());
-            if (sysDictBO.getTotalCount(condition) > 0) {
-                throw new BizException("xn000000", "当前节点下，key不能为重复");
-            }
-        } else if (EDictType.FIRST.getCode().equals(type)) {
-            // 第一层数据字典 key不能重复
-            SYSDict condition = new SYSDict();
-            condition.setDkey(key);
-            condition.setType(EDictType.FIRST.getCode());
-            if (sysDictBO.getTotalCount(condition) > 0) {
-                throw new BizException("xn000000", "第一层key不能为重复");
-            }
-        } else {
-            throw new BizException("xn000000", "type类型不在枚举类中 0-第一层 1-第二层");
-        }
-        SYSDict sysDict = new SYSDict();
-        sysDict.setType(type);
-        if (EDictType.SECOND.getCode().equals(type)) {
-            sysDict.setParentKey(parentKey);
-        }
-        sysDict.setDkey(key);
-        sysDict.setDvalue(value);
-        sysDict.setRemark(remark);
-        sysDict.setSystemCode(systemCode);
-        return sysDictBO.saveSYSDict(sysDict);
+    public Long addSYSDict(String parentKey, String key, String value,
+            String updater, String remark) {
+        sysDictBO.checkKeys(parentKey, key);
+        return sysDictBO.saveSecondDict(parentKey, key, value, updater, remark);
     }
 
     @Override
-    public int dropSYSDict(Long id) {
-        int count = 0;
-        if (id != null) {
-            SYSDict condition = new SYSDict();
-            condition.setId(id);
-            if (sysDictBO.getTotalCount(condition) <= 0) {
-                throw new BizException("xn000000", "id记录不存在");
-            }
-            count = sysDictBO.removeSYSDict(id);
-        }
-        return count;
+    public void dropSYSDict(Long id) {
+        sysDictBO.removeSYSDict(id);
     }
 
     @Override
-    public int editSYSDict(Long id, String value, String remark) {
-        SYSDict data = new SYSDict();
-        data.setId(id);
-        data.setDvalue(value);
-        data.setRemark(remark);
-        return sysDictBO.refreshSYSDict(data);
+    public void editSYSDict(Long id, String value, String updater, String remark) {
+        sysDictBO.refreshSYSDict(id, value, updater, remark);
     }
 
     @Override
@@ -115,15 +58,8 @@ public class SYSDictAOImpl implements ISYSDictAO {
 
     @Override
     public SYSDict getSYSDict(Long id) {
-        SYSDict sysDict = null;
-        if (id != null) {
-            SYSDict condition = new SYSDict();
-            condition.setId(id);
-            if (sysDictBO.getTotalCount(condition) <= 0) {
-                throw new BizException("xn000000", "id记录不存在");
-            }
-            sysDict = sysDictBO.getSYSDict(id);
-        }
-        return sysDict;
+
+        return sysDictBO.getSYSDict(id);
+
     }
 }

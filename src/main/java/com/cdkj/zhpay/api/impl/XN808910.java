@@ -4,7 +4,6 @@ import com.cdkj.zhpay.ao.ISYSConfigAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.domain.SYSConfig;
 import com.cdkj.zhpay.dto.req.XN808910Req;
 import com.cdkj.zhpay.dto.res.BooleanRes;
 import com.cdkj.zhpay.exception.BizException;
@@ -25,19 +24,17 @@ public class XN808910 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        SYSConfig data = new SYSConfig();
-        data.setId(StringValidater.toLong(req.getId()));
-        data.setCvalue(req.getCvalue());
-        data.setRemark(req.getRemark());
-        data.setCompanyCode(req.getCompanyCode());
-        sysConfigAO.editSYSConfig(data);
+        Long id = StringValidater.toLong(req.getId());
+        sysConfigAO.editSYSConfig(id, req.getCvalue(), req.getUpdater(),
+            req.getRemark());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808910Req.class);
-        StringValidater.validateBlank(req.getId(), req.getCvalue());
+        StringValidater.validateBlank(req.getId(), req.getCvalue(),
+            req.getUpdater());
     }
 
 }

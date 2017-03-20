@@ -19,7 +19,7 @@ import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /** 
- * 新增数据字典
+ * 新增第二层数据字典
  * @author: haiqingzheng 
  * @since: 2016年4月17日 下午5:00:02 
  * @history:
@@ -35,9 +35,9 @@ public class XN808900 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return new PKIdRes(sysDictAO.addSYSDict(req.getType(),
-            req.getParentKey(), req.getDkey(), req.getDvalue(),
-            req.getRemark(), req.getSystemCode()));
+        Long id = sysDictAO.addSYSDict(req.getParentKey(), req.getDkey(),
+            req.getDvalue(), req.getUpdater(), req.getRemark());
+        return new PKIdRes(id);
     }
 
     /** 
@@ -46,7 +46,7 @@ public class XN808900 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808900Req.class);
-        StringValidater.validateBlank(req.getType(), req.getDkey(),
-            req.getDvalue(), req.getSystemCode());
+        StringValidater.validateBlank(req.getParentKey(), req.getDkey(),
+            req.getDvalue(), req.getUpdater());
     }
 }

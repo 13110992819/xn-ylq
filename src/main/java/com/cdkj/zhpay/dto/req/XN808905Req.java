@@ -28,17 +28,6 @@ public class XN808905Req extends APageReq {
     // key（选填）
     private String dkey;
 
-    // 系统编号(必填)
-    private String systemCode;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
     public String getType() {
         return type;
     }

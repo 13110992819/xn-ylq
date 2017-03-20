@@ -14,8 +14,8 @@ import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
  * 分页查询系统参数
- * @author: Gejin 
- * @since: 2016年4月17日 下午8:30:55 
+ * @author: xieyj 
+ * @since: 2017年3月20日 下午6:02:22 
  * @history:
  */
 public class XN808915 extends AProcessor {
@@ -27,11 +27,11 @@ public class XN808915 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         SYSConfig condition = new SYSConfig();
-        condition.setCategory(req.getCategory());
         condition.setType(req.getType());
-        condition.setCompanyCode(req.getCompanyCode());
-        condition.setCname(req.getCname());
         condition.setCkeyForQuery(req.getCkey());
+        condition.setUpdater(req.getUpdater());
+        condition.setCompanyCode(req.getCompanyCode());
+        condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = ISYSConfigAO.DEFAULT_ORDER_COLUMN;
@@ -46,6 +46,7 @@ public class XN808915 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808915Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater.validateBlank(req.getSystemCode());
+        StringValidater
+            .validateBlank(req.getCompanyCode(), req.getSystemCode());
     }
 }

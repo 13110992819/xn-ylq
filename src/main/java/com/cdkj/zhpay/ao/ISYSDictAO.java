@@ -21,12 +21,12 @@ import com.cdkj.zhpay.domain.SYSDict;
 public interface ISYSDictAO {
     static String DEFAULT_ORDER_COLUMN = "id";
 
-    public Long addSYSDict(String type, String parentKey, String key,
-            String value, String remark, String systemCode);
+    public Long addSYSDict(String parentKey, String key, String value,
+            String updater, String remark);
 
-    public int dropSYSDict(Long id);
+    public void dropSYSDict(Long id);
 
-    public int editSYSDict(Long id, String value, String remark);
+    public void editSYSDict(Long id, String value, String updater, String remark);
 
     public Paginable<SYSDict> querySYSDictPage(int start, int limit,
             SYSDict condition);

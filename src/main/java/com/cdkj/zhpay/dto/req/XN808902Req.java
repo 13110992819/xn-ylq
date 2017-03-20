@@ -20,6 +20,9 @@ public class XN808902Req {
     // value（必填）
     private String dvalue;
 
+    // 修改人（必填）
+    private String updater;
+
     // 备注（选填）
     private String remark;
 
@@ -39,6 +42,14 @@ public class XN808902Req {
         this.dvalue = dvalue;
     }
 
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -46,4 +57,5 @@ public class XN808902Req {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
 }

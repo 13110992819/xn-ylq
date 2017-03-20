@@ -8,6 +8,7 @@
  */
 package com.cdkj.zhpay.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import com.cdkj.zhpay.bo.ISYSDictBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.dao.ISYSDictDAO;
 import com.cdkj.zhpay.domain.SYSDict;
+import com.cdkj.zhpay.enums.EDictType;
+import com.cdkj.zhpay.exception.BizException;
 
 /** 
  * @author: haiqingzheng 
@@ -29,26 +32,10 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
     @Autowired
     private ISYSDictDAO sysDictDAO;
 
-    /** 
-     * @see com.cdkj.zhpay.bo.ISYSDictBO#saveSYSDict(com.cdkj.zhpay.domain.SYSDict)
-     */
-    @Override
-    public Long saveSYSDict(SYSDict data) {
-        Long id = null;
-        if (data != null) {
-            sysDictDAO.insert(data);
-            id = data.getId();
-        }
-        return id;
-    }
-
-    /** 
-     * @see com.cdkj.zhpay.bo.ISYSDictBO#removeSYSDict(java.lang.Long)
-     */
     @Override
     public int removeSYSDict(Long id) {
         int count = 0;
-        if (id != null) {
+        if (id > 0) {
             SYSDict data = new SYSDict();
             data.setId(id);
             count = sysDictDAO.delete(data);
@@ -56,16 +43,16 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
         return count;
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.ISYSDictBO#refreshSYSDict(com.cdkj.zhpay.domain.SYSDict)
-     */
     @Override
-    public int refreshSYSDict(SYSDict data) {
-        int count = 0;
-        if (data != null) {
-            count = sysDictDAO.update(data);
-        }
-        return count;
+    public int refreshSYSDict(Long id, String value, String updater,
+            String remark) {
+        SYSDict data = new SYSDict();
+        data.setId(id);
+        data.setDvalue(value);
+        data.setUpdater(updater);
+        data.setUpdateDatetime(new Date());
+        data.setRemark(remark);
+        return sysDictDAO.update(data);
     }
 
     /** 
@@ -74,12 +61,16 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
     @Override
     public SYSDict getSYSDict(Long id) {
         SYSDict sysDict = null;
-        if (id != null) {
+        if (id > 0) {
             SYSDict data = new SYSDict();
             data.setId(id);
             sysDict = sysDictDAO.select(data);
         }
+        if (sysDict == null) {
+            throw new BizException("xn000000", "id记录不存在");
+        }
         return sysDict;
+
     }
 
     /** 
@@ -88,6 +79,42 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
     @Override
     public List<SYSDict> querySYSDictList(SYSDict condition) {
         return sysDictDAO.selectList(condition);
+    }
+
+    @Override
+    public Long saveSecondDict(String parentKey, String key, String value,
+            String updater, String remark) {
+        SYSDict sysDict = new SYSDict();
+        sysDict.setType(EDictType.SECOND.getCode());
+        sysDict.setParentKey(parentKey);
+        sysDict.setDkey(key);
+        sysDict.setDvalue(value);
+
+        sysDict.setUpdater(updater);
+        sysDict.setUpdateDatetime(new Date());
+        sysDict.setRemark(remark);
+        sysDictDAO.insert(sysDict);
+        return sysDict.getId();
+
+    }
+
+    @Override
+    public void checkKeys(String parentKey, String key) {
+        // 查看父节点是否存在
+        SYSDict fDict = new SYSDict();
+        fDict.setDkey(parentKey);
+        fDict.setType(EDictType.FIRST.getCode());
+        if (getTotalCount(fDict) <= 0) {
+            throw new BizException("xn000000", "parentKey不存在");
+        }
+        // 第二层数据字典 在当前父节点下key不能重复
+        SYSDict condition = new SYSDict();
+        condition.setDkey(key);
+        condition.setParentKey(parentKey);
+        condition.setType(EDictType.SECOND.getCode());
+        if (getTotalCount(condition) > 0) {
+            throw new BizException("xn000000", "当前节点下，key不能为重复");
+        }
     }
 
 }

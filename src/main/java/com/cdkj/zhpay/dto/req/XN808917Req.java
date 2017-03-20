@@ -14,24 +14,14 @@ package com.cdkj.zhpay.dto.req;
  * @history:
  */
 public class XN808917Req {
-    // 类型
-    private String type;
-
-    // 配置文件名
+    // 配置文件名(必填)
     private String key;
 
+    // 公司编号(必填)
     private String companyCode;
 
     // 系统编号(必填)
     private String systemCode;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String getKey() {
         return key;

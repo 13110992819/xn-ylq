@@ -7,30 +7,20 @@ public class XN808915Req extends APageReq {
      */
     private static final long serialVersionUID = 7955498610040656532L;
 
-    // 大类(选填)
-    private String category;
-
     // 小类(选填)
     private String type;
 
     // key值(选填)
     private String ckey;
 
-    // cname(选填)
-    private String cname;
+    // 修改人(选填)
+    private String updater;
 
+    // 系统编号(必填)
     private String companyCode;
 
     // 系统编号(必填)
     private String systemCode;
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
 
     public String getType() {
         return type;
@@ -56,19 +46,19 @@ public class XN808915Req extends APageReq {
         this.companyCode = companyCode;
     }
 
-    public String getCname() {
-        return cname;
-    }
-
-    public void setCname(String cname) {
-        this.cname = cname;
-    }
-
     public String getSystemCode() {
         return systemCode;
     }
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 }

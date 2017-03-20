@@ -20,37 +20,14 @@ import com.cdkj.zhpay.domain.SYSConfig;
  */
 public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
 
-    public int saveSYSConfig(SYSConfig data);
+    public int refreshSYSConfig(Long id, String cvalue, String updater,
+            String remark);
 
-    /**
-     * 更新系统参数值
-     * @param value 参数值
-     * @param note 参数说明
-     * @param updater 更新人
-     * @param remark 备注
-     * @return 
-     * @create: 2016年4月17日 下午2:43:11 haiqingzheng
-     * @history:
-     */
-    public int refreshSYSConfig(SYSConfig data);
-
-    public SYSConfig getConfig(Long id);
+    public SYSConfig getSYSConfig(Long id);
 
     public Map<String, String> getConfigsMap(String systemCode,
             String companyCode);
 
-    boolean isSYSConfigExist(Long Id);
-
-    /**
-     * 获取系统参数值
-     * @param systemCode
-     * @param type
-     * @param companyCode
-     * @param ckey
-     * @return 
-     * @create: 2016年12月27日 上午11:30:28 xieyj
-     * @history:
-     */
-    public String getConfigValue(String systemCode, String type,
-            String companyCode, String ckey);
+    public SYSConfig getSYSConfig(String key, String companyCode,
+            String systemCode);
 }

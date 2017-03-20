@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import com.cdkj.zhpay.ao.ISYSDictAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
-import com.cdkj.zhpay.core.StringValidater;
 import com.cdkj.zhpay.domain.SYSDict;
 import com.cdkj.zhpay.dto.req.XN808906Req;
 import com.cdkj.zhpay.exception.BizException;
@@ -55,6 +54,5 @@ public class XN808906 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808906Req.class);
-        StringValidater.validateBlank(req.getSystemCode());
     }
 }

@@ -20,20 +20,17 @@ import com.cdkj.zhpay.domain.SYSDict;
  */
 public interface ISYSDictBO extends IPaginableBO<SYSDict> {
 
-    public Long saveSYSDict(SYSDict data);
-
-    public int removeSYSDict(Long id);
-
-    /**
-     * 修改数据字典
-     * @param sysDict
-     * @return 
-     * @create: 2016年4月17日 下午2:41:36 haiqingzheng
-     * @history:
-     */
-    public int refreshSYSDict(SYSDict data);
-
     public SYSDict getSYSDict(Long id);
 
     public List<SYSDict> querySYSDictList(SYSDict condition);
+
+    public Long saveSecondDict(String parentKey, String key, String value,
+            String updater, String remark);
+
+    public int removeSYSDict(Long id);
+
+    public void checkKeys(String parentKey, String key);
+
+    public int refreshSYSDict(Long id, String value, String updater,
+            String remark);
 }

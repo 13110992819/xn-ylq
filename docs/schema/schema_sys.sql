@@ -9,6 +9,7 @@ CREATE TABLE `tsys_config` (
   `type` varchar(32) DEFAULT NULL COMMENT '类型',
   `ckey` varchar(32) DEFAULT NULL COMMENT 'key值',
   `cvalue` text COMMENT '值',
+  
   `updater` varchar(32) NOT NULL COMMENT '更新人',
   `update_datetime` datetime NOT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
@@ -27,6 +28,7 @@ CREATE TABLE `tsys_dict` (
   `parent_key` varchar(32) DEFAULT NULL COMMENT '父key',
   `dkey` varchar(32) NOT NULL COMMENT 'key',
   `dvalue` varchar(64) NOT NULL COMMENT '值',
+  
   `updater` varchar(32) NOT NULL COMMENT '更新人',
   `update_datetime` datetime NOT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',

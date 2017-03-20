@@ -8,6 +8,8 @@
  */
 package com.cdkj.zhpay.domain;
 
+import java.util.Date;
+
 import com.cdkj.zhpay.dao.base.ABaseDO;
 
 /** 
@@ -36,19 +38,14 @@ public class SYSDict extends ABaseDO {
     // value
     private String dvalue;
 
+    // 修改人
+    private String updater;
+
+    // 修改时间
+    private Date updateDatetime;
+
     // 备注
     private String remark;
-
-    // 系统编号
-    private String systemCode;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public Long getId() {
         return id;
@@ -90,6 +87,22 @@ public class SYSDict extends ABaseDO {
         this.dvalue = dvalue;
     }
 
+    public String getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(String updater) {
+        this.updater = updater;
+    }
+
+    public Date getUpdateDatetime() {
+        return updateDatetime;
+    }
+
+    public void setUpdateDatetime(Date updateDatetime) {
+        this.updateDatetime = updateDatetime;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -97,4 +110,5 @@ public class SYSDict extends ABaseDO {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
 }
