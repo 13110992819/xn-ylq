@@ -13,20 +13,21 @@ package com.cdkj.zhpay.dto.req;
  * @since: 2016年12月19日 下午5:23:19 
  * @history:
  */
-public class XN808401Req extends APageReq {
+public class XN615216Req extends APageReq {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */
     private static final long serialVersionUID = -2527101197388003750L;
 
-    // 状态（选填）
-    private String status;
+    // 用户ID（选填）
+    private String userId;
 
-    public String getStatus() {
-        return status;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
+
 }
