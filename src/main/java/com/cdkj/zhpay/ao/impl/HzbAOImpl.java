@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cdkj.zhpay.ao.IHzbHoldAO;
+import com.cdkj.zhpay.ao.IHzbAO;
 import com.cdkj.zhpay.bo.IAccountBO;
-import com.cdkj.zhpay.bo.IHzbHoldBO;
+import com.cdkj.zhpay.bo.IHzbBO;
 import com.cdkj.zhpay.bo.IHzbMgiftBO;
 import com.cdkj.zhpay.bo.IHzbYyBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
@@ -20,7 +20,7 @@ import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.common.SysConstants;
-import com.cdkj.zhpay.domain.HzbHold;
+import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbMgift;
 import com.cdkj.zhpay.dto.res.XN802527Res;
 import com.cdkj.zhpay.dto.res.XN805901Res;
@@ -29,10 +29,10 @@ import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 
 @Service
-public class HzbHoldAOImpl implements IHzbHoldAO {
+public class HzbAOImpl implements IHzbAO {
 
     @Autowired
-    private IHzbHoldBO hzbHoldBO;
+    private IHzbBO hzbBO;
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
@@ -51,8 +51,8 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
 
     // 分页无法统计，暂时不用
     @Override
-    public Paginable<HzbHold> queryDistanceHzbHoldPage(int start, int limit,
-            HzbHold condition) {
+    public Paginable<Hzb> queryDistanceHzbHoldPage(int start, int limit,
+            Hzb condition) {
         String distance = sysConfigBO.getConfigValue(null, null, null,
             SysConstants.HZB_DISTANCE);
         if (StringUtils.isBlank(distance)) {
@@ -60,12 +60,12 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
             distance = SysConstants.HZB_DISTANCE_DEF;
         }
         condition.setDistance(distance);
-        return hzbHoldBO.queryDistancePaginable(start, limit, condition);
+        return hzbBO.queryDistancePaginable(start, limit, condition);
     }
 
     @Override
     @Transactional
-    public Object queryDistanceHzbHoldList(HzbHold condition, String userId,
+    public Object queryDistanceHzbHoldList(Hzb condition, String userId,
             String deviceNo) {
         XN805901Res userRes = userBO.getRemoteUser(userId, userId);
         hzbYyBO.checkHzbYyCondition(userRes.getSystemCode(), userId, deviceNo);
@@ -86,7 +86,7 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
             periodRockNum = Integer.valueOf(periodRockNumString);
         }
         condition.setPeriodRockNum(periodRockNum);
-        List<HzbHold> list = hzbHoldBO.queryDistanceHzbHoldList(condition);
+        List<Hzb> list = hzbBO.queryDistanceHzbHoldList(condition);
         // 截取数量
         String hzbMaxNumStr = sysConfigBO.getConfigValue(null, null, null,
             SysConstants.HZB_MAX_NUM);
@@ -97,45 +97,45 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
         if (CollectionUtils.isNotEmpty(list) && list.size() > hzbMaxNum) {
             list = list.subList(0, hzbMaxNum);
         }
-        for (HzbHold hzbHold : list) {
-            hzbHold.setShareUrl(PropertiesUtil.Config.SHARE_URL);
+        for (Hzb hzb : list) {
+            hzb.setShareUrl(PropertiesUtil.Config.SHARE_URL);
         }
         return list;
     }
 
     @Override
-    public Paginable<HzbHold> queryHzbHoldPage(int start, int limit,
-            HzbHold condition) {
-        return hzbHoldBO.getPaginable(start, limit, condition);
+    public Paginable<Hzb> queryHzbHoldPage(int start, int limit,
+            Hzb condition) {
+        return hzbBO.getPaginable(start, limit, condition);
     }
 
     @Override
-    public List<HzbHold> queryHzbHoldList(HzbHold condition) {
-        return hzbHoldBO.queryHzbHoldList(condition);
+    public List<Hzb> queryHzbHoldList(Hzb condition) {
+        return hzbBO.queryHzbHoldList(condition);
     }
 
     @Override
-    public HzbHold getHzbHold(Long id) {
-        return hzbHoldBO.getHzbHold(id);
+    public Hzb getHzbHold(Long id) {
+        return hzbBO.getHzbHold(id);
     }
 
     /** 
-     * @see com.cdkj.zhpay.ao.IHzbHoldAO#doGetHzbTotalData(java.lang.String, java.lang.String)
+     * @see com.cdkj.zhpay.ao.IHzbAO#doGetHzbTotalData(java.lang.String, java.lang.String)
      */
     @Override
     public XN808802Res doGetHzbTotalData(String systemCode, String userId) {
-        HzbHold hzbHold = hzbHoldBO.getHzbHold(userId);
+        Hzb hzb = hzbBO.getHzbHold(userId);
         XN808802Res res = new XN808802Res();
         Date todayStart = DateUtil.getTodayStart();
         Date todayEnd = DateUtil.getTodayEnd();
         Date yesterdayEnd = DateUtil.getRelativeDate(todayStart, -1);
         // 历史被摇一摇次数
         Long historyYyTimes = hzbYyBO.getTotalHzbYyCount(null, yesterdayEnd,
-            hzbHold.getId());
+            hzb.getId());
         res.setHistoryYyTimes(historyYyTimes);
         // 今日被摇一摇次数
         Long todayYyTimes = hzbYyBO.getTotalHzbYyCount(todayStart, todayEnd,
-            hzbHold.getId());
+            hzb.getId());
         res.setTodayYyTimes(todayYyTimes);
         // 总的摇一摇分成
         XN802527Res accountRes = accountBO.doGetBizTotalAmount(systemCode,
@@ -162,6 +162,6 @@ public class HzbHoldAOImpl implements IHzbHoldAO {
 
     @Override
     public void doResetRockNumDaily() {
-        hzbHoldBO.resetPeriodRockNum();
+        hzbBO.resetPeriodRockNum();
     }
 }

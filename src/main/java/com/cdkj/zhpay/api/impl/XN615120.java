@@ -15,7 +15,7 @@ import com.cdkj.zhpay.spring.SpringContextHolder;
  * @since: 2017年1月9日 下午4:22:06 
  * @history:
  */
-public class XN808460 extends AProcessor {
+public class XN615120 extends AProcessor {
     private IHzbYyAO hzbYyAO = SpringContextHolder.getBean(IHzbYyAO.class);
 
     private XN808460Req req = null;

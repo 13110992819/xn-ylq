@@ -10,25 +10,24 @@ package com.cdkj.zhpay.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.cdkj.zhpay.ao.IHzbHoldAO;
+import com.cdkj.zhpay.ao.IHzbAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.domain.HzbHold;
+import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.dto.req.XN808458Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /** 
- * 分页查询汇赚宝购买记录
+ * 分页查询汇赚宝Oss
  * @author: haiqingzheng 
  * @since: 2016年12月21日 下午4:21:12 
  * @history:
  */
-public class XN808458 extends AProcessor {
-    private IHzbHoldAO hzbHoldAO = SpringContextHolder
-        .getBean(IHzbHoldAO.class);
+public class XN615115 extends AProcessor {
+    private IHzbAO hzbAO = SpringContextHolder.getBean(IHzbAO.class);
 
     private XN808458Req req = null;
 
@@ -37,18 +36,18 @@ public class XN808458 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        HzbHold condition = new HzbHold();
+        Hzb condition = new Hzb();
         condition.setUserId(req.getUserId());
         condition.setStatus(req.getStatus());
         condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
-            orderColumn = IHzbHoldAO.DEFAULT_ORDER_COLUMN;
+            orderColumn = IHzbAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return hzbHoldAO.queryHzbHoldPage(start, limit, condition);
+        return hzbAO.queryHzbHoldPage(start, limit, condition);
     }
 
     /** 

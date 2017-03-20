@@ -5,94 +5,94 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.cdkj.zhpay.common.PropertiesUtil;
-import com.cdkj.zhpay.dao.IHzbHoldDAO;
+import com.cdkj.zhpay.dao.IHzbDAO;
 import com.cdkj.zhpay.dao.base.support.AMybatisTemplate;
-import com.cdkj.zhpay.domain.HzbHold;
+import com.cdkj.zhpay.domain.Hzb;
 
 @Repository("hzbHoldDAOImpl")
-public class HzbHoldDAOImpl extends AMybatisTemplate implements IHzbHoldDAO {
+public class HzbDAOImpl extends AMybatisTemplate implements IHzbDAO {
 
     @Override
-    public int insert(HzbHold data) {
+    public int insert(Hzb data) {
         return super.insert(NAMESPACE.concat("insert_hzbHold"), data);
     }
 
     @Override
-    public int delete(HzbHold data) {
+    public int delete(Hzb data) {
         return super.delete(NAMESPACE.concat("delete_hzbHold"), data);
     }
 
     @Override
-    public HzbHold select(HzbHold condition) {
+    public Hzb select(Hzb condition) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.select(NAMESPACE.concat("select_hzbHold"), condition,
-            HzbHold.class);
+            Hzb.class);
     }
 
     @Override
-    public Long selectTotalCount(HzbHold condition) {
+    public Long selectTotalCount(Hzb condition) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectTotalCount(NAMESPACE.concat("select_hzbHold_count"),
             condition);
     }
 
     @Override
-    public List<HzbHold> selectList(HzbHold condition) {
+    public List<Hzb> selectList(Hzb condition) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_hzbHold"), condition,
-            HzbHold.class);
+            Hzb.class);
     }
 
     @Override
-    public List<HzbHold> selectList(HzbHold condition, int start, int count) {
+    public List<Hzb> selectList(Hzb condition, int start, int count) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_hzbHold"), start,
-            count, condition, HzbHold.class);
+            count, condition, Hzb.class);
     }
 
     @Override
-    public int updateStatus(HzbHold data) {
+    public int updateStatus(Hzb data) {
         return super.update(NAMESPACE.concat("update_status"), data);
     }
 
     @Override
-    public int updatePayStatus(HzbHold data) {
+    public int updatePayStatus(Hzb data) {
         return super.update(NAMESPACE.concat("update_pay_status"), data);
     }
 
     /** 
-     * @see com.cdkj.zhpay.dao.IHzbHoldDAO#selectDistanceTotalCount(com.cdkj.zhpay.domain.HzbHold)
+     * @see com.cdkj.zhpay.dao.IHzbDAO#selectDistanceTotalCount(com.cdkj.zhpay.domain.Hzb)
      */
     @Override
-    public Long selectDistanceTotalCount(HzbHold condition) {
+    public Long selectDistanceTotalCount(Hzb condition) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectTotalCount(
             NAMESPACE.concat("select_hzbHold_distance_count"), condition);
     }
 
     /** 
-     * @see com.cdkj.zhpay.dao.IHzbHoldDAO#selectDistanceList(com.cdkj.zhpay.domain.HzbHold)
+     * @see com.cdkj.zhpay.dao.IHzbDAO#selectDistanceList(com.cdkj.zhpay.domain.Hzb)
      */
     @Override
-    public List<HzbHold> selectDistanceList(HzbHold condition) {
+    public List<Hzb> selectDistanceList(Hzb condition) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_hzbHold_distance"),
-            condition, HzbHold.class);
+            condition, Hzb.class);
     }
 
     /** 
-     * @see com.cdkj.zhpay.dao.IHzbHoldDAO#selectDistanceList(com.cdkj.zhpay.domain.HzbHold, int, int)
+     * @see com.cdkj.zhpay.dao.IHzbDAO#selectDistanceList(com.cdkj.zhpay.domain.Hzb, int, int)
      */
     @Override
-    public List<HzbHold> selectDistanceList(HzbHold condition, int start,
+    public List<Hzb> selectDistanceList(Hzb condition, int start,
             int count) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_hzbHold_distance"),
-            start, count, condition, HzbHold.class);
+            start, count, condition, Hzb.class);
     }
 
     @Override
-    public int updateRockNum(HzbHold data) {
+    public int updateRockNum(Hzb data) {
         return super.update(NAMESPACE.concat("update_rockNum"), data);
     }
 
@@ -103,7 +103,7 @@ public class HzbHoldDAOImpl extends AMybatisTemplate implements IHzbHoldDAO {
     }
 
     @Override
-    public Long getTotalAmount(HzbHold condition) {
+    public Long getTotalAmount(Hzb condition) {
         return super.select(NAMESPACE.concat("select_totalAmount"), condition,
             Long.class);
     }

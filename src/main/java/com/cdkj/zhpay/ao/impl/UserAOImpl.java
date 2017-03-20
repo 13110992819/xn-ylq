@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cdkj.zhpay.ao.IUserAO;
-import com.cdkj.zhpay.bo.IHzbHoldBO;
+import com.cdkj.zhpay.bo.IHzbBO;
 import com.cdkj.zhpay.bo.IUserBO;
-import com.cdkj.zhpay.domain.HzbHold;
+import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.UserExt;
 import com.cdkj.zhpay.dto.res.XN805060Res;
 import com.cdkj.zhpay.dto.res.XN805901Res;
@@ -35,7 +35,7 @@ import com.cdkj.zhpay.exception.BizException;
 public class UserAOImpl implements IUserAO {
 
     @Autowired
-    private IHzbHoldBO hzbHoldBO;
+    private IHzbBO hzbBO;
 
     @Autowired
     private IUserBO userBO;
@@ -63,10 +63,10 @@ public class UserAOImpl implements IUserAO {
                 bUserList.add(bUser.getUserId());
             }
         }
-        HzbHold hzbHoldCondition = new HzbHold();
+        Hzb hzbHoldCondition = new Hzb();
         hzbHoldCondition.setUserList(cUserList);
         hzbHoldCondition.setStatus(EDiviFlag.EFFECT.getCode());
-        long hzbNum = hzbHoldBO.getTotalCount(hzbHoldCondition);
+        long hzbNum = hzbBO.getTotalCount(hzbHoldCondition);
         return new XN808800Res(hzbNum);
     }
 }

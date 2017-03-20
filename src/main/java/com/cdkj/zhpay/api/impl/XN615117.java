@@ -8,11 +8,11 @@
  */
 package com.cdkj.zhpay.api.impl;
 
-import com.cdkj.zhpay.ao.IHzbHoldAO;
+import com.cdkj.zhpay.ao.IHzbAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.domain.HzbHold;
+import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.dto.req.XN808457Req;
 import com.cdkj.zhpay.enums.EHzbHoldStatus;
 import com.cdkj.zhpay.exception.BizException;
@@ -25,9 +25,9 @@ import com.cdkj.zhpay.spring.SpringContextHolder;
  * @since: 2016年12月21日 下午4:19:09 
  * @history:
  */
-public class XN808457 extends AProcessor {
-    private IHzbHoldAO hzbHoldAO = SpringContextHolder
-        .getBean(IHzbHoldAO.class);
+public class XN615117 extends AProcessor {
+    private IHzbAO hzbAO = SpringContextHolder
+        .getBean(IHzbAO.class);
 
     private XN808457Req req = null;
 
@@ -36,7 +36,7 @@ public class XN808457 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        HzbHold condition = new HzbHold();
+        Hzb condition = new Hzb();
         condition.setUserLatitude(req.getLatitude());
         condition.setUserLongitude(req.getLongitude());
         condition.setStatus(EHzbHoldStatus.ACTIVATED.getCode());
@@ -47,7 +47,7 @@ public class XN808457 extends AProcessor {
         // condition.setOrder(orderColumn, req.getOrderDir());
         // int start = StringValidater.toInteger(req.getStart());
         // int limit = StringValidater.toInteger(req.getLimit());
-        return hzbHoldAO.queryDistanceHzbHoldList(condition, req.getUserId(),
+        return hzbAO.queryDistanceHzbHoldList(condition, req.getUserId(),
             req.getDeviceNo());
     }
 

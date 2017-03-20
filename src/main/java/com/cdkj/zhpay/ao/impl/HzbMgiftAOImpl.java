@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cdkj.zhpay.ao.IHzbMgiftAO;
 import com.cdkj.zhpay.bo.IAccountBO;
-import com.cdkj.zhpay.bo.IHzbHoldBO;
+import com.cdkj.zhpay.bo.IHzbBO;
 import com.cdkj.zhpay.bo.IHzbMgiftBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.IUserBO;
@@ -20,7 +20,7 @@ import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
-import com.cdkj.zhpay.domain.HzbHold;
+import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbMgift;
 import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.enums.EBizType;
@@ -43,7 +43,7 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
     private IHzbMgiftBO hzbMgiftBO;
 
     @Autowired
-    private IHzbHoldBO hzbHoldBO;
+    private IHzbBO hzbBO;
 
     @Autowired
     private IUserBO userBO;
@@ -83,11 +83,11 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         }
 
         // 查询已购买汇赚宝记录，发放红包
-        HzbHold hhCondition = new HzbHold();
+        Hzb hhCondition = new Hzb();
         hhCondition.setStatus(EDiviFlag.EFFECT.getCode());
-        List<HzbHold> hzbHoldlist = hzbHoldBO.queryHzbHoldList(hhCondition);
-        for (HzbHold hzbHold : hzbHoldlist) {
-            hzbMgiftBO.sendHzbMgift(hzbHold.getUserId());
+        List<Hzb> hzbHoldlist = hzbBO.queryHzbHoldList(hhCondition);
+        for (Hzb hzb : hzbHoldlist) {
+            hzbMgiftBO.sendHzbMgift(hzb.getUserId());
         }
         logger.info("**** 定时红包扫描结束 " + todayStart + " ****");
     }

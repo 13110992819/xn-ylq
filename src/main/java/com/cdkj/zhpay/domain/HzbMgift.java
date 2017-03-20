@@ -17,17 +17,23 @@ public class HzbMgift extends ABaseDO {
     // 编号
     private String code;
 
-    // 广告标题
-    private String advTitle;
-
-    // 树主人
-    private String owner;
+    // 汇赚宝编号
+    private String hzbCode;
 
     // 树主人币种
     private String ownerCurrency;
 
     // 树主人金额
     private Long ownerAmount;
+
+    // 树主人
+    private String owner;
+
+    // 状态
+    private String status;
+
+    // 创建时间（默认当前0点0分0秒）
+    private Date createDatetime;
 
     // 接收人币种
     private String receiveCurrency;
@@ -41,14 +47,16 @@ public class HzbMgift extends ABaseDO {
     // 接收时间
     private Date receiveDatetime;
 
-    // 状态(0 待发送 1 已发送，待领取 2 已领取 3 已失效)
-    private String status;
-
-    // 创建时间（默认当前0点0分0秒）
-    private Date createDatetime;
-
     // 备注
     private String remark;
+
+    private String advTitle;
+
+    // 系统编号
+    private String systemCode;
+
+    // 公司编号
+    private String companyCode;
 
     // *************db properties ****************
     // 树主人手机号

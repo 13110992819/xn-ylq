@@ -2,50 +2,54 @@ package com.cdkj.zhpay.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.cdkj.zhpay.ao.IHzbYyAO;
+import com.cdkj.zhpay.ao.IHzbMgiftAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.domain.HzbYy;
-import com.cdkj.zhpay.dto.req.XN808465Req;
+import com.cdkj.zhpay.domain.HzbMgift;
+import com.cdkj.zhpay.dto.req.XN808475Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
- * 汇赚宝摇一摇分页查询
+ * 分页查询定向红包
  * @author: xieyj 
- * @since: 2017年2月26日 下午8:25:39 
+ * @since: 2017年2月20日 下午6:26:17 
  * @history:
  */
-public class XN808465 extends AProcessor {
-    private IHzbYyAO hzbYyAO = SpringContextHolder.getBean(IHzbYyAO.class);
+public class XN615135 extends AProcessor {
+    private IHzbMgiftAO hzbMgiftAO = SpringContextHolder
+        .getBean(IHzbMgiftAO.class);
 
-    private XN808465Req req = null;
+    private XN808475Req req = null;
 
     /** 
      * @see com.cdkj.zhpay.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        HzbYy condition = new HzbYy();
-        Long hzbHoldId = StringValidater.toLong(req.getHzbHoldId());
-        condition.setHzbHoldId(hzbHoldId);
-        condition.setType(req.getType());
-        condition.setUserId(req.getUserId());
+        HzbMgift condition = new HzbMgift();
+        condition.setOwner(req.getOwner());
+        condition.setReceiver(req.getReceiver());
+        condition.setStatus(req.getStatus());
         condition.setCreateDatetimeStart(DateUtil.getFrontDate(
-            req.getDateStart(), false));
-        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
-            true));
+            req.getCreateDatetimeStart(), false));
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(
+            req.getCreateDatetimeEnd(), true));
+        condition.setReceiveDatetimeStart(DateUtil.getFrontDate(
+            req.getReceiveDatetimeStart(), false));
+        condition.setReceiveDatetimeEnd(DateUtil.getFrontDate(
+            req.getReceiveDatetimeEnd(), true));
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
-            orderColumn = IHzbYyAO.DEFAULT_ORDER_COLUMN;
+            orderColumn = IHzbMgiftAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return hzbYyAO.queryHzbYyPage(start, limit, condition);
+        return hzbMgiftAO.queryHzbMgiftPage(start, limit, condition);
     }
 
     /** 
@@ -53,8 +57,7 @@ public class XN808465 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808465Req.class);
-        StringValidater.validateBlank(req.getHzbHoldId());
+        req = JsonUtil.json2Bean(inputparams, XN808475Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
     }
 }

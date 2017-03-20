@@ -10,7 +10,12 @@ package com.cdkj.zhpay.api.impl;
 
 import com.cdkj.zhpay.ao.IHzbTemplateAO;
 import com.cdkj.zhpay.api.AProcessor;
+import com.cdkj.zhpay.common.JsonUtil;
+import com.cdkj.zhpay.core.StringValidater;
+import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.dto.req.XN615102Req;
+import com.cdkj.zhpay.dto.req.XN808450Req;
+import com.cdkj.zhpay.dto.res.BooleanRes;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
@@ -32,8 +37,15 @@ public class XN615102 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        // TODO Auto-generated method stub
-        return null;
+        HzbTemplate data = new HzbTemplate();
+        data.setCode(req.getCode());
+        data.setName(req.getName());
+        data.setPic(req.getPic());
+        data.setDescription(req.getDescription());
+        data.setPrice(StringValidater.toLong(req.getPrice()));
+        data.setCurrency(req.getCurrency());
+        hzbTemplateAO.editHzb(data);
+        return new BooleanRes(true);
     }
 
     /** 
@@ -41,7 +53,9 @@ public class XN615102 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        // TODO Auto-generated method stub
+        req = JsonUtil.json2Bean(inputparams, XN808450Req.class);
+        StringValidater.validateBlank(req.getCode(), req.getName(),
+            req.getPrice(), req.getCurrency());
 
     }
 

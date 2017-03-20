@@ -5,9 +5,9 @@ import java.util.List;
 import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.HzbTemplate;
-import com.cdkj.zhpay.domain.HzbHold;
+import com.cdkj.zhpay.domain.Hzb;
 
-public interface IHzbHoldBO extends IPaginableBO<HzbHold> {
+public interface IHzbBO extends IPaginableBO<Hzb> {
 
     public boolean isHzbHoldExist(Long id);
 
@@ -47,16 +47,16 @@ public interface IHzbHoldBO extends IPaginableBO<HzbHold> {
 
     public void resetPeriodRockNum();
 
-    public List<HzbHold> queryHzbHoldList(HzbHold condition);
+    public List<Hzb> queryHzbHoldList(Hzb condition);
 
-    public List<HzbHold> queryDistanceHzbHoldList(HzbHold condition);
+    public List<Hzb> queryDistanceHzbHoldList(Hzb condition);
 
-    public Paginable<HzbHold> queryDistancePaginable(int start, int pageSize,
-            HzbHold condition);
+    public Paginable<Hzb> queryDistancePaginable(int start, int pageSize,
+            Hzb condition);
 
-    public HzbHold getHzbHold(Long id);
+    public Hzb getHzbHold(Long id);
 
-    public HzbHold getHzbHold(String userId);
+    public Hzb getHzbHold(String userId);
 
     public Long getTotalAmount(String payGroup);
 }

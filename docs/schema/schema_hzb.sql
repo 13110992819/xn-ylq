@@ -28,14 +28,15 @@ CREATE TABLE `tyqs_hzb` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
   `template_code` varchar(32) DEFAULT NULL COMMENT '汇赚宝编号',
-  `price` bigint(20) DEFAULT NULL COMMENT '购买价格',
-  `currency` varchar(4) DEFAULT NULL COMMENT '价格币种',
+  `price` bigint(20) DEFAULT NULL COMMENT '购买时价格',
+  `currency` varchar(4) DEFAULT NULL COMMENT '购买时价格币种',
  
-  `period_rock_num` int(11) DEFAULT NULL COMMENT '周期内可摇总次数',
-  `total_rock_num` int(11) DEFAULT NULL COMMENT '可摇总次数',
-  `back_amount1` bigint(20) DEFAULT NULL COMMENT '价值1',
-  `back_amount2` bigint(20) DEFAULT NULL COMMENT '价值2',
-  `back_amount3` bigint(20) DEFAULT NULL COMMENT '价值3',
+  `period_rock_num` int(11) DEFAULT NULL COMMENT '周期内已被摇总次数',
+  `total_rock_num` int(11) DEFAULT NULL COMMENT '已摇总次数',
+  `back_amount1` bigint(20) DEFAULT NULL COMMENT '已价值1',
+  `back_amount2` bigint(20) DEFAULT NULL COMMENT '已价值2',
+  `back_amount3` bigint(20) DEFAULT NULL COMMENT '已价值3',
+  
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
 
@@ -77,12 +78,15 @@ CREATE TABLE `tyqs_hzb_mgift` (
   `owner_currency` varchar(4) DEFAULT NULL COMMENT '树主人领取币种',
   `owner_amount` bigint(20) DEFAULT NULL COMMENT '树主人领取金额',
   `owner` varchar(32) DEFAULT NULL COMMENT '树主人编号',
+  
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  
   `receive_currency` varchar(4) DEFAULT NULL COMMENT '领取人币种',
   `receive_amount` bigint(20) DEFAULT NULL COMMENT '红包领取金额',
   `receiver` varchar(32) DEFAULT NULL COMMENT '红包领取人编号',
   `receive_datetime` datetime DEFAULT NULL COMMENT '被领取时间',
+  
   `remark` varchar(255) DEFAULT NULL,
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',

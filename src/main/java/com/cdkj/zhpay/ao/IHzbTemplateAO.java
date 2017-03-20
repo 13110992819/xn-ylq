@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.HzbTemplate;
-import com.cdkj.zhpay.domain.HzbHold;
+import com.cdkj.zhpay.domain.Hzb;
 
 public interface IHzbTemplateAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
@@ -18,7 +18,7 @@ public interface IHzbTemplateAO {
 
     public void putOnOffHzb(String userId);
 
-    public HzbHold myHzb(String userId);
+    public Hzb myHzb(String userId);
 
     public Paginable<HzbTemplate> queryHzbPage(int start, int limit, HzbTemplate condition);
 

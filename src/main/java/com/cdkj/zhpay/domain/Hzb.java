@@ -11,45 +11,43 @@ import com.cdkj.zhpay.dao.base.ABaseDO;
 * @since: 2016年12月21日 13:31:59
 * @history:
 */
-public class HzbHold extends ABaseDO {
+public class Hzb extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 
     // 编号
-    private Long id;
+    private String code;
 
     // 用户编号
     private String userId;
 
-    // 汇赚宝编号
-    private String hzbCode;
+    // 汇赚宝模板编号
+    private String templateCode;
 
-    // 状态
-    private String status;
-
-    // 购买价格
+    // 购买时价格
     private Long price;
 
-    // 价格币种
+    // 购买时价格币种
     private String currency;
 
-    // 周期内被摇总次数
+    // 周期内已被摇总次数
     private Integer periodRockNum;
 
     // 已摇总次数
     private Integer totalRockNum;
 
-    // 支付价格1人民币
-    private Long payAmount1;
+    // 已价值1
+    private Long backAmount1;
 
-    // 支付价格2人民币
-    private Long payAmount2;
+    // 已价值2
+    private Long backAmount2;
 
-    // 支付价格3人民币
-    private Long payAmount3;
+    // 已价值3
+    private Long backAmount3;
 
-    // 支付ip
-    private Long ip;
+    private Date createDatetime;
+
+    private String status;
 
     // 支付组号
     private String payGroup;
@@ -60,14 +58,26 @@ public class HzbHold extends ABaseDO {
     // 支付时间
     private Date payDatetime;
 
+    // 支付人民币
+    private Long payAmount1;
+
+    // 支付虚拟币1
+    private Long payAmount2;
+
+    // 支付虚拟币2
+    private Long payAmount3;
+
     // 系统编号
     private String systemCode;
 
+    // 公司编号
+    private String companyCode;
+
     // **************db properties*******************
-    // 精度
+    // 摇的人的经度
     private String userLatitude;
 
-    // 维度
+    // 摇的人纬度
     private String userLongitude;
 
     // 距离

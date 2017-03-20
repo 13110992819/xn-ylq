@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cdkj.zhpay.ao.IHzbYyAO;
 import com.cdkj.zhpay.bo.IAccountBO;
-import com.cdkj.zhpay.bo.IHzbHoldBO;
+import com.cdkj.zhpay.bo.IHzbBO;
 import com.cdkj.zhpay.bo.IHzbYyBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.IUserBO;
@@ -21,7 +21,7 @@ import com.cdkj.zhpay.common.PrizeUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.core.CalculationUtil;
-import com.cdkj.zhpay.domain.HzbHold;
+import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbYy;
 import com.cdkj.zhpay.domain.Prize;
 import com.cdkj.zhpay.domain.UserExt;
@@ -36,7 +36,7 @@ import com.cdkj.zhpay.enums.EPrizeType;
 @Service
 public class HzbYyAOImpl implements IHzbYyAO {
     @Autowired
-    private IHzbHoldBO hzbHoldBO;
+    private IHzbBO hzbBO;
 
     @Autowired
     private IHzbYyBO hzbYyBO;
@@ -62,12 +62,12 @@ public class HzbYyAOImpl implements IHzbYyAO {
     @Transactional
     public XN808460Res doHzbYy(String userId, Long hzbHoldId, String deviceNo) {
         XN805901Res yyUser = userBO.getRemoteUser(userId, userId);
-        HzbHold hzbHold = hzbHoldBO.getHzbHold(hzbHoldId);
+        Hzb hzb = hzbBO.getHzbHold(hzbHoldId);
         // 验证次数
-        hzbYyBO.checkHzbYyCondition(hzbHold.getSystemCode(), hzbHoldId, userId,
+        hzbYyBO.checkHzbYyCondition(hzb.getSystemCode(), hzbHoldId, userId,
             deviceNo);
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(
-            hzbHold.getSystemCode(), null);
+            hzb.getSystemCode(), null);
         String type = null;
         Double ycQbbWeight = getWeight(rateMap, SysConstants.YC_QBB);
         Double ycGwbWeight = getWeight(rateMap, SysConstants.YC_GWB);
@@ -94,8 +94,8 @@ public class HzbYyAOImpl implements IHzbYyAO {
         data.setQuantity(quantity);
         hzbYyBO.saveHzbYy(data);
         // 更新被摇次数
-        hzbHoldBO.refreshRockNum(hzbHold.getId(),
-            hzbHold.getPeriodRockNum() + 1, hzbHold.getTotalRockNum() + 1);
+        hzbBO.refreshRockNum(hzb.getId(),
+            hzb.getPeriodRockNum() + 1, hzb.getTotalRockNum() + 1);
         String currency = null;
         if (EPrizeType.GWB.getCode().equals(type)) {
             currency = ECurrency.GWB.getCode();
@@ -103,8 +103,8 @@ public class HzbYyAOImpl implements IHzbYyAO {
             currency = ECurrency.QBB.getCode();
         } else if (EPrizeType.HBB.getCode().equals(type)) {
             currency = ECurrency.HBB.getCode();
-            distributeAmount(hzbHold.getSystemCode(), yyUser,
-                hzbHold.getUserId());
+            distributeAmount(hzb.getSystemCode(), yyUser,
+                hzb.getUserId());
         }
         String quantityStr = CalculationUtil.divi(Long.valueOf(quantity));
         String toBizNote = EBizType.AJ_YYJL.getValue()
@@ -113,7 +113,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
         String fromBizNote = UserUtil.getUserMobile(yyUser.getMobile())
                 + toBizNote;
         // 奖励划拨
-        accountBO.doTransferFcBySystem(hzbHold.getSystemCode(), userId,
+        accountBO.doTransferFcBySystem(hzb.getSystemCode(), userId,
             currency, Long.valueOf(quantity), EBizType.AJ_YYJL.getCode(),
             fromBizNote, toBizNote);
         return new XN808460Res(type, quantityStr);
@@ -166,12 +166,12 @@ public class HzbYyAOImpl implements IHzbYyAO {
             SysConstants.YY_CUSER);
         // B用户摇一摇分成
         String bUserId = cUser.getUserReferee();
-        boolean bHzbResult = hzbHoldBO.isHzbHoldExistByUser(bUserId);
+        boolean bHzbResult = hzbBO.isHzbHoldExistByUser(bUserId);
         if (StringUtils.isNotBlank(bUserId) && bHzbResult) {
             XN805901Res bUser = this.userFcAmount(systemCode, yyUser, bUserId,
                 SysConstants.YY_BUSER);
             String aUserId = bUser.getUserReferee();
-            boolean aHzbResult = hzbHoldBO.isHzbHoldExistByUser(aUserId);
+            boolean aHzbResult = hzbBO.isHzbHoldExistByUser(aUserId);
             if (StringUtils.isNotBlank(aUserId) && aHzbResult) {
                 // A用户摇一摇分成
                 userFcAmount(systemCode, yyUser, aUserId, SysConstants.YY_AUSER);

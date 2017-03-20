@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cdkj.zhpay.ao.IHzbTemplateAO;
 import com.cdkj.zhpay.bo.IAccountBO;
 import com.cdkj.zhpay.bo.IHzbTemplateBO;
-import com.cdkj.zhpay.bo.IHzbHoldBO;
+import com.cdkj.zhpay.bo.IHzbBO;
 import com.cdkj.zhpay.bo.IHzbMgiftBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.IUserBO;
@@ -21,7 +21,7 @@ import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.domain.HzbTemplate;
-import com.cdkj.zhpay.domain.HzbHold;
+import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.UserExt;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
@@ -43,7 +43,7 @@ public class HzbTemplateAOImpl implements IHzbTemplateAO {
     private IHzbTemplateBO hzbTemplateBO;
 
     @Autowired
-    private IHzbHoldBO hzbHoldBO;
+    private IHzbBO hzbBO;
 
     @Autowired
     private IAccountBO accountBO;
@@ -76,10 +76,10 @@ public class HzbTemplateAOImpl implements IHzbTemplateAO {
             throw new BizException("xn0000", "用户未实名认证，请先实名认证");
         }
         // 查询是否已经购买摇钱树
-        HzbHold condition = new HzbHold();
+        Hzb condition = new Hzb();
         condition.setUserId(userId);
         condition.setStatus(EDiviFlag.EFFECT.getCode());
-        if (hzbHoldBO.getTotalCount(condition) > 0) {
+        if (hzbBO.getTotalCount(condition) > 0) {
             throw new BizException("xn0000", "您已经购买过汇赚宝");
         }
         // 落地汇赚宝购买记录
@@ -107,7 +107,7 @@ public class HzbTemplateAOImpl implements IHzbTemplateAO {
         // 余额支付
         PayBalanceRes payRes = accountBO.doFRPay(hzbTemplate.getSystemCode(), userRes,
             ESysUser.SYS_USER.getCode(), hzbTemplate.getPrice(), EBizType.AJ_GMHZB);
-        Object result = hzbHoldBO.saveHzbHold(userRes.getUserId(), hzbTemplate,
+        Object result = hzbBO.saveHzbHold(userRes.getUserId(), hzbTemplate,
             payRes.getFrAmount());
         // 分销规则
         distributeAmount(hzbTemplate.getSystemCode(), userRes.getUserId(),
@@ -132,7 +132,7 @@ public class HzbTemplateAOImpl implements IHzbTemplateAO {
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
         // 落地本地系统消费记录，状态为未支付
-        hzbHoldBO.saveHzbHold(userId, hzbTemplate, payGroup);
+        hzbBO.saveHzbHold(userId, hzbTemplate, payGroup);
         XN802180Res res = accountBO.doWeiXinPay(hzbTemplate.getSystemCode(), userId,
             payGroup, EBizType.AJ_GMHZB, hzbTemplate.getPrice(), ip);
         return res;
@@ -142,36 +142,36 @@ public class HzbTemplateAOImpl implements IHzbTemplateAO {
     public void putOnOffHzb(String userId) {
         if (StringUtils.isNotBlank(userId)) {
             // 查询是否已经购买摇钱树
-            HzbHold condition = new HzbHold();
+            Hzb condition = new Hzb();
             condition.setUserId(userId);
-            List<HzbHold> list = hzbHoldBO.queryHzbHoldList(condition);
+            List<Hzb> list = hzbBO.queryHzbHoldList(condition);
             if (CollectionUtils.isEmpty(list)) {
                 throw new BizException("xn0000", "该用户未购买过汇赚宝");
             }
-            HzbHold hzbHold = list.get(0);
-            if (EHzbHoldStatus.ACTIVATED.getCode().equals(hzbHold.getStatus())) {
-                hzbHoldBO.refreshStatus(hzbHold.getId(),
+            Hzb hzb = list.get(0);
+            if (EHzbHoldStatus.ACTIVATED.getCode().equals(hzb.getStatus())) {
+                hzbBO.refreshStatus(hzb.getId(),
                     EHzbHoldStatus.OFFLINE.getCode());
             } else if (EHzbHoldStatus.OFFLINE.getCode().equals(
-                hzbHold.getStatus())) {
-                hzbHoldBO.refreshStatus(hzbHold.getId(),
+                hzb.getStatus())) {
+                hzbBO.refreshStatus(hzb.getId(),
                     EHzbHoldStatus.ACTIVATED.getCode());
             }
         }
     }
 
     @Override
-    public HzbHold myHzb(String userId) {
-        HzbHold hzbHold = null;
+    public Hzb myHzb(String userId) {
+        Hzb hzb = null;
         // 查询是否已经购买摇钱树
-        HzbHold condition = new HzbHold();
+        Hzb condition = new Hzb();
         condition.setUserId(userId);
         condition.setStatus(EDiviFlag.EFFECT.getCode());
-        List<HzbHold> list = hzbHoldBO.queryHzbHoldList(condition);
+        List<Hzb> list = hzbBO.queryHzbHoldList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
-            hzbHold = list.get(0);
+            hzb = list.get(0);
         }
-        return hzbHold;
+        return hzb;
     }
 
     /**
@@ -184,30 +184,30 @@ public class HzbTemplateAOImpl implements IHzbTemplateAO {
     @Override
     @Transactional
     public void paySuccess(String payGroup, String payCode, Long transAmount) {
-        HzbHold condition = new HzbHold();
+        Hzb condition = new Hzb();
         condition.setPayGroup(payGroup);
-        List<HzbHold> result = hzbHoldBO.queryHzbHoldList(condition);
+        List<Hzb> result = hzbBO.queryHzbHoldList(condition);
         if (CollectionUtils.isEmpty(result)) {
             throw new BizException("XN000000", "找不到对应的消费记录");
         }
-        if (!transAmount.equals(hzbHoldBO.getTotalAmount(payGroup))) {
+        if (!transAmount.equals(hzbBO.getTotalAmount(payGroup))) {
             throw new BizException("XN000000", "金额校验错误，非正常调用");
         }
-        for (HzbHold hzbHold : result) {
-            if (!EHzbHoldStatus.TO_PAY.getCode().equals(hzbHold.getStatus())) {
-                throw new BizException("XN000000", "汇赚宝号：" + hzbHold.getId()
+        for (Hzb hzb : result) {
+            if (!EHzbHoldStatus.TO_PAY.getCode().equals(hzb.getStatus())) {
+                throw new BizException("XN000000", "汇赚宝号：" + hzb.getId()
                         + "已支付，重复回调");
             }
         }
-        for (HzbHold hzbHold : result) {
+        for (Hzb hzb : result) {
             // 更新状态
-            hzbHoldBO.refreshPayStatus(hzbHold.getId(),
+            hzbBO.refreshPayStatus(hzb.getId(),
                 EHzbHoldStatus.ACTIVATED.getCode(), payCode, transAmount);
             // 分配分成
-            distributeAmount(hzbHold.getSystemCode(), hzbHold.getUserId(),
-                hzbHold.getPrice());
+            distributeAmount(hzb.getSystemCode(), hzb.getUserId(),
+                hzb.getPrice());
             // 产生红包
-            hzbMgiftBO.sendHzbMgift(hzbHold.getUserId());
+            hzbMgiftBO.sendHzbMgift(hzb.getUserId());
         }
     }
 
@@ -220,7 +220,7 @@ public class HzbTemplateAOImpl implements IHzbTemplateAO {
         String cUserId = ownerUser.getUserReferee();
         if (StringUtils.isNotBlank(cUserId)) {
             XN805901Res cUser = userBO.getRemoteUser(cUserId, cUserId);
-            boolean cHzbResult = hzbHoldBO.isHzbHoldExistByUser(cUserId);
+            boolean cHzbResult = hzbBO.isHzbHoldExistByUser(cUserId);
             if (cHzbResult) {
                 this.userFcAmount(systemCode, cUser, ownerUser,
                     SysConstants.HZB_CUSER, price);
@@ -229,7 +229,7 @@ public class HzbTemplateAOImpl implements IHzbTemplateAO {
             String bUserId = cUser.getUserReferee();
             if (StringUtils.isNotBlank(bUserId)) {
                 XN805901Res bUser = userBO.getRemoteUser(bUserId, bUserId);
-                boolean bHzbResult = hzbHoldBO.isHzbHoldExistByUser(bUserId);
+                boolean bHzbResult = hzbBO.isHzbHoldExistByUser(bUserId);
                 if (bHzbResult) {
                     this.userFcAmount(systemCode, bUser, ownerUser,
                         SysConstants.HZB_BUSER, price);
@@ -238,7 +238,7 @@ public class HzbTemplateAOImpl implements IHzbTemplateAO {
                 String aUserId = bUser.getUserReferee();
                 if (StringUtils.isNotBlank(aUserId)) {
                     XN805901Res aUser = userBO.getRemoteUser(aUserId, aUserId);
-                    boolean aHzbResult = hzbHoldBO
+                    boolean aHzbResult = hzbBO
                         .isHzbHoldExistByUser(aUserId);
                     if (aHzbResult) {
                         this.userFcAmount(systemCode, aUser, ownerUser,

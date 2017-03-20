@@ -14,26 +14,15 @@ package com.cdkj.zhpay.dto.req;
  * @since: 2016年12月21日 下午3:05:19 
  * @history:
  */
-public class XN808452Req {
+public class XN615110Req {
     // 用户编号
     private String userId;
 
     // 汇赚宝编号
-    private String hzbCode;
+    private String hzbTemplateCode;
 
-    // 支付类型(1 内部划转 2 微信 3 支付宝)
+    // 支付类型
     private String payType;
-
-    // ip
-    private String ip;
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
 
     public String getPayType() {
         return payType;

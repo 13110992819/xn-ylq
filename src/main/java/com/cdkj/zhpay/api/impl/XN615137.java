@@ -11,12 +11,12 @@ import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
- * 列表查询红包
+ * 列表查询定向红包
  * @author: xieyj 
  * @since: 2017年2月20日 下午6:26:17 
  * @history:
  */
-public class XN808476 extends AProcessor {
+public class XN615137 extends AProcessor {
     private IHzbMgiftAO hzbMgiftAO = SpringContextHolder
         .getBean(IHzbMgiftAO.class);
 
