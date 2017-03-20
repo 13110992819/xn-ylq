@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.cdkj.zhpay.ao.IHzbAO;
+import com.cdkj.zhpay.ao.IHzbTemplateAO;
 import com.cdkj.zhpay.ao.IJewelRecordAO;
 import com.cdkj.zhpay.enums.EBizType;
 
@@ -28,7 +28,7 @@ public class CallbackConroller {
     private IJewelRecordAO jewelRecordAO;
 
     @Autowired
-    IHzbAO hzbAO;
+    IHzbTemplateAO hzbTemplateAO;
 
     @RequestMapping("/zhpay/app/callback")
     public synchronized void doCallbackZhpay(HttpServletRequest request,
@@ -53,7 +53,7 @@ public class CallbackConroller {
                     System.out.println("**** 进入一元夺宝，微信APP支付服务器回调 end****");
                 } else if (EBizType.AJ_GMHZB.getCode().equals(bizType)) {
                     System.out.println("**** 进入购买汇赚宝，微信APP支付服务器回调 start****");
-                    hzbAO.paySuccess(payGroup, payCode, amount);
+                    hzbTemplateAO.paySuccess(payGroup, payCode, amount);
                     System.out.println("**** 进入购买汇赚宝，微信APP支付服务器回调 end****");
                 }
             } catch (Exception e) {

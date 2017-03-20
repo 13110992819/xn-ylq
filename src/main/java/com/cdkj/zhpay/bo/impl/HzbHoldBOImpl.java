@@ -12,7 +12,7 @@ import com.cdkj.zhpay.bo.base.Page;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.dao.IHzbHoldDAO;
-import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.HzbHold;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EHzbHoldStatus;
@@ -47,40 +47,40 @@ public class HzbHoldBOImpl extends PaginableBOImpl<HzbHold> implements
     }
 
     @Override
-    public int saveHzbHold(String userId, Hzb hzb, String payGroup) {
+    public int saveHzbHold(String userId, HzbTemplate hzbTemplate, String payGroup) {
         int count = 0;
         if (StringUtils.isNotBlank(userId)) {
             HzbHold data = new HzbHold();
             data.setUserId(userId);
-            data.setHzbCode(hzb.getCode());
+            data.setHzbCode(hzbTemplate.getCode());
             data.setStatus(EHzbHoldStatus.TO_PAY.getCode());
-            data.setPrice(hzb.getPrice());
-            data.setCurrency(hzb.getCurrency());
+            data.setPrice(hzbTemplate.getPrice());
+            data.setCurrency(hzbTemplate.getCurrency());
             data.setPeriodRockNum(0);
             data.setTotalRockNum(0);
             data.setPayGroup(payGroup);
-            data.setSystemCode(hzb.getSystemCode());
+            data.setSystemCode(hzbTemplate.getSystemCode());
             count = hzbHoldDAO.insert(data);
         }
         return count;
     }
 
     @Override
-    public int saveHzbHold(String userId, Hzb hzb, Long amount) {
+    public int saveHzbHold(String userId, HzbTemplate hzbTemplate, Long amount) {
         int count = 0;
         if (StringUtils.isNotBlank(userId)) {
             HzbHold data = new HzbHold();
             data.setUserId(userId);
-            data.setHzbCode(hzb.getCode());
+            data.setHzbCode(hzbTemplate.getCode());
             data.setStatus(EHzbHoldStatus.ACTIVATED.getCode());
-            data.setPrice(hzb.getPrice());
-            data.setCurrency(hzb.getCurrency());
+            data.setPrice(hzbTemplate.getPrice());
+            data.setCurrency(hzbTemplate.getCurrency());
             data.setPeriodRockNum(0);
             data.setTotalRockNum(0);
             data.setPayAmount1(0L);
             data.setPayAmount2(0L);
             data.setPayAmount3(amount);
-            data.setSystemCode(hzb.getSystemCode());
+            data.setSystemCode(hzbTemplate.getSystemCode());
             count = hzbHoldDAO.insert(data);
         }
         return count;

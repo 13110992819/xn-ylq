@@ -11,12 +11,13 @@ import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
+ * 待移至account
  * 不同币种间账户兑换审批
  * @author: xieyj 
  * @since: 2017年1月4日 下午9:06:32 
  * @history:
  */
-public class XN808500 extends AProcessor {
+public class XN0000001 extends AProcessor {
     private IAccountAO accountAO = SpringContextHolder
         .getBean(IAccountAO.class);
 

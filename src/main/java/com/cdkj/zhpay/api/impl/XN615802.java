@@ -1,32 +1,33 @@
 package com.cdkj.zhpay.api.impl;
 
-import com.cdkj.zhpay.ao.IAccountAO;
+import com.cdkj.zhpay.ao.IHzbHoldAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.dto.req.XN808801Req;
+import com.cdkj.zhpay.dto.req.XN808802Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
- * 获取余额
+ * 统计汇赚宝发一发和摇一摇产生的数据
  * @author: xieyj 
  * @since: 2017年1月15日 下午5:44:58 
  * @history:
  */
-public class XN808801 extends AProcessor {
-    private IAccountAO accountAO = SpringContextHolder
-        .getBean(IAccountAO.class);
+public class XN615802 extends AProcessor {
+    private IHzbHoldAO hzbHoldAO = SpringContextHolder
+        .getBean(IHzbHoldAO.class);
 
-    private XN808801Req req = null;
+    private XN808802Req req = null;
 
     /** 
      * @see com.cdkj.zhpay.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        return accountAO.getBalanceByUser(req.getSystemCode(), req.getUserId());
+        return hzbHoldAO
+            .doGetHzbTotalData(req.getSystemCode(), req.getUserId());
     }
 
     /** 
@@ -34,7 +35,7 @@ public class XN808801 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808801Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN808802Req.class);
         StringValidater.validateBlank(req.getSystemCode(), req.getUserId());
     }
 }

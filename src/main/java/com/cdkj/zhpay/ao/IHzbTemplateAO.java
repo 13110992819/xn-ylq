@@ -3,13 +3,13 @@ package com.cdkj.zhpay.ao;
 import java.util.List;
 
 import com.cdkj.zhpay.bo.base.Paginable;
-import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.HzbHold;
 
-public interface IHzbAO {
+public interface IHzbTemplateAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public void editHzb(Hzb data);
+    public void editHzb(HzbTemplate data);
 
     public Object buyHzb(String userId, String hzbCode, String payType,
             String fromIp);
@@ -20,10 +20,10 @@ public interface IHzbAO {
 
     public HzbHold myHzb(String userId);
 
-    public Paginable<Hzb> queryHzbPage(int start, int limit, Hzb condition);
+    public Paginable<HzbTemplate> queryHzbPage(int start, int limit, HzbTemplate condition);
 
-    public List<Hzb> queryHzbList(Hzb condition);
+    public List<HzbTemplate> queryHzbList(HzbTemplate condition);
 
-    public Hzb getHzb(String code);
+    public HzbTemplate getHzb(String code);
 
 }

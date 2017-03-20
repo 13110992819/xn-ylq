@@ -4,49 +4,49 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.cdkj.zhpay.dao.IHzbDAO;
+import com.cdkj.zhpay.dao.IHzbTemplateDAO;
 import com.cdkj.zhpay.dao.base.support.AMybatisTemplate;
-import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.domain.HzbTemplate;
 
 @Repository("hzbDAOImpl")
-public class HzbDAOImpl extends AMybatisTemplate implements IHzbDAO {
+public class HzbTemplateDAOImpl extends AMybatisTemplate implements IHzbTemplateDAO {
 
     @Override
-    public int insert(Hzb data) {
+    public int insert(HzbTemplate data) {
         return super.insert(NAMESPACE.concat("insert_hzb"), data);
     }
 
     @Override
-    public int delete(Hzb data) {
+    public int delete(HzbTemplate data) {
         return super.delete(NAMESPACE.concat("delete_hzb"), data);
     }
 
     @Override
-    public Hzb select(Hzb condition) {
+    public HzbTemplate select(HzbTemplate condition) {
         return super.select(NAMESPACE.concat("select_hzb"), condition,
-            Hzb.class);
+            HzbTemplate.class);
     }
 
     @Override
-    public Long selectTotalCount(Hzb condition) {
+    public Long selectTotalCount(HzbTemplate condition) {
         return super.selectTotalCount(NAMESPACE.concat("select_hzb_count"),
             condition);
     }
 
     @Override
-    public List<Hzb> selectList(Hzb condition) {
+    public List<HzbTemplate> selectList(HzbTemplate condition) {
         return super.selectList(NAMESPACE.concat("select_hzb"), condition,
-            Hzb.class);
+            HzbTemplate.class);
     }
 
     @Override
-    public List<Hzb> selectList(Hzb condition, int start, int count) {
+    public List<HzbTemplate> selectList(HzbTemplate condition, int start, int count) {
         return super.selectList(NAMESPACE.concat("select_hzb"), start, count,
-            condition, Hzb.class);
+            condition, HzbTemplate.class);
     }
 
     @Override
-    public int update(Hzb data) {
+    public int update(HzbTemplate data) {
         return super.update(NAMESPACE.concat("update_hzb"), data);
     }
 

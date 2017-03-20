@@ -15,7 +15,7 @@ import com.cdkj.zhpay.spring.SpringContextHolder;
  * @since: 2017年1月15日 下午5:44:58 
  * @history:
  */
-public class XN808800 extends AProcessor {
+public class XN615800 extends AProcessor {
     private IUserAO userAO = SpringContextHolder.getBean(IUserAO.class);
 
     private XN808800Req req = null;

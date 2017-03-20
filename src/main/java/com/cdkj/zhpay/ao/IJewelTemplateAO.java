@@ -17,15 +17,6 @@ public interface IJewelTemplateAO {
 
     public JewelTemplate getJewelTemplate(String code);
 
-    /**
-     * 模板上下架
-     * @param code
-     * @param updater
-     * @param remark
-     * @return 
-     * @create: 2017年2月20日 下午2:47:34 haiqingzheng
-     * @history:
-     */
     public String putOnOff(String code, String updater, String remark);
 
 }

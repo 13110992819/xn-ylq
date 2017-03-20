@@ -13,7 +13,7 @@ package com.cdkj.zhpay.dto.req;
  * @since: 2016年4月17日 下午5:00:54 
  * @history:
  */
-public class XN808900Req {
+public class XN615900Req {
 
     // 父key（必填）
     private String parentKey;

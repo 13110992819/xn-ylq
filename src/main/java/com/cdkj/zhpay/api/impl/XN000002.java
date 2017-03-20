@@ -10,12 +10,13 @@ import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
+ * 移动至acctount
  * 获取单个币种转人民币金额
  * @author: xieyj 
  * @since: 2017年1月15日 下午5:44:58 
  * @history:
  */
-public class XN808803 extends AProcessor {
+public class XN000002 extends AProcessor {
     private IAccountAO accountAO = SpringContextHolder
         .getBean(IAccountAO.class);
 

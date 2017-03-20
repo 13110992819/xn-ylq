@@ -8,11 +8,11 @@
  */
 package com.cdkj.zhpay.api.impl;
 
-import com.cdkj.zhpay.ao.IHzbAO;
+import com.cdkj.zhpay.ao.IHzbTemplateAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.dto.req.XN808450Req;
 import com.cdkj.zhpay.dto.res.BooleanRes;
 import com.cdkj.zhpay.exception.BizException;
@@ -26,7 +26,7 @@ import com.cdkj.zhpay.spring.SpringContextHolder;
  * @history:
  */
 public class XN808450 extends AProcessor {
-    private IHzbAO hzbAO = SpringContextHolder.getBean(IHzbAO.class);
+    private IHzbTemplateAO hzbTemplateAO = SpringContextHolder.getBean(IHzbTemplateAO.class);
 
     private XN808450Req req = null;
 
@@ -35,14 +35,14 @@ public class XN808450 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        Hzb data = new Hzb();
+        HzbTemplate data = new HzbTemplate();
         data.setCode(req.getCode());
         data.setName(req.getName());
         data.setPic(req.getPic());
         data.setDescription(req.getDescription());
         data.setPrice(StringValidater.toLong(req.getPrice()));
         data.setCurrency(req.getCurrency());
-        hzbAO.editHzb(data);
+        hzbTemplateAO.editHzb(data);
         return new BooleanRes(true);
     }
 

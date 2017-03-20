@@ -8,7 +8,7 @@
  */
 package com.cdkj.zhpay.api.impl;
 
-import com.cdkj.zhpay.ao.IHzbAO;
+import com.cdkj.zhpay.ao.IHzbTemplateAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
@@ -25,7 +25,7 @@ import com.cdkj.zhpay.spring.SpringContextHolder;
  * @history:
  */
 public class XN808454 extends AProcessor {
-    private IHzbAO hzbAO = SpringContextHolder.getBean(IHzbAO.class);
+    private IHzbTemplateAO hzbTemplateAO = SpringContextHolder.getBean(IHzbTemplateAO.class);
 
     private XN808454Req req = null;
 
@@ -34,7 +34,7 @@ public class XN808454 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        hzbAO.putOnOffHzb(req.getUserId());
+        hzbTemplateAO.putOnOffHzb(req.getUserId());
         return new BooleanRes(true);
     }
 

@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cdkj.zhpay.ao.IHzbAO;
+import com.cdkj.zhpay.ao.IHzbTemplateAO;
 import com.cdkj.zhpay.bo.IAccountBO;
-import com.cdkj.zhpay.bo.IHzbBO;
+import com.cdkj.zhpay.bo.IHzbTemplateBO;
 import com.cdkj.zhpay.bo.IHzbHoldBO;
 import com.cdkj.zhpay.bo.IHzbMgiftBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
@@ -20,7 +20,7 @@ import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.core.OrderNoGenerater;
-import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.HzbHold;
 import com.cdkj.zhpay.domain.UserExt;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
@@ -38,9 +38,9 @@ import com.cdkj.zhpay.enums.ESysUser;
 import com.cdkj.zhpay.exception.BizException;
 
 @Service
-public class HzbAOImpl implements IHzbAO {
+public class HzbTemplateAOImpl implements IHzbTemplateAO {
     @Autowired
-    private IHzbBO hzbBO;
+    private IHzbTemplateBO hzbTemplateBO;
 
     @Autowired
     private IHzbHoldBO hzbHoldBO;
@@ -58,11 +58,11 @@ public class HzbAOImpl implements IHzbAO {
     private IHzbMgiftBO hzbMgiftBO;
 
     @Override
-    public void editHzb(Hzb data) {
-        if (!hzbBO.isHzbExist(data.getCode())) {
+    public void editHzb(HzbTemplate data) {
+        if (!hzbTemplateBO.isHzbExist(data.getCode())) {
             throw new BizException("xn0000", "汇赚宝记录不存在");
         }
-        hzbBO.refreshHzb(data);
+        hzbTemplateBO.refreshHzb(data);
     }
 
     @Override
@@ -83,11 +83,11 @@ public class HzbAOImpl implements IHzbAO {
             throw new BizException("xn0000", "您已经购买过汇赚宝");
         }
         // 落地汇赚宝购买记录
-        Hzb hzb = hzbBO.getHzb(hzbCode);
+        HzbTemplate hzbTemplate = hzbTemplateBO.getHzb(hzbCode);
         if (EPayType.YEFR.getCode().equals(payType)) {
-            result = doFRPay(userRes, hzb);
+            result = doFRPay(userRes, hzbTemplate);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-            result = doWeixinPay(userId, hzb, ip);
+            result = doWeixinPay(userId, hzbTemplate, ip);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
             return null;
         }
@@ -97,21 +97,21 @@ public class HzbAOImpl implements IHzbAO {
     /**
      * 分润支付
      * @param userRes
-     * @param hzb
+     * @param hzbTemplate
      * @return 
      * @create: 2017年2月25日 下午1:20:29 xieyj
      * @history:
      */
     @Transactional
-    private Object doFRPay(XN805901Res userRes, Hzb hzb) {
+    private Object doFRPay(XN805901Res userRes, HzbTemplate hzbTemplate) {
         // 余额支付
-        PayBalanceRes payRes = accountBO.doFRPay(hzb.getSystemCode(), userRes,
-            ESysUser.SYS_USER.getCode(), hzb.getPrice(), EBizType.AJ_GMHZB);
-        Object result = hzbHoldBO.saveHzbHold(userRes.getUserId(), hzb,
+        PayBalanceRes payRes = accountBO.doFRPay(hzbTemplate.getSystemCode(), userRes,
+            ESysUser.SYS_USER.getCode(), hzbTemplate.getPrice(), EBizType.AJ_GMHZB);
+        Object result = hzbHoldBO.saveHzbHold(userRes.getUserId(), hzbTemplate,
             payRes.getFrAmount());
         // 分销规则
-        distributeAmount(hzb.getSystemCode(), userRes.getUserId(),
-            hzb.getPrice());
+        distributeAmount(hzbTemplate.getSystemCode(), userRes.getUserId(),
+            hzbTemplate.getPrice());
         // 产生红包
         hzbMgiftBO.sendHzbMgift(userRes.getUserId());
         return result;
@@ -120,21 +120,21 @@ public class HzbAOImpl implements IHzbAO {
     /** 
      * 微信支付
      * @param userId
-     * @param hzb
+     * @param hzbTemplate
      * @param ip
      * @return 
      * @create: 2017年2月22日 下午4:43:17 xieyj
      * @history: 
      */
     @Transactional
-    private XN802180Res doWeixinPay(String userId, Hzb hzb, String ip) {
+    private XN802180Res doWeixinPay(String userId, HzbTemplate hzbTemplate, String ip) {
         // 生成支付组号
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
         // 落地本地系统消费记录，状态为未支付
-        hzbHoldBO.saveHzbHold(userId, hzb, payGroup);
-        XN802180Res res = accountBO.doWeiXinPay(hzb.getSystemCode(), userId,
-            payGroup, EBizType.AJ_GMHZB, hzb.getPrice(), ip);
+        hzbHoldBO.saveHzbHold(userId, hzbTemplate, payGroup);
+        XN802180Res res = accountBO.doWeiXinPay(hzbTemplate.getSystemCode(), userId,
+            payGroup, EBizType.AJ_GMHZB, hzbTemplate.getPrice(), ip);
         return res;
     }
 
@@ -319,17 +319,17 @@ public class HzbAOImpl implements IHzbAO {
     }
 
     @Override
-    public Paginable<Hzb> queryHzbPage(int start, int limit, Hzb condition) {
-        return hzbBO.getPaginable(start, limit, condition);
+    public Paginable<HzbTemplate> queryHzbPage(int start, int limit, HzbTemplate condition) {
+        return hzbTemplateBO.getPaginable(start, limit, condition);
     }
 
     @Override
-    public List<Hzb> queryHzbList(Hzb condition) {
-        return hzbBO.queryHzbList(condition);
+    public List<HzbTemplate> queryHzbList(HzbTemplate condition) {
+        return hzbTemplateBO.queryHzbList(condition);
     }
 
     @Override
-    public Hzb getHzb(String code) {
-        return hzbBO.getHzb(code);
+    public HzbTemplate getHzb(String code) {
+        return hzbTemplateBO.getHzb(code);
     }
 }
