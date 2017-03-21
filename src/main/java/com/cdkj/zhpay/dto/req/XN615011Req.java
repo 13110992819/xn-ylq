@@ -6,19 +6,22 @@ package com.cdkj.zhpay.dto.req;
  * @since: 2016年12月21日 下午4:38:44 
  * @history:
  */
-public class XN808311Req extends APageReq {
+public class XN615011Req extends APageReq {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */
     private static final long serialVersionUID = 1L;
 
-    // 模板编号
+    // 模板编号（选填）
     private String templateCode;
 
-    // 状态
+    // 状态（选填）
     private String status;
 
-    // 系统编号
+    // 公司编号（必填）
+    private String companyCode;
+
+    // 系统编号（必填）
     private String systemCode;
 
     public String getTemplateCode() {
@@ -35,6 +38,14 @@ public class XN808311Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public String getSystemCode() {
