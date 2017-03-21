@@ -12,9 +12,7 @@ import com.cdkj.zhpay.ao.IHzbTemplateAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.dto.req.XN615106Req;
-import com.cdkj.zhpay.dto.req.XN808451Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
@@ -36,9 +34,7 @@ public class XN615106 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        HzbTemplate condition = new HzbTemplate();
-        condition.setSystemCode(req.getSystemCode());
-        return hzbTemplateAO.queryHzbList(condition);
+        return hzbTemplateAO.getHzbTemplate(req.getCode());
     }
 
     /** 
@@ -46,8 +42,8 @@ public class XN615106 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808451Req.class);
-        StringValidater.validateBlank(req.getSystemCode());
+        req = JsonUtil.json2Bean(inputparams, XN615106Req.class);
+        StringValidater.validateBlank(req.getCode());
 
     }
 

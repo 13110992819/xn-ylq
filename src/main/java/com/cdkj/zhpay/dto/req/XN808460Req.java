@@ -1,13 +1,13 @@
 package com.cdkj.zhpay.dto.req;
 
 public class XN808460Req {
-    // 用户编号
+    // 用户编号(必填)
     private String userId;
 
-    // 针对持有汇赚宝序号
-    private String hzbHoldId;
+    // 针对汇赚宝的编号(必填)
+    private String hzbCode;
 
-    // 设备编号
+    // 设备编号(必填)
     private String deviceNo;
 
     public String getDeviceNo() {
@@ -26,11 +26,12 @@ public class XN808460Req {
         this.userId = userId;
     }
 
-    public String getHzbHoldId() {
-        return hzbHoldId;
+    public String getHzbCode() {
+        return hzbCode;
     }
 
-    public void setHzbHoldId(String hzbHoldId) {
-        this.hzbHoldId = hzbHoldId;
+    public void setHzbCode(String hzbCode) {
+        this.hzbCode = hzbCode;
     }
+
 }

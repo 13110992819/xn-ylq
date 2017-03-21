@@ -13,7 +13,12 @@ package com.cdkj.zhpay.dto.req;
  * @since: 2017年3月20日 下午8:19:39 
  * @history:
  */
-public class XN615107Req {
+public class XN615107Req extends APageReq {
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
+    private static final long serialVersionUID = -5315928105680332449L;
+
     // 名称
     private String name;
 

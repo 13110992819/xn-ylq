@@ -10,7 +10,10 @@ package com.cdkj.zhpay.api.impl;
 
 import com.cdkj.zhpay.ao.IHzbTemplateAO;
 import com.cdkj.zhpay.api.AProcessor;
+import com.cdkj.zhpay.common.JsonUtil;
+import com.cdkj.zhpay.core.StringValidater;
 import com.cdkj.zhpay.dto.req.XN615104Req;
+import com.cdkj.zhpay.dto.res.BooleanRes;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
@@ -32,8 +35,9 @@ public class XN615104 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        // TODO Auto-generated method stub
-        return null;
+        hzbTemplateAO.putOffTemplate(req.getCode(), req.getUpdater(),
+            req.getRemark());
+        return new BooleanRes(true);
     }
 
     /** 
@@ -41,7 +45,8 @@ public class XN615104 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        // TODO Auto-generated method stub
+        req = JsonUtil.json2Bean(inputparams, XN615104Req.class);
+        StringValidater.validateBlank(req.getCode(), req.getUpdater());
 
     }
 

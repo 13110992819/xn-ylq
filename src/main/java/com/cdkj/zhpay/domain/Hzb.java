@@ -45,8 +45,10 @@ public class Hzb extends ABaseDO {
     // 已价值3
     private Long backAmount3;
 
+    // 生成时间
     private Date createDatetime;
 
+    // 状态
     private String status;
 
     // 支付组号
@@ -172,12 +174,12 @@ public class Hzb extends ABaseDO {
         this.payCode = payCode;
     }
 
-    public Long getId() {
-        return id;
+    public String getCode() {
+        return code;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getUserId() {
@@ -188,20 +190,12 @@ public class Hzb extends ABaseDO {
         this.userId = userId;
     }
 
-    public String getHzbCode() {
-        return hzbCode;
+    public String getTemplateCode() {
+        return templateCode;
     }
 
-    public void setHzbCode(String hzbCode) {
-        this.hzbCode = hzbCode;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setTemplateCode(String templateCode) {
+        this.templateCode = templateCode;
     }
 
     public Long getPrice() {
@@ -236,20 +230,44 @@ public class Hzb extends ABaseDO {
         this.totalRockNum = totalRockNum;
     }
 
-    public String getSystemCode() {
-        return systemCode;
+    public Long getBackAmount1() {
+        return backAmount1;
     }
 
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
+    public void setBackAmount1(Long backAmount1) {
+        this.backAmount1 = backAmount1;
     }
 
-    public Long getIp() {
-        return ip;
+    public Long getBackAmount2() {
+        return backAmount2;
     }
 
-    public void setIp(Long ip) {
-        this.ip = ip;
+    public void setBackAmount2(Long backAmount2) {
+        this.backAmount2 = backAmount2;
+    }
+
+    public Long getBackAmount3() {
+        return backAmount3;
+    }
+
+    public void setBackAmount3(Long backAmount3) {
+        this.backAmount3 = backAmount3;
+    }
+
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getPayGroup() {
@@ -266,6 +284,22 @@ public class Hzb extends ABaseDO {
 
     public void setPayDatetime(Date payDatetime) {
         this.payDatetime = payDatetime;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
 }

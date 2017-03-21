@@ -6,9 +6,9 @@ package com.cdkj.zhpay.enums;
  * @history:
  */
 public enum EGeneratePrefix {
-    STOCK("GF", "股份"), JEWEL_TEMPLETE("JT", "小目标模板"), JEWEL("J", "小目标"), JEWEL_RECORD(
-            "JR", "小目标参与记录"), JEWEL_NUMBER("JN", "夺宝记录编号"), SHAKE("YY", "摇一摇"), PAY_GROUP(
-            "PG", "支付组号");
+    HZB_TEMPLETE("HT", "摇钱树模板"), STOCK("GF", "股份"), JEWEL_TEMPLETE("JT",
+            "小目标模板"), JEWEL("J", "小目标"), JEWEL_RECORD("JR", "小目标参与记录"), JEWEL_NUMBER(
+            "JN", "夺宝记录编号"), SHAKE("YY", "摇一摇"), PAY_GROUP("PG", "支付组号");
 
     EGeneratePrefix(String code, String value) {
         this.code = code;

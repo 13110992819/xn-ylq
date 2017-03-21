@@ -15,13 +15,13 @@ public interface IHzbYyAO {
     /**
      * 汇赚宝摇一摇
      * @param userId
-     * @param hzbHoldId
+     * @param hzbCode
      * @param deviceNo
      * @return 
-     * @create: 2017年1月10日 上午11:39:05 xieyj
+     * @create: 2017年3月21日 上午11:08:24 myb858
      * @history:
      */
-    public XN808460Res doHzbYy(String userId, Long hzbHoldId, String deviceNo);
+    public XN808460Res doHzbYy(String userId, String hzbCode, String deviceNo);
 
     public Paginable<HzbYy> queryHzbYyPage(int start, int limit, HzbYy condition);
 

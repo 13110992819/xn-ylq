@@ -8,8 +8,14 @@
  */
 package com.cdkj.zhpay.api.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.cdkj.zhpay.ao.IHzbTemplateAO;
+import com.cdkj.zhpay.ao.ISYSDictAO;
 import com.cdkj.zhpay.api.AProcessor;
+import com.cdkj.zhpay.common.JsonUtil;
+import com.cdkj.zhpay.core.StringValidater;
+import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.dto.req.XN615107Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
@@ -32,8 +38,18 @@ public class XN615107 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        // TODO Auto-generated method stub
-        return null;
+        HzbTemplate condition = new HzbTemplate();
+        condition.setName(req.getName());
+        condition.setStatus(req.getStatus());
+        condition.setUpdater(req.getUpdater());
+        condition.setSystemCode(req.getSystemCode());
+        condition.setCompanyCode(req.getCompanyCode());
+        String orderColumn = req.getOrderColumn();
+        if (StringUtils.isBlank(orderColumn)) {
+            orderColumn = ISYSDictAO.DEFAULT_ORDER_COLUMN;
+        }
+        condition.setOrder(orderColumn, req.getOrderDir());
+        return hzbTemplateAO.queryHzbTemplateList(condition);
     }
 
     /** 
@@ -41,8 +57,9 @@ public class XN615107 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        // TODO Auto-generated method stub
-
+        req = JsonUtil.json2Bean(inputparams, XN615107Req.class);
+        StringValidater
+            .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }
 
 }

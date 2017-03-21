@@ -8,4 +8,8 @@ public interface IHzbTemplateDAO extends IBaseDAO<HzbTemplate> {
     String NAMESPACE = IHzbTemplateDAO.class.getName().concat(".");
 
     public int update(HzbTemplate data);
+
+    public int putOnTemplate(HzbTemplate data);
+
+    public int putOffTemplate(HzbTemplate data);
 }
