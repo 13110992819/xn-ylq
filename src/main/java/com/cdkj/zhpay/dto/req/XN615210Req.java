@@ -14,7 +14,7 @@ package com.cdkj.zhpay.dto.req;
  * @since: 2016年12月19日 下午5:46:29 
  * @history:
  */
-public class XN808403Req {
+public class XN615210Req {
     // 股份编号
     private String code;
 

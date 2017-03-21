@@ -1,40 +1,39 @@
 /**
- * @Title XN808409.java 
+ * @Title XN808402.java 
  * @Package com.xnjr.mall.api.impl 
  * @Description 
  * @author haiqingzheng  
- * @date 2016年12月19日 下午9:13:14 
+ * @date 2016年12月19日 下午5:40:47 
  * @version V1.0   
  */
 package com.cdkj.zhpay.api.impl;
 
-import com.cdkj.zhpay.ao.IStockHoldAO;
+import com.cdkj.zhpay.ao.IStockAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.dto.req.XN808409Req;
+import com.cdkj.zhpay.dto.req.XN615206Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /** 
- * 详情查询股份购买记录
+ * 详情查询股份
  * @author: haiqingzheng 
- * @since: 2016年12月19日 下午9:13:14 
+ * @since: 2016年12月19日 下午5:40:47 
  * @history:
  */
-public class XN808409 extends AProcessor {
-    private IStockHoldAO stockHoldAO = SpringContextHolder
-        .getBean(IStockHoldAO.class);
+public class XN615206 extends AProcessor {
+    private IStockAO stockAO = SpringContextHolder.getBean(IStockAO.class);
 
-    private XN808409Req req = null;
+    private XN615206Req req = null;
 
     /** 
      * @see com.xnjr.mall.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        return stockHoldAO.getStockHold(StringValidater.toLong(req.getId()));
+        return stockAO.getStock(req.getCode());
     }
 
     /** 
@@ -42,8 +41,8 @@ public class XN808409 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808409Req.class);
-        StringValidater.validateBlank(req.getId());
+        req = JsonUtil.json2Bean(inputparams, XN615206Req.class);
+        StringValidater.validateBlank(req.getCode());
     }
 
 }

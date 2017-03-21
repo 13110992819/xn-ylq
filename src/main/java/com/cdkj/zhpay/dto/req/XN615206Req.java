@@ -13,7 +13,7 @@ package com.cdkj.zhpay.dto.req;
  * @since: 2016年12月19日 下午5:41:49 
  * @history:
  */
-public class XN808402Req {
+public class XN615206Req {
     // 编号（必填）
     private String code;
 
