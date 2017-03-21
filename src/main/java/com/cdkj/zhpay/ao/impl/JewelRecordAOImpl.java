@@ -80,8 +80,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         if (!EJewelStatus.RUNNING.getCode().equals(jewel.getStatus())) {
             throw new BizException("xn0000", "夺宝标的不处于募集中状态，不能进行购买操作");
         }
-        jewelRecordBO.checkTimes(userId, jewelCode, jewel.getMaxInvestNum(),
-            times);
+        jewelRecordBO.checkTimes(userId, jewelCode, jewel.getMaxNum(), times);
         // 判断是否大于剩余购买份数
         if (jewel.getTotalNum() - jewel.getInvestNum() < times) {
             throw new BizException("xn0000", "剩余份数不足");

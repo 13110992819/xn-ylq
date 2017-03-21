@@ -5,7 +5,7 @@ package com.cdkj.zhpay.dto.req;
  * @since: 2017年1月11日 下午5:41:54 
  * @history:
  */
-public class XN808315Req extends APageReq {
+public class XN615021Req extends APageReq {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */
@@ -19,6 +19,9 @@ public class XN808315Req extends APageReq {
 
     // 状态(0待开奖，1已中奖，2未中奖)(选填)
     private String status;
+
+    // 公司编号（必填）
+    private String companyCode;
 
     // 系统编号(必填)
     private String systemCode;
@@ -37,6 +40,14 @@ public class XN808315Req extends APageReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public String getSystemCode() {
