@@ -1,11 +1,3 @@
-/**
- * @Title XN808452.java 
- * @Package com.xnjr.mall.api.impl 
- * @Description 
- * @author haiqingzheng  
- * @date 2016年12月21日 下午3:03:33 
- * @version V1.0   
- */
 package com.cdkj.zhpay.api.impl;
 
 import com.cdkj.zhpay.ao.IHzbAO;
@@ -18,7 +10,7 @@ import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /** 
- * 购买摇钱树
+ * 购买摇钱树(正汇)
  * @author: haiqingzheng 
  * @since: 2016年12月21日 下午3:03:33 
  * @history:
@@ -33,7 +25,7 @@ public class XN615110 extends AProcessor {
      */
     @Override
     public synchronized Object doBusiness() throws BizException {
-        return hzbAO.buyHzb(req.getUserId(), req.getHzbTemplateCode(),
+        return hzbAO.buyHzbOfZH(req.getUserId(), req.getHzbTemplateCode(),
             req.getPayType());
     }
 

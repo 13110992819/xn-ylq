@@ -1,23 +1,22 @@
 /**
- * @Title EInteractType.java 
+ * @Title EHzbHoldStatus.java 
  * @Package com.xnjr.mall.enums 
  * @Description 
  * @author haiqingzheng  
- * @date 2017年1月17日 下午6:03:14 
+ * @date 2016年12月21日 下午3:21:14 
  * @version V1.0   
  */
 package com.cdkj.zhpay.enums;
 
 /** 
  * @author: haiqingzheng 
- * @since: 2017年1月17日 下午6:03:14 
+ * @since: 2016年12月21日 下午3:21:14 
  * @history:
  */
-public enum EInteractType {
-    // 1宝贝，2商品
-    JEWEL("1", "宝贝"), PRODUCT("2", "商品");
+public enum EHzbStatus {
+    TO_PAY("0", "待支付"), ACTIVATED("1", "激活"), OFFLINE("2", "已冻结");
 
-    EInteractType(String code, String value) {
+    EHzbStatus(String code, String value) {
         this.code = code;
         this.value = value;
     }

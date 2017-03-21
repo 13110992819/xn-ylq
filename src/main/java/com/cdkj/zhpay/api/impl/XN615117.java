@@ -12,9 +12,7 @@ import com.cdkj.zhpay.ao.IHzbAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.domain.Hzb;
-import com.cdkj.zhpay.dto.req.XN808457Req;
-import com.cdkj.zhpay.enums.EHzbHoldStatus;
+import com.cdkj.zhpay.dto.req.XN615117Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
@@ -26,29 +24,18 @@ import com.cdkj.zhpay.spring.SpringContextHolder;
  * @history:
  */
 public class XN615117 extends AProcessor {
-    private IHzbAO hzbAO = SpringContextHolder
-        .getBean(IHzbAO.class);
+    private IHzbAO hzbAO = SpringContextHolder.getBean(IHzbAO.class);
 
-    private XN808457Req req = null;
+    private XN615117Req req = null;
 
     /** 
      * @see com.cdkj.zhpay.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        Hzb condition = new Hzb();
-        condition.setUserLatitude(req.getLatitude());
-        condition.setUserLongitude(req.getLongitude());
-        condition.setStatus(EHzbHoldStatus.ACTIVATED.getCode());
-        // String orderColumn = req.getOrderColumn();
-        // if (StringUtils.isBlank(orderColumn)) {
-        // orderColumn = IHzbHoldAO.DEFAULT_ORDER_COLUMN;
-        // }
-        // condition.setOrder(orderColumn, req.getOrderDir());
-        // int start = StringValidater.toInteger(req.getStart());
-        // int limit = StringValidater.toInteger(req.getLimit());
-        return hzbAO.queryDistanceHzbHoldList(condition, req.getUserId(),
-            req.getDeviceNo());
+        return hzbAO.queryHzbList(req.getLatitude(), req.getLongitude(),
+            req.getUserId(), req.getDeviceNo(), req.getCompanyCode(),
+            req.getSystemCode());
     }
 
     /** 
@@ -56,8 +43,9 @@ public class XN615117 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808457Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN615117Req.class);
         StringValidater.validateBlank(req.getLatitude(), req.getLongitude(),
-            req.getUserId(), req.getDeviceNo());
+            req.getUserId(), req.getDeviceNo(), req.getCompanyCode(),
+            req.getSystemCode());
     }
 }

@@ -141,7 +141,7 @@ public interface IAccountBO {
             XN805901Res fromUserRes, String toUserId, Long price,
             EBizType bizType);
 
-    public PayBalanceRes doFRPay(String systemCode, XN805901Res fromUser,
+    public void doFRPay(String systemCode, XN805901Res fromUser,
             String toUserId, Long price, EBizType bizType);
 
     /**

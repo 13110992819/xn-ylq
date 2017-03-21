@@ -12,15 +12,14 @@ import com.cdkj.zhpay.bo.base.Page;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.dao.IHzbDAO;
-import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.enums.EDiviFlag;
-import com.cdkj.zhpay.enums.EHzbHoldStatus;
+import com.cdkj.zhpay.enums.EHzbStatus;
 import com.cdkj.zhpay.exception.BizException;
 
 @Component
-public class HzbBOImpl extends PaginableBOImpl<Hzb> implements
-        IHzbBO {
+public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
 
     @Autowired
     private IHzbDAO hzbDAO;
@@ -47,13 +46,14 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements
     }
 
     @Override
-    public int saveHzbHold(String userId, HzbTemplate hzbTemplate, String payGroup) {
+    public int buySuccess(String userId, HzbTemplate hzbTemplate,
+            String payGroup) {
         int count = 0;
         if (StringUtils.isNotBlank(userId)) {
             Hzb data = new Hzb();
             data.setUserId(userId);
             data.setHzbCode(hzbTemplate.getCode());
-            data.setStatus(EHzbHoldStatus.TO_PAY.getCode());
+            data.setStatus(EHzbStatus.TO_PAY.getCode());
             data.setPrice(hzbTemplate.getPrice());
             data.setCurrency(hzbTemplate.getCurrency());
             data.setPeriodRockNum(0);
@@ -72,7 +72,7 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements
             Hzb data = new Hzb();
             data.setUserId(userId);
             data.setHzbCode(hzbTemplate.getCode());
-            data.setStatus(EHzbHoldStatus.ACTIVATED.getCode());
+            data.setStatus(EHzbStatus.ACTIVATED.getCode());
             data.setPrice(hzbTemplate.getPrice());
             data.setCurrency(hzbTemplate.getCurrency());
             data.setPeriodRockNum(0);
@@ -104,21 +104,21 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements
     }
 
     @Override
-    public Hzb getHzbHold(Long id) {
+    public Hzb getHzb(String code) {
         Hzb data = null;
-        if (id != null) {
+        if (StringUtils.isNotBlank(code)) {
             Hzb condition = new Hzb();
-            condition.setId(id);
+            condition.setCode(code);
             data = hzbDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "汇赚宝购买记录不存在");
+                throw new BizException("xn0000", "汇赚宝不存在");
             }
         }
         return data;
     }
 
     @Override
-    public Hzb getHzbHold(String userId) {
+    public Hzb getHzbByUser(String userId) {
         Hzb data = null;
         if (StringUtils.isNotBlank(userId)) {
             Hzb condition = new Hzb();
@@ -205,6 +205,19 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements
         Hzb data = new Hzb();
         data.setPayGroup(payGroup);
         return hzbDAO.getTotalAmount(data);
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IHzbBO#checkBuy(java.lang.String)
+     */
+    @Override
+    public void checkBuy(String userId) {
+        Hzb condition = new Hzb();
+        condition.setUserId(userId);
+        condition.setStatus(EDiviFlag.EFFECT.getCode());
+        if (hzbDAO.selectTotalCount(condition) > 0) {
+            throw new BizException("xn0000", "您已经购买过汇赚宝");
+        }
     }
 
 }

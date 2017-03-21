@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.bo.base.Paginable;
-import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.domain.HzbTemplate;
 
 public interface IHzbBO extends IPaginableBO<Hzb> {
 
@@ -13,16 +13,9 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
 
     public boolean isHzbHoldExistByUser(String userId);
 
-    /**
-     * 微信支付落地汇赚宝记录
-     * @param userId
-     * @param hzbTemplate
-     * @param payGroup
-     * @return 
-     * @create: 2017年2月27日 下午4:10:24 haiqingzheng
-     * @history:
-     */
-    public int saveHzbHold(String userId, HzbTemplate hzbTemplate, String payGroup);
+    public void checkBuy(String userId);
+
+    public int doFRPay(String userId, HzbTemplate hzbTemplate);
 
     /**
      * 余额支付落地汇赚宝记录
@@ -54,9 +47,10 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
     public Paginable<Hzb> queryDistancePaginable(int start, int pageSize,
             Hzb condition);
 
-    public Hzb getHzbHold(Long id);
+    public Hzb getHzb(String code);
 
-    public Hzb getHzbHold(String userId);
+    public Hzb getHzbByUser(String userId);
 
     public Long getTotalAmount(String payGroup);
+
 }

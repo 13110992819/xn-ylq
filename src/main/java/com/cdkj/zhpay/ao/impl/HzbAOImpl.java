@@ -14,6 +14,7 @@ import com.cdkj.zhpay.ao.IHzbAO;
 import com.cdkj.zhpay.bo.IAccountBO;
 import com.cdkj.zhpay.bo.IHzbBO;
 import com.cdkj.zhpay.bo.IHzbMgiftBO;
+import com.cdkj.zhpay.bo.IHzbTemplateBO;
 import com.cdkj.zhpay.bo.IHzbYyBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.IUserBO;
@@ -27,7 +28,6 @@ import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbMgift;
 import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.UserExt;
-import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
 import com.cdkj.zhpay.dto.res.XN802527Res;
 import com.cdkj.zhpay.dto.res.XN805060Res;
@@ -38,13 +38,17 @@ import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
-import com.cdkj.zhpay.enums.EHzbHoldStatus;
+import com.cdkj.zhpay.enums.EHzbStatus;
+import com.cdkj.zhpay.enums.EHzbTemplateStatus;
 import com.cdkj.zhpay.enums.EPayType;
 import com.cdkj.zhpay.enums.ESysUser;
 import com.cdkj.zhpay.exception.BizException;
 
 @Service
 public class HzbAOImpl implements IHzbAO {
+
+    @Autowired
+    private IHzbTemplateBO hzbTemplateBO;
 
     @Autowired
     private IHzbBO hzbBO;
@@ -66,29 +70,42 @@ public class HzbAOImpl implements IHzbAO {
 
     @Override
     @Transactional
-    public String buyHzb(String userId, String hzbCode, String payType) {
-        String result = null;
+    public Object buyHzbOfZH(String userId, String hzbTemplateCode,
+            String payType) {
+        Object result = null;
         // 判断用户是否实名认证
         XN805901Res userRes = userBO.getRemoteUser(userId, userId);
         if (!EBoolean.YES.getCode().equals(userRes.getIdentityFlag())) {
             throw new BizException("xn0000", "用户未实名认证，请先实名认证");
         }
-        // 查询是否已经购买摇钱树
-        Hzb condition = new Hzb();
-        condition.setUserId(userId);
-        condition.setStatus(EDiviFlag.EFFECT.getCode());
-        if (hzbBO.getTotalCount(condition) > 0) {
-            throw new BizException("xn0000", "您已经购买过汇赚宝");
+        hzbBO.checkBuy(userId);
+        HzbTemplate hzbTemplate = hzbTemplateBO.getHzbTemplate(hzbTemplateCode);
+        if (!EHzbTemplateStatus.ON.getCode().equals(hzbTemplate.getStatus())) {
+            throw new BizException("xn0000", "该汇赚宝模板未上线，不可购买");
         }
-        // 落地汇赚宝购买记录
-        HzbTemplate hzbTemplate = hzbTemplateBO.getHzb(hzbCode);
+
+        // 购买摇钱树
         if (EPayType.YEFR.getCode().equals(payType)) {
             result = doFRPay(userRes, hzbTemplate);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-            result = doWeixinPay(userId, hzbTemplate, ip);
+            result = doWeixinPay(userId, hzbTemplate);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
             return null;
         }
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public Object buyHzbOfCG(String userId, String hzbTemplateCode,
+            String payType) {
+        Object result = null;
+        // 判断用户是否实名认证
+        XN805901Res userRes = userBO.getRemoteUser(userId, userId);
+        if (!EBoolean.YES.getCode().equals(userRes.getIdentityFlag())) {
+            throw new BizException("xn0000", "用户未实名认证，请先实名认证");
+        }
+        hzbBO.checkBuy(userId);
         return result;
     }
 
@@ -112,15 +129,15 @@ public class HzbAOImpl implements IHzbAO {
             throw new BizException("XN000000", "金额校验错误，非正常调用");
         }
         for (Hzb hzb : result) {
-            if (!EHzbHoldStatus.TO_PAY.getCode().equals(hzb.getStatus())) {
+            if (!EHzbStatus.TO_PAY.getCode().equals(hzb.getStatus())) {
                 throw new BizException("XN000000", "汇赚宝号：" + hzb.getId()
                         + "已支付，重复回调");
             }
         }
         for (Hzb hzb : result) {
             // 更新状态
-            hzbBO.refreshPayStatus(hzb.getId(),
-                EHzbHoldStatus.ACTIVATED.getCode(), payCode, transAmount);
+            hzbBO.refreshPayStatus(hzb.getId(), EHzbStatus.ACTIVATED.getCode(),
+                payCode, transAmount);
             // 分配分成
             distributeAmount(hzb.getSystemCode(), hzb.getUserId(),
                 hzb.getPrice());
@@ -140,11 +157,11 @@ public class HzbAOImpl implements IHzbAO {
     @Transactional
     private Object doFRPay(XN805901Res userRes, HzbTemplate hzbTemplate) {
         // 余额支付
-        PayBalanceRes payRes = accountBO.doFRPay(hzbTemplate.getSystemCode(),
-            userRes, ESysUser.SYS_USER.getCode(), hzbTemplate.getPrice(),
+        accountBO.doFRPay(hzbTemplate.getSystemCode(), userRes,
+            ESysUser.SYS_USER.getCode(), hzbTemplate.getPrice(),
             EBizType.AJ_GMHZB);
-        Object result = hzbBO.saveHzbHold(userRes.getUserId(), hzbTemplate,
-            payRes.getFrAmount());
+        // 汇赚宝购买成功
+        Object result = hzbBO.doFRPay(userRes.getUserId(), hzbTemplate);
         // 分销规则
         distributeAmount(hzbTemplate.getSystemCode(), userRes.getUserId(),
             hzbTemplate.getPrice());
@@ -169,7 +186,7 @@ public class HzbAOImpl implements IHzbAO {
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
         // 落地本地系统消费记录，状态为未支付
-        hzbBO.saveHzbHold(userId, hzbTemplate, payGroup);
+        hzbBO.buySuccess(userId, hzbTemplate, payGroup);
         XN802180Res res = accountBO.doWeiXinPay(hzbTemplate.getSystemCode(),
             userId, payGroup, EBizType.AJ_GMHZB, hzbTemplate.getPrice(), ip);
         return res;
@@ -297,17 +314,14 @@ public class HzbAOImpl implements IHzbAO {
 
     @Override
     @Transactional
-    public Object queryDistanceHzbHoldList(Hzb condition, String userId,
-            String deviceNo) {
+    public Object queryHzbList(String latitude, String longitude,
+            String userId, String deviceNo, String companyCode,
+            String systemCode) {
         XN805901Res userRes = userBO.getRemoteUser(userId, userId);
         hzbYyBO.checkHzbYyCondition(userRes.getSystemCode(), userId, deviceNo);
-        // 设置距离
-        String distance = sysConfigBO.getConfigValue(null, null, null,
-            SysConstants.HZB_DISTANCE);
-        if (StringUtils.isBlank(distance)) {
-            // 默认1000米
-            distance = SysConstants.HZB_DISTANCE_DEF;
-        }
+        // 取距离
+        String distance = sysConfigBO.getConfigValue(SysConstants.HZB_DISTANCE,
+            companyCode, systemCode);
         condition.setDistance(distance);
         // 设置最多被摇次数
         Integer periodRockNum = SysConstants.HZB_YY_DAY_MAX_COUNT_DEF;
@@ -346,8 +360,8 @@ public class HzbAOImpl implements IHzbAO {
     }
 
     @Override
-    public Hzb getHzbHold(Long id) {
-        return hzbBO.getHzbHold(id);
+    public Hzb getHzb(String code) {
+        return hzbBO.getHzbByUser(id);
     }
 
     /** 
@@ -355,7 +369,7 @@ public class HzbAOImpl implements IHzbAO {
      */
     @Override
     public XN808802Res doGetHzbTotalData(String systemCode, String userId) {
-        Hzb hzb = hzbBO.getHzbHold(userId);
+        Hzb hzb = hzbBO.getHzbByUser(userId);
         XN808802Res res = new XN808802Res();
         Date todayStart = DateUtil.getTodayStart();
         Date todayEnd = DateUtil.getTodayEnd();

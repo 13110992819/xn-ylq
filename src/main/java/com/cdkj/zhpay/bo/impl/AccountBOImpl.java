@@ -244,7 +244,7 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     @Override
-    public PayBalanceRes doFRPay(String systemCode, XN805901Res userRes,
+    public void doFRPay(String systemCode, XN805901Res userRes,
             String toUserId, Long price, EBizType bizType) {
         Long frPrice = 0L;
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
@@ -255,18 +255,16 @@ public class AccountBOImpl implements IAccountBO {
         Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
         Long frCnyAmount = Double.valueOf(frAccount.getAmount() / fr2cny)
             .longValue();
-        // 1、分润<价格 分润币不足
+        // 分润<价格 分润币不足
         if (frCnyAmount < price) {
             throw new BizException("xn0000", "分润币不足");
         }
         frPrice = Double.valueOf(price * fr2cny).longValue();
         String fromBizNote = bizType.getValue();
         String toBizNote = "用户[" + userRes.getMobile() + "] " + fromBizNote;
-        // 扣除分润
         doTransferAmountByUser(systemCode, userRes.getUserId(), toUserId,
             ECurrency.FRB.getCode(), frPrice, bizType.getCode(), fromBizNote,
             toBizNote);
-        return new PayBalanceRes(frPrice);
     }
 
     @Override

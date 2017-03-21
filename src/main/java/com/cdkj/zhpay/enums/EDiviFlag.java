@@ -9,8 +9,8 @@ import java.util.Map;
  * @history:
  */
 public enum EDiviFlag {
-    EFFECT("effect", "有效值"), NO_EFFECT("no_effect", "有效值");
-    public static Map<String, EDiviFlag> getBizTypeMap() {
+    EFFECT("effect", "有效值"), NO_EFFECT("no_effect", "无效值");
+    public static Map<String, EDiviFlag> getMap() {
         Map<String, EDiviFlag> map = new HashMap<String, EDiviFlag>();
         for (EDiviFlag bizType : EDiviFlag.values()) {
             map.put(bizType.getCode(), bizType);
