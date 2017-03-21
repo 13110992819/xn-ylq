@@ -30,6 +30,12 @@ public class JewelRecordNumber extends ABaseDO {
     // 用户编号
     private String userId;
 
+    // 公司编号
+    private String companyCode;
+
+    // 系统编号
+    private String systemCode;
+
     public Long getId() {
         return id;
     }
@@ -68,5 +74,21 @@ public class JewelRecordNumber extends ABaseDO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 }

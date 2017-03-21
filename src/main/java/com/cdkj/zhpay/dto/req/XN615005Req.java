@@ -13,7 +13,7 @@ package com.cdkj.zhpay.dto.req;
  * @since: 2017年2月20日 下午2:49:31 
  * @history:
  */
-public class XN808354Req extends APageReq {
+public class XN615005Req extends APageReq {
 
     // 状态（选填）
     private String status;
