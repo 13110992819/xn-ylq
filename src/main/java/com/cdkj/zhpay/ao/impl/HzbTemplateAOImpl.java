@@ -3,7 +3,6 @@ package com.cdkj.zhpay.ao.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +40,7 @@ public class HzbTemplateAOImpl implements IHzbTemplateAO {
         data.setBackAmount2(StringValidater.toLong(req.getBackAmount2()));
         data.setBackAmount3(StringValidater.toLong(req.getBackAmount3()));
 
+        data.setStatus(EHzbTemplateStatus.TO_ON.getCode());
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
@@ -74,28 +74,22 @@ public class HzbTemplateAOImpl implements IHzbTemplateAO {
 
     @Override
     public void putOnTemplate(String code, String updater, String remark) {
-        if (StringUtils.isNotBlank(code) && StringUtils.isNotBlank(updater)) {
-            HzbTemplate data = hzbTemplateBO.getHzbTemplate(code);
-            if (!EHzbTemplateStatus.ONED.getCode().equals(data.getStatus())) {
-                hzbTemplateBO.putOnTemplate(code, updater, remark);
-            } else {
-                throw new BizException("xn000000", "该模板处于已上架状态，不能重复上架");
-            }
-
+        HzbTemplate data = hzbTemplateBO.getHzbTemplate(code);
+        if (!EHzbTemplateStatus.ON.getCode().equals(data.getStatus())) {
+            hzbTemplateBO.putOnTemplate(code, updater, remark);
+        } else {
+            throw new BizException("xn000000", "该模板处于已上架状态，不能重复上架");
         }
     }
 
     @Override
     public void putOffTemplate(String code, String updater, String remark) {
-        if (StringUtils.isNotBlank(code) && StringUtils.isNotBlank(updater)) {
-            HzbTemplate data = hzbTemplateBO.getHzbTemplate(code);
-            if (EHzbTemplateStatus.ONED.getCode().equals(data.getStatus())) {
-                hzbTemplateBO.putOffTemplate(code, updater, remark);
-            } else {
-                throw new BizException("xn000000", "该模板不处于已上架状态，不能下架");
-            }
+        HzbTemplate data = hzbTemplateBO.getHzbTemplate(code);
+        if (EHzbTemplateStatus.ON.getCode().equals(data.getStatus())) {
+            hzbTemplateBO.putOffTemplate(code, updater, remark);
+        } else {
+            throw new BizException("xn000000", "该模板不处于已上架状态，不能下架");
         }
-
     }
 
     @Override

@@ -11,7 +11,6 @@ package com.cdkj.zhpay.api.impl;
 import org.apache.commons.lang3.StringUtils;
 
 import com.cdkj.zhpay.ao.IHzbTemplateAO;
-import com.cdkj.zhpay.ao.ISYSDictAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
@@ -46,7 +45,7 @@ public class XN615107 extends AProcessor {
         condition.setCompanyCode(req.getCompanyCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
-            orderColumn = ISYSDictAO.DEFAULT_ORDER_COLUMN;
+            orderColumn = IHzbTemplateAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());
         return hzbTemplateAO.queryHzbTemplateList(condition);

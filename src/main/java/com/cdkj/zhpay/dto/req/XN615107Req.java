@@ -19,19 +19,19 @@ public class XN615107Req extends APageReq {
      */
     private static final long serialVersionUID = -5315928105680332449L;
 
-    // 名称
+    // 名称(选填)
     private String name;
 
-    // 状态（0 待上架 1 已上架 2 已下架）
+    // 状态(选填)
     private String status;
 
-    // 更新人
+    // 更新人(选填)
     private String updater;
 
-    // 系统编号
+    // 系统编号(必填)
     private String systemCode;
 
-    // 公司编号
+    // 公司编号(必填)
     private String companyCode;
 
     public String getName() {
