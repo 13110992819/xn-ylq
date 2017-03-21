@@ -4,26 +4,25 @@ import java.util.List;
 
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.HzbTemplate;
-import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.dto.req.XN615100Req;
+import com.cdkj.zhpay.dto.req.XN615102Req;
 
 public interface IHzbTemplateAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public void editHzb(HzbTemplate data);
+    public String addTemplate(XN615100Req req);
 
-    public Object buyHzb(String userId, String hzbCode, String payType,
-            String fromIp);
+    public void editTemplate(XN615102Req req);
 
-    public void paySuccess(String payGroup, String payCode, Long transAmount);
+    public void putOnTemplate(String code, String updater, String remark);
 
-    public void putOnOffHzb(String userId);
+    public void putOffTemplate(String code, String updater, String remark);
 
-    public Hzb myHzb(String userId);
+    public Paginable<HzbTemplate> queryHzbTemplatePage(int start, int limit,
+            HzbTemplate condition);
 
-    public Paginable<HzbTemplate> queryHzbPage(int start, int limit, HzbTemplate condition);
+    public List<HzbTemplate> queryHzbTemplateList(HzbTemplate condition);
 
-    public List<HzbTemplate> queryHzbList(HzbTemplate condition);
-
-    public HzbTemplate getHzb(String code);
+    public HzbTemplate getHzbTemplate(String code);
 
 }

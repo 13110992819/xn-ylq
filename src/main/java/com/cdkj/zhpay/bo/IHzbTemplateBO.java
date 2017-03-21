@@ -6,15 +6,16 @@ import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.domain.HzbTemplate;
 
 public interface IHzbTemplateBO extends IPaginableBO<HzbTemplate> {
+    public void saveHzbTemplate(HzbTemplate data);
 
-    public boolean isHzbExist(String code);
+    public int refreshHzbTemplate(HzbTemplate data);
 
-    public int removeHzb(String code);
+    public List<HzbTemplate> queryHzbTemplateList(HzbTemplate condition);
 
-    public int refreshHzb(HzbTemplate data);
+    public HzbTemplate getHzbTemplate(String code);
 
-    public List<HzbTemplate> queryHzbList(HzbTemplate condition);
+    public int putOnTemplate(String code, String updater, String remark);
 
-    public HzbTemplate getHzb(String code);
+    public int putOffTemplate(String code, String updater, String remark);
 
 }

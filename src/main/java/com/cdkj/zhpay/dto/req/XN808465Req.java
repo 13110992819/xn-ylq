@@ -6,29 +6,38 @@ public class XN808465Req extends APageReq {
      */
     private static final long serialVersionUID = 1L;
 
-    // 针对持有汇赚宝序号(选填)
-    private String hzbHoldId;
+    // 汇赚宝编号（必填）
+    private String hzbCode;
 
-    // 类型(选填)
-    private String type;
+    // 摇出币种（选填）
+    private String yyCurrency;
 
-    // 用户编号(选填)
+    // 摇的人（选填）
     private String userId;
 
-    public String getHzbHoldId() {
-        return hzbHoldId;
+    // 设备编号（选填）
+    private String deviceNo;
+
+    // 系统编号（必填）
+    private String systemCode;
+
+    // 公司编号（必填）
+    private String companyCode;
+
+    public String getHzbCode() {
+        return hzbCode;
     }
 
-    public void setHzbHoldId(String hzbHoldId) {
-        this.hzbHoldId = hzbHoldId;
+    public void setHzbCode(String hzbCode) {
+        this.hzbCode = hzbCode;
     }
 
-    public String getType() {
-        return type;
+    public String getYyCurrency() {
+        return yyCurrency;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setYyCurrency(String yyCurrency) {
+        this.yyCurrency = yyCurrency;
     }
 
     public String getUserId() {
@@ -38,4 +47,29 @@ public class XN808465Req extends APageReq {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    public String getDeviceNo() {
+        return deviceNo;
+    }
+
+    public void setDeviceNo(String deviceNo) {
+        this.deviceNo = deviceNo;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
 }

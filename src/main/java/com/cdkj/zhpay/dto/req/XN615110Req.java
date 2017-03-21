@@ -15,22 +15,14 @@ package com.cdkj.zhpay.dto.req;
  * @history:
  */
 public class XN615110Req {
-    // 用户编号
+    // 用户编号(必填)
     private String userId;
 
-    // 汇赚宝编号
+    // 汇赚宝模板编号(必填)
     private String hzbTemplateCode;
 
-    // 支付类型
+    // 支付类型(必填)
     private String payType;
-
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
-    }
 
     public String getUserId() {
         return userId;
@@ -40,11 +32,20 @@ public class XN615110Req {
         this.userId = userId;
     }
 
-    public String getHzbCode() {
-        return hzbCode;
+    public String getHzbTemplateCode() {
+        return hzbTemplateCode;
     }
 
-    public void setHzbCode(String hzbCode) {
-        this.hzbCode = hzbCode;
+    public void setHzbTemplateCode(String hzbTemplateCode) {
+        this.hzbTemplateCode = hzbTemplateCode;
     }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
+
 }

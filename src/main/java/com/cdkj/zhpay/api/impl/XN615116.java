@@ -33,7 +33,7 @@ public class XN615116 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return hzbAO.getHzbHold(StringValidater.toLong(req.getId()));
+        return hzbAO.getHzb(req.getCode());
     }
 
     /** 
@@ -42,7 +42,7 @@ public class XN615116 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808459Req.class);
-        StringValidater.validateBlank(req.getId());
+        StringValidater.validateBlank(req.getCode());
     }
 
 }

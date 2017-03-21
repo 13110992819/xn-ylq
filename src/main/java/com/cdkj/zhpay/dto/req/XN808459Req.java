@@ -15,15 +15,15 @@ package com.cdkj.zhpay.dto.req;
  * @history:
  */
 public class XN808459Req {
-    // 主键ID
-    private String id;
+    // 编号(必填)
+    private String code;
 
-    public String getId() {
-        return id;
+    public String getCode() {
+        return code;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCode(String code) {
+        this.code = code;
     }
 
 }

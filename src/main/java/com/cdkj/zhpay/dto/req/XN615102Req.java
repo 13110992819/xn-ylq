@@ -14,43 +14,40 @@ package com.cdkj.zhpay.dto.req;
  * @history:
  */
 public class XN615102Req {
-    // 编号
+    // 编号(必填)
     private String code;
 
-    // 名称
+    // 名称(必填)
     private String name;
 
-    // 照片
+    // 照片(必填)
     private String pic;
 
-    // 玩法描述
-    private String description;
+    // 价格(必填)
+    private String price;
 
-    // 价格
-    private Long price;
-
-    // 价格币种
+    // 价格币种(必填)
     private String currency;
 
-    // 周期内可被摇总次数
-    private Integer periodRockNum;
+    // 周期内可被摇总次数(选填)
+    private String periodRockNum;
 
-    // 可摇总次数
-    private Integer totalRockNum;
+    // 可摇总次数(选填)
+    private String totalRockNum;
 
-    // 价值1
-    private Long backAmount1;
+    // 价值1(选填)
+    private String backAmount1;
 
-    // 价值2
-    private Long backAmount2;
+    // 价值2(选填)
+    private String backAmount2;
 
-    // 价值3
-    private Long backAmount3;
+    // 价值3(选填)
+    private String backAmount3;
 
-    // 更新人
+    // 更新人(必填)
     private String updater;
 
-    // 备注
+    // 备注(选填)
     private String remark;
 
     public String getCode() {
@@ -77,19 +74,11 @@ public class XN615102Req {
         this.pic = pic;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Long getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -101,43 +90,43 @@ public class XN615102Req {
         this.currency = currency;
     }
 
-    public Integer getPeriodRockNum() {
+    public String getPeriodRockNum() {
         return periodRockNum;
     }
 
-    public void setPeriodRockNum(Integer periodRockNum) {
+    public void setPeriodRockNum(String periodRockNum) {
         this.periodRockNum = periodRockNum;
     }
 
-    public Integer getTotalRockNum() {
+    public String getTotalRockNum() {
         return totalRockNum;
     }
 
-    public void setTotalRockNum(Integer totalRockNum) {
+    public void setTotalRockNum(String totalRockNum) {
         this.totalRockNum = totalRockNum;
     }
 
-    public Long getBackAmount1() {
+    public String getBackAmount1() {
         return backAmount1;
     }
 
-    public void setBackAmount1(Long backAmount1) {
+    public void setBackAmount1(String backAmount1) {
         this.backAmount1 = backAmount1;
     }
 
-    public Long getBackAmount2() {
+    public String getBackAmount2() {
         return backAmount2;
     }
 
-    public void setBackAmount2(Long backAmount2) {
+    public void setBackAmount2(String backAmount2) {
         this.backAmount2 = backAmount2;
     }
 
-    public Long getBackAmount3() {
+    public String getBackAmount3() {
         return backAmount3;
     }
 
-    public void setBackAmount3(Long backAmount3) {
+    public void setBackAmount3(String backAmount3) {
         this.backAmount3 = backAmount3;
     }
 

@@ -14,20 +14,32 @@ public class HzbYy extends ABaseDO {
 
     private static final long serialVersionUID = 1L;
 
+    // 编号
     private String code;
 
-    private Long hzbHoldId;
+    // 汇赚宝编号
+    private String hzbCode;
 
-    // 类型(1 红包 2 钱包 3 购物币)
-    private String type;
+    // 摇出币种
+    private String yyCurrency;
 
-    private Integer quantity;
+    // 摇出金额
+    private Long yyAmount;
 
+    // 摇的人
     private String userId;
 
+    // 设备编号
     private String deviceNo;
 
+    // 生成时间
     private Date createDatetime;
+
+    // 系统编号
+    private String systemCode;
+
+    // 公司编号
+    private String companyCode;
 
     // **********db properties********
     private Date createDatetimeStart;
@@ -36,12 +48,76 @@ public class HzbYy extends ABaseDO {
 
     private String mobile;
 
-    public String getMobile() {
-        return mobile;
+    public String getCode() {
+        return code;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getHzbCode() {
+        return hzbCode;
+    }
+
+    public void setHzbCode(String hzbCode) {
+        this.hzbCode = hzbCode;
+    }
+
+    public String getYyCurrency() {
+        return yyCurrency;
+    }
+
+    public void setYyCurrency(String yyCurrency) {
+        this.yyCurrency = yyCurrency;
+    }
+
+    public Long getYyAmount() {
+        return yyAmount;
+    }
+
+    public void setYyAmount(Long yyAmount) {
+        this.yyAmount = yyAmount;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getDeviceNo() {
+        return deviceNo;
+    }
+
+    public void setDeviceNo(String deviceNo) {
+        this.deviceNo = deviceNo;
+    }
+
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public Date getCreateDatetimeStart() {
@@ -60,60 +136,12 @@ public class HzbYy extends ABaseDO {
         this.createDatetimeEnd = createDatetimeEnd;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public String getMobile() {
+        return mobile;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setHzbHoldId(Long hzbHoldId) {
-        this.hzbHoldId = hzbHoldId;
-    }
-
-    public Long getHzbHoldId() {
-        return hzbHoldId;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setDeviceNo(String deviceNo) {
-        this.deviceNo = deviceNo;
-    }
-
-    public String getDeviceNo() {
-        return deviceNo;
-    }
-
-    public void setCreateDatetime(Date createDatetime) {
-        this.createDatetime = createDatetime;
-    }
-
-    public Date getCreateDatetime() {
-        return createDatetime;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
 }

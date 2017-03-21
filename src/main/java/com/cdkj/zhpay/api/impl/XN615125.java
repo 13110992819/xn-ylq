@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.cdkj.zhpay.ao.IHzbYyAO;
 import com.cdkj.zhpay.api.AProcessor;
-import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
 import com.cdkj.zhpay.domain.HzbYy;
@@ -30,14 +29,13 @@ public class XN615125 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         HzbYy condition = new HzbYy();
-        Long hzbHoldId = StringValidater.toLong(req.getHzbHoldId());
-        condition.setHzbHoldId(hzbHoldId);
-        condition.setType(req.getType());
+        condition.setHzbCode(req.getHzbCode());
+        condition.setYyCurrency(req.getYyCurrency());
         condition.setUserId(req.getUserId());
-        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
-            req.getDateStart(), false));
-        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
-            true));
+        condition.setDeviceNo(req.getDeviceNo());
+        condition.setSystemCode(req.getSystemCode());
+        condition.setCompanyCode(req.getCompanyCode());
+
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IHzbYyAO.DEFAULT_ORDER_COLUMN;
@@ -54,7 +52,8 @@ public class XN615125 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808465Req.class);
-        StringValidater.validateBlank(req.getHzbHoldId());
+        StringValidater.validateBlank(req.getHzbCode(), req.getSystemCode(),
+            req.getCompanyCode());
         StringValidater.validateNumber(req.getStart(), req.getLimit());
     }
 }

@@ -1,9 +1,9 @@
 package com.cdkj.zhpay.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,11 +14,13 @@ import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.dao.IHzbTemplateDAO;
 import com.cdkj.zhpay.domain.HzbTemplate;
+import com.cdkj.zhpay.enums.EHzbTemplateStatus;
 import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
 @Component
-public class HzbTemplateBOImpl extends PaginableBOImpl<HzbTemplate> implements IHzbTemplateBO {
+public class HzbTemplateBOImpl extends PaginableBOImpl<HzbTemplate> implements
+        IHzbTemplateBO {
 
     @Autowired
     private IHzbTemplateDAO hzbTemplateDAO;
@@ -27,28 +29,14 @@ public class HzbTemplateBOImpl extends PaginableBOImpl<HzbTemplate> implements I
     private ISYSConfigBO sysConfigBO;
 
     @Override
-    public boolean isHzbExist(String code) {
-        HzbTemplate condition = new HzbTemplate();
-        condition.setCode(code);
-        if (hzbTemplateDAO.selectTotalCount(condition) > 0) {
-            return true;
+    public void saveHzbTemplate(HzbTemplate data) {
+        if (StringUtils.isNotBlank(data.getCode())) {
+            hzbTemplateDAO.insert(data);
         }
-        return false;
     }
 
     @Override
-    public int removeHzb(String code) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            HzbTemplate data = new HzbTemplate();
-            data.setCode(code);
-            count = hzbTemplateDAO.delete(data);
-        }
-        return count;
-    }
-
-    @Override
-    public int refreshHzb(HzbTemplate data) {
+    public int refreshHzbTemplate(HzbTemplate data) {
         int count = 0;
         if (StringUtils.isNotBlank(data.getCode())) {
             count = hzbTemplateDAO.update(data);
@@ -57,7 +45,7 @@ public class HzbTemplateBOImpl extends PaginableBOImpl<HzbTemplate> implements I
     }
 
     @Override
-    public List<HzbTemplate> queryHzbList(HzbTemplate condition) {
+    public List<HzbTemplate> queryHzbTemplateList(HzbTemplate condition) {
         List<HzbTemplate> list = hzbTemplateDAO.selectList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             // hzb价格设置为系统参数
@@ -75,7 +63,7 @@ public class HzbTemplateBOImpl extends PaginableBOImpl<HzbTemplate> implements I
     }
 
     @Override
-    public HzbTemplate getHzb(String code) {
+    public HzbTemplate getHzbTemplate(String code) {
         HzbTemplate data = null;
         if (StringUtils.isNotBlank(code)) {
             HzbTemplate condition = new HzbTemplate();
@@ -94,5 +82,36 @@ public class HzbTemplateBOImpl extends PaginableBOImpl<HzbTemplate> implements I
             data.setPrice(hzbPrice);
         }
         return data;
+    }
+
+    @Override
+    public int putOnTemplate(String code, String updater, String remark) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code) && StringUtils.isNotBlank(updater)) {
+            HzbTemplate data = new HzbTemplate();
+            data.setCode(code);
+            data.setStatus(EHzbTemplateStatus.ONED.getCode());
+            data.setUpdater(updater);
+            data.setUpdateDatetime(new Date());
+            data.setRemark(remark);
+            count = hzbTemplateDAO.putOnTemplate(data);
+        }
+        return count;
+
+    }
+
+    @Override
+    public int putOffTemplate(String code, String updater, String remark) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code) && StringUtils.isNotBlank(updater)) {
+            HzbTemplate data = new HzbTemplate();
+            data.setCode(code);
+            data.setStatus(EHzbTemplateStatus.OFFED.getCode());
+            data.setUpdater(updater);
+            data.setUpdateDatetime(new Date());
+            data.setRemark(remark);
+            count = hzbTemplateDAO.putOffTemplate(data);
+        }
+        return count;
     }
 }

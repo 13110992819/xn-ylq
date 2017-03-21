@@ -12,9 +12,7 @@ import com.cdkj.zhpay.ao.IHzbTemplateAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.dto.req.XN615102Req;
-import com.cdkj.zhpay.dto.req.XN808450Req;
 import com.cdkj.zhpay.dto.res.BooleanRes;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
@@ -37,14 +35,7 @@ public class XN615102 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        HzbTemplate data = new HzbTemplate();
-        data.setCode(req.getCode());
-        data.setName(req.getName());
-        data.setPic(req.getPic());
-        data.setDescription(req.getDescription());
-        data.setPrice(StringValidater.toLong(req.getPrice()));
-        data.setCurrency(req.getCurrency());
-        hzbTemplateAO.editHzb(data);
+        hzbTemplateAO.editTemplate(req);
         return new BooleanRes(true);
     }
 
@@ -53,9 +44,9 @@ public class XN615102 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808450Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN615102Req.class);
         StringValidater.validateBlank(req.getCode(), req.getName(),
-            req.getPrice(), req.getCurrency());
+            req.getPic(), req.getPrice(), req.getCurrency(), req.getUpdater());
 
     }
 

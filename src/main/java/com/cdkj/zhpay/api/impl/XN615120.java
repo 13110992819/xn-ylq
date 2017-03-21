@@ -25,8 +25,8 @@ public class XN615120 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        Long hzbHoldId = StringValidater.toLong(req.getHzbHoldId());
-        return hzbYyAO.doHzbYy(req.getUserId(), hzbHoldId, req.getDeviceNo());
+        return hzbYyAO.doHzbYy(req.getUserId(), req.getHzbCode(),
+            req.getDeviceNo());
     }
 
     /** 
@@ -35,7 +35,7 @@ public class XN615120 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN808460Req.class);
-        StringValidater.validateBlank(req.getUserId(), req.getHzbHoldId(),
+        StringValidater.validateBlank(req.getUserId(), req.getHzbCode(),
             req.getDeviceNo());
     }
 }

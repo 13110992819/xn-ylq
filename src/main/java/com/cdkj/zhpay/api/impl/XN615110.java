@@ -8,7 +8,7 @@
  */
 package com.cdkj.zhpay.api.impl;
 
-import com.cdkj.zhpay.ao.IHzbTemplateAO;
+import com.cdkj.zhpay.ao.IHzbAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
@@ -24,8 +24,7 @@ import com.cdkj.zhpay.spring.SpringContextHolder;
  * @history:
  */
 public class XN615110 extends AProcessor {
-    private IHzbTemplateAO hzbTemplateAO = SpringContextHolder
-        .getBean(IHzbTemplateAO.class);
+    private IHzbAO hzbAO = SpringContextHolder.getBean(IHzbAO.class);
 
     private XN615110Req req = null;
 
@@ -34,8 +33,8 @@ public class XN615110 extends AProcessor {
      */
     @Override
     public synchronized Object doBusiness() throws BizException {
-        return hzbTemplateAO.buyHzb(req.getUserId(), req.getHzbCode(),
-            req.getPayType(), req.getIp());
+        return hzbAO.buyHzb(req.getUserId(), req.getHzbTemplateCode(),
+            req.getPayType());
     }
 
     /** 
@@ -44,7 +43,7 @@ public class XN615110 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN615110Req.class);
-        StringValidater.validateBlank(req.getUserId(), req.getHzbCode(),
-            req.getPayType());
+        StringValidater.validateBlank(req.getUserId(),
+            req.getHzbTemplateCode(), req.getPayType());
     }
 }

@@ -32,7 +32,7 @@ public class HzbMgift extends ABaseDO {
     // 状态
     private String status;
 
-    // 创建时间（默认当前0点0分0秒）
+    // 创建时间
     private Date createDatetime;
 
     // 接收人币种
@@ -220,4 +220,29 @@ public class HzbMgift extends ABaseDO {
     public void setReceiveAmount(Long receiveAmount) {
         this.receiveAmount = receiveAmount;
     }
+
+    public String getHzbCode() {
+        return hzbCode;
+    }
+
+    public void setHzbCode(String hzbCode) {
+        this.hzbCode = hzbCode;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
 }

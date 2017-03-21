@@ -23,9 +23,6 @@ public class HzbTemplate extends ABaseDO {
     // 照片
     private String pic;
 
-    // 玩法描述
-    private String description;
-
     // 价格
     private Long price;
 
@@ -87,14 +84,6 @@ public class HzbTemplate extends ABaseDO {
 
     public void setPic(String pic) {
         this.pic = pic;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Long getPrice() {
