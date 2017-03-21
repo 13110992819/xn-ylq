@@ -1,6 +1,6 @@
 package com.cdkj.zhpay.dto.req;
 
-public class XN808915Req extends APageReq {
+public class XN615915Req extends APageReq {
 
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 

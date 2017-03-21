@@ -1,41 +1,42 @@
 /**
- * @Title XNlh5034.java 
- * @Package com.xnjr.mall.api.impl 
+ * @Title XNlh5011.java 
+ * @Package com.xnjr.moom.api.impl 
  * @Description 
  * @author haiqingzheng  
- * @date 2016年6月12日 下午1:36:16 
+ * @date 2016年4月17日 下午6:30:54 
  * @version V1.0   
  */
 package com.cdkj.zhpay.api.impl;
 
-import com.cdkj.zhpay.ao.ISYSConfigAO;
+import com.cdkj.zhpay.ao.ISYSDictAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.dto.req.XN808917Req;
+import com.cdkj.zhpay.dto.req.XN615901Req;
+import com.cdkj.zhpay.dto.res.BooleanRes;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /** 
- * 根据key获取value值
+ * 删除数据字典
  * @author: haiqingzheng 
- * @since: 2016年6月12日 下午1:36:16 
+ * @since: 2016年4月17日 下午6:30:54 
  * @history:
  */
-public class XN808917 extends AProcessor {
-    private ISYSConfigAO sysConfigAO = SpringContextHolder
-        .getBean(ISYSConfigAO.class);
+public class XN615901 extends AProcessor {
+    private ISYSDictAO sysDictAO = SpringContextHolder
+        .getBean(ISYSDictAO.class);
 
-    private XN808917Req req = null;
+    private XN615901Req req = null;
 
     /** 
      * @see com.cdkj.zhpay.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        return sysConfigAO.getSYSConfig(req.getKey(), req.getCompanyCode(),
-            req.getSystemCode());
+        sysDictAO.dropSYSDict(StringValidater.toLong(req.getId()));
+        return new BooleanRes(true);
     }
 
     /** 
@@ -43,8 +44,8 @@ public class XN808917 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808917Req.class);
-        StringValidater.validateBlank(req.getKey(), req.getCompanyCode(),
-            req.getSystemCode());
+        req = JsonUtil.json2Bean(inputparams, XN615901Req.class);
+        StringValidater.validateBlank(req.getId());
     }
+
 }

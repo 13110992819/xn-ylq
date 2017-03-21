@@ -14,7 +14,7 @@ import com.cdkj.zhpay.ao.ISYSDictAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.domain.SYSDict;
-import com.cdkj.zhpay.dto.req.XN808906Req;
+import com.cdkj.zhpay.dto.req.XN615906Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
@@ -25,11 +25,11 @@ import com.cdkj.zhpay.spring.SpringContextHolder;
  * @since: 2016年4月17日 下午8:06:49 
  * @history:
  */
-public class XN808906 extends AProcessor {
+public class XN615906 extends AProcessor {
     private ISYSDictAO sysDictAO = SpringContextHolder
         .getBean(ISYSDictAO.class);
 
-    private XN808906Req req = null;
+    private XN615906Req req = null;
 
     /** 
      * @see com.cdkj.zhpay.api.IProcessor#doBusiness()
@@ -53,6 +53,6 @@ public class XN808906 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808906Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN615906Req.class);
     }
 }

@@ -1,6 +1,6 @@
 package com.cdkj.zhpay.dto.req;
 
-public class XN808910Req {
+public class XN615910Req {
     // 编号（必填）
     private String id;
 

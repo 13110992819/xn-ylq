@@ -1,42 +1,41 @@
 /**
- * @Title XNlh5011.java 
- * @Package com.xnjr.moom.api.impl 
+ * @Title XNlh5034.java 
+ * @Package com.xnjr.mall.api.impl 
  * @Description 
  * @author haiqingzheng  
- * @date 2016年4月17日 下午6:30:54 
+ * @date 2016年6月12日 下午1:36:16 
  * @version V1.0   
  */
 package com.cdkj.zhpay.api.impl;
 
-import com.cdkj.zhpay.ao.ISYSDictAO;
+import com.cdkj.zhpay.ao.ISYSConfigAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.dto.req.XN808901Req;
-import com.cdkj.zhpay.dto.res.BooleanRes;
+import com.cdkj.zhpay.dto.req.XN615917Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /** 
- * 删除数据字典
+ * 根据key获取value值
  * @author: haiqingzheng 
- * @since: 2016年4月17日 下午6:30:54 
+ * @since: 2016年6月12日 下午1:36:16 
  * @history:
  */
-public class XN808901 extends AProcessor {
-    private ISYSDictAO sysDictAO = SpringContextHolder
-        .getBean(ISYSDictAO.class);
+public class XN615917 extends AProcessor {
+    private ISYSConfigAO sysConfigAO = SpringContextHolder
+        .getBean(ISYSConfigAO.class);
 
-    private XN808901Req req = null;
+    private XN615917Req req = null;
 
     /** 
      * @see com.cdkj.zhpay.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        sysDictAO.dropSYSDict(StringValidater.toLong(req.getId()));
-        return new BooleanRes(true);
+        return sysConfigAO.getSYSConfig(req.getKey(), req.getCompanyCode(),
+            req.getSystemCode());
     }
 
     /** 
@@ -44,8 +43,8 @@ public class XN808901 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808901Req.class);
-        StringValidater.validateBlank(req.getId());
+        req = JsonUtil.json2Bean(inputparams, XN615917Req.class);
+        StringValidater.validateBlank(req.getKey(), req.getCompanyCode(),
+            req.getSystemCode());
     }
-
 }

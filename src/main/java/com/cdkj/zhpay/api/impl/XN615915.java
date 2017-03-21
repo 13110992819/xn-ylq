@@ -7,7 +7,7 @@ import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
 import com.cdkj.zhpay.domain.SYSConfig;
-import com.cdkj.zhpay.dto.req.XN808915Req;
+import com.cdkj.zhpay.dto.req.XN615915Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
@@ -18,11 +18,11 @@ import com.cdkj.zhpay.spring.SpringContextHolder;
  * @since: 2017年3月20日 下午6:02:22 
  * @history:
  */
-public class XN808915 extends AProcessor {
+public class XN615915 extends AProcessor {
     private ISYSConfigAO sysConfigAO = SpringContextHolder
         .getBean(ISYSConfigAO.class);
 
-    private XN808915Req req = null;
+    private XN615915Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -44,7 +44,7 @@ public class XN808915 extends AProcessor {
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808915Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN615915Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
         StringValidater
             .validateBlank(req.getCompanyCode(), req.getSystemCode());
