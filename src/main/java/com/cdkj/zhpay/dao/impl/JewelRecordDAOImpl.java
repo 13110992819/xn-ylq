@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.dao.IJewelRecordDAO;
 import com.cdkj.zhpay.dao.base.support.AMybatisTemplate;
+import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelRecord;
 
 /**
@@ -73,25 +74,16 @@ public class JewelRecordDAOImpl extends AMybatisTemplate implements
     }
 
     @Override
-    public JewelRecord selectMy(JewelRecord condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.select(NAMESPACE.concat("select_my_jewelRecord"),
-            condition, JewelRecord.class);
-    }
-
-    @Override
-    public List<JewelRecord> selectMyList(JewelRecord condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.selectList(NAMESPACE.concat("select_my_jewelRecord"),
-            condition, JewelRecord.class);
-    }
-
-    @Override
-    public List<JewelRecord> selectMyList(JewelRecord condition, int start,
+    public List<Jewel> selectMyJewelList(JewelRecord condition, int start,
             int count) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.selectList(NAMESPACE.concat("select_my_jewelRecord"),
-            start, count, condition, JewelRecord.class);
+        return super.selectList(NAMESPACE.concat("select_myjewel"), start,
+            count, condition, Jewel.class);
+    }
+
+    @Override
+    public Long selectMyJewelTotalCount(JewelRecord condition) {
+        return super.selectTotalCount(NAMESPACE.concat("select_myjewel_count"),
+            condition);
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.cdkj.zhpay.api.impl;
 import com.cdkj.zhpay.ao.IJewelRecordAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.dto.req.XN615022Req;
+import com.cdkj.zhpay.dto.req.XN615026Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.http.JsonUtils;
@@ -15,11 +15,11 @@ import com.cdkj.zhpay.spring.SpringContextHolder;
  * @since: 2017年1月11日 下午5:53:04 
  * @history:
  */
-public class XN615022 extends AProcessor {
+public class XN615026 extends AProcessor {
     private IJewelRecordAO jewelRecordAO = SpringContextHolder
         .getBean(IJewelRecordAO.class);
 
-    private XN615022Req req = null;
+    private XN615026Req req = null;
 
     /** 
      * @see com.cdkj.zhpay.api.IProcessor#doBusiness()
@@ -34,7 +34,7 @@ public class XN615022 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtils.json2Bean(inputparams, XN615022Req.class);
+        req = JsonUtils.json2Bean(inputparams, XN615026Req.class);
         StringValidater.validateBlank(req.getCode());
     }
 }

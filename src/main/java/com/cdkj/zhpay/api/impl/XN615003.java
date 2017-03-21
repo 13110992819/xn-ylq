@@ -14,7 +14,6 @@ import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.core.StringValidater;
 import com.cdkj.zhpay.dto.req.XN615003Req;
 import com.cdkj.zhpay.dto.res.BooleanRes;
-import com.cdkj.zhpay.enums.EJewelTemplateStatus;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.http.JsonUtils;
@@ -39,12 +38,8 @@ public class XN615003 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        String status = jewelTemplateAO.putOn(req.getCode(), req.getUpdater(),
-            req.getRemark());
-        // 上架即发布宝贝
-        if (EJewelTemplateStatus.PUTON.getCode().equals(status)) {
-            jewelAO.publishNextPeriods(req.getCode());
-        }
+        jewelTemplateAO.putOn(req.getCode(), req.getUpdater(), req.getRemark());
+        jewelAO.publishNextPeriods(req.getCode());
         return new BooleanRes(true);
     }
 

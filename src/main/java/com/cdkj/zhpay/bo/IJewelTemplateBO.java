@@ -8,11 +8,7 @@ import com.cdkj.zhpay.enums.EJewelTemplateStatus;
 
 public interface IJewelTemplateBO extends IPaginableBO<JewelTemplate> {
 
-    public boolean isJewelTemplateExist(String code);
-
-    public String saveJewelTemplate(JewelTemplate data);
-
-    public int removeJewelTemplate(String code);
+    public void saveJewelTemplate(JewelTemplate data);
 
     public int refreshJewelTemplate(JewelTemplate data);
 
@@ -24,5 +20,4 @@ public interface IJewelTemplateBO extends IPaginableBO<JewelTemplate> {
             String updater, String remark);
 
     public int refreshPeriods(String code, Integer periods);
-
 }

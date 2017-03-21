@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.bo.base.Paginable;
+import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelRecord;
 
 /**
@@ -12,14 +13,6 @@ import com.cdkj.zhpay.domain.JewelRecord;
  * @history:
  */
 public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
-    /**
-     * @param code
-     * @return 
-     * @create: 2016年12月20日 下午12:26:40 shan
-     * @history:
-     */
-    public boolean isJewelRecordExist(String code);
-
     /**
      * 验证是否大于最大次数
      * @param userId
@@ -33,19 +26,7 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
             Integer maxInvestTimes, Integer times);
 
     public String saveJewelRecord(String userId, String jewelCode,
-            Integer times, Long amount, String ip, String payGroup,
-            String systemCode);
-
-    public String saveJewelRecord(String userId, String jewelCode,
             Integer times, Long amount, String ip, String systemCode);
-
-    /**
-     * @param code
-     * @return 
-     * @create: 2016年12月20日 下午12:26:49 shan
-     * @history:
-     */
-    public int removeJewelRecord(String code);
 
     /**
      * 更新状态
@@ -101,16 +82,8 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
      */
     public List<JewelRecord> queryJewelRecordList(JewelRecord condition);
 
-    /**
-     * @param condition
-     * @return 
-     * @create: 2017年1月12日 下午2:17:25 xieyj
-     * @history:
-     */
-    public List<JewelRecord> queryMyJewelRecordList(JewelRecord condition);
-
-    public Paginable<JewelRecord> queryMyJewelRecordPage(int start,
-            int pageSize, JewelRecord condition);
+    public Paginable<Jewel> queryMyJewelRecordPage(int start, int pageSize,
+            JewelRecord condition);
 
     public Long getLastRecordsTimes(String jewelCode);
 

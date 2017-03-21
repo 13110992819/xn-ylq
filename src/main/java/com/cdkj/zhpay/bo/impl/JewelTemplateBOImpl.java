@@ -9,10 +9,8 @@ import org.springframework.stereotype.Component;
 
 import com.cdkj.zhpay.bo.IJewelTemplateBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
-import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IJewelTemplateDAO;
 import com.cdkj.zhpay.domain.JewelTemplate;
-import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EJewelTemplateStatus;
 import com.cdkj.zhpay.exception.BizException;
 
@@ -29,46 +27,14 @@ public class JewelTemplateBOImpl extends PaginableBOImpl<JewelTemplate>
     private IJewelTemplateDAO JewelTemplateDAO;
 
     @Override
-    public boolean isJewelTemplateExist(String code) {
-        JewelTemplate condition = new JewelTemplate();
-        condition.setCode(code);
-        if (JewelTemplateDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public String saveJewelTemplate(JewelTemplate data) {
-        String code = null;
-        if (data != null) {
-            code = OrderNoGenerater.generateM(EGeneratePrefix.JEWEL_TEMPLETE
-                .getCode());
-            data.setCode(code);
-            data.setUpdateDatetime(new Date());
-            data.setCurrentPeriods(0);
-            data.setStatus(EJewelTemplateStatus.NEW.getCode());
-            JewelTemplateDAO.insert(data);
-        }
-        return code;
-    }
-
-    @Override
-    public int removeJewelTemplate(String code) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            JewelTemplate data = new JewelTemplate();
-            data.setCode(code);
-            count = JewelTemplateDAO.delete(data);
-        }
-        return count;
+    public void saveJewelTemplate(JewelTemplate data) {
+        JewelTemplateDAO.insert(data);
     }
 
     @Override
     public int refreshJewelTemplate(JewelTemplate data) {
         int count = 0;
         if (StringUtils.isNotBlank(data.getCode())) {
-            data.setUpdateDatetime(new Date());
             count = JewelTemplateDAO.update(data);
         }
         return count;

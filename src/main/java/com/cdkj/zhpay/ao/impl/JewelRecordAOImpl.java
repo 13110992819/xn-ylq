@@ -275,23 +275,10 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         return page;
     }
 
-    @Override
-    public Paginable<JewelRecord> queryMyJewelRecordPage(int start, int limit,
-            JewelRecord condition) {
+    public Paginable<Jewel> queryMyJewelPage(int start, int limit, String userId) {
+        JewelRecord condition = new JewelRecord();
+        condition.setUserId(userId);
         return jewelRecordBO.queryMyJewelRecordPage(start, limit, condition);
-
-    }
-
-    @Override
-    public List<JewelRecord> queryJewelRecordList(JewelRecord condition) {
-        List<JewelRecord> list = jewelRecordBO.queryJewelRecordList(condition);
-        if (CollectionUtils.isNotEmpty(list)) {
-            for (JewelRecord jewelRecord : list) {
-                Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
-                jewelRecord.setJewel(jewel);
-            }
-        }
-        return list;
     }
 
     @Override
@@ -300,10 +287,10 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         JewelRecord jewelRecord = jewelRecordBO.getJewelRecord(code);
         // 宝贝
         Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
+        jewelRecord.setJewel(jewel);
         // 参与号码
         List<JewelRecordNumber> jewelRecordNumberList = jewelRecordNumberBO
             .queryJewelRecordNumberList(code);
-        jewelRecord.setJewel(jewel);
         jewelRecord.setJewelRecordNumberList(jewelRecordNumberList);
         return jewelRecord;
     }

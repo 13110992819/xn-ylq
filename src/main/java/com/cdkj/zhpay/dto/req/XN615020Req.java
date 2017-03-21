@@ -1,29 +1,42 @@
 package com.cdkj.zhpay.dto.req;
 
 /**
- * 我的夺宝分页查询
- * @author: asus 
- * @since: 2016年12月21日 下午4:53:57 
+ * 购买宝贝
+ * @author: xieyj 
+ * @since: 2017年1月11日 下午7:30:57 
  * @history:
  */
-public class XN615020Req extends APageReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
-    private static final long serialVersionUID = 1L;
+public class XN615020Req {
 
-    // 用户ID(必填)
+    // 用户编号
     public String userId;
 
-    // 状态(选填)
-    private String jewelStatus;
+    // 宝贝编号
+    public String jewelCode;
 
-    public String getJewelStatus() {
-        return jewelStatus;
+    // 购买次数
+    public String times;
+
+    // 支付类型
+    private String payType;
+
+    // ip 地址
+    private String ip;
+
+    public String getPayType() {
+        return payType;
     }
 
-    public void setJewelStatus(String jewelStatus) {
-        this.jewelStatus = jewelStatus;
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
     public String getUserId() {
@@ -32,6 +45,22 @@ public class XN615020Req extends APageReq {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getJewelCode() {
+        return jewelCode;
+    }
+
+    public void setJewelCode(String jewelCode) {
+        this.jewelCode = jewelCode;
+    }
+
+    public String getTimes() {
+        return times;
+    }
+
+    public void setTimes(String times) {
+        this.times = times;
     }
 
 }

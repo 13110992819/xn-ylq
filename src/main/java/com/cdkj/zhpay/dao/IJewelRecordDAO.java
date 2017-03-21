@@ -3,6 +3,7 @@ package com.cdkj.zhpay.dao;
 import java.util.List;
 
 import com.cdkj.zhpay.dao.base.IBaseDAO;
+import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelRecord;
 
 /**
@@ -19,12 +20,10 @@ public interface IJewelRecordDAO extends IBaseDAO<JewelRecord> {
 
     public int updateLostInfo(JewelRecord data);
 
-    public JewelRecord selectMy(JewelRecord condition);
-
-    public List<JewelRecord> selectMyList(JewelRecord condition);
-
-    public List<JewelRecord> selectMyList(JewelRecord condition, int start,
+    public List<Jewel> selectMyJewelList(JewelRecord condition, int start,
             int count);
+
+    public Long selectMyJewelTotalCount(JewelRecord condition);
 
     public Long getTotalAmount(JewelRecord condition);
 }

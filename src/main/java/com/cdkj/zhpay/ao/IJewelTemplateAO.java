@@ -10,8 +10,6 @@ public interface IJewelTemplateAO {
 
     public String addJewelTemplate(XN615000Req req);
 
-    public void dropJewelTemplate(String code);
-
     public void editJewelTemplate(XN615002Req req);
 
     public String putOn(String code, String updater, String remark);

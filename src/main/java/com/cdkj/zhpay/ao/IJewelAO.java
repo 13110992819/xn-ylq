@@ -1,7 +1,5 @@
 package com.cdkj.zhpay.ao;
 
-import java.util.List;
-
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.Jewel;
 
@@ -31,15 +29,6 @@ public interface IJewelAO {
      * @history:
      */
     public Paginable<Jewel> queryJewelPage(int start, int limit, Jewel condition);
-
-    /**
-     * 列表查询
-     * @param condition
-     * @return 
-     * @create: 2016年12月21日 下午4:45:57 asus
-     * @history:
-     */
-    public List<Jewel> queryJewelList(Jewel condition);
 
     public Jewel getJewel(String code);
 }

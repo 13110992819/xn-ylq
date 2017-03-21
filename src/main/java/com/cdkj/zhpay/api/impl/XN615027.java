@@ -3,36 +3,36 @@ package com.cdkj.zhpay.api.impl;
 import com.cdkj.zhpay.ao.IJewelRecordAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.dto.req.XN615020Req;
+import com.cdkj.zhpay.dto.req.XN615027Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.http.JsonUtils;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
- * 参与夺宝
- * @author: xieyj 
- * @since: 2017年1月11日 下午6:21:36 
+ * 我参与的宝贝分页查询
+ * @author: asus 
+ * @since: 2016年12月21日 下午4:56:49 
  * @history:
  */
-public class XN615020 extends AProcessor {
+public class XN615027 extends AProcessor {
     private IJewelRecordAO jewelRecordAO = SpringContextHolder
         .getBean(IJewelRecordAO.class);
 
-    private XN615020Req req = null;
+    private XN615027Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        Integer times = StringValidater.toInteger(req.getTimes());
-        return jewelRecordAO.buyJewel(req.getUserId(), req.getJewelCode(),
-            times, req.getPayType(), req.getIp());
+        int start = StringValidater.toInteger(req.getStart());
+        int limit = StringValidater.toInteger(req.getLimit());
+        return jewelRecordAO.queryMyJewelPage(start, limit, req.getUserId());
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtils.json2Bean(inputparams, XN615020Req.class);
-        StringValidater.validateNumber(req.getTimes());
-        StringValidater.validateBlank(req.getUserId(), req.getJewelCode(),
-            req.getPayType(), req.getIp());
+        req = JsonUtils.json2Bean(inputparams, XN615027Req.class);
+        StringValidater.validateBlank(req.getUserId());
+        StringValidater.validateNumber(req.getStart(), req.getLimit());
     }
+
 }

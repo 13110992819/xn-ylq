@@ -74,11 +74,6 @@ public class Jewel extends ABaseDO {
     private String systemCode;
 
     // **********db properties ******************
-    // 开奖时间起
-    private Date winDatetimeStart;
-
-    // 开奖时间止
-    private Date winDatetimeEnd;
 
     public String getCode() {
         return code;
@@ -230,21 +225,5 @@ public class Jewel extends ABaseDO {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
-    }
-
-    public Date getWinDatetimeStart() {
-        return winDatetimeStart;
-    }
-
-    public void setWinDatetimeStart(Date winDatetimeStart) {
-        this.winDatetimeStart = winDatetimeStart;
-    }
-
-    public Date getWinDatetimeEnd() {
-        return winDatetimeEnd;
-    }
-
-    public void setWinDatetimeEnd(Date winDatetimeEnd) {
-        this.winDatetimeEnd = winDatetimeEnd;
     }
 }

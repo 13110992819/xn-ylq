@@ -1,6 +1,7 @@
 package com.cdkj.zhpay.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.cdkj.zhpay.dao.base.ABaseDO;
 
@@ -55,6 +56,40 @@ public class JewelRecord extends ABaseDO {
 
     // 系统编号
     private String systemCode;
+
+    // 对应宝贝
+    private Jewel jewel;
+
+    // 本次购买记录对应号码
+    private List<JewelRecordNumber> jewelRecordNumberList;
+
+    // 购买用户
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Jewel getJewel() {
+        return jewel;
+    }
+
+    public void setJewel(Jewel jewel) {
+        this.jewel = jewel;
+    }
+
+    public List<JewelRecordNumber> getJewelRecordNumberList() {
+        return jewelRecordNumberList;
+    }
+
+    public void setJewelRecordNumberList(
+            List<JewelRecordNumber> jewelRecordNumberList) {
+        this.jewelRecordNumberList = jewelRecordNumberList;
+    }
 
     public String getCode() {
         return code;
@@ -161,21 +196,10 @@ public class JewelRecord extends ABaseDO {
     }
 
     // ***********************db properties **************************
-    // // 昵称
-    // private String nickname;
-    //
-    // // 手机号
-    // private String mobile;
-    //
-    // // 照片
-    // private String photo;
     //
     // // 我投资人次
     // private String myInvestTimes;
     //
-    // // 宝贝购买记录
-    // private List<JewelRecordNumber> jewelRecordNumberList;
     //
-    // // 宝贝
-    // private Jewel jewel;
+
 }

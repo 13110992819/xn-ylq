@@ -21,29 +21,30 @@
 		<result column="ip" property="ip" />
 		<result column="pay_group" property="payGroup" />
 		<result column="pay_code" property="payCode" />
+		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
+	</resultMap>
+	
+	<resultMap id="jewel_DB_Result" type="jewel">
+		<result column="code" property="code" />
+		<result column="template_code" property="templateCode" />
+		<result column="periods" property="periods" />
+		<result column="currency" property="currency" />
+		<result column="amount" property="amount" />
 		
-		<result column="jewel_code" property="jewel.code" />
-		<result column="jewel_template_code" property="jewel.templateCode" />
-		<result column="jewel_periods" property="jewel.periods" />
-		<result column="jewel_currency" property="jewel.currency" />
-		<result column="jewel_amount" property="jewel.amount" />
+		<result column="total_num" property="totalNum" />
+		<result column="price" property="price" />
+		<result column="max_invest_num" property="maxInvestNum" />
+		<result column="adv_text" property="advText" />
+		<result column="adv_pic" property="advPic" />
 		
-		<result column="jewel_total_num" property="jewel.totalNum" />
-		<result column="jewel_price" property="jewel.price" />
-		<result column="jewel_max_invest_num" property="jewel.maxInvestNum" />
-		<result column="jewel_adv_text" property="jewel.advText" />
-		<result column="jewel_adv_pic" property="jewel.advPic" />
-		
-		<result column="jewel_invest_num" property="jewel.investNum" />
-		<result column="jewel_create_datetime" property="jewel.createDatetime" />
-		<result column="jewel_win_number" property="jewel.winNumber" />
-		<result column="jewel_win_user" property="jewel.winUser" />
-		<result column="jewel_win_datetime" property="jewel.winDatetime" />
-		
-		<result column="jewel_status" property="jewel.status" />
-		<result column="jewel_remark" property="jewel.remark" />
-		<result column="jewel_system_code" property="jewel.systemCode" />
+		<result column="invest_num" property="investNum" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="win_number" property="winNumber" />
+		<result column="win_user" property="winUser" />
+		<result column="win_datetime" property="winDatetime" />
+		<result column="status" property="status" />
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -58,21 +59,12 @@
 				AND t.jewel_code = #{jewelCode}
 			</if>
 			<if test="status != null and status != '' ">
-				<choose>
-					<when test='status == "payed"'>
-						AND t.status not in(0)
-					</when>
-				    <otherwise>
-						AND t.status = #{status}
-					</otherwise>
-				</choose>
-			</if>
-			<if test="jewel != null and jewel.status != null and jewel.status != '' ">
-				AND tj.status = #{jewel.status}
+			    AND t.status = #{status}
 			</if>
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group = #{payGroup}
 			</if>
+			
 			<if test="payCode != null and payCode != '' ">
 				AND t.pay_code = #{payCode}
 			</if>
@@ -116,40 +108,41 @@
 		<include refid="where_condition" />
 	</select>
 	
-	<select id="select_my_jewelRecord" parameterType="jewelRecord" resultMap="jewelRecord_DB_Result">
+	<select id="select_myjewel" parameterType="jewelRecord" resultMap="jewelRecord_DB_Result">
 		SELECT
-		t.user_id
-        ,sum(t.times) as my_invest_times
-		,t.jewel_code
+		t.code
+		,t.template_code
+		,t.periods
+		,t.currency
+		,t.amount
 		
-		,tj.code jewel_code
-		,tj.template_code jewel_template_code
-		,tj.periods  jewel_periods
-		,tj.currency jewel_currency
-		,tj.amount jewel_amount
+		,t.total_num
+		,t.price
+		,t.max_invest_num
+		,t.adv_text
+		,t.adv_pic
 		
-		,tj.total_num jewel_total_num
-		,tj.price jewel_price
-		,tj.max_invest_num jewel_max_invest_num
-		,tj.adv_text jewel_adv_text
-		,tj.adv_pic jewel_adv_pic
+		,t.invest_num
+		,t.create_datetime
+		,t.win_number
+		,t.win_datetime
 		
-		,tj.invest_num jewel_invest_num
-		,tj.create_datetime jewel_create_datetime
-		,tj.win_number jewel_win_number
-		,tj.win_user jewel_win_user
-		,tj.win_datetime jewel_win_datetime
-		
-		,tj.status jewel_status
+		,t.status
+		,t.system_code
 		FROM
-		tact_jewel_record t 
-		LEFT JOIN tact_jewel tj ON t.jewel_code = tj.code
-		LEFT JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id 
-		LEFT JOIN ${userDB}.tstd_user_ext tue ON tu.user_id = tue.user_id
-		<include refid="where_condition" />
-		<trim prefix="GROUP BY ">
-			t.jewel_code 
-		</trim>
+		tact_jewel t
+		LEFT JOIN tact_jewel_record tjr ON  t.code = tjr.jewel_code 
+		WHERE tjr.status not in(0) 
+		GROUP BY t.jewel_code 
+	</select>
+	
+	<select id="select_myjewel_count" parameterType="jewelRecord"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM
+		tact_jewel t
+		LEFT JOIN tact_jewel_record tjr ON  t.code = tjr.jewel_code 
+		WHERE tjr.status not in(0) 
+		GROUP BY t.jewel_code 
 	</select>
 	
 	<insert id="insert_jewelRecord" parameterType="jewelRecord">

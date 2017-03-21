@@ -1,8 +1,7 @@
 package com.cdkj.zhpay.ao;
 
-import java.util.List;
-
 import com.cdkj.zhpay.bo.base.Paginable;
+import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelRecord;
 
 /**
@@ -49,17 +48,7 @@ public interface IJewelRecordAO {
     public Paginable<JewelRecord> queryJewelRecordPage(int start, int limit,
             JewelRecord condition);
 
-    public Paginable<JewelRecord> queryMyJewelRecordPage(int start, int limit,
-            JewelRecord condition);
-
-    /**
-     * 查询所有标的购买记录
-     * @param condition
-     * @return 
-     * @create: 2016年12月20日 下午12:11:53 shan
-     * @history:
-     */
-    public List<JewelRecord> queryJewelRecordList(JewelRecord condition);
+    public Paginable<Jewel> queryMyJewelPage(int start, int limit, String userId);
 
     /**
      * 查询标的购买详情

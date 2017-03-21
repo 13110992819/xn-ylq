@@ -1,7 +1,6 @@
 package com.cdkj.zhpay.bo.impl;
 
 import java.util.Date;
-import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +27,6 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
     private IJewelDAO jewelDAO;
 
     @Override
-    public boolean isJewelExist(String code) {
-        Jewel condition = new Jewel();
-        condition.setCode(code);
-        if (jewelDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public String saveJewel(JewelTemplate data) {
         String code = null;
         if (data != null) {
@@ -46,15 +35,21 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
             jewel.setCode(code);
             jewel.setTemplateCode(data.getCode());
             jewel.setPeriods(data.getCurrentPeriods());
-            jewel.setCurrency(data.getCurrency());
-            jewel.setAmount(data.getAmount());
+            jewel.setToAmount(data.getToAmount());
+            jewel.setToCurrency(data.getToCurrency());
+
             jewel.setTotalNum(data.getTotalNum());
-            jewel.setPrice(data.getPrice());
-            jewel.setMaxInvestNum(data.getMaxInvestNum());
-            jewel.setAdvText(data.getAdvText());
+            jewel.setMaxNum(data.getMaxNum());
+            jewel.setInvestNum(0);
+            jewel.setFromAmount(data.getFromAmount());
+            jewel.setFromCurrency(data.getFromCurrency());
+
+            jewel.setSlogan(data.getSlogan());
             jewel.setAdvPic(data.getAdvPic());
+            jewel.setStartDatetime(new Date());
             jewel.setStatus(EJewelStatus.RUNNING.getCode());
-            jewel.setCreateDatetime(new Date());
+            jewel.setCompanyCode(data.getCompanyCode());
+
             jewel.setSystemCode(data.getSystemCode());
             jewelDAO.insert(jewel);
         }
@@ -86,23 +81,6 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
         }
         return false;
 
-    }
-
-    @Override
-    public List<Jewel> queryJewelList(Jewel data) {
-        return jewelDAO.selectList(data);
-    }
-
-    @Override
-    public int refreshStatus(String code, String status) {
-        int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            Jewel data = new Jewel();
-            data.setCode(code);
-            data.setStatus(status);
-            count = jewelDAO.updateStatus(data);
-        }
-        return count;
     }
 
     @Override

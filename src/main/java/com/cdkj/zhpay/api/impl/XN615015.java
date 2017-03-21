@@ -1,8 +1,11 @@
 package com.cdkj.zhpay.api.impl;
 
-import com.cdkj.zhpay.ao.IJewelRecordAO;
+import org.apache.commons.lang3.StringUtils;
+
+import com.cdkj.zhpay.ao.IJewelAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.core.StringValidater;
+import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.dto.req.XN615015Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
@@ -10,29 +13,41 @@ import com.cdkj.zhpay.http.JsonUtils;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
- * 参与夺宝
+ * 宝贝分页查询
  * @author: xieyj 
- * @since: 2017年1月11日 下午6:21:36 
+ * @since: 2017年1月12日 下午2:54:00 
  * @history:
  */
 public class XN615015 extends AProcessor {
-    private IJewelRecordAO jewelRecordAO = SpringContextHolder
-        .getBean(IJewelRecordAO.class);
+    private IJewelAO jewelAO = SpringContextHolder.getBean(IJewelAO.class);
 
     private XN615015Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        Integer times = StringValidater.toInteger(req.getTimes());
-        return jewelRecordAO.buyJewel(req.getUserId(), req.getJewelCode(),
-            times, req.getPayType(), req.getIp());
+        Jewel condition = new Jewel();
+        condition.setTemplateCode(req.getTemplateCode());
+        condition.setToCurrency(req.getToCurrency());
+        condition.setFromCurrency(req.getFromCurrency());
+        condition.setStatus(req.getStatus());
+        condition.setWinUser(req.getWinUser());
+        condition.setCompanyCode(req.getCompanyCode());
+        condition.setSystemCode(req.getSystemCode());
+        String orderColumn = req.getOrderColumn();
+        if (StringUtils.isBlank(orderColumn)) {
+            orderColumn = IJewelAO.DEFAULT_ORDER_COLUMN;
+        }
+        condition.setOrder(orderColumn, req.getOrderDir());
+        int start = StringValidater.toInteger(req.getStart());
+        int limit = StringValidater.toInteger(req.getLimit());
+        return jewelAO.queryJewelPage(start, limit, condition);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN615015Req.class);
-        StringValidater.validateNumber(req.getTimes());
-        StringValidater.validateBlank(req.getUserId(), req.getJewelCode(),
-            req.getPayType(), req.getIp());
+        StringValidater.validateNumber(req.getStart(), req.getLimit());
+        StringValidater
+            .validateBlank(req.getCompanyCode(), req.getSystemCode());
     }
 }

@@ -15,14 +15,6 @@ public interface IJewelRecordNumberBO extends IPaginableBO<JewelRecordNumber> {
     public String saveJewelRecordNumber(JewelRecordNumber data);
 
     /**
-     * @param id
-     * @return 
-     * @create: 2016年12月20日 下午12:49:35 shan
-     * @history:
-     */
-    public JewelRecordNumber getJewelRecordNumber(Long id);
-
-    /**
      * 
      * @param data
      * @return 
