@@ -17,23 +17,26 @@ public class JewelTemplate extends ABaseDO {
     // 编号
     private String code;
 
-    // 中奖币种
-    private String currency;
-
     // 中奖金额
-    private Long amount;
+    private Long toAmount;
+
+    // 中奖币种
+    private String toCurrency;
 
     // 总人次
     private Integer totalNum;
 
+    // 单人最大次数
+    private Integer maxNum;
+
     // 人次单价
-    private Long price;
+    private Long fromAmount;
 
-    // 单人最大投资次数
-    private Integer maxInvestNum;
+    // 单价币种
+    private String fromCurrency;
 
-    // 宣传文字
-    private String advText;
+    // 宣传标语
+    private String slogan;
 
     // 宣传图
     private String advPic;
@@ -53,6 +56,9 @@ public class JewelTemplate extends ABaseDO {
     // 备注
     private String remark;
 
+    // 公司编号
+    private String companyCode;
+
     // 系统编号
     private String systemCode;
 
@@ -64,20 +70,20 @@ public class JewelTemplate extends ABaseDO {
         this.code = code;
     }
 
-    public String getCurrency() {
-        return currency;
+    public Long getToAmount() {
+        return toAmount;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setToAmount(Long toAmount) {
+        this.toAmount = toAmount;
     }
 
-    public Long getAmount() {
-        return amount;
+    public String getToCurrency() {
+        return toCurrency;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setToCurrency(String toCurrency) {
+        this.toCurrency = toCurrency;
     }
 
     public Integer getTotalNum() {
@@ -88,28 +94,36 @@ public class JewelTemplate extends ABaseDO {
         this.totalNum = totalNum;
     }
 
-    public Long getPrice() {
-        return price;
+    public Integer getMaxNum() {
+        return maxNum;
     }
 
-    public void setPrice(Long price) {
-        this.price = price;
+    public void setMaxNum(Integer maxNum) {
+        this.maxNum = maxNum;
     }
 
-    public Integer getMaxInvestNum() {
-        return maxInvestNum;
+    public Long getFromAmount() {
+        return fromAmount;
     }
 
-    public void setMaxInvestNum(Integer maxInvestNum) {
-        this.maxInvestNum = maxInvestNum;
+    public void setFromAmount(Long fromAmount) {
+        this.fromAmount = fromAmount;
     }
 
-    public String getAdvText() {
-        return advText;
+    public String getFromCurrency() {
+        return fromCurrency;
     }
 
-    public void setAdvText(String advText) {
-        this.advText = advText;
+    public void setFromCurrency(String fromCurrency) {
+        this.fromCurrency = fromCurrency;
+    }
+
+    public String getSlogan() {
+        return slogan;
+    }
+
+    public void setSlogan(String slogan) {
+        this.slogan = slogan;
     }
 
     public String getAdvPic() {
@@ -160,6 +174,14 @@ public class JewelTemplate extends ABaseDO {
         this.remark = remark;
     }
 
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
     public String getSystemCode() {
         return systemCode;
     }
@@ -167,5 +189,4 @@ public class JewelTemplate extends ABaseDO {
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
     }
-
 }

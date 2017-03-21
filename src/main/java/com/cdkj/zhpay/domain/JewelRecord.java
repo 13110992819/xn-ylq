@@ -1,7 +1,6 @@
 package com.cdkj.zhpay.domain;
 
 import java.util.Date;
-import java.util.List;
 
 import com.cdkj.zhpay.dao.base.ABaseDO;
 
@@ -33,20 +32,11 @@ public class JewelRecord extends ABaseDO {
     // 参与次数
     private Integer times;
 
-    // 支付金额
-    private Long payAmount;
-
-    // 支付时间
-    private String payDatetime;
+    // ip
+    private String ip;
 
     // 状态(0待开奖，1已中奖，2未中奖)
     private String status;
-
-    // 备注
-    private String remark;
-
-    // ip
-    private String ip;
 
     // 支付组号
     private String payGroup;
@@ -54,56 +44,17 @@ public class JewelRecord extends ABaseDO {
     // 支付编号
     private String payCode;
 
+    // 支付金额
+    private Long payAmount;
+
+    // 支付时间(格式化到毫秒)
+    private String payDatetime;
+
+    // 公司编号
+    private String companyCode;
+
     // 系统编号
     private String systemCode;
-
-    // ***********************db properties **************************
-    // 昵称
-    private String nickname;
-
-    // 手机号
-    private String mobile;
-
-    // 照片
-    private String photo;
-
-    // 宝贝购买记录
-    private List<JewelRecordNumber> jewelRecordNumberList;
-
-    // 宝贝
-    private Jewel jewel;
-
-    // 我投资人次
-    private String myInvestTimes;
-
-    public String getPayDatetime() {
-        return payDatetime;
-    }
-
-    public void setPayDatetime(String payDatetime) {
-        this.payDatetime = payDatetime;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public JewelRecord() {
-        Jewel jewel = new Jewel();
-        this.jewel = jewel;
-    }
 
     public String getCode() {
         return code;
@@ -145,12 +96,12 @@ public class JewelRecord extends ABaseDO {
         this.times = times;
     }
 
-    public Long getPayAmount() {
-        return payAmount;
+    public String getIp() {
+        return ip;
     }
 
-    public void setPayAmount(Long payAmount) {
-        this.payAmount = payAmount;
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
     public String getStatus() {
@@ -169,20 +120,36 @@ public class JewelRecord extends ABaseDO {
         this.payGroup = payGroup;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
     public String getPayCode() {
         return payCode;
     }
 
     public void setPayCode(String payCode) {
         this.payCode = payCode;
+    }
+
+    public Long getPayAmount() {
+        return payAmount;
+    }
+
+    public void setPayAmount(Long payAmount) {
+        this.payAmount = payAmount;
+    }
+
+    public String getPayDatetime() {
+        return payDatetime;
+    }
+
+    public void setPayDatetime(String payDatetime) {
+        this.payDatetime = payDatetime;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public String getSystemCode() {
@@ -193,45 +160,22 @@ public class JewelRecord extends ABaseDO {
         this.systemCode = systemCode;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    public List<JewelRecordNumber> getJewelRecordNumberList() {
-        return jewelRecordNumberList;
-    }
-
-    public void setJewelRecordNumberList(
-            List<JewelRecordNumber> jewelRecordNumberList) {
-        this.jewelRecordNumberList = jewelRecordNumberList;
-    }
-
-    public Jewel getJewel() {
-        return jewel;
-    }
-
-    public void setJewel(Jewel jewel) {
-        this.jewel = jewel;
-    }
-
-    public String getMyInvestTimes() {
-        return myInvestTimes;
-    }
-
-    public void setMyInvestTimes(String myInvestTimes) {
-        this.myInvestTimes = myInvestTimes;
-    }
-
+    // ***********************db properties **************************
+    // // 昵称
+    // private String nickname;
+    //
+    // // 手机号
+    // private String mobile;
+    //
+    // // 照片
+    // private String photo;
+    //
+    // // 我投资人次
+    // private String myInvestTimes;
+    //
+    // // 宝贝购买记录
+    // private List<JewelRecordNumber> jewelRecordNumberList;
+    //
+    // // 宝贝
+    // private Jewel jewel;
 }

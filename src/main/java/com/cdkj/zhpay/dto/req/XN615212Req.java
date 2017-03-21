@@ -9,12 +9,12 @@
 package com.cdkj.zhpay.dto.req;
 
 /** 
- * 股份返还
+ * 股份清算回购
  * @author: haiqingzheng 
  * @since: 2016年12月19日 下午7:47:18 
  * @history:
  */
-public class XN808404Req {
+public class XN615212Req {
     // 用户编号
     private String userId;
 

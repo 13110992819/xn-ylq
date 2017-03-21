@@ -1,60 +1,53 @@
 /**
- * @Title XN808408.java 
+ * @Title XN808401.java 
  * @Package com.xnjr.mall.api.impl 
  * @Description 
  * @author haiqingzheng  
- * @date 2016年12月19日 下午9:08:56 
+ * @date 2016年12月19日 下午5:15:26 
  * @version V1.0   
  */
 package com.cdkj.zhpay.api.impl;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.cdkj.zhpay.ao.IStockHoldAO;
+import com.cdkj.zhpay.ao.IStockAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.domain.StockHold;
-import com.cdkj.zhpay.dto.req.XN808407Req;
+import com.cdkj.zhpay.domain.Stock;
+import com.cdkj.zhpay.dto.req.XN615205Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /** 
- * 分页查询股份购买记录
+ * 分页查询股份
  * @author: haiqingzheng 
- * @since: 2016年12月19日 下午9:08:56 
+ * @since: 2016年12月19日 下午5:15:26 
  * @history:
  */
-public class XN808408 extends AProcessor {
-    private IStockHoldAO stockHoldAO = SpringContextHolder
-        .getBean(IStockHoldAO.class);
+public class XN615205 extends AProcessor {
+    private IStockAO stockAO = SpringContextHolder.getBean(IStockAO.class);
 
-    private XN808407Req req = null;
+    private XN615205Req req = null;
 
-    /** 
-     * @see com.xnjr.mall.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
-        StockHold condition = new StockHold();
+        Stock condition = new Stock();
+        condition.setStatus(req.getStatus());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
-            orderColumn = IStockHoldAO.DEFAULT_ORDER_COLUMN;
+            orderColumn = IStockAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return stockHoldAO.queryStockHoldPage(start, limit, condition);
+        return stockAO.queryStockPage(start, limit, condition);
     }
 
-    /** 
-     * @see com.xnjr.mall.api.IProcessor#doCheck(java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808407Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN615205Req.class);
         StringValidater.validateBlank(req.getStart(), req.getLimit());
     }
-
 }

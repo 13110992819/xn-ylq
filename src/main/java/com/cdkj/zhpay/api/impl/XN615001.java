@@ -1,50 +1,42 @@
 /**
- * @Title XN808353.java 
+ * @Title XN808351.java 
  * @Package com.xnjr.mall.api.impl 
  * @Description 
  * @author leo(haiqing)  
- * @date 2017年2月20日 下午1:59:12 
+ * @date 2017年2月20日 下午1:41:59 
  * @version V1.0   
  */
 package com.cdkj.zhpay.api.impl;
 
-import com.cdkj.zhpay.ao.IJewelAO;
 import com.cdkj.zhpay.ao.IJewelTemplateAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.dto.req.XN808353Req;
+import com.cdkj.zhpay.dto.req.XNCodeReq;
 import com.cdkj.zhpay.dto.res.BooleanRes;
-import com.cdkj.zhpay.enums.EJewelTemplateStatus;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.http.JsonUtils;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /** 
- * 模板上下架
+ * 删除宝贝模板
  * @author: haiqingzheng 
- * @since: 2017年2月20日 下午1:59:12 
+ * @since: 2017年2月20日 下午1:41:59 
  * @history:
  */
-public class XN808353 extends AProcessor {
+public class XN615001 extends AProcessor {
+
     private IJewelTemplateAO jewelTemplateAO = SpringContextHolder
         .getBean(IJewelTemplateAO.class);
 
-    private IJewelAO jewelAO = SpringContextHolder.getBean(IJewelAO.class);
-
-    private XN808353Req req = null;
+    private XNCodeReq req = null;
 
     /** 
      * @see com.cdkj.zhpay.api.IProcessor#doBusiness()
      */
     @Override
     public Object doBusiness() throws BizException {
-        String status = jewelTemplateAO.putOnOff(req.getCode(),
-            req.getUpdater(), req.getRemark());
-        // 上架即发布宝贝
-        if (EJewelTemplateStatus.PUTON.getCode().equals(status)) {
-            jewelAO.publishNextPeriods(req.getCode());
-        }
+        jewelTemplateAO.dropJewelTemplate(req.getCode());
         return new BooleanRes(true);
     }
 
@@ -53,7 +45,8 @@ public class XN808353 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtils.json2Bean(inputparams, XN808353Req.class);
-        StringValidater.validateBlank(req.getCode(), req.getUpdater());
+        req = JsonUtils.json2Bean(inputparams, XNCodeReq.class);
+        StringValidater.validateBlank(req.getCode());
     }
+
 }

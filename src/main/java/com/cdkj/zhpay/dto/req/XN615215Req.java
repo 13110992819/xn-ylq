@@ -14,7 +14,7 @@ package com.cdkj.zhpay.dto.req;
  * @since: 2016年12月19日 下午7:47:18 
  * @history:
  */
-public class XN808406Req {
+public class XN615215Req {
     // 用户编号
     private String userId;
 
