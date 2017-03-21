@@ -93,11 +93,8 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
     }
 
     @Override
-    public void doSendHzbMgift(String userId, String hzbMgiftCode) {
+    public void doSendHzbMgift(String hzbMgiftCode) {
         HzbMgift hzbMgift = hzbMgiftBO.getHzbMgift(hzbMgiftCode);
-        if (!hzbMgift.getOwner().equals(userId)) {
-            throw new BizException("xn0000", "该红包不属于当前用户");
-        }
         if (!EHzbMgiftStatus.TO_SEND.getCode().equals(hzbMgift.getStatus())
                 && !EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
             throw new BizException("xn0000", "该红包不是待发送或已发送待领取状态，无法发送!");

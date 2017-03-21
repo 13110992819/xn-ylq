@@ -74,6 +74,7 @@ CREATE TABLE `tyqs_hzb_yy` (
 DROP TABLE IF EXISTS `tyqs_hzb_mgift`;
 CREATE TABLE `tyqs_hzb_mgift` (
   `code` varchar(32) NOT NULL COMMENT '红包编号',
+  `slogan` varchar(255) DEFAULT NULL COMMENT '标语',
   `hzb_code` bigint(32) DEFAULT NULL COMMENT '汇赚宝',
   `owner_currency` varchar(4) DEFAULT NULL COMMENT '树主人领取币种',
   `owner_amount` bigint(20) DEFAULT NULL COMMENT '树主人领取金额',

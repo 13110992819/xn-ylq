@@ -5,7 +5,7 @@ import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.domain.HzbMgift;
-import com.cdkj.zhpay.dto.req.XN808476Req;
+import com.cdkj.zhpay.dto.req.XN615137Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
@@ -20,7 +20,7 @@ public class XN615137 extends AProcessor {
     private IHzbMgiftAO hzbMgiftAO = SpringContextHolder
         .getBean(IHzbMgiftAO.class);
 
-    private XN808476Req req = null;
+    private XN615137Req req = null;
 
     /** 
      * @see com.cdkj.zhpay.api.IProcessor#doBusiness()
@@ -28,6 +28,7 @@ public class XN615137 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         HzbMgift condition = new HzbMgift();
+        condition.setHzbCode(req.getHzbCode());
         condition.setOwner(req.getOwner());
         condition.setReceiver(req.getReceiver());
         condition.setStatus(req.getStatus());
@@ -47,6 +48,6 @@ public class XN615137 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808476Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN615137Req.class);
     }
 }

@@ -16,7 +16,7 @@ public interface IHzbMgiftAO {
      */
     public void doDailyHzbMgift();
 
-    public void doSendHzbMgift(String userId, String hzbMgiftCode);
+    public void doSendHzbMgift(String hzbMgiftCode);
 
     public void doReceiveHzbMgift(String userId, String hzbMgiftCode);
 

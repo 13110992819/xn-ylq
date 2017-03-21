@@ -20,6 +20,9 @@ public class HzbMgift extends ABaseDO {
     // 汇赚宝编号
     private String hzbCode;
 
+    // 标语
+    private String slogan;
+
     // 树主人币种
     private String ownerCurrency;
 
@@ -49,8 +52,6 @@ public class HzbMgift extends ABaseDO {
 
     // 备注
     private String remark;
-
-    private String advTitle;
 
     // 系统编号
     private String systemCode;
@@ -133,12 +134,12 @@ public class HzbMgift extends ABaseDO {
         return code;
     }
 
-    public void setAdvTitle(String advTitle) {
-        this.advTitle = advTitle;
+    public String getSlogan() {
+        return slogan;
     }
 
-    public String getAdvTitle() {
-        return advTitle;
+    public void setSlogan(String slogan) {
+        this.slogan = slogan;
     }
 
     public void setOwner(String owner) {

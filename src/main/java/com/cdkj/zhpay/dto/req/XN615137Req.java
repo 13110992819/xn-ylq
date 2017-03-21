@@ -1,6 +1,9 @@
 package com.cdkj.zhpay.dto.req;
 
-public class XN808476Req {
+public class XN615137Req {
+
+    // 汇赚宝编号（选填）
+    private String hzbCode;
 
     // 树主人（选填）
     private String owner;
@@ -22,6 +25,14 @@ public class XN808476Req {
 
     // 接收日期止（选填）
     private String receiveDatetimeEnd;
+
+    public String getHzbCode() {
+        return hzbCode;
+    }
+
+    public void setHzbCode(String hzbCode) {
+        this.hzbCode = hzbCode;
+    }
 
     public String getOwner() {
         return owner;

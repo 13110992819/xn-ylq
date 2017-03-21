@@ -1,11 +1,13 @@
 package com.cdkj.zhpay.dto.req;
 
-
-public class XN808475Req extends APageReq {
+public class XN615135Req extends APageReq {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */
     private static final long serialVersionUID = 1L;
+
+    // 汇赚宝编号（选填）
+    private String hzbCode;
 
     // 树主人（选填）
     private String owner;
@@ -27,6 +29,14 @@ public class XN808475Req extends APageReq {
 
     // 接收日期止（选填）
     private String receiveDatetimeEnd;
+
+    public String getHzbCode() {
+        return hzbCode;
+    }
+
+    public void setHzbCode(String hzbCode) {
+        this.hzbCode = hzbCode;
+    }
 
     public String getCreateDatetimeStart() {
         return createDatetimeStart;

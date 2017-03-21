@@ -1,11 +1,11 @@
 package com.cdkj.zhpay.dto.req;
 
-public class XN808460Req {
-    // 用户编号(必填)
-    private String userId;
-
+public class XN615120Req {
     // 针对汇赚宝的编号(必填)
     private String hzbCode;
+
+    // 用户编号(必填)
+    private String userId;
 
     // 设备编号(必填)
     private String deviceNo;
