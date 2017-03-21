@@ -14,6 +14,7 @@ package com.cdkj.zhpay.dto.req;
  * @history:
  */
 public class XN615916Req {
+    // id （必填）
     private String id;
 
     public String getId() {

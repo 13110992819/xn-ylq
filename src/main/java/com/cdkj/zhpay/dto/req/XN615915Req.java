@@ -7,7 +7,7 @@ public class XN615915Req extends APageReq {
      */
     private static final long serialVersionUID = 7955498610040656532L;
 
-    // 小类(选填)
+    // 类型(选填)
     private String type;
 
     // key值(选填)

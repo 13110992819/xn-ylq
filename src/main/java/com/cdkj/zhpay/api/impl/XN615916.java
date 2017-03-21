@@ -34,7 +34,8 @@ public class XN615916 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return sysConfigAO.getSYSConfig(StringValidater.toLong(req.getId()));
+        Long id = StringValidater.toLong(req.getId());
+        return sysConfigAO.getSYSConfig(id);
     }
 
     /** 

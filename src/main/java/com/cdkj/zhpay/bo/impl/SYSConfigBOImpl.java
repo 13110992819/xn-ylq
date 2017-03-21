@@ -68,10 +68,12 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
             condition.setCkey(key);
             condition.setCompanyCode(companyCode);
             condition.setSystemCode(systemCode);
-            sysConfig = sysConfigDAO.select(condition);
+            List<SYSConfig> sysConfigList = sysConfigDAO.selectList(condition);
+            if (CollectionUtils.isNotEmpty(sysConfigList)) {
+                sysConfig = sysConfigList.get(0);
+            }
         }
         return sysConfig;
-
     }
 
     @Override

@@ -14,7 +14,7 @@ package com.cdkj.zhpay.dto.req;
  * @history:
  */
 public class XN615917Req {
-    // 配置文件名(必填)
+    // key(必填)
     private String key;
 
     // 公司编号(必填)
