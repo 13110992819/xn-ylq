@@ -27,7 +27,10 @@ public class XN615010 extends AProcessor {
     public Object doBusiness() throws BizException {
         Jewel condition = new Jewel();
         condition.setTemplateCode(req.getTemplateCode());
+        condition.setToCurrency(req.getToCurrency());
+        condition.setFromCurrency(req.getFromCurrency());
         condition.setStatus(req.getStatus());
+        condition.setWinUser(req.getWinUser());
         condition.setCompanyCode(req.getCompanyCode());
         condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
@@ -43,9 +46,8 @@ public class XN615010 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN615010Req.class);
-        StringValidater.validateBlank(req.getStart(), req.getLimit(),
-            req.getSystemCode());
-
+        StringValidater.validateNumber(req.getStart(), req.getLimit());
+        StringValidater
+            .validateBlank(req.getCompanyCode(), req.getSystemCode());
     }
-
 }

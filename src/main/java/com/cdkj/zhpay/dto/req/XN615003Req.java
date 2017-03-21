@@ -14,7 +14,7 @@ package com.cdkj.zhpay.dto.req;
  * @history:
  */
 public class XN615003Req {
-    // 主键编号（必填）
+    // 编号（必填）
     private String code;
 
     // 更新人（必填）

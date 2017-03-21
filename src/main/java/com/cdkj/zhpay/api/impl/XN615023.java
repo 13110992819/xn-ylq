@@ -13,7 +13,7 @@ import com.cdkj.zhpay.http.JsonUtils;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
- * 宝贝号码分页查询
+ * 宝贝号码列表查询
  * @author: xieyj 
  * @since: 2017年1月11日 下午5:53:04 
  * @history:
@@ -37,10 +37,7 @@ public class XN615023 extends AProcessor {
             orderColumn = IJewelRecordNumberAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(orderColumn, req.getOrderDir());
-        int start = StringValidater.toInteger(req.getStart());
-        int limit = StringValidater.toInteger(req.getLimit());
-        return jewelRecordNumberAO.queryJewelRecordNumberPage(start, limit,
-            condition);
+        return jewelRecordNumberAO.queryJewelRecordNumberList(condition);
     }
 
     /** 
@@ -50,6 +47,5 @@ public class XN615023 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN615023Req.class);
         StringValidater.validateBlank(req.getJewelCode());
-        StringValidater.validateNumber(req.getStart(), req.getLimit());
     }
 }

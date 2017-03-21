@@ -21,7 +21,7 @@ import com.cdkj.zhpay.http.JsonUtils;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
- * 参与记录分页查询
+ * 夺宝参与记录分页查询
  * @author: xieyj 
  * @since: 2017年1月11日 下午5:53:04 
  * @history:
@@ -39,9 +39,12 @@ public class XN615021 extends AProcessor {
     public Object doBusiness() throws BizException {
         JewelRecord condition = new JewelRecord();
         condition.setUserId(req.getUserId());
-        condition.setSystemCode(req.getSystemCode());
         condition.setJewelCode(req.getJewelCode());
         condition.setStatus(req.getStatus());
+        condition.setPayCode(req.getPayCode());
+        condition.setPayGroup(req.getPayGroup());
+        condition.setCompanyCode(req.getCompanyCode());
+        condition.setSystemCode(req.getSystemCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IJewelRecordAO.DEFAULT_ORDER_COLUMN;
@@ -58,7 +61,8 @@ public class XN615021 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN615021Req.class);
-        StringValidater.validateBlank(req.getSystemCode());
+        StringValidater
+            .validateBlank(req.getCompanyCode(), req.getSystemCode());
         StringValidater.validateNumber(req.getStart(), req.getLimit());
     }
 }

@@ -12,10 +12,10 @@ public class XN615020Req extends APageReq {
      */
     private static final long serialVersionUID = 1L;
 
-    // 用户ID
+    // 用户ID(必填)
     public String userId;
 
-    // 状态
+    // 状态(选填)
     private String jewelStatus;
 
     public String getJewelStatus() {

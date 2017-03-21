@@ -44,10 +44,11 @@ public class XN615000 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN615000Req.class);
-        StringValidater.validateBlank(req.getToAmount(), req.getToCurrency(),
-            req.getTotalNum(), req.getMaxNum(), req.getFromAmount(),
-            req.getFromCurrency(), req.getSlogan(), req.getAdvPic(),
-            req.getUpdater(), req.getCompanyCode(), req.getSystemCode());
+        StringValidater.validateAmount(req.getToAmount(), req.getFromAmount());
+        StringValidater.validateBlank(req.getToCurrency(), req.getTotalNum(),
+            req.getMaxNum(), req.getFromCurrency(), req.getSlogan(),
+            req.getAdvPic(), req.getUpdater(), req.getCompanyCode(),
+            req.getSystemCode());
     }
 
 }

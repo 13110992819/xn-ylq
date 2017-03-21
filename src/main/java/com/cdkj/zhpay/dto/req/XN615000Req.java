@@ -42,7 +42,7 @@ public class XN615000Req {
     // 更新人（必填）
     private String updater;
 
-    // 备注
+    // 备注（选填）
     private String remark;
 
     // 公司编号（必填）

@@ -15,8 +15,17 @@ public class XN615010Req extends APageReq {
     // 模板编号（选填）
     private String templateCode;
 
+    // 中奖币种（选填）
+    private String toCurrency;
+
+    // 单价币种（选填）
+    private String fromCurrency;
+
     // 状态（选填）
     private String status;
+
+    // 中奖人编号（选填）
+    private String winUser;
 
     // 公司编号（必填）
     private String companyCode;
@@ -32,12 +41,36 @@ public class XN615010Req extends APageReq {
         this.templateCode = templateCode;
     }
 
+    public String getToCurrency() {
+        return toCurrency;
+    }
+
+    public void setToCurrency(String toCurrency) {
+        this.toCurrency = toCurrency;
+    }
+
+    public String getFromCurrency() {
+        return fromCurrency;
+    }
+
+    public void setFromCurrency(String fromCurrency) {
+        this.fromCurrency = fromCurrency;
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getWinUser() {
+        return winUser;
+    }
+
+    public void setWinUser(String winUser) {
+        this.winUser = winUser;
     }
 
     public String getCompanyCode() {
@@ -55,5 +88,4 @@ public class XN615010Req extends APageReq {
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
     }
-
 }

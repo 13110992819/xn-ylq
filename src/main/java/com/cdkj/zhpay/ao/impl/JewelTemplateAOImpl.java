@@ -74,7 +74,7 @@ public class JewelTemplateAOImpl implements IJewelTemplateAO {
         JewelTemplate jewelTemplate = jewelTemplateBO.getJewelTemplate(code);
         if (!EJewelTemplateStatus.PUTON.getCode().equals(
             jewelTemplate.getStatus())) {
-            throw new BizException("xn0000", "只有已上架的宝贝模板可以上架");
+            throw new BizException("xn0000", "只有已上架的宝贝模板可以下架");
         }
         return jewelTemplateBO.refreshStatus(code, EJewelTemplateStatus.PUTOFF,
             updater, remark);

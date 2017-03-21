@@ -44,7 +44,7 @@ public class XN615002Req {
     // 更新人（必填）
     private String updater;
 
-    // 备注
+    // 备注（选填）
     private String remark;
 
     public String getCode() {

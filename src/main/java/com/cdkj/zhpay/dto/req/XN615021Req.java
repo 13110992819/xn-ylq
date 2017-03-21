@@ -20,11 +20,33 @@ public class XN615021Req extends APageReq {
     // 状态(0待开奖，1已中奖，2未中奖)(选填)
     private String status;
 
+    // 支付组号(选填)
+    private String payGroup;
+
+    // 支付编号(选填)
+    private String payCode;
+
     // 公司编号（必填）
     private String companyCode;
 
     // 系统编号(必填)
     private String systemCode;
+
+    public String getPayGroup() {
+        return payGroup;
+    }
+
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
+
+    public String getPayCode() {
+        return payCode;
+    }
+
+    public void setPayCode(String payCode) {
+        this.payCode = payCode;
+    }
 
     public String getUserId() {
         return userId;
