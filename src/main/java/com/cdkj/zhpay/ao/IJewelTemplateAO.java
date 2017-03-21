@@ -2,21 +2,25 @@ package com.cdkj.zhpay.ao;
 
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.JewelTemplate;
+import com.cdkj.zhpay.dto.req.XN615000Req;
+import com.cdkj.zhpay.dto.req.XN615002Req;
 
 public interface IJewelTemplateAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addJewelTemplate(JewelTemplate data);
+    public String addJewelTemplate(XN615000Req req);
 
-    public int dropJewelTemplate(String code);
+    public void dropJewelTemplate(String code);
 
-    public int editJewelTemplate(JewelTemplate data);
+    public void editJewelTemplate(XN615002Req req);
+
+    public String putOn(String code, String updater, String remark);
+
+    public String putOff(String code, String updater, String remark);
 
     public Paginable<JewelTemplate> queryJewelTemplatePage(int start,
             int limit, JewelTemplate condition);
 
     public JewelTemplate getJewelTemplate(String code);
-
-    public String putOnOff(String code, String updater, String remark);
 
 }

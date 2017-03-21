@@ -8,31 +8,33 @@
  */
 package com.cdkj.zhpay.dto.req;
 
-import java.util.Date;
-
 /** 
  * @author: haiqingzheng 
  * @since: 2017年2月20日 下午12:45:24 
  * @history:
  */
 public class XN615000Req {
-    // 中奖币种（必填）
-    private String currency;
 
     // 中奖金额（必填）
-    private String amount;
+    private String toAmount;
+
+    // 中奖币种（必填）
+    private String toCurrency;
 
     // 总人次（必填）
     private String totalNum;
 
+    // 单人最大次数（必填）
+    private String maxNum;
+
     // 人次单价（必填）
-    private String price;
+    private String fromAmount;
 
-    // 单人最大投资次数（必填）
-    private String maxInvestNum;
+    // 单价币种（必填）
+    private String fromCurrency;
 
-    // 宣传文字（必填）
-    private String advText;
+    // 宣传标语（必填）
+    private String slogan;
 
     // 宣传图（必填）
     private String advPic;
@@ -40,79 +42,29 @@ public class XN615000Req {
     // 更新人（必填）
     private String updater;
 
-    // 备注（必填）
+    // 备注
     private String remark;
+
+    // 公司编号（必填）
+    private String companyCode;
 
     // 系统编号（必填）
     private String systemCode;
 
-    // 中奖金额
-    private Long toAmount;
-
-    // 中奖币种
-    private String toCurrency;
-
-    // 总人次
-    private Integer totalNum;
-
-    // 单人最大次数
-    private Integer maxNum;
-
-    // 人次单价
-    private Long fromAmount;
-
-    // 单价币种
-    private String fromCurrency;
-
-    // 宣传标语
-    private String slogan;
-
-    // 宣传图
-    private String advPic;
-
-    // 当前期数
-    private Integer currentPeriods;
-
-    // 状态（0 待上架 1 已上架 2 已下架）
-    private String status;
-
-    // 更新人
-    private String updater;
-
-    // 更新时间
-    private Date updateDatetime;
-
-    // 备注
-    private String remark;
-
-    // 公司编号
-    private String companyCode;
-
-    // 系统编号
-    private String systemCode;
-
-    public String getRemark() {
-        return remark;
+    public String getToAmount() {
+        return toAmount;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setToAmount(String toAmount) {
+        this.toAmount = toAmount;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getToCurrency() {
+        return toCurrency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
+    public void setToCurrency(String toCurrency) {
+        this.toCurrency = toCurrency;
     }
 
     public String getTotalNum() {
@@ -123,28 +75,36 @@ public class XN615000Req {
         this.totalNum = totalNum;
     }
 
-    public String getPrice() {
-        return price;
+    public String getMaxNum() {
+        return maxNum;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setMaxNum(String maxNum) {
+        this.maxNum = maxNum;
     }
 
-    public String getMaxInvestNum() {
-        return maxInvestNum;
+    public String getFromAmount() {
+        return fromAmount;
     }
 
-    public void setMaxInvestNum(String maxInvestNum) {
-        this.maxInvestNum = maxInvestNum;
+    public void setFromAmount(String fromAmount) {
+        this.fromAmount = fromAmount;
     }
 
-    public String getAdvText() {
-        return advText;
+    public String getFromCurrency() {
+        return fromCurrency;
     }
 
-    public void setAdvText(String advText) {
-        this.advText = advText;
+    public void setFromCurrency(String fromCurrency) {
+        this.fromCurrency = fromCurrency;
+    }
+
+    public String getSlogan() {
+        return slogan;
+    }
+
+    public void setSlogan(String slogan) {
+        this.slogan = slogan;
     }
 
     public String getAdvPic() {
@@ -161,6 +121,22 @@ public class XN615000Req {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public String getSystemCode() {

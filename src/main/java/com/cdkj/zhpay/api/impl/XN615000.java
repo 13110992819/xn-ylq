@@ -11,7 +11,6 @@ package com.cdkj.zhpay.api.impl;
 import com.cdkj.zhpay.ao.IJewelTemplateAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.domain.JewelTemplate;
 import com.cdkj.zhpay.dto.req.XN615000Req;
 import com.cdkj.zhpay.dto.res.PKCodeRes;
 import com.cdkj.zhpay.exception.BizException;
@@ -36,18 +35,7 @@ public class XN615000 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        JewelTemplate data = new JewelTemplate();
-        data.setCurrency(req.getCurrency());
-        data.setAmount(StringValidater.toLong(req.getAmount()));
-        data.setTotalNum(StringValidater.toInteger(req.getTotalNum()));
-        data.setPrice(StringValidater.toLong(req.getPrice()));
-        data.setMaxInvestNum(StringValidater.toInteger(req.getMaxInvestNum()));
-        data.setAdvText(req.getAdvText());
-        data.setAdvPic(req.getAdvPic());
-        data.setUpdater(req.getUpdater());
-        data.setRemark(req.getRemark());
-        data.setSystemCode(req.getSystemCode());
-        return new PKCodeRes(jewelTemplateAO.addJewelTemplate(data));
+        return new PKCodeRes(jewelTemplateAO.addJewelTemplate(req));
     }
 
     /** 
@@ -56,10 +44,10 @@ public class XN615000 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtils.json2Bean(inputparams, XN615000Req.class);
-        StringValidater.validateBlank(req.getCurrency(), req.getAmount(),
-            req.getTotalNum(), req.getPrice(), req.getMaxInvestNum(),
-            req.getAdvText(), req.getAdvPic(), req.getUpdater(),
-            req.getSystemCode());
+        StringValidater.validateBlank(req.getToAmount(), req.getToCurrency(),
+            req.getTotalNum(), req.getMaxNum(), req.getFromAmount(),
+            req.getFromCurrency(), req.getSlogan(), req.getAdvPic(),
+            req.getUpdater(), req.getCompanyCode(), req.getSystemCode());
     }
 
 }

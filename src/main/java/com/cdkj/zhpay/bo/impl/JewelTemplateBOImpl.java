@@ -87,7 +87,7 @@ public class JewelTemplateBOImpl extends PaginableBOImpl<JewelTemplate>
             condition.setCode(code);
             data = JewelTemplateDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "记录不存在");
+                throw new BizException("xn0000", "宝贝模板不存在");
             }
         }
         return data;

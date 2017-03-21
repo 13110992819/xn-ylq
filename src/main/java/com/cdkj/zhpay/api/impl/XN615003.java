@@ -21,7 +21,7 @@ import com.cdkj.zhpay.http.JsonUtils;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /** 
- * 模板上下架
+ * 模板上架
  * @author: haiqingzheng 
  * @since: 2017年2月20日 下午1:59:12 
  * @history:
@@ -39,8 +39,8 @@ public class XN615003 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        String status = jewelTemplateAO.putOnOff(req.getCode(),
-            req.getUpdater(), req.getRemark());
+        String status = jewelTemplateAO.putOn(req.getCode(), req.getUpdater(),
+            req.getRemark());
         // 上架即发布宝贝
         if (EJewelTemplateStatus.PUTON.getCode().equals(status)) {
             jewelAO.publishNextPeriods(req.getCode());
