@@ -103,18 +103,18 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
     public void checkKeys(String parentKey, String key) {
         // 查看父节点是否存在
         SYSDict fDict = new SYSDict();
-        fDict.setDkey(parentKey);
+        fDict.setParentKey(parentKey);
         fDict.setType(EDictType.FIRST.getCode());
         if (getTotalCount(fDict) <= 0) {
             throw new BizException("xn000000", "parentKey不存在");
         }
         // 第二层数据字典 在当前父节点下key不能重复
         SYSDict condition = new SYSDict();
-        condition.setDkey(key);
         condition.setParentKey(parentKey);
+        condition.setDkey(key);
         condition.setType(EDictType.SECOND.getCode());
         if (getTotalCount(condition) > 0) {
-            throw new BizException("xn000000", "当前节点下，key不能为重复");
+            throw new BizException("xn000000", "当前节点下，key重复");
         }
     }
 

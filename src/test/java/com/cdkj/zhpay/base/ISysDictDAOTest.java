@@ -37,4 +37,13 @@ public class ISysDictDAOTest extends ADAOTest {
         logger.info("select : {}", data.getId());
     }
 
+    @Test
+    public void selectList() {
+        SYSDict condition = new SYSDict();
+        condition.setType("0");
+        condition.setParentKey("A");
+        Long count = sysDictDAO.selectTotalCount(condition);
+        logger.info("selectList : {}", count);
+    }
+
 }
