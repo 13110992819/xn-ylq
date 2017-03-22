@@ -43,22 +43,25 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
 
     @Override
     public String saveJewelRecord(String userId, String jewelCode,
-            Integer times, Long amount, String ip, String systemCode) {
+            Integer times, Long amount, String ip, String companyCode,
+            String systemCode) {
         String code = null;
         if (StringUtils.isNotBlank(userId)) {
             JewelRecord data = new JewelRecord();
+            Date now = new Date();
             code = OrderNoGenerater.generateM(EGeneratePrefix.JEWEL_RECORD
                 .getCode());
             data.setCode(code);
             data.setUserId(userId);
             data.setJewelCode(jewelCode);
+            data.setInvestDatetime(now);
             data.setTimes(times);
-            data.setPayAmount(amount);
+
             data.setIp(ip);
             data.setStatus(EJewelRecordStatus.LOTTERY.getCode());
-            Date payDatetime = new Date();
-            data.setInvestDatetime(payDatetime);
+            data.setPayAmount(amount);
             data.setPayDatetime(DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7));
+            data.setCompanyCode(companyCode);
             data.setSystemCode(systemCode);
             jewelRecordDAO.insert(data);
         }

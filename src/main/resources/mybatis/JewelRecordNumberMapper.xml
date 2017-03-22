@@ -7,6 +7,8 @@
 		<result column="jewel_code" property="jewelCode" />
 		<result column="record_code" property="recordCode" />
 		<result column="number" property="number" />
+		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -25,6 +27,12 @@
 			<if test="userId != null and userId != '' ">
 				AND tjr.user_id = #{userId}
 			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_jewelRecordNumber" parameterType="jewelRecordNumber" resultMap="jewelRecordNumber_DB_Result">
@@ -33,8 +41,10 @@
 		,t.jewel_code
 		,t.record_code
 		,t.number 
+		,t.company_code
+		,t.system_code
 		FROM
-		tact_jewel_record_number t inner join tact_jewel_record tjr on t.record_code = tjr.code
+		tyydb_jewel_record_number t inner join tyydb_jewel_record tjr on t.record_code = tjr.code
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -45,34 +55,38 @@
 
 	<select id="select_jewelRecordNumber_count" parameterType="jewelRecordNumber"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tact_jewel_record_number t inner join tact_jewel_record tjr on t.record_code = tjr.code
+		SELECT count(1) FROM tyydb_jewel_record_number t inner join tyydb_jewel_record tjr on t.record_code = tjr.code
 		<include refid="where_condition" />
 	</select>
  
 	<select id="select_existNumbers" parameterType="String"
 		resultType="java.lang.String">
-		SELECT t.number FROM tact_jewel_record_number t
+		SELECT t.number FROM tyydb_jewel_record_number t
 		where t.jewel_code = #{jewelCode}
 	</select>
 
 	<insert id="insert_jewelRecordNumber" parameterType="jewelRecordNumber">
 		INSERT INTO
-		tact_jewel_record_number(
+		tyydb_jewel_record_number(
 		id
 		,jewel_code
 		,record_code
 		,number 
+		,company_code
+		,system_code
 		)
 		VALUES(
 		#{id}
 		,#{jewelCode}
 		,#{recordCode}
 		,#{number}
+		,#{companyCode}
+		,#{systemCode}
 		)
 	</insert>
 	
 	<update id="update_jewelRecordNumber" parameterType="jewelRecordNumber">
-		UPDATE tact_jewel_record_number
+		UPDATE tyydb_jewel_record_number
 		SET
 		quantity = #{quantity}
 		WHERE id = #{id}
@@ -80,7 +94,7 @@
 	
 	<delete id="delete_jewelRecordNumber" parameterType="jewelRecordNumber">
 		DELETE FROM
-		tact_jewel_record_number
+		tyydb_jewel_record_number
 		WHERE
 		id = #{id}
 	</delete>
