@@ -10,7 +10,7 @@
 	    
 	    <typeAlias alias="jewelRecordNumber" type="com.cdkj.zhpay.domain.JewelRecordNumber" />
 	    <typeAlias alias="hzbTemplate" type="com.cdkj.zhpay.domain.HzbTemplate" />
-	    <typeAlias alias="hzbHold" type="com.cdkj.zhpay.domain.HzbHold" />
+	    <typeAlias alias="hzb" type="com.cdkj.zhpay.domain.Hzb" />
 	    <typeAlias alias="hzbYy" type="com.cdkj.zhpay.domain.HzbYy" />
 	    
 	    <typeAlias alias="hzbMgift" type="com.cdkj.zhpay.domain.HzbMgift" />

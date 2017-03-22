@@ -9,7 +9,7 @@ import com.cdkj.zhpay.dao.IHzbDAO;
 import com.cdkj.zhpay.dao.base.support.AMybatisTemplate;
 import com.cdkj.zhpay.domain.Hzb;
 
-@Repository("hzbHoldDAOImpl")
+@Repository("hzbDAOImpl")
 public class HzbDAOImpl extends AMybatisTemplate implements IHzbDAO {
 
     @Override
@@ -84,8 +84,7 @@ public class HzbDAOImpl extends AMybatisTemplate implements IHzbDAO {
      * @see com.cdkj.zhpay.dao.IHzbDAO#selectDistanceList(com.cdkj.zhpay.domain.Hzb, int, int)
      */
     @Override
-    public List<Hzb> selectDistanceList(Hzb condition, int start,
-            int count) {
+    public List<Hzb> selectDistanceList(Hzb condition, int start, int count) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_hzbHold_distance"),
             start, count, condition, Hzb.class);

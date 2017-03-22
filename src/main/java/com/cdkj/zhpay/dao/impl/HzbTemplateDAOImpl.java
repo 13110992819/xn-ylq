@@ -8,8 +8,9 @@ import com.cdkj.zhpay.dao.IHzbTemplateDAO;
 import com.cdkj.zhpay.dao.base.support.AMybatisTemplate;
 import com.cdkj.zhpay.domain.HzbTemplate;
 
-@Repository("hzbDAOImpl")
-public class HzbTemplateDAOImpl extends AMybatisTemplate implements IHzbTemplateDAO {
+@Repository("hzbTemplateDAOImpl")
+public class HzbTemplateDAOImpl extends AMybatisTemplate implements
+        IHzbTemplateDAO {
 
     @Override
     public int insert(HzbTemplate data) {
@@ -40,7 +41,8 @@ public class HzbTemplateDAOImpl extends AMybatisTemplate implements IHzbTemplate
     }
 
     @Override
-    public List<HzbTemplate> selectList(HzbTemplate condition, int start, int count) {
+    public List<HzbTemplate> selectList(HzbTemplate condition, int start,
+            int count) {
         return super.selectList(NAMESPACE.concat("select_hzb"), start, count,
             condition, HzbTemplate.class);
     }

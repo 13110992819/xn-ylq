@@ -36,12 +36,12 @@
 		<property name="paginableDAO" ref="jewelRecordNumberDAOImpl"/>
 	</bean>	
 
-	<bean id="hzbBO" class="com.cdkj.zhpay.bo.impl.HzbBOImpl">
-		<property name="paginableDAO" ref="hzbDAOImpl"/>
+	<bean id="hzbTemplateBO" class="com.cdkj.zhpay.bo.impl.HzbTemplateBOImpl">
+		<property name="paginableDAO" ref="hzbTemplateDAOImpl"/>
 	</bean>
 	
-	<bean id="hzbHoldBO" class="com.cdkj.zhpay.bo.impl.HzbHoldBOImpl">
-		<property name="paginableDAO" ref="hzbHoldDAOImpl"/>
+	<bean id="hzbBO" class="com.cdkj.zhpay.bo.impl.HzbBOImpl">
+		<property name="paginableDAO" ref="hzbDAOImpl"/>
 	</bean>
 	
 	<bean id="hzbYyBO" class="com.cdkj.zhpay.bo.impl.HzbYyBOImpl">
