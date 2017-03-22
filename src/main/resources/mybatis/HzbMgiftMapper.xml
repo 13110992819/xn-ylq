@@ -154,10 +154,12 @@
 	</update>
 	
 	<update id="update_doInvalidHzbMgift" parameterType="hzbMgift">
+	  <![CDATA[  
 		UPDATE tyqs_hzb_mgift
 		SET
 		status = '0'
 		,remark = '过期失效'
 		WHERE status = #{status} AND create_datetime <= #{createDatetimeEnd}
+		 ]]>  
 	</update>
 </mapper>

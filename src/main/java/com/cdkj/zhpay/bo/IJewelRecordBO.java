@@ -26,7 +26,8 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
             Integer maxInvestTimes, Integer times);
 
     public String saveJewelRecord(String userId, String jewelCode,
-            Integer times, Long amount, String ip, String systemCode);
+            Integer times, Long amount, String ip, String companyCode,
+            String systemCode);
 
     /**
      * 更新状态

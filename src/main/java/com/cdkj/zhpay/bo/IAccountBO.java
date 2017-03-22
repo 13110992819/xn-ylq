@@ -169,4 +169,5 @@ public interface IAccountBO {
      */
     public XN802527Res doGetBizTotalAmount(String systemCode, String userId,
             String currency, String bizType);
+
 }
