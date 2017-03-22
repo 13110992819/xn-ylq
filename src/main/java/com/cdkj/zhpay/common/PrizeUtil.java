@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cdkj.zhpay.domain.Prize;
-import com.cdkj.zhpay.enums.EPrizeType;
+import com.cdkj.zhpay.enums.EPrizeCurrency;
 
 /** 
  * @author: xieyj 
@@ -61,8 +61,8 @@ public class PrizeUtil {
     public static void main(String[] args) {
         List<Prize> list = new ArrayList<Prize>();
         // Prize hbb = new Prize(EPrizeType.HBB.getCode(), (1 / 3D));
-        Prize qbb = new Prize(EPrizeType.QBB.getCode(), 0.556);
-        Prize gwb = new Prize(EPrizeType.GWB.getCode(), 0.555);
+        Prize qbb = new Prize(EPrizeCurrency.ZH_QBB.getCode(), 0.556);
+        Prize gwb = new Prize(EPrizeCurrency.ZH_GWB.getCode(), 0.555);
         // list.add(hbb);
         list.add(qbb);
         list.add(gwb);

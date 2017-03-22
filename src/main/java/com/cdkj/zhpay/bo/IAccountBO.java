@@ -1,7 +1,5 @@
 package com.cdkj.zhpay.bo;
 
-import java.util.Map;
-
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
 import com.cdkj.zhpay.dto.res.XN802503Res;
@@ -27,17 +25,6 @@ public interface IAccountBO {
      */
     public XN802503Res getAccountByUserId(String systemCode, String userId,
             String currency);
-
-    /**
-     * 获取用户所有的账户
-     * @param systemCode
-     * @param userId
-     * @return 
-     * @create: 2017年1月10日 下午8:32:36 xieyj
-     * @history:
-     */
-    public Map<String, XN802503Res> getAccountsByUser(String systemCode,
-            String userId);
 
     /**
      * 账户划转资金

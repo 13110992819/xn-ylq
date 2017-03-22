@@ -44,8 +44,7 @@ public class AccountBOImpl implements IAccountBO {
     @Override
     public XN802503Res getAccountByUserId(String systemCode, String userId,
             String currency) {
-        Map<String, XN802503Res> map = this.getAccountsByUser(systemCode,
-            userId);
+        Map<String, XN802503Res> map = getAccountsByUser(systemCode, userId);
         XN802503Res result = map.get(currency);
         if (null == result) {
             throw new BizException("xn000000", "用户[" + userId + "]账户不存在");
@@ -53,8 +52,7 @@ public class AccountBOImpl implements IAccountBO {
         return result;
     }
 
-    @Override
-    public Map<String, XN802503Res> getAccountsByUser(String systemCode,
+    private Map<String, XN802503Res> getAccountsByUser(String systemCode,
             String userId) {
         Map<String, XN802503Res> resultMap = new HashMap<String, XN802503Res>();
         XN802503Req req = new XN802503Req();
