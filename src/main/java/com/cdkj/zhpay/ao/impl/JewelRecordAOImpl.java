@@ -26,15 +26,16 @@ import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelRecord;
 import com.cdkj.zhpay.domain.JewelRecordNumber;
+import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.BooleanRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
-import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.enums.EBizType;
+import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EJewelRecordStatus;
 import com.cdkj.zhpay.enums.EJewelStatus;
 import com.cdkj.zhpay.enums.EPayType;
-import com.cdkj.zhpay.enums.ESysUser;
+import com.cdkj.zhpay.enums.ESysAccount;
 import com.cdkj.zhpay.exception.BizException;
 
 /**
@@ -75,7 +76,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     public Object buyJewel(String userId, String jewelCode, Integer times,
             String payType, String ip) {
         Object result = null;
-        XN805901Res userRes = userBO.getRemoteUser(userId, userId);
+        User user = userBO.getRemoteUser(userId);
         Jewel jewel = jewelBO.getJewel(jewelCode);
         if (!EJewelStatus.RUNNING.getCode().equals(jewel.getStatus())) {
             throw new BizException("xn0000", "夺宝标的不处于募集中状态，不能进行购买操作");
@@ -88,7 +89,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         userBO.doCheckUser(userId);
         // 余额支付(余额支付)
         if (EPayType.YEFR.getCode().equals(payType)) {
-            boolean resultByBalance = doBalancePay(userRes, times, jewel, ip);
+            boolean resultByBalance = doBalancePay(user, times, jewel, ip);
             // 是否可以开奖，开奖自动开始下一期
             if (resultByBalance) {
                 lotteryJewel(jewel);
@@ -96,11 +97,42 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             }
             result = new BooleanRes(true);
         } else if (EPayType.WEIXIN.getCode().equals(payType)) {
+            if (!ECurrency.CNY.getCode().equals(jewel.getFromCurrency())) {
+                throw new BizException("xn0000", "购买币种不是人民币，不能使用微信支付");
+            }
             result = doWeixinPay(userId, times, jewel, ip);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
         }
         return result;
     }
+
+    // /**
+    // * 余额支付
+    // * @param userId
+    // * @param times
+    // * @param jewel
+    // * @param ip
+    // * @return
+    // * @create: 2017年2月22日 下午3:21:45 xieyj
+    // * @history:
+    // */
+    // @Transactional
+    // private boolean doBalancePay(User user, Integer times,
+    // Jewel jewel, String ip) {
+    // String userId = user.getUserId();
+    // Long amount = jewel.getFromAmount() * times;
+    // // 检验分润和贡献值是否充足
+    // accountBO.checkBalanceAmount(jewel.getSystemCode(), userId, amount);
+    // String jewelRecordCode = jewelRecordBO.saveJewelRecord(
+    // user.getUserId(), jewel.getCode(), times, amount, ip,
+    // jewel.getSystemCode());
+    // // 分配号码
+    // boolean result = distributeNumber(userId, jewel, times, jewelRecordCode);
+    // // 扣除余额
+    // accountBO.doBalancePay(jewel.getSystemCode(), user,
+    // ESysUser.SYS_USER.getCode(), amount, EBizType.AJ_DUOBAO);
+    // return result;
+    // }
 
     /**
      * 余额支付
@@ -113,20 +145,21 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
      * @history:
      */
     @Transactional
-    private boolean doBalancePay(XN805901Res userRes, Integer times,
-            Jewel jewel, String ip) {
-        String userId = userRes.getUserId();
-        Long amount = jewel.getPrice() * times;
-        // 检验分润和贡献值是否充足
-        accountBO.checkBalanceAmount(jewel.getSystemCode(), userId, amount);
+    private boolean doBalancePay(User user, Integer times, Jewel jewel,
+            String ip) {
+        String userId = user.getUserId();
+        Long amount = jewel.getFromAmount() * times;
+        // 购买记录落地
         String jewelRecordCode = jewelRecordBO.saveJewelRecord(
-            userRes.getUserId(), jewel.getCode(), times, amount, ip,
-            jewel.getSystemCode());
+            user.getUserId(), jewel.getCode(), times, amount, ip,
+            jewel.getCompanyCode(), jewel.getSystemCode());
         // 分配号码
         boolean result = distributeNumber(userId, jewel, times, jewelRecordCode);
         // 扣除余额
-        accountBO.doBalancePay(jewel.getSystemCode(), userRes,
-            ESysUser.SYS_USER.getCode(), amount, EBizType.AJ_DUOBAO);
+        accountBO.doTransferAmountByUser(jewel.getSystemCode(),
+            user.getUserId(), ESysAccount.SYS_ACCOUNT.getCode(),
+            jewel.getFromCurrency(), amount, EBizType.AJ_DUOBAO.getCode(),
+            EBizType.AJ_DUOBAO.getValue(), EBizType.AJ_DUOBAO.getValue());
         return result;
     }
 
@@ -149,9 +182,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             .getCode());
         // 落地小目标购买记录
         jewelRecordBO.saveJewelRecord(userId, jewel.getCode(), times,
-            jewel.getPrice() * times, ip, payGroup, jewel.getSystemCode());
+            jewel.getFromAmount() * times, ip, payGroup, jewel.getSystemCode());
         XN802180Res res = accountBO.doWeiXinPay(jewel.getSystemCode(), userId,
-            payGroup, EBizType.AJ_DUOBAO, jewel.getPrice() * times, ip);
+            payGroup, EBizType.AJ_DUOBAO, jewel.getFromAmount() * times);
         return res;
     }
 
@@ -182,6 +215,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             jewelRecordNumber.setJewelCode(jewelCode);
             jewelRecordNumber.setRecordCode(jewelRecordCode);
             jewelRecordNumber.setNumber(numbers.get(i));
+            jewelRecordNumber.setCompanyCode(jewel.getCompanyCode());
+            jewelRecordNumber.setSystemCode(jewel.getSystemCode());
             jewelRecordNumberBO.saveJewelRecordNumber(jewelRecordNumber);
         }
         Integer investNum = jewel.getInvestNum() + times;
@@ -215,13 +250,13 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             EJewelRecordStatus.LOST.getCode(), "很遗憾，本次未中奖");
         // 更新宝贝中奖号码
         jewelBO.refreshWinInfo(jewelCode, luckyNumber, userId);
-        XN805901Res userRes = userBO.getRemoteUser(userId, userId);
+        User user = userBO.getRemoteUser(userId);
         // 中奖者加上奖金
         String toBizNote = EBizType.AJ_DUOBAO_PRIZE.getValue();
-        String fromBizNote = UserUtil.getUserMobile(userRes.getMobile())
+        String fromBizNote = UserUtil.getUserMobile(user.getMobile())
                 + toBizNote;
         accountBO.doTransferFcBySystem(jewel.getSystemCode(), userId,
-            jewel.getCurrency(), jewel.getAmount(),
+            jewel.getToCurrency(), jewel.getToAmount(),
             EBizType.AJ_DUOBAO_PRIZE.getCode(), fromBizNote, toBizNote);
     }
 

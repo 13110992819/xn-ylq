@@ -54,7 +54,7 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
 
     // 处理思路：
     // 1、将今天之前的红包状态置换为失效
-    // 2、获取已经购买汇赚宝的记录，产生n个红包
+    // 2、根据有效摇钱树，生成当天红包
     @Override
     @Transactional
     public void doDailyHzbMgift() {
@@ -63,22 +63,16 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         logger.info("**** 定时红包扫描开始 " + todayStart + " ****");
         // 将今天之前的红包状态置换为失效
         Date yesterdayEnd = DateUtil.getRelativeDateOfDays(todayEnd, -1);
-        hzbMgiftBO.doDailyInvalid(yesterdayEnd);
-
-        // 定时器一天跑一次:避免重复生成红包
-        HzbMgift hmCondition = new HzbMgift();
-        hmCondition.setCreateDatetime(todayStart);
-        List<HzbMgift> todayList = hzbMgiftBO.queryHzbMgiftList(hmCondition);
-        if (CollectionUtils.isNotEmpty(todayList)) {
-            throw new BizException("xn0000", "今天已经发放红包，无法继续发放!");
-        }
-
-        // 查询已购买汇赚宝记录，发放红包
+        hzbMgiftBO.doInvalidHzbMgift(yesterdayEnd);
+        // 根据有效摇钱树，生成当天红包
         Hzb hhCondition = new Hzb();
         hhCondition.setStatus(EDiviFlag.EFFECT.getCode());
-        List<Hzb> hzblist = hzbBO.queryDistanceHzbList(hhCondition);
-        for (Hzb hzb : hzblist) {
-            hzbMgiftBO.generateHzbMgift(hzb);
+
+        List<Hzb> hzblist = hzbBO.queryHzbList(hhCondition);
+        if (CollectionUtils.isNotEmpty(hzblist)) {
+            for (Hzb hzb : hzblist) {
+                hzbMgiftBO.generateHzbMgift(hzb, todayStart);
+            }
         }
         logger.info("**** 定时红包扫描结束 " + todayStart + " ****");
     }

@@ -5,22 +5,17 @@
 	<resultMap id="jewelRecord_DB_Result" type="jewelRecord">
 		<result column="code" property="code" />
 		<result column="user_id" property="userId" />
-		<result column="mobile" property="mobile" />
-		<result column="nickname" property="nickname" />
-		<result column="photo" property="photo" />
 		<result column="jewel_code" property="jewelCode" />
-		
 		<result column="invest_datetime" property="investDatetime" />
-		<result column="my_invest_times" property="myInvestTimes" />
 		<result column="times" property="times" />
-		<result column="pay_amount" property="payAmount" />
-		<result column="pay_datetime" property="payDatetime" />
 		
-		<result column="status" property="status" />
-		<result column="remark" property="remark" />
 		<result column="ip" property="ip" />
+		<result column="status" property="status" />
 		<result column="pay_group" property="payGroup" />
 		<result column="pay_code" property="payCode" />
+		<result column="pay_amount" property="payAmount" />
+		
+		<result column="pay_datetime" property="payDatetime" />
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
@@ -29,21 +24,24 @@
 		<result column="code" property="code" />
 		<result column="template_code" property="templateCode" />
 		<result column="periods" property="periods" />
-		<result column="currency" property="currency" />
-		<result column="amount" property="amount" />
+		<result column="to_amount" property="toAmount" />
+		<result column="to_currency" property="toCurrency" />
 		
 		<result column="total_num" property="totalNum" />
-		<result column="price" property="price" />
-		<result column="max_invest_num" property="maxInvestNum" />
-		<result column="adv_text" property="advText" />
-		<result column="adv_pic" property="advPic" />
-		
+		<result column="max_num" property="maxNum" />
 		<result column="invest_num" property="investNum" />
-		<result column="create_datetime" property="createDatetime" />
+		<result column="from_amount" property="fromAmount" />
+		<result column="from_currency" property="fromCurrency" />
+		
+		<result column="slogan" property="slogan" />
+		<result column="adv_pic" property="advPic" />
+		<result column="start_datetime" property="startDatetime" />
+		<result column="status" property="status" />
 		<result column="win_number" property="winNumber" />
+		
 		<result column="win_user" property="winUser" />
 		<result column="win_datetime" property="winDatetime" />
-		<result column="status" property="status" />
+		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	
@@ -68,6 +66,9 @@
 			<if test="payCode != null and payCode != '' ">
 				AND t.pay_code = #{payCode}
 			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
@@ -77,23 +78,21 @@
 		SELECT
 		t.code
 		,t.user_id
-		,tu.mobile
-		,tu.nickname
-		,tue.photo
 		,t.jewel_code
 		,t.invest_datetime
 		,t.times
-		,t.pay_amount
-		,t.pay_datetime
-		,t.status
-		,t.remark
+		
 		,t.ip
+		,t.status
 		,t.pay_group
 		,t.pay_code 
+		,t.pay_amount
+		
+		,t.pay_datetime
+		,t.company_code
 		,t.system_code
 		FROM
-		tact_jewel_record t LEFT JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id  
-		                    LEFT JOIN ${userDB}.tstd_user_ext tue ON tu.user_id = tue.user_id
+		tyydb_jewel_record t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -104,63 +103,67 @@
 	
 	<select id="select_jewelRecord_count" parameterType="jewelRecord"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tact_jewel_record t 
+		SELECT count(1) FROM tyydb_jewel_record t 
 		<include refid="where_condition" />
 	</select>
 	
-	<select id="select_myjewel" parameterType="jewelRecord" resultMap="jewelRecord_DB_Result">
+	<select id="select_myjewel" parameterType="jewelRecord" resultMap="jewel_DB_Result">
 		SELECT
 		t.code
 		,t.template_code
 		,t.periods
-		,t.currency
-		,t.amount
+		,t.to_amount
+		,t.to_currency
 		
 		,t.total_num
-		,t.price
-		,t.max_invest_num
-		,t.adv_text
-		,t.adv_pic
-		
+		,t.max_num
 		,t.invest_num
-		,t.create_datetime
-		,t.win_number
-		,t.win_datetime
+		,t.from_amount
+		,t.from_currency
 		
+		,t.slogan
+		,t.adv_pic
+		,t.start_datetime
 		,t.status
+		,t.win_number
+		
+		,t.win_user
+		,t.win_datetime
+		,t.company_code
 		,t.system_code
 		FROM
-		tact_jewel t
-		LEFT JOIN tact_jewel_record tjr ON  t.code = tjr.jewel_code 
+		tyydb_jewel t
+		LEFT JOIN tyydb_jewel_record tjr ON  t.code = tjr.jewel_code 
 		WHERE tjr.status not in(0) 
-		GROUP BY t.jewel_code 
+		GROUP BY t.code 
 	</select>
 	
 	<select id="select_myjewel_count" parameterType="jewelRecord"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM
-		tact_jewel t
-		LEFT JOIN tact_jewel_record tjr ON  t.code = tjr.jewel_code 
+		tyydb_jewel t
+		LEFT JOIN tyydb_jewel_record tjr ON  t.code = tjr.jewel_code 
 		WHERE tjr.status not in(0) 
-		GROUP BY t.jewel_code 
+		GROUP BY t.code 
 	</select>
 	
 	<insert id="insert_jewelRecord" parameterType="jewelRecord">
 		INSERT INTO
-		tact_jewel_record(
+		tyydb_jewel_record(
 		code
 		,user_id
 		,jewel_code
 		,invest_datetime
 		,times
 		
-		,pay_amount
-		,pay_datetime
-		,status
-		,remark
 		,ip
-		
+		,status
 		,pay_group
+		,pay_code 
+		,pay_amount
+		
+		,pay_datetime
+		,company_code
 		,system_code
 		)
 		VALUES(
@@ -170,46 +173,44 @@
 		,#{investDatetime}
 		,#{times}
 		
-		,#{payAmount}
-		,#{payDatetime}
-		,#{status}
-		,#{remark}
 		,#{ip}
-		
+		,#{status}
 		,#{payGroup}
+		,#{payCode}
+		,#{payAmount}
+		
+		,#{payDatetime}
+		,#{companyCode}
 		,#{systemCode}
 		)
 	</insert>
 	
 	<update id="update_status" parameterType="jewelRecord">
-		UPDATE tact_jewel_record
+		UPDATE tyydb_jewel_record
 		SET
 		status=#{status}
-		,remark=#{remark}
 		WHERE code = #{code}
 	</update>
 	
 	<update id="update_pay_status" parameterType="jewelRecord">
-		UPDATE tact_jewel_record
+		UPDATE tyydb_jewel_record
 		SET
 		status = #{status}
 		,pay_code = #{payCode}
 		,pay_datetime = #{payDatetime}
-		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	
 	<update id="update_lostInfo" parameterType="jewelRecord">
-		UPDATE tact_jewel_record
+		UPDATE tyydb_jewel_record
 		SET
 		status=#{status}
-		,remark=#{remark}
 		WHERE jewel_code = #{jewelCode} and code != #{code} and status != 0
 	</update>
 	
 	<select id="select_totalAmount" parameterType="jewelRecord"
 		resultType="java.lang.Long">
-		SELECT sum(pay_amount) FROM tact_jewel_record t
+		SELECT sum(pay_amount) FROM tyydb_jewel_record t
 		<include refid="where_condition" />
 	</select>
 </mapper>

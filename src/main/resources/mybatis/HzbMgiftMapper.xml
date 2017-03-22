@@ -4,43 +4,42 @@
 <mapper namespace="com.cdkj.zhpay.dao.IHzbMgiftDAO">
 	<resultMap id="hzbMgift_DB_Result" type="hzbMgift">
 		<result column="code" property="code" />
-		<result column="adv_title" property="advTitle" />
+		<result column="hzb_code" property="hzbCode" />
+		<result column="slogan" property="slogan" />
 		<result column="owner" property="owner" />
-		<result column="owner_mobile" property="ownerMobile" />
+		
 		<result column="owner_currency" property="ownerCurrency" />
 		<result column="owner_amount" property="ownerAmount" />
 		<result column="receive_currency" property="receiveCurrency" />
 		<result column="receive_amount" property="receiveAmount" />
-		<result column="receiver" property="receiver" />
-		<result column="receiver_mobile" property="receiverMobile" />
-		<result column="receive_datetime" property="receiveDatetime" />
-		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="remark" property="remark" />
+		<result column="status" property="status" />
+		
+		<result column="receiver" property="receiver" />
+		<result column="receive_datetime" property="receiveDatetime" />
+		<result column="system_code" property="systemCode" />
+		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="hzbCode != null and hzbCode != '' ">
+				AND t.hzb_code = #{hzbCode}
+			</if>
 			<if test="owner != null and owner != '' ">
 				AND t.owner = #{owner}
 			</if>
-			<if test="receiver != null and receiver != '' ">
-				AND t.receiver = #{receiver}
-			</if>
-			<if test="status != null and status != '' ">
-				<choose>
-				     <when test='status == "01"'>
-					 	AND t.status in ('0','1')
-					 </when>
-					 <otherwise>
-						AND t.status = #{status}
-					 </otherwise>
-				</choose>
-			</if>
 			<if test="createDatetime != null and createDatetime != '' ">
 				AND t.create_datetime = #{createDatetime}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="receiver != null and receiver != '' ">
+				AND t.receiver = #{receiver}
 			</if>
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
 				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
@@ -60,21 +59,24 @@
 	<select id="select_hzbMgift" parameterType="hzbMgift" resultMap="hzbMgift_DB_Result">
 		SELECT
 		t.code
-		,t.adv_title
+		,t.hzb_code
+		,t.slogan
 		,t.owner
-		,(select mobile from ${userDB}.tstd_user tu where tu.user_id=t.owner) as owner_mobile
+		
 		,t.owner_currency
 		,t.owner_amount
 		,t.receive_currency
 		,t.receive_amount
-		,t.receiver
-		,(select mobile from ${userDB}.tstd_user tu where tu.user_id=t.receiver) as receiver_mobile
-		,t.receive_datetime
-		,t.status
+		
 		,t.create_datetime
 		,t.remark
+		,t.status
+		,t.receiver
+		,t.receive_datetime
+		,t.system_code
+		,t.company_code
 		FROM
-		tact_hzb_mgift t
+		tyqs_hzb_mgift t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -85,67 +87,79 @@
 
 	<select id="select_hzbMgift_count" parameterType="hzbMgift"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tact_hzb_mgift t
+		SELECT count(1) FROM tyqs_hzb_mgift t
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_hzbMgift" parameterType="hzbMgift">
 		INSERT INTO
-		tact_hzb_mgift(
+		tyqs_hzb_mgift(
 		code
-		,adv_title
+		,hzb_code
+		,slogan
 		,owner
+		
 		,owner_currency
 		,owner_amount
 		,receive_currency
 		,receive_amount
-		,receiver
-		,receive_datetime
+		
+		
 		,status
 		,create_datetime
 		,remark
+		,system_code
+		,company_code
 		)
 		VALUES(
 		#{code}
-		,#{advTitle}
+		,#{hzbCode}
+		,#{slogan}
 		,#{owner}
+		
 		,#{ownerCurrency}
 		,#{ownerAmount}
 		,#{receiveCurrency}
 		,#{receiveAmount}
-		,#{receiver}
-		,#{receiveDatetime}
+		
+	
 		,#{status}
 		,#{createDatetime}
 		,#{remark}
+		,#{systemCode}
+		,#{companyCode}
 		)
 	</insert>
 
-	<update id="update_hzbMgift_status" parameterType="hzbMgift">
-		UPDATE tact_hzb_mgift
-		SET
-		status = #{status}
-		,remark = #{remark}
-		WHERE code = #{code}
-	</update>
+	
 	
 	
 	
 	
 	<update id="update_doSendHzbMgift" parameterType="hzbMgift">
-		UPDATE tact_hzb_mgift
+		UPDATE tyqs_hzb_mgift
 		SET
 		status = #{status}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
 	<update id="update_doReceiveHzbMgift" parameterType="hzbMgift">
-		UPDATE tact_hzb_mgift
+		UPDATE tyqs_hzb_mgift
 		SET
 		status = #{status}
 		,receiver = #{receiver}
 		,receive_datetime = #{receiveDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}
+	</update>
+	
+	<update id="update_doInvalidHzbMgift" parameterType="hzbMgift">
+	  <![CDATA[  
+		UPDATE tyqs_hzb_mgift
+		SET
+		status = '0'
+		,remark = '过期失效'
+		WHERE status = #{status} AND create_datetime <= #{createDatetimeEnd}
+		 ]]>  
 	</update>
 </mapper>
