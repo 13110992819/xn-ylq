@@ -156,10 +156,11 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         // 分配号码
         boolean result = distributeNumber(userId, jewel, times, jewelRecordCode);
         // 扣除余额
-        accountBO.doTransferAmountByUser(jewel.getSystemCode(),
-            user.getUserId(), ESysAccount.SYS_ACCOUNT.getCode(),
-            jewel.getFromCurrency(), amount, EBizType.AJ_DUOBAO.getCode(),
-            EBizType.AJ_DUOBAO.getValue(), EBizType.AJ_DUOBAO.getValue());
+        ECurrency currency = ECurrency.getECurrency(jewel.getFromCurrency());
+        accountBO.doTransferAmount(user.getUserId(),
+            ESysAccount.SYS_ACCOUNT.getCode(), currency, amount,
+            EBizType.AJ_DUOBAO, EBizType.AJ_DUOBAO.getValue(),
+            EBizType.AJ_DUOBAO.getValue());
         return result;
     }
 
@@ -255,7 +256,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         String toBizNote = EBizType.AJ_DUOBAO_PRIZE.getValue();
         String fromBizNote = UserUtil.getUserMobile(user.getMobile())
                 + toBizNote;
-        accountBO.doTransferFcBySystem(jewel.getSystemCode(), userId,
+        accountBO.doTransferAmount(jewel.getSystemCode(), userId,
             jewel.getToCurrency(), jewel.getToAmount(),
             EBizType.AJ_DUOBAO_PRIZE.getCode(), fromBizNote, toBizNote);
     }

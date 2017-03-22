@@ -14,7 +14,8 @@ package com.cdkj.zhpay.enums;
  * @history:
  */
 public enum EHzbStatus {
-    TO_PAY("0", "待支付"), ACTIVATED("1", "激活"), OFFLINE("2", "已冻结");
+    TO_PAY("0", "待支付"), ACTIVATED("1", "激活"), OFFLINE("91", "人为下架"), DIED("92",
+            "正常耗尽");
 
     EHzbStatus(String code, String value) {
         this.code = code;

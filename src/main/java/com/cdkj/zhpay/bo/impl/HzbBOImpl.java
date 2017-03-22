@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cdkj.zhpay.bo.IHzbBO;
+import com.cdkj.zhpay.bo.IHzbTemplateBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.common.PropertiesUtil;
@@ -22,6 +23,8 @@ import com.cdkj.zhpay.dto.res.XN808460Res;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EHzbStatus;
+import com.cdkj.zhpay.enums.EPrizeCurrency;
+import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
 @Component
@@ -32,6 +35,9 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private IHzbTemplateBO hzbTemplateBO;
 
     @Override
     public boolean isHzbExistByUser(String userId) {
@@ -258,6 +264,52 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
 
     @Override
     public void refreshYy(Hzb hzb, XN808460Res prize) {
+
+        hzb.setPeriodRockNum(hzb.getPeriodRockNum() + 1);
+        hzb.setTotalRockNum(hzb.getTotalRockNum() + 1);
+        if (ESystemCode.Caigo.getCode().equals(hzb.getSystemCode())) {
+            if (EPrizeCurrency.CG_RMB.getCode().equals(prize.getYyCurrency())) {
+                hzb.setBackAmount1(hzb.getBackAmount1() + prize.getYyAmount());
+            }
+            if (EPrizeCurrency.CG_CGB.getCode().equals(prize.getYyCurrency())) {
+                hzb.setBackAmount2(hzb.getBackAmount2() + prize.getYyAmount());
+            }
+            if (EPrizeCurrency.CG_JF.getCode().equals(prize.getYyCurrency())) {
+                hzb.setBackAmount3(hzb.getBackAmount3() + prize.getYyAmount());
+            }
+        }
+        if (ESystemCode.ZHPAY.getCode().equals(hzb.getSystemCode())) {
+            if (EPrizeCurrency.ZH_HBB.getCode().equals(prize.getYyCurrency())) {
+                hzb.setBackAmount1(hzb.getBackAmount1() + prize.getYyAmount());
+            }
+            if (EPrizeCurrency.ZH_QBB.getCode().equals(prize.getYyCurrency())) {
+                hzb.setBackAmount2(hzb.getBackAmount2() + prize.getYyAmount());
+            }
+            if (EPrizeCurrency.ZH_GWB.getCode().equals(prize.getYyCurrency())) {
+                hzb.setBackAmount3(hzb.getBackAmount3() + prize.getYyAmount());
+            }
+        }
+        // 判断树是否“耗尽”
+        HzbTemplate template = hzbTemplateBO.getHzbTemplate(hzb
+            .getTemplateCode());
+        if (hzb.getTotalRockNum() >= template.getTotalRockNum()) {
+            hzb.setStatus(EHzbStatus.DIED.getCode());
+        }
+        if (hzb.getBackAmount1() >= template.getBackAmount1()
+                && hzb.getBackAmount2() >= template.getBackAmount2()
+                && hzb.getBackAmount3() >= template.getBackAmount3()) {
+            hzb.setStatus(EHzbStatus.DIED.getCode());
+        }
+        hzbDAO.refreshYy(hzb);
+
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IHzbBO#hasActivatedHzb(java.lang.String)
+     */
+    @Override
+    public boolean hasActivatedHzb(String userId) {
         // TODO Auto-generated method stub
+        return false;
     }
 }

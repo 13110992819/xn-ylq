@@ -56,4 +56,13 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
      * @history:
      */
     public void refreshYy(Hzb hzb, XN808460Res prize);
+
+    /**
+     * 此人是否拥有存活的汇赚宝
+     * @param userId
+     * @return 
+     * @create: 2017年3月22日 下午10:47:48 myb858
+     * @history:
+     */
+    public boolean hasActivatedHzb(String userId);
 }

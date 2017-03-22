@@ -148,10 +148,11 @@ public class HzbAOImpl implements IHzbAO {
     @Transactional
     private Object doCGOneCurrencyPay(User user, HzbTemplate hzbTemplate) {
         // 单个币种资金划转
-        accountBO.doTransferAmountByUser(hzbTemplate.getSystemCode(),
-            user.getUserId(), ESysUser.SYS_USER_CAIGO.getCode(),
-            hzbTemplate.getCurrency(), hzbTemplate.getPrice(),
-            EBizType.AJ_GMHZB.getCode(), "购买摇钱树", user.getMobile() + "购买摇钱树");
+        ECurrency currency = ECurrency.getECurrency(hzbTemplate.getCurrency());
+        accountBO.doTransferAmount(user.getUserId(),
+            ESysUser.SYS_USER_CAIGO.getCode(), currency,
+            hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买摇钱树",
+            user.getMobile() + "购买摇钱树");
         hzbBO.saveHzb(user.getUserId(), hzbTemplate, hzbTemplate.getPrice());
         return new BooleanRes(true);
     }
@@ -285,10 +286,9 @@ public class HzbAOImpl implements IHzbAO {
                     + UserUtil.getUserMobile(fcUser.getMobile()) + "分成";
             String toBizNote = UserUtil.getUserMobile(ownerUser.getMobile())
                     + EBizType.AJ_GMHZBFC.getValue();
-            accountBO.doTransferAmountByUser(systemCode, fcUser.getUserId(),
-                ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB.getCode(),
-                transAmount, EBizType.AJ_GMHZBFC.getCode(), fromBizNote,
-                toBizNote);
+            accountBO.doTransferAmount(fcUser.getUserId(),
+                ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB, transAmount,
+                EBizType.AJ_GMHZBFC, fromBizNote, toBizNote);
         }
     }
 
@@ -303,10 +303,9 @@ public class HzbAOImpl implements IHzbAO {
                     + UserUtil.getUserMobile(areaUser.getMobile()) + "分成";
             String toBizNote = UserUtil.getUserMobile(ownerUser.getMobile())
                     + EBizType.AJ_GMHZBFC.getValue() + "," + remark + "合伙人分成";
-            accountBO.doTransferAmountByUser(systemCode, areaUser.getUserId(),
-                ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB.getCode(),
-                transAmount, EBizType.AJ_GMHZBFC.getCode(), fromBizNote,
-                toBizNote);
+            accountBO.doTransferAmount(areaUser.getUserId(),
+                ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB, transAmount,
+                EBizType.AJ_GMHZBFC, fromBizNote, toBizNote);
         }
     }
 
