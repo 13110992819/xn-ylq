@@ -19,11 +19,6 @@ import com.cdkj.zhpay.domain.SYSDict;
  * @history:
  */
 public interface ISYSDictBO extends IPaginableBO<SYSDict> {
-
-    public SYSDict getSYSDict(Long id);
-
-    public List<SYSDict> querySYSDictList(SYSDict condition);
-
     public Long saveSecondDict(String parentKey, String key, String value,
             String updater, String remark);
 
@@ -33,4 +28,9 @@ public interface ISYSDictBO extends IPaginableBO<SYSDict> {
 
     public int refreshSYSDict(Long id, String value, String updater,
             String remark);
+
+    public List<SYSDict> querySYSDictList(SYSDict condition);
+
+    public SYSDict getSYSDict(Long id);
+
 }

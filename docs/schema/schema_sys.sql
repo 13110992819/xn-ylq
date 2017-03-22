@@ -1,8 +1,4 @@
 
-
--- ----------------------------
---  Table structure for `tsys_config`
--- ----------------------------
 DROP TABLE IF EXISTS `tsys_config`;
 CREATE TABLE `tsys_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
@@ -18,9 +14,7 @@ CREATE TABLE `tsys_config` (
   PRIMARY KEY (`id`) COMMENT '系统参数'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
---  Table structure for `tsys_dict`
--- ----------------------------
+
 DROP TABLE IF EXISTS `tsys_dict`;
 CREATE TABLE `tsys_dict` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
