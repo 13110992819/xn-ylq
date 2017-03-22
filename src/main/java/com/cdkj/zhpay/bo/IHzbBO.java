@@ -12,7 +12,7 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
 
     public void checkBuy(String userId);
 
-    public int saveHzb(String userId, HzbTemplate hzbTemplate, Long frPayAmount);
+    public Hzb saveHzb(String userId, HzbTemplate hzbTemplate, Long frPayAmount);
 
     public int buyHzb(String userId, HzbTemplate hzbTemplate, String payGroup);
 

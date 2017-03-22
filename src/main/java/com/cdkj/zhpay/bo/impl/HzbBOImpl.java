@@ -66,10 +66,10 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     }
 
     @Override
-    public int saveHzb(String userId, HzbTemplate hzbTemplate, Long frPayAmount) {
-        int count = 0;
+    public Hzb saveHzb(String userId, HzbTemplate hzbTemplate, Long frPayAmount) {
+        Hzb data = null;
         if (StringUtils.isNotBlank(userId)) {
-            Hzb data = new Hzb();
+            data = new Hzb();
             String code = OrderNoGenerater.generateM(EGeneratePrefix.HZB
                 .getCode());
             data.setCode(code);
@@ -93,10 +93,9 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
             data.setPayAmount3(0L);
             data.setCompanyCode(hzbTemplate.getCompanyCode());
             data.setSystemCode(hzbTemplate.getSystemCode());
-            count = hzbDAO.insert(data);
+            hzbDAO.insert(data);
         }
-        return count;
-
+        return data;
     }
 
     @Override

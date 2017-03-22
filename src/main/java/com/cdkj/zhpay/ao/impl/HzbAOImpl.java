@@ -18,6 +18,7 @@ import com.cdkj.zhpay.bo.IHzbYyBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
+import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
@@ -136,12 +137,12 @@ public class HzbAOImpl implements IHzbAO {
             ESysUser.SYS_USER.getCode(), hzbTemplate.getPrice(),
             EBizType.AJ_GMHZB);
         // 汇赚宝购买成功
-        hzbBO.saveHzb(user.getUserId(), hzbTemplate, frPayAmount);
+        Hzb hzb = hzbBO.saveHzb(user.getUserId(), hzbTemplate, frPayAmount);
         // 分销规则
         distributeAmount(hzbTemplate.getSystemCode(), user.getUserId(),
             hzbTemplate.getPrice());
         // 产生红包
-        // hzbMgiftBO.sendHzbMgift(user.getUserId());
+        hzbMgiftBO.generateHzbMgift(hzb, DateUtil.getTodayStart());
         return new BooleanRes(true);
     }
 
@@ -302,9 +303,10 @@ public class HzbAOImpl implements IHzbAO {
                     + UserUtil.getUserMobile(areaUser.getMobile()) + "分成";
             String toBizNote = UserUtil.getUserMobile(ownerUser.getMobile())
                     + EBizType.AJ_GMHZBFC.getValue() + "," + remark + "合伙人分成";
-            accountBO.doTransferFcBySystem(systemCode, areaUser.getUserId(),
-                ECurrency.FRB.getCode(), transAmount,
-                EBizType.AJ_GMHZBFC.getCode(), fromBizNote, toBizNote);
+            accountBO.doTransferAmountByUser(systemCode, areaUser.getUserId(),
+                ESysUser.SYS_USER.getCode(), ECurrency.FRB.getCode(),
+                transAmount, EBizType.AJ_GMHZBFC.getCode(), fromBizNote,
+                toBizNote);
         }
     }
 
