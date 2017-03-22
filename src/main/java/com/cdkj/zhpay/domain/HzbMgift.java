@@ -23,35 +23,35 @@ public class HzbMgift extends ABaseDO {
     // 标语
     private String slogan;
 
-    // 树主人币种
-    private String ownerCurrency;
-
-    // 树主人金额
-    private Long ownerAmount;
-
     // 树主人
     private String owner;
 
-    // 状态
-    private String status;
+    // 树主人币种(红包形成时就确定)
+    private String ownerCurrency;
+
+    // 树主人金额(红包形成时就确定)
+    private Long ownerAmount;
+
+    // 接收人币种(红包形成时就确定)
+    private String receiveCurrency;
+
+    // 接收人金额(红包形成时就确定)
+    private Long receiveAmount;
 
     // 创建时间
     private Date createDatetime;
 
-    // 接收人币种
-    private String receiveCurrency;
+    // 备注
+    private String remark;
 
-    // 接收人金额
-    private Long receiveAmount;
+    // 状态
+    private String status;
 
     // 接收人
     private String receiver;
 
     // 接收时间
     private Date receiveDatetime;
-
-    // 备注
-    private String remark;
 
     // 系统编号
     private String systemCode;
@@ -60,11 +60,6 @@ public class HzbMgift extends ABaseDO {
     private String companyCode;
 
     // *************db properties ****************
-    // 树主人手机号
-    private String ownerMobile;
-
-    // 接收人手机号
-    private String receiverMobile;
 
     // 创建日期起
     private Date createDatetimeStart;
@@ -108,22 +103,6 @@ public class HzbMgift extends ABaseDO {
 
     public void setReceiveDatetimeEnd(Date receiveDatetimeEnd) {
         this.receiveDatetimeEnd = receiveDatetimeEnd;
-    }
-
-    public String getOwnerMobile() {
-        return ownerMobile;
-    }
-
-    public void setOwnerMobile(String ownerMobile) {
-        this.ownerMobile = ownerMobile;
-    }
-
-    public String getReceiverMobile() {
-        return receiverMobile;
-    }
-
-    public void setReceiverMobile(String receiverMobile) {
-        this.receiverMobile = receiverMobile;
     }
 
     public void setCode(String code) {

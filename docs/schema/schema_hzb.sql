@@ -79,21 +79,21 @@ CREATE TABLE `tyqs_hzb_yy` (
 DROP TABLE IF EXISTS `tyqs_hzb_mgift`;
 CREATE TABLE `tyqs_hzb_mgift` (
   `code` varchar(32) NOT NULL COMMENT '红包编号',
+   `hzb_code` bigint(32) DEFAULT NULL COMMENT '汇赚宝',
   `slogan` varchar(255) DEFAULT NULL COMMENT '标语',
-  `hzb_code` bigint(32) DEFAULT NULL COMMENT '汇赚宝',
+ `owner` varchar(32) DEFAULT NULL COMMENT '树主人编号',
+ 
   `owner_currency` varchar(4) DEFAULT NULL COMMENT '树主人领取币种',
   `owner_amount` bigint(20) DEFAULT NULL COMMENT '树主人领取金额',
-  `owner` varchar(32) DEFAULT NULL COMMENT '树主人编号',
+   `receive_currency` varchar(4) DEFAULT NULL COMMENT '领取人币种',
+  `receive_amount` bigint(20) DEFAULT NULL COMMENT '红包领取金额',
   
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
+  `remark` varchar(255) DEFAULT NULL,
   `status` varchar(4) DEFAULT NULL COMMENT '状态',
   
-  `receive_currency` varchar(4) DEFAULT NULL COMMENT '领取人币种',
-  `receive_amount` bigint(20) DEFAULT NULL COMMENT '红包领取金额',
   `receiver` varchar(32) DEFAULT NULL COMMENT '红包领取人编号',
   `receive_datetime` datetime DEFAULT NULL COMMENT '被领取时间',
-  
-  `remark` varchar(255) DEFAULT NULL,
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`) COMMENT '定向红包'

@@ -3,6 +3,7 @@ package com.cdkj.zhpay.ao.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,12 +63,17 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         logger.info("**** 定时红包扫描开始 " + todayStart + " ****");
         // 将今天之前的红包状态置换为失效
         Date yesterdayEnd = DateUtil.getRelativeDateOfDays(todayEnd, -1);
-        hzbMgiftBO.doDailyInvalid(yesterdayEnd);
+        hzbMgiftBO.doInvalidHzbMgift(yesterdayEnd);
         // 根据有效摇钱树，生成当天红包
         Hzb hhCondition = new Hzb();
         hhCondition.setStatus(EDiviFlag.EFFECT.getCode());
         List<Hzb> hzblist = hzbBO.queryHzbList(hhCondition);
-        hzbMgiftBO.generateHzbMgift(hzblist, todayStart);
+        if (CollectionUtils.isNotEmpty(hzblist)) {
+            for (Hzb hzb : hzblist) {
+                hzbMgiftBO.generateHzbMgift(hzb, todayStart);
+            }
+        }
+
         logger.info("**** 定时红包扫描结束 " + todayStart + " ****");
     }
 

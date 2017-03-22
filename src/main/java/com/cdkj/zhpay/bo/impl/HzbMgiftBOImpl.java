@@ -1,11 +1,9 @@
 package com.cdkj.zhpay.bo.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,55 +33,51 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
     private IHzbMgiftDAO hzbMgiftDAO;
 
     @Override
-    public void doDailyInvalid(Date createDatetimeEnd) {
+    public void doInvalidHzbMgift(Date createDatetimeEnd) {
         HzbMgift condition = new HzbMgift();
         condition.setStatus(EHzbMgiftStatus.TO_INVALID.getCode());
         condition.setCreateDatetimeEnd(createDatetimeEnd);
-        List<HzbMgift> list = queryHzbMgiftList(condition);
-        List<String> codeList = new ArrayList<String>();
-        for (HzbMgift ele : list) {
-            codeList.add(ele.getCode());
-        }
-        if (CollectionUtils.isNotEmpty(codeList)) {
-            hzbMgiftDAO.doDailyInvalid(codeList);
-        }
-
+        hzbMgiftDAO.doInvalidHzbMgift(condition);
     }
 
     @Override
-    public void generateHzbMgift(List<Hzb> hzblist, Date createDatetime) {
-        if (CollectionUtils.isNotEmpty(hzblist)) {
-            for (Hzb hzb : hzblist) {
-                // 发放红包
-                Map<String, String> rateMap = sysConfigBO.getConfigsMap(
-                    ESystemCode.ZHPAY.getCode(), null);
-                Long dayNumbers = Long.valueOf(rateMap
-                    .get(SysConstants.DAY_NUMBER));
-                String advTitle = rateMap.get(SysConstants.ADV_TITLE);
-                String hzbOwnerCurrency = rateMap
-                    .get(SysConstants.HZB_OWNER_CURRENCY);
-                Long hzbOwnerAmount = Long.valueOf(rateMap
-                    .get(SysConstants.HZB_OWNER_AMOUNT))
-                        * SysConstants.AMOUNT_RADIX;
-                String hzbReceiveCurrency = rateMap
-                    .get(SysConstants.HZB_RECEIVE_CURRENCY);
-                Long hzbReceiveAmount = Long.valueOf(rateMap
-                    .get(SysConstants.HZB_RECEIVE_AMOUNT))
-                        * SysConstants.AMOUNT_RADIX;
-                Date today = DateUtil.getTodayStart();
-                for (int i = 0; i < dayNumbers; i++) {
-                    HzbMgift data = new HzbMgift();
-                    data.setCode(OrderNoGenerater.generateME("HM"));
-                    data.setAdvTitle(advTitle);
-                    data.setOwner(userId);
-                    data.setOwnerCurrency(hzbOwnerCurrency);
-                    data.setOwnerAmount(hzbOwnerAmount);
-                    data.setReceiveAmount(hzbReceiveAmount);
-                    data.setReceiveCurrency(hzbReceiveCurrency);
-                    data.setStatus(EHzbMgiftStatus.TO_SEND.getCode());
-                    data.setCreateDatetime(today);
-                    hzbMgiftDAO.insert(data);
-                }
+    public void generateHzbMgift(Hzb hzb, Date createDatetime) {
+        if (hzb != null && hzb.getUserId() != null) {
+            String userId = hzb.getUserId();
+            // 发放红包
+            Map<String, String> rateMap = sysConfigBO
+                .getConfigsMap(ESystemCode.ZHPAY.getCode());
+            Long dayNumbers = Long
+                .valueOf(rateMap.get(SysConstants.DAY_NUMBER));
+            String advTitle = rateMap.get(SysConstants.ADV_TITLE);
+            String hzbOwnerCurrency = rateMap
+                .get(SysConstants.HZB_OWNER_CURRENCY);
+            Long hzbOwnerAmount = Long.valueOf(rateMap
+                .get(SysConstants.HZB_OWNER_AMOUNT))
+                    * SysConstants.AMOUNT_RADIX;
+            String hzbReceiveCurrency = rateMap
+                .get(SysConstants.HZB_RECEIVE_CURRENCY);
+            Long hzbReceiveAmount = Long.valueOf(rateMap
+                .get(SysConstants.HZB_RECEIVE_AMOUNT))
+                    * SysConstants.AMOUNT_RADIX;
+            for (int i = 0; i < dayNumbers; i++) {
+                HzbMgift data = new HzbMgift();
+                data.setCode(OrderNoGenerater.generateME("HM"));
+                data.setHzbCode(hzb.getCode());
+                data.setSlogan(advTitle);
+                data.setOwner(userId);
+
+                data.setOwnerCurrency(hzbOwnerCurrency);
+                data.setOwnerAmount(hzbOwnerAmount);
+                data.setReceiveAmount(hzbReceiveAmount);
+                data.setReceiveCurrency(hzbReceiveCurrency);
+
+                data.setCreateDatetime(createDatetime);
+                data.setStatus(EHzbMgiftStatus.TO_SEND.getCode());
+                data.setRemark("程序每日自动生成的定向红包");
+                data.setCompanyCode(ESystemCode.ZHPAY.getCode());
+                data.setSystemCode(ESystemCode.ZHPAY.getCode());
+                hzbMgiftDAO.insert(data);
             }
         }
     }
@@ -92,21 +86,22 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
     public void doSendHzbMgift(HzbMgift hzbMgift) {
         if (hzbMgift != null && StringUtils.isNotBlank(hzbMgift.getCode())) {
             hzbMgift.setStatus(EHzbMgiftStatus.SENT.getCode());
+            hzbMgift.setRemark("该红包已经被发送");
             hzbMgiftDAO.doSendHzbMgift(hzbMgift);
         }
 
     }
 
     @Override
-    public int doReceiveHzbMgift(HzbMgift hzbMgift, User user) {
-        int count = 0;
+    public void doReceiveHzbMgift(HzbMgift hzbMgift, User user) {
         if (hzbMgift != null && StringUtils.isNotBlank(hzbMgift.getCode())) {
             hzbMgift.setReceiver(user.getUserId());
             hzbMgift.setReceiveDatetime(new Date());
             hzbMgift.setStatus(EHzbMgiftStatus.RECEIVE.getCode());
-            count = hzbMgiftDAO.doReceiveHzbMgift(hzbMgift);
+            hzbMgift.setRemark("该红包已经被领取");
+            hzbMgiftDAO.doReceiveHzbMgift(hzbMgift);
         }
-        return count;
+
     }
 
     @Override
