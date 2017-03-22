@@ -2,7 +2,6 @@ package com.cdkj.zhpay.ao.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
@@ -18,11 +17,10 @@ import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.common.DateUtil;
-import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbMgift;
-import com.cdkj.zhpay.dto.res.XN805901Res;
+import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EHzbMgiftStatus;
@@ -55,7 +53,7 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
     private ISYSConfigBO sysConfigBO;
 
     // 处理思路：
-    // 1、查询昨天即将失效的红包，将状态置换为失效
+    // 1、将今天之前的红包状态置换为失效
     // 2、获取已经购买汇赚宝的记录，产生n个红包
     @Override
     @Transactional
@@ -63,18 +61,11 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         Date todayStart = DateUtil.getTodayStart();
         Date todayEnd = DateUtil.getTodayEnd();
         logger.info("**** 定时红包扫描开始 " + todayStart + " ****");
-        // 将未领取的红包状态更改为已失效
+        // 将今天之前的红包状态置换为失效
         Date yesterdayEnd = DateUtil.getRelativeDateOfDays(todayEnd, -1);
-        HzbMgift condition = new HzbMgift();
-        condition.setStatus(EHzbMgiftStatus.TO_INVALID.getCode());
-        condition.setCreateDatetimeEnd(yesterdayEnd);
-        List<HzbMgift> list = hzbMgiftBO.queryHzbMgiftList(condition);
-        for (HzbMgift hzbMgift : list) {
-            hzbMgiftBO.refreshHzbMgiftStatus(hzbMgift.getCode(),
-                EHzbMgiftStatus.INVALID);
-        }
+        hzbMgiftBO.doDailyInvalid(yesterdayEnd);
 
-        // 定时器一天跑一次
+        // 定时器一天跑一次:避免重复生成红包
         HzbMgift hmCondition = new HzbMgift();
         hmCondition.setCreateDatetime(todayStart);
         List<HzbMgift> todayList = hzbMgiftBO.queryHzbMgiftList(hmCondition);
@@ -85,9 +76,9 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         // 查询已购买汇赚宝记录，发放红包
         Hzb hhCondition = new Hzb();
         hhCondition.setStatus(EDiviFlag.EFFECT.getCode());
-        List<Hzb> hzbHoldlist = hzbBO.queryHzbHoldList(hhCondition);
-        for (Hzb hzb : hzbHoldlist) {
-            hzbMgiftBO.sendHzbMgift(hzb.getUserId());
+        List<Hzb> hzblist = hzbBO.queryHzbList(hhCondition);
+        for (Hzb hzb : hzblist) {
+            hzbMgiftBO.generateHzbMgift(hzb);
         }
         logger.info("**** 定时红包扫描结束 " + todayStart + " ****");
     }
@@ -95,42 +86,41 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
     @Override
     public void doSendHzbMgift(String hzbMgiftCode) {
         HzbMgift hzbMgift = hzbMgiftBO.getHzbMgift(hzbMgiftCode);
-        if (!EHzbMgiftStatus.TO_SEND.getCode().equals(hzbMgift.getStatus())
-                && !EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
+        if (EHzbMgiftStatus.TO_SEND.getCode().equals(hzbMgift.getStatus())
+                || EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
+            hzbMgiftBO.doSendHzbMgift(hzbMgift);
+        } else {
             throw new BizException("xn0000", "该红包不是待发送或已发送待领取状态，无法发送!");
         }
-        hzbMgiftBO.refreshHzbMgiftStatus(hzbMgiftCode, EHzbMgiftStatus.SENT);
+
     }
 
     @Override
     @Transactional
     public void doReceiveHzbMgift(String userId, String hzbMgiftCode) {
-        XN805901Res userRes = userBO.getRemoteUser(userId, userId);
+        User user = userBO.getRemoteUser(userId);
         HzbMgift hzbMgift = hzbMgiftBO.getHzbMgift(hzbMgiftCode);
-        if (!EHzbMgiftStatus.TO_SEND.getCode().equals(hzbMgift.getStatus())
-                && !EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
-            throw new BizException("xn0000", "该红包已领取或已失效，无法操作!");
-        }
         if (hzbMgift.getOwner().equals(userId)) {
             throw new BizException("xn0000", "自己发出的红包无法自己领取!");
         }
-        // 判断当前人员每天领取次数是否超限
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(
-            ESystemCode.ZHPAY.getCode(), null);
-        Long dayRecevieNumber = Long.valueOf(rateMap
-            .get(SysConstants.DAY_RECEVIE_NUMBER));
-        HzbMgift hmCondition = new HzbMgift();
-        hmCondition.setReceiver(userId);
-        hmCondition.setReceiveDatetimeStart(DateUtil.getTodayStart());
-        hmCondition.setReceiveDatetimeEnd(DateUtil.getTodayEnd());
-        long totalCount = hzbMgiftBO.getTotalCount(hmCondition);
-        if ((totalCount + 1) > dayRecevieNumber) {
-            throw new BizException("xn0000", "已超过每天最大领取次数，无法领取!");
+        if (EHzbMgiftStatus.TO_SEND.getCode().equals(hzbMgift.getStatus())
+                || EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
+            // 判断当前人员每天领取次数是否超限
+            hzbMgiftBO.checkMaxReceive(userId);
+            hzbMgiftBO.doReceiveHzbMgift(hzbMgift, user);
+            // 领取红包后的分销规则
+            doTransferAmountForReceiveHzbMgift(hzbMgift, user);
+        } else {
+            throw new BizException("xn0000", "定向红包不处于可领取状态，无法领取!");
         }
-        hzbMgiftBO.refreshHzbMgiftReciever(hzbMgiftCode, userId);
+
+    }
+
+    // 领取红包后的分销规则
+    private void doTransferAmountForReceiveHzbMgift(HzbMgift hzbMgift, User user) {
         // 汇赚宝主人
         String ownerToBizNote = EBizType.AJ_FSDHB.getValue();
-        String ownerFromBizNote = UserUtil.getUserMobile(userRes.getMobile())
+        String ownerFromBizNote = UserUtil.getUserMobile(user.getMobile())
                 + ownerToBizNote;
         accountBO.doTransferAmountByUser(ESystemCode.ZHPAY.getCode(),
             ESysUser.SYS_USER.getCode(), hzbMgift.getOwner(),
@@ -138,12 +128,13 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
             EBizType.AJ_FSDHB.getCode(), ownerFromBizNote, ownerToBizNote);
         // 领取用户
         String reToBizNote = EBizType.AJ_LQHB.getValue();
-        String reFromBizNote = UserUtil.getUserMobile(userRes.getMobile())
+        String reFromBizNote = UserUtil.getUserMobile(user.getMobile())
                 + reToBizNote;
         accountBO.doTransferAmountByUser(ESystemCode.ZHPAY.getCode(),
-            ESysUser.SYS_USER.getCode(), userId, hzbMgift.getReceiveCurrency(),
-            hzbMgift.getReceiveAmount(), EBizType.AJ_LQHB.getCode(),
-            reFromBizNote, reToBizNote);
+            ESysUser.SYS_USER.getCode(), user.getUserId(),
+            hzbMgift.getReceiveCurrency(), hzbMgift.getReceiveAmount(),
+            EBizType.AJ_LQHB.getCode(), reFromBizNote, reToBizNote);
+
     }
 
     @Override

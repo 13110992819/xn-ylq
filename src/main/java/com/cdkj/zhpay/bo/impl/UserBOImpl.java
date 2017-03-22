@@ -44,20 +44,23 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         }
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.IUserBO#getRemoteUser(java.lang.String)
-     */
     @Override
-    public XN805901Res getRemoteUser(String tokenId, String userId) {
+    public User getRemoteUser(String userId) {
         XN805901Req req = new XN805901Req();
-        req.setTokenId(tokenId);
+        req.setTokenId(userId);
         req.setUserId(userId);
         XN805901Res res = BizConnecter.getBizData("805901",
             JsonUtils.object2Json(req), XN805901Res.class);
         if (res == null) {
             throw new BizException("XN000000", "编号为" + userId + "的用户不存在");
         }
-        return res;
+        User user = new User();
+        user.setUserId(userId);
+        user.setLoginName(res.getLoginName());
+        user.setNickname(null);
+        user.setPhoto(res.getPhoto());
+        user.setMobile(res.getMobile());
+        return user;
     }
 
     /** 

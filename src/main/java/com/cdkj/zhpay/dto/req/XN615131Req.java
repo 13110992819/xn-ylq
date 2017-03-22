@@ -1,10 +1,10 @@
 package com.cdkj.zhpay.dto.req;
 
 public class XN615131Req {
-    // userId（必填）
+    // 领取人（必填）
     private String userId;
 
-    // 红包编号（必填）
+    // 定向红包编号（必填）
     private String code;
 
     public String getCode() {

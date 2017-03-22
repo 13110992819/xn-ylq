@@ -8,12 +8,6 @@ import com.cdkj.zhpay.domain.HzbMgift;
 public interface IHzbMgiftAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    /**
-     * 每日产生和扫描过期定向红包
-     * @return 
-     * @create: 2017年2月20日 下午3:15:34 xieyj
-     * @history:
-     */
     public void doDailyHzbMgift();
 
     public void doSendHzbMgift(String hzbMgiftCode);

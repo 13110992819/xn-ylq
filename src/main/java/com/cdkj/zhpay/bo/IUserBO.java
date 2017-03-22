@@ -2,8 +2,8 @@ package com.cdkj.zhpay.bo;
 
 import java.util.List;
 
+import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.XN805060Res;
-import com.cdkj.zhpay.dto.res.XN805901Res;
 
 /**
  * @author: xieyj 
@@ -22,13 +22,12 @@ public interface IUserBO {
 
     /**
      * 获取远程用户信息
-     * @param tokenId
      * @param userId
      * @return 
-     * @create: 2016年5月30日 下午3:00:44 xieyj
+     * @create: 2017年3月22日 下午3:50:24 myb858
      * @history:
      */
-    public XN805901Res getRemoteUser(String tokenId, String userId);
+    public User getRemoteUser(String userId);
 
     /**
      * 获取辖区合伙人详情

@@ -1,9 +1,11 @@
 package com.cdkj.zhpay.bo.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,7 @@ import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IHzbMgiftDAO;
 import com.cdkj.zhpay.domain.HzbMgift;
+import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.enums.EHzbMgiftStatus;
 import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
@@ -29,16 +32,6 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
 
     @Autowired
     private IHzbMgiftDAO hzbMgiftDAO;
-
-    @Override
-    public boolean isHzbMgiftExist(String code) {
-        HzbMgift condition = new HzbMgift();
-        condition.setCode(code);
-        if (hzbMgiftDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public void sendHzbMgift(String userId) {
@@ -89,15 +82,22 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
     }
 
     @Override
-    public int refreshHzbMgiftReciever(String code, String userId) {
+    public void doSendHzbMgift(HzbMgift hzbMgift) {
+        if (hzbMgift != null && StringUtils.isNotBlank(hzbMgift.getCode())) {
+            hzbMgift.setStatus(EHzbMgiftStatus.SENT.getCode());
+            hzbMgiftDAO.doSendHzbMgift(hzbMgift);
+        }
+
+    }
+
+    @Override
+    public int doReceiveHzbMgift(HzbMgift hzbMgift, User user) {
         int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            HzbMgift data = new HzbMgift();
-            data.setCode(code);
-            data.setReceiver(userId);
-            data.setReceiveDatetime(new Date());
-            data.setStatus(EHzbMgiftStatus.RECEIVE.getCode());
-            count = hzbMgiftDAO.updateReciever(data);
+        if (hzbMgift != null && StringUtils.isNotBlank(hzbMgift.getCode())) {
+            hzbMgift.setReceiver(user.getUserId());
+            hzbMgift.setReceiveDatetime(new Date());
+            hzbMgift.setStatus(EHzbMgiftStatus.RECEIVE.getCode());
+            count = hzbMgiftDAO.doReceiveHzbMgift(hzbMgift);
         }
         return count;
     }
@@ -144,6 +144,38 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
         condition.setOwner(userId);
         condition.setStatus(EHzbMgiftStatus.RECEIVE.getCode());
         return hzbMgiftDAO.selectTotalCount(condition);
+
+    }
+
+    @Override
+    public void checkMaxReceive(String userId) {
+        Map<String, String> rateMap = sysConfigBO
+            .getConfigsMap(ESystemCode.ZHPAY.getCode());
+        Long dayRecevieNumber = Long.valueOf(rateMap
+            .get(SysConstants.DAY_RECEVIE_NUMBER));
+        HzbMgift hmCondition = new HzbMgift();
+        hmCondition.setReceiver(userId);
+        hmCondition.setReceiveDatetimeStart(DateUtil.getTodayStart());
+        hmCondition.setReceiveDatetimeEnd(DateUtil.getTodayEnd());
+        long totalCount = getTotalCount(hmCondition);
+        if ((totalCount + 1) > dayRecevieNumber) {
+            throw new BizException("xn0000", "已超过每天最大领取次数，无法领取!");
+        }
+    }
+
+    @Override
+    public void doDailyInvalid(Date createDatetimeEnd) {
+        HzbMgift condition = new HzbMgift();
+        condition.setStatus(EHzbMgiftStatus.TO_INVALID.getCode());
+        condition.setCreateDatetimeEnd(createDatetimeEnd);
+        List<HzbMgift> list = queryHzbMgiftList(condition);
+        List<String> codeList = new ArrayList<String>();
+        for (HzbMgift ele : list) {
+            codeList.add(ele.getCode());
+        }
+        if (CollectionUtils.isNotEmpty(codeList)) {
+            hzbMgiftDAO.doDailyInvalid(codeList);
+        }
 
     }
 }

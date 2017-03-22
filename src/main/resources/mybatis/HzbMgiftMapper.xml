@@ -129,7 +129,17 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_hzbMgift_receiver" parameterType="hzbMgift">
+	
+	
+	
+	<update id="update_doSendHzbMgift" parameterType="hzbMgift">
+		UPDATE tact_hzb_mgift
+		SET
+		status = #{status}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	<update id="update_doReceiveHzbMgift" parameterType="hzbMgift">
 		UPDATE tact_hzb_mgift
 		SET
 		status = #{status}

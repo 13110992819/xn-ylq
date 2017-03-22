@@ -12,8 +12,8 @@ import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
  * 发送定向红包
- * @author: xieyj 
- * @since: 2017年2月20日 下午6:23:17 
+ * @author: myb858 
+ * @since: 2017年3月22日 下午3:27:24 
  * @history:
  */
 public class XN615130 extends AProcessor {

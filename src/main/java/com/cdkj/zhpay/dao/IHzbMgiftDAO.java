@@ -1,5 +1,7 @@
 package com.cdkj.zhpay.dao;
 
+import java.util.List;
+
 import com.cdkj.zhpay.dao.base.IBaseDAO;
 import com.cdkj.zhpay.domain.HzbMgift;
 
@@ -7,7 +9,9 @@ import com.cdkj.zhpay.domain.HzbMgift;
 public interface IHzbMgiftDAO extends IBaseDAO<HzbMgift> {
     String NAMESPACE = IHzbMgiftDAO.class.getName().concat(".");
 
-    int updateStatus(HzbMgift data);
+    int doSendHzbMgift(HzbMgift hzbMgift);
 
-    int updateReciever(HzbMgift data);
+    int doReceiveHzbMgift(HzbMgift hzbMgift);
+
+    int doDailyInvalid(List<String> codeList);
 }

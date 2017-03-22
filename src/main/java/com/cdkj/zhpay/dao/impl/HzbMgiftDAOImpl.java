@@ -56,19 +56,22 @@ public class HzbMgiftDAOImpl extends AMybatisTemplate implements IHzbMgiftDAO {
             count, condition, HzbMgift.class);
     }
 
-    /** 
-     * @see com.cdkj.zhpay.dao.IHzbMgiftDAO#updateStatus(com.cdkj.zhpay.domain.HzbMgift)
-     */
     @Override
-    public int updateStatus(HzbMgift data) {
-        return super.update(NAMESPACE.concat("update_hzbMgift_status"), data);
+    public int doSendHzbMgift(HzbMgift hzbMgift) {
+        return super
+            .update(NAMESPACE.concat("update_doSendHzbMgift"), hzbMgift);
+
     }
 
-    /** 
-     * @see com.cdkj.zhpay.dao.IHzbMgiftDAO#updateReciever(com.cdkj.zhpay.domain.HzbMgift)
-     */
     @Override
-    public int updateReciever(HzbMgift data) {
-        return super.update(NAMESPACE.concat("update_hzbMgift_receiver"), data);
+    public int doReceiveHzbMgift(HzbMgift hzbMgift) {
+        return super.update(NAMESPACE.concat("update_doReceiveHzbMgift"),
+            hzbMgift);
+    }
+
+    @Override
+    public int doDailyInvalid(List<String> codeList) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }
