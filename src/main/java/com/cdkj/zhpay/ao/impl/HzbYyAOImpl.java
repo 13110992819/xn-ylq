@@ -20,12 +20,11 @@ import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbYy;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.domain.UserExt;
-import com.cdkj.zhpay.dto.res.XN805060Res;
-import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.dto.res.XN808460Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EPrizeCurrency;
+import com.cdkj.zhpay.enums.ESysUser;
 import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
@@ -86,9 +85,14 @@ public class HzbYyAOImpl implements IHzbYyAO {
         hzbBO.refreshYy(hzb, prize);
         // 3、平台兑现奖励
         // 兑现摇的人
-
+        ECurrency currency = ECurrency.getECurrency(prize.getYyCurrency());
+        accountBO.doTransferAmount(ESysUser.SYS_USER.getCode(),
+            yyUser.getUserId(), currency, prize.getYyAmount(),
+            EBizType.AJ_YYJL, "摇一摇奖励发放", "摇一摇奖励获得");
         // 兑现树主人
-
+        accountBO.doTransferAmount(ESysUser.SYS_USER.getCode(),
+            yyUser.getUserId(), currency, prize.getYyAmount(),
+            EBizType.AJ_YYFC, "摇一摇分成发放", "摇一摇分成获得");
         return prize;
     }
 
@@ -103,6 +107,10 @@ public class HzbYyAOImpl implements IHzbYyAO {
         if (EPrizeCurrency.ZH_GWB.getCode().equals(currency)
                 || EPrizeCurrency.ZH_QBB.getCode().equals(currency)) {
             // 兑现摇的人
+            ECurrency ecurrency = ECurrency.getECurrency(currency);
+            accountBO.doTransferAmount(ESysUser.SYS_USER.getCode(),
+                yyUser.getUserId(), ecurrency, prize.getYyAmount(),
+                EBizType.AJ_YYJL, "摇一摇奖励发放", "摇一摇奖励获得");
         } else if (EPrizeCurrency.ZH_HBB.getCode().equals(currency)) {
             // 促发分销规则
         }
@@ -112,50 +120,53 @@ public class HzbYyAOImpl implements IHzbYyAO {
     // 汇赚宝分成:
     // 1、数据准备
     // 2、计算分成:针对用户_已购买汇赚宝的一级二级推荐人和所在辖区用户
-    private void distributeAmount(String systemCode, XN805901Res yyUser,
-            String userId) {
+    private void fcAmount(String systemCode, User yyUser) {
+        // 分销规则
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
         // C用户摇一摇分成
-        XN805901Res cUser = userFcAmount(systemCode, yyUser, userId,
-            SysConstants.YY_CUSER);
+        String camount = rateMap.get(SysConstants.YY_CUSER);
+        userFcAmount(yyUser.getUserId(), camount);
         // B用户摇一摇分成
-        String bUserId = cUser.getUserReferee();
-        boolean bHzbResult = hzbBO.isHzbHoldExistByUser(bUserId);
-        if (StringUtils.isNotBlank(bUserId) && bHzbResult) {
-            XN805901Res bUser = this.userFcAmount(systemCode, yyUser, bUserId,
-                SysConstants.YY_BUSER);
+        String bUserId = yyUser.getUserReferee();
+        boolean bcheck = hzbBO.hasActivatedHzb(bUserId);
+        if (StringUtils.isNotBlank(bUserId) && bcheck) {
+            String bamount = rateMap.get(SysConstants.YY_BUSER);
+            userFcAmount(bUserId, bamount);
+            // A用户摇一摇分成
+            User bUser = userBO.getRemoteUser(bUserId);
             String aUserId = bUser.getUserReferee();
-            boolean aHzbResult = hzbBO.isHzbHoldExistByUser(aUserId);
-            if (StringUtils.isNotBlank(aUserId) && aHzbResult) {
-                // A用户摇一摇分成
-                userFcAmount(systemCode, yyUser, aUserId, SysConstants.YY_AUSER);
+            boolean acheck = hzbBO.hasActivatedHzb(aUserId);
+            if (StringUtils.isNotBlank(aUserId) && acheck) {
+                String aamount = rateMap.get(SysConstants.YY_AUSER);
+                userFcAmount(aUserId, aamount);
             }
         }
         // 辖区分成
-        UserExt userExt = cUser.getUserExt();
+        UserExt userExt = yyUser.getUserExt();
         if (userExt != null) {
             if (StringUtils.isNotBlank(userExt.getProvince())) {
                 // 省合伙人
-                XN805060Res provinceUser = userBO.getPartnerUserInfo(
+                User provinceUser = userBO.getPartnerUserInfo(
                     userExt.getProvince(), null, null);
                 if (provinceUser != null) {
-                    areaFcAmount(systemCode, yyUser, provinceUser,
+                    areaFcAmount(rateMap, yyUser, provinceUser,
                         SysConstants.YY_PROVINCE, "省");
                 }
                 if (StringUtils.isNotBlank(userExt.getCity())) {
                     // 市合伙人
-                    XN805060Res cityUser = userBO.getPartnerUserInfo(
+                    User cityUser = userBO.getPartnerUserInfo(
                         userExt.getProvince(), userExt.getCity(), null);
                     if (cityUser != null) {
-                        areaFcAmount(systemCode, yyUser, cityUser,
+                        areaFcAmount(rateMap, yyUser, cityUser,
                             SysConstants.YY_CITY, "市");
                     }
                     if (StringUtils.isNotBlank(userExt.getArea())) {
                         // 县合伙人
-                        XN805060Res areaRes = userBO.getPartnerUserInfo(
+                        User areaRes = userBO.getPartnerUserInfo(
                             userExt.getProvince(), userExt.getCity(),
                             userExt.getArea());
                         if (areaRes != null) {
-                            areaFcAmount(systemCode, yyUser, areaRes,
+                            areaFcAmount(rateMap, yyUser, areaRes,
                                 SysConstants.YY_AREA, "县");
                         }
                     }
@@ -164,28 +175,25 @@ public class HzbYyAOImpl implements IHzbYyAO {
         }
     }
 
-    private User userFcAmount(String systemCode, XN805901Res yyUser,
-            String userId, String sysConstants) {
-        // 分销规则
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
-        User refUser = userBO.getRemoteUser(userId);
-        Double fc = Double.valueOf(rateMap.get(sysConstants));
+    /**
+     * 摇一摇推荐人的分销金额划转
+     * @param refUserId 推荐人
+     * @param fcAmount 分成金额
+     * @return 
+     * @create: 2017年3月22日 下午10:32:41 myb858
+     * @history:
+     */
+    private void userFcAmount(String refUserId, String configAmount) {
+        Double fc = Double.valueOf(configAmount);
         Long fcAmount = Double.valueOf(fc * SysConstants.AMOUNT_RADIX)
             .longValue();
-        String toBizNote = UserUtil.getUserMobile(yyUser.getMobile())
-                + EBizType.AJ_YYFC.getValue();
-        String fromBizNote = toBizNote + ","
-                + UserUtil.getUserMobile(refUser.getMobile()) + "分成";
-        accountBO.doTransferFcBySystem(systemCode, userId,
-            ECurrency.HBYJ.getCode(), fcAmount, EBizType.AJ_YYFC.getCode(),
-            fromBizNote, toBizNote);
-        return refUser;
+        accountBO.doTransferAmount(ESysUser.SYS_USER.getCode(), refUserId,
+            ECurrency.HBYJ, fcAmount, EBizType.AJ_YYFC, "摇一摇分成发放", "摇一摇分成获得");
     }
 
-    private void areaFcAmount(String systemCode, XN805901Res yyUser,
-            XN805060Res areaUser, String sysConstants, String remark) {
+    private void areaFcAmount(Map<String, String> rateMap, User yyUser,
+            User areaUser, String sysConstants, String remark) {
         // 分销规则
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
         Double fc = Double.valueOf(rateMap.get(sysConstants));
         Long fcAmount = Double.valueOf(fc * SysConstants.AMOUNT_RADIX)
             .longValue();
@@ -194,8 +202,8 @@ public class HzbYyAOImpl implements IHzbYyAO {
         String fromBizNote = toBizNote + "," + remark + "合伙人"
                 + UserUtil.getUserMobile(areaUser.getMobile()) + "分成";
         toBizNote = toBizNote + "," + remark + "合伙人分成";
-        accountBO.doTransferFcBySystem(systemCode, areaUser.getUserId(),
-            ECurrency.HBYJ.getCode(), fcAmount, EBizType.AJ_YYFC.getCode(),
+        accountBO.doTransferAmount(ESysUser.SYS_USER.getCode(),
+            areaUser.getUserId(), ECurrency.HBYJ, fcAmount, EBizType.AJ_YYFC,
             fromBizNote, toBizNote);
     }
 

@@ -90,7 +90,8 @@ public abstract class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements
             // 判断前面1次，2次是否有红包
             if (count % 3 != 0) {
                 for (HzbYy hzbYy : dataList) {
-                    if (EPrizeCurrency.ZH_HBB.getCode().equals(hzbYy.getType())) {
+                    if (EPrizeCurrency.ZH_HBB.getCode().equals(
+                        hzbYy.getYyCurrency())) {
                         haveHbb = "1";
                         break;
                     }
@@ -102,18 +103,6 @@ public abstract class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements
             }
         }
         return haveHbb;
-    }
-
-    /** 
-     * @see com.cdkj.zhpay.bo.IHzbYyBO#getTotalHzbYyCount(java.util.Date, java.util.Date, java.lang.String)
-     */
-    @Override
-    public Long getTotalHzbYyCount(Date startDate, Date endDate, Long hzbHoldId) {
-        HzbYy condition = new HzbYy();
-        condition.setHzbHoldId(hzbHoldId);
-        condition.setCreateDatetimeStart(startDate);
-        condition.setCreateDatetimeEnd(endDate);
-        return hzbYyDAO.selectTotalCount(condition);
     }
 
     // 摇一摇全局规则：
