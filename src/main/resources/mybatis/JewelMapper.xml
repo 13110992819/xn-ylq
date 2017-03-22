@@ -6,21 +6,24 @@
 		<result column="code" property="code" />
 		<result column="template_code" property="templateCode" />
 		<result column="periods" property="periods" />
-		<result column="currency" property="currency" />
-		<result column="amount" property="amount" />
+		<result column="to_amount" property="toAmount" />
+		<result column="to_currency" property="toCurrency" />
 		
 		<result column="total_num" property="totalNum" />
-		<result column="price" property="price" />
-		<result column="max_invest_num" property="maxInvestNum" />
-		<result column="adv_text" property="advText" />
-		<result column="adv_pic" property="advPic" />
-		
+		<result column="max_num" property="maxNum" />
 		<result column="invest_num" property="investNum" />
-		<result column="create_datetime" property="createDatetime" />
+		<result column="from_amount" property="fromAmount" />
+		<result column="from_currency" property="fromCurrency" />
+		
+		<result column="slogan" property="slogan" />
+		<result column="adv_pic" property="advPic" />
+		<result column="start_datetime" property="startDatetime" />
+		<result column="status" property="status" />
 		<result column="win_number" property="winNumber" />
+		
 		<result column="win_user" property="winUser" />
 		<result column="win_datetime" property="winDatetime" />
-		<result column="status" property="status" />
+		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
 		
 	</resultMap>
@@ -32,14 +35,20 @@
 			<if test="templateCode != null and templateCode != '' ">
 				AND t.template_code = #{templateCode}
 			</if>
-			<if test="nameForQuery != null and nameForQuery != '' ">
-				AND t.name like "%"#{nameForQuery}"%"
+			<if test="toCurrency != null and toCurrency != '' ">
+				AND t.to_currency = #{toCurrency}
+			</if>
+			<if test="fromCurrency != null and fromCurrency != '' ">
+				AND t.from_currency = #{fromCurrency}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
-			<if test="createDatetime != null and createDatetime != '' ">
-				AND t.create_datetime = #{createDatetime}
+			<if test="winUser != null and winUser != '' ">
+				AND t.win_user = #{winUser}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
 			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
@@ -51,25 +60,27 @@
 		code
 		,template_code
 		,periods
-		,currency
-		,amount
+		,to_amount
+		,to_currency
 		
 		,total_num
-		,price
-		,max_invest_num
-		,adv_text
-		,adv_pic
-		
+		,max_num
 		,invest_num
-		,create_datetime
-		,win_number
-		,(select nickname from ${userDB}.tstd_user tu where tu.user_id=t.win_user) as win_user
-		,win_datetime
+		,from_amount
+		,from_currency
 		
+		,slogan
+		,adv_pic
+		,start_datetime
 		,status
+		,win_number
+		
+		,win_user
+		,win_datetime
+		,company_code
 		,system_code
 		FROM
-		tact_jewel t
+		tyydb_jewel t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -80,64 +91,72 @@
 	
 	<select id="select_jewel_count" parameterType="jewel"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tact_jewel t 
+		SELECT count(1) FROM tyydb_jewel t 
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_jewel" parameterType="jewel">
 		INSERT INTO
-		tact_jewel(
+		tyydb_jewel(
 		code
 		,template_code
 		,periods
-		,currency
-		,amount
+		,to_amount
+		,to_currency
+		
 		,total_num
+		,max_num
+		,invest_num
+		,from_amount
+		,from_currency
 		
-		,price
-		,max_invest_num
-		,adv_text
+		,slogan
 		,adv_pic
-		,create_datetime
-		
+		,start_datetime
 		,status
+		,company_code
+		
 		,system_code
 		)
 		VALUES(
 		#{code}
 		,#{templateCode}
 		,#{periods}
-		,#{currency}
-		,#{amount}
+		,#{toAmount}
+		,#{toCurrency}
+		
 		,#{totalNum}
+		,#{maxNum}
+		,#{investNum}
+		,#{fromAmount}
+		,#{fromCurrency}
 		
-		,#{price}
-		,#{maxInvestNum}
-		,#{advText}
+		,#{slogan}
 		,#{advPic}
-		,#{createDatetime}
-		
+		,#{startDatetime}
 		,#{status}
+		,#{companyCode}
+		
 		,#{systemCode}
 		)
 	</insert>
 	
 	<update id="update_status" parameterType="jewel">
-		UPDATE tact_jewel
+		UPDATE tyydb_jewel
 		SET
 		status=#{status}
 		WHERE code = #{code}
 	</update>
 	
 	<update id="update_investInfo" parameterType="jewel">
-		UPDATE tact_jewel
+		UPDATE tyydb_jewel
 		SET
 		invest_num = #{investNum}
 		WHERE code = #{code}
 	</update>
 	
 	<update id="update_winInfo" parameterType="jewel">
-		UPDATE tact_jewel
+		UPDATE tyydb_jewel
 		SET
 		win_number = #{winNumber}
 		,win_user = #{winUser}
@@ -149,7 +168,7 @@
 	
 	<delete id="delete_jewel" parameterType="jewel">
 		DELETE FROM
-		tact_jewel
+		tyydb_jewel
 		WHERE
 		code = #{code}
 	</delete>

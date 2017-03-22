@@ -4,18 +4,20 @@
 <mapper namespace="com.cdkj.zhpay.dao.IJewelTemplateDAO">
 	<resultMap id="JewelTemplate_DB_Result" type="JewelTemplate">
 		<result column="code" property="code" />
-		<result column="currency" property="currency" />
-		<result column="amount" property="amount" />
+		<result column="to_amount" property="toAmount" />
+		<result column="to_currency" property="toCurrency" />
 		<result column="total_num" property="totalNum" />
-		<result column="price" property="price" />
-		<result column="max_invest_num" property="maxInvestNum" />
-		<result column="adv_text" property="advText" />
+		<result column="max_num" property="maxNum" />
+		<result column="from_amount" property="fromAmount" />
+		<result column="from_currency" property="fromCurrency" />
+		<result column="slogan" property="slogan" />
 		<result column="adv_pic" property="advPic" />
 		<result column="current_periods" property="currentPeriods" />
 		<result column="status" property="status" />
 		<result column="updater" property="updater" />
 		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
+		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
@@ -29,6 +31,9 @@
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
@@ -37,21 +42,23 @@
 	<select id="select_JewelTemplate" parameterType="JewelTemplate" resultMap="JewelTemplate_DB_Result">
 		SELECT
 		t.code
-		,t.currency
-		,t.amount
+		,t.to_amount
+		,t.to_currency
 		,t.total_num
-		,t.price
-		,t.max_invest_num
-		,t.adv_text
+		,t.max_num
+		,t.from_amount
+		,t.from_currency
+		,t.slogan
 		,t.adv_pic
 		,t.current_periods
 		,t.status
 		,t.updater
 		,t.update_datetime
 		,t.remark
+		,t.company_code
 		,t.system_code
 		FROM
-		tact_jewel_template t
+		tyydb_jewel_template t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -62,55 +69,60 @@
 
 	<select id="select_JewelTemplate_count" parameterType="JewelTemplate"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tact_jewel_template t
+		SELECT count(1) FROM tyydb_jewel_template t
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_JewelTemplate" parameterType="JewelTemplate">
 		INSERT INTO
-		tact_jewel_template(
+		tyydb_jewel_template(
 		code
-		,currency
-		,amount
+		,to_amount
+		,to_currency
 		,total_num
-		,price
-		,max_invest_num
-		,adv_text
+		,max_num
+		,from_amount
+		,from_currency
+		,slogan
 		,adv_pic
 		,current_periods
 		,status
 		,updater
 		,update_datetime
 		,remark
+		,company_code
 		,system_code
 		)
 		VALUES(
 		#{code}
-		,#{currency}
-		,#{amount}
+		,#{toAmount}
+		,#{toCurrency}
 		,#{totalNum}
-		,#{price}
-		,#{maxInvestNum}
-		,#{advText}
+		,#{maxNum}
+		,#{fromAmount}
+		,#{fromCurrency}
+		,#{slogan}
 		,#{advPic}
 		,#{currentPeriods}
 		,#{status}
 		,#{updater}
 		,#{updateDatetime}
 		,#{remark}
+		,#{companyCode}
 		,#{systemCode}
 		)
 	</insert>
 
 	<update id="update_JewelTemplate" parameterType="JewelTemplate">
-		UPDATE tact_jewel_template
+		UPDATE tyydb_jewel_template
 		SET
-		currency = #{currency}
-		,amount = #{amount}
+		to_amount = #{toAmount}
+		,to_currency = #{toCurrency}
 		,total_num = #{totalNum}
-		,price = #{price}
-		,max_invest_num = #{maxInvestNum}
-		,adv_text = #{advText}
+		,max_num = #{maxNum}
+		,from_amount = #{fromAmount}
+		,from_currency = #{fromCurrency}
+		,slogan = #{slogan}
 		,adv_pic = #{advPic}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
@@ -119,7 +131,7 @@
 	</update>
 	
 	<update id="update_status" parameterType="JewelTemplate">
-		UPDATE tact_jewel_template
+		UPDATE tyydb_jewel_template
 		SET
 		status = #{status}
 		,updater = #{updater}
@@ -129,17 +141,10 @@
 	</update>
 	
 	<update id="update_periods" parameterType="JewelTemplate">
-		UPDATE tact_jewel_template
+		UPDATE tyydb_jewel_template
 		SET
 		current_periods = #{currentPeriods}
 		WHERE code = #{code}
 	</update>
-
-    <delete id="delete_JewelTemplate" parameterType="jewel">
-		DELETE FROM
-		tact_jewel_template
-		WHERE
-		code = #{code}
-	</delete>
 
 </mapper>
