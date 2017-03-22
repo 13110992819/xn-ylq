@@ -316,11 +316,12 @@ public class HzbAOImpl implements IHzbAO {
     public Object queryDistanceHzbList(String latitude, String longitude,
             String userId, String deviceNo, String companyCode,
             String systemCode) {
-        hzbYyBO.checkHzbYyCondition(systemCode, userId, deviceNo);
+        // 校验人和设备
         // 取距离
         Map<String, String> sysConfigMap = sysConfigBO
             .getConfigsMap(systemCode);
         Hzb condition = new Hzb();
+        condition.setStatus(EHzbStatus.ACTIVATED.getCode());
         condition.setDistance(sysConfigMap.get(SysConstants.HZB_DISTANCE));
         // 设置最多被摇次数
         String periodRockNumCount = sysConfigMap

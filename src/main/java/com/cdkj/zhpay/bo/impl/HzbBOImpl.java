@@ -13,6 +13,7 @@ import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IHzbDAO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
+import com.cdkj.zhpay.dto.res.XN808460Res;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EHzbStatus;
@@ -224,5 +225,10 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         } else {
             throw new BizException("xn0000", "该摇钱树不处于激活状态");
         }
+    }
+
+    @Override
+    public void refreshYy(Hzb hzb, XN808460Res prize) {
+        // TODO Auto-generated method stub
     }
 }
