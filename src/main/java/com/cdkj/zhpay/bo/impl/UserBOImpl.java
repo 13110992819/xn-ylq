@@ -9,16 +9,10 @@ import org.springframework.stereotype.Component;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.dto.req.XN805042Req;
 import com.cdkj.zhpay.dto.req.XN805060Req;
-import com.cdkj.zhpay.dto.req.XN805300Req;
 import com.cdkj.zhpay.dto.req.XN805901Req;
-import com.cdkj.zhpay.dto.req.XN805902Req;
-import com.cdkj.zhpay.dto.req.XN805910Req;
-import com.cdkj.zhpay.dto.res.XN805042Res;
 import com.cdkj.zhpay.dto.res.XN805060Res;
 import com.cdkj.zhpay.dto.res.XN805901Res;
-import com.cdkj.zhpay.dto.res.XN805910Res;
 import com.cdkj.zhpay.enums.EUserKind;
 import com.cdkj.zhpay.enums.EUserStatus;
 import com.cdkj.zhpay.exception.BizException;
@@ -64,59 +58,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             throw new BizException("XN000000", "编号为" + userId + "的用户不存在");
         }
         return res;
-    }
-
-    /** 
-     * @see com.cdkj.zhpay.bo.IUserBO#checkTradePwd(java.lang.String, java.lang.String)
-     */
-    @Override
-    public void checkTradePwd(String userId, String tradePwd) {
-        XN805902Req req = new XN805902Req();
-        req.setUserId(userId);
-        req.setTradePwd(tradePwd);
-        BizConnecter.getBizData("805902", JsonUtils.object2Json(req),
-            Object.class);
-    }
-
-    /** 
-     * @see com.cdkj.zhpay.bo.IUserBO#doTransfer(java.lang.String, java.lang.String, java.lang.Long, java.lang.String, java.lang.String)
-     */
-    @Override
-    public void doTransfer(String userId, String direction, Long amount,
-            String remark, String refNo) {
-        XN805300Req req = new XN805300Req();
-        req.setUserId(userId);
-        req.setDirection(direction);
-        req.setAmount(String.valueOf(amount));
-        req.setRemark(remark);
-        req.setRefNo(refNo);
-        BizConnecter.getBizData("805300", JsonUtils.object2Json(req),
-            Object.class);
-    }
-
-    /** 
-     * @see com.cdkj.zhpay.bo.IUserBO#doSaveUser(com.cdkj.zhpay.dto.req.XN805042Req)
-     */
-    @Override
-    public String doSaveUser(XN805042Req req) {
-        XN805042Res res = BizConnecter.getBizData("805042",
-            JsonUtils.object2Json(req), XN805042Res.class);
-        return res.getUserId();
-    }
-
-    @Override
-    public String getUserId(String mobile, String kind, String systemCode) {
-        String userId = null;
-        XN805910Req req = new XN805910Req();
-        req.setMobile(mobile);
-        req.setKind(kind);
-        req.setSystemCode(systemCode);
-        XN805910Res res = BizConnecter.getBizData("805910",
-            JsonUtils.object2Json(req), XN805910Res.class);
-        if (res != null) {
-            userId = res.getUserId();
-        }
-        return userId;
     }
 
     /** 
