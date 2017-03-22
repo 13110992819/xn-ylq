@@ -56,9 +56,17 @@
 			<if test="jewelCode != null and jewelCode != '' ">
 				AND t.jewel_code = #{jewelCode}
 			</if>
-			<if test="status != null and status != '' ">
-			    AND t.status = #{status}
-			</if>
+			<choose>
+				 <when test="status == '123'">
+				  	AND (t.status = 1 or t.status = 2 or t.status = 3)
+				 </when>
+				 <when test="status != null and status != '' ">
+				  	AND t.status = #{status}
+				 </when>
+				 <otherwise>
+				  	AND 1 = 1
+				 </otherwise>
+			</choose>
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group = #{payGroup}
 			</if>

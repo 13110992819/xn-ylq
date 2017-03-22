@@ -12,6 +12,9 @@ public class XN805901Res {
     // 最好不是手机号，就是一般的登录名。目前第一版版本先用手机号，因为用一般登录名，注册流程以及手机验证就要变
     private String loginName;
 
+    // nickname 昵称
+    private String nickname;
+
     // 手机号
     private String mobile;
 
@@ -33,11 +36,11 @@ public class XN805901Res {
     // 推荐人
     private String userReferee;
 
-    // 是否手机绑定
-    private String mobileFlag;
+    // 证件类型
+    private String idKind;
 
-    // 是否实名认证
-    private String identityFlag;
+    // 证件号码
+    private String idNo;
 
     // 是否设置支付密码
     private String tradepwdFlag;
@@ -54,10 +57,54 @@ public class XN805901Res {
     // 粉丝数
     private String totalFansNum;
 
-    // 粉丝数
+    // 系统编号
     private String systemCode;
 
+    // 用户扩展信息
     private UserExt userExt;
+
+    // 实名认证
+    private String identityFlag;
+
+    public String getIdentityFlag() {
+        return identityFlag;
+    }
+
+    public void setIdentityFlag(String identityFlag) {
+        this.identityFlag = identityFlag;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getIdKind() {
+        return idKind;
+    }
+
+    public void setIdKind(String idKind) {
+        this.idKind = idKind;
+    }
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public String getUserId() {
         return userId;
@@ -81,14 +128,6 @@ public class XN805901Res {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 
     public String getPhoto() {
@@ -115,46 +154,6 @@ public class XN805901Res {
         this.level = level;
     }
 
-    public String getKind() {
-        return kind;
-    }
-
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    public String getUserReferee() {
-        return userReferee;
-    }
-
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
-    }
-
-    public String getMobileFlag() {
-        return mobileFlag;
-    }
-
-    public void setMobileFlag(String mobileFlag) {
-        this.mobileFlag = mobileFlag;
-    }
-
-    public String getIdentityFlag() {
-        return identityFlag;
-    }
-
-    public void setIdentityFlag(String identityFlag) {
-        this.identityFlag = identityFlag;
-    }
-
     public String getTradepwdFlag() {
         return tradepwdFlag;
     }
@@ -169,6 +168,30 @@ public class XN805901Res {
 
     public void setBankcardFlag(String bankcardFlag) {
         this.bankcardFlag = bankcardFlag;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
     public String getCompanyCode() {
@@ -195,19 +218,19 @@ public class XN805901Res {
         this.totalFansNum = totalFansNum;
     }
 
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
     public UserExt getUserExt() {
         return userExt;
     }
 
     public void setUserExt(UserExt userExt) {
         this.userExt = userExt;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 }

@@ -57,8 +57,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         User user = new User();
         user.setUserId(userId);
         user.setLoginName(res.getLoginName());
-        user.setNickname(null);
-        user.setPhoto(res.getPhoto());
+        user.setNickname(res.getNickname());
+        user.setPhoto(res.getUserExt().getPhoto());
         user.setMobile(res.getMobile());
         return user;
     }
