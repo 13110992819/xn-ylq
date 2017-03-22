@@ -83,7 +83,6 @@ public class HzbAOImpl implements IHzbAO {
         if (!EHzbTemplateStatus.ON.getCode().equals(hzbTemplate.getStatus())) {
             throw new BizException("xn0000", "该汇赚宝模板未上线，不可购买");
         }
-
         // 购买摇钱树
         if (EPayType.YEFR.getCode().equals(payType)) {
             result = doFRPay(userRes, hzbTemplate);
@@ -107,43 +106,6 @@ public class HzbAOImpl implements IHzbAO {
         }
         hzbBO.checkBuy(userId);
         return result;
-    }
-
-    /**
-     * 支付回调
-     * @param payCode
-     * @return 
-     * @create: 2017年1月6日 下午9:25:22 xieyj
-     * @history:
-     */
-    @Override
-    @Transactional
-    public void paySuccess(String payGroup, String payCode, Long transAmount) {
-        Hzb condition = new Hzb();
-        condition.setPayGroup(payGroup);
-        List<Hzb> result = hzbBO.queryHzbHoldList(condition);
-        if (CollectionUtils.isEmpty(result)) {
-            throw new BizException("XN000000", "找不到对应的消费记录");
-        }
-        if (!transAmount.equals(hzbBO.getTotalAmount(payGroup))) {
-            throw new BizException("XN000000", "金额校验错误，非正常调用");
-        }
-        for (Hzb hzb : result) {
-            if (!EHzbStatus.TO_PAY.getCode().equals(hzb.getStatus())) {
-                throw new BizException("XN000000", "汇赚宝号：" + hzb.getId()
-                        + "已支付，重复回调");
-            }
-        }
-        for (Hzb hzb : result) {
-            // 更新状态
-            hzbBO.refreshPayStatus(hzb.getId(), EHzbStatus.ACTIVATED.getCode(),
-                payCode, transAmount);
-            // 分配分成
-            distributeAmount(hzb.getSystemCode(), hzb.getUserId(),
-                hzb.getPrice());
-            // 产生红包
-            hzbMgiftBO.sendHzbMgift(hzb.getUserId());
-        }
     }
 
     /**
@@ -180,16 +142,52 @@ public class HzbAOImpl implements IHzbAO {
      * @history: 
      */
     @Transactional
-    private XN802180Res doWeixinPay(String userId, HzbTemplate hzbTemplate,
-            String ip) {
+    private XN802180Res doWeixinPay(String userId, HzbTemplate hzbTemplate) {
         // 生成支付组号
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
         // 落地本地系统消费记录，状态为未支付
         hzbBO.buySuccess(userId, hzbTemplate, payGroup);
         XN802180Res res = accountBO.doWeiXinPay(hzbTemplate.getSystemCode(),
-            userId, payGroup, EBizType.AJ_GMHZB, hzbTemplate.getPrice(), ip);
+            userId, payGroup, EBizType.AJ_GMHZB, hzbTemplate.getPrice());
         return res;
+    }
+
+    /**
+     * 支付回调
+     * @param payCode
+     * @return 
+     * @create: 2017年1月6日 下午9:25:22 xieyj
+     * @history:
+     */
+    @Override
+    @Transactional
+    public void paySuccess(String payGroup, String payCode, Long transAmount) {
+        Hzb condition = new Hzb();
+        condition.setPayGroup(payGroup);
+        List<Hzb> result = hzbBO.queryHzbList(condition);
+        if (CollectionUtils.isEmpty(result)) {
+            throw new BizException("XN000000", "找不到对应的消费记录");
+        }
+        if (!transAmount.equals(hzbBO.getTotalAmount(payGroup))) {
+            throw new BizException("XN000000", "金额校验错误，非正常调用");
+        }
+        for (Hzb hzb : result) {
+            if (!EHzbStatus.TO_PAY.getCode().equals(hzb.getStatus())) {
+                throw new BizException("XN000000", "汇赚宝号：" + hzb.getCode()
+                        + "已支付，重复回调");
+            }
+        }
+        for (Hzb hzb : result) {
+            // 更新状态
+            hzbBO.refreshPayStatus(hzb.getCode(),
+                EHzbStatus.ACTIVATED.getCode(), payCode, transAmount);
+            // 分配分成
+            distributeAmount(hzb.getSystemCode(), hzb.getUserId(),
+                hzb.getPrice());
+            // 产生红包
+            hzbMgiftBO.sendHzbMgift(hzb.getUserId());
+        }
     }
 
     // 汇赚宝分成:
@@ -201,7 +199,7 @@ public class HzbAOImpl implements IHzbAO {
         String cUserId = ownerUser.getUserReferee();
         if (StringUtils.isNotBlank(cUserId)) {
             XN805901Res cUser = userBO.getRemoteUser(cUserId, cUserId);
-            boolean cHzbResult = hzbBO.isHzbHoldExistByUser(cUserId);
+            boolean cHzbResult = hzbBO.isHzbExistByUser(cUserId);
             if (cHzbResult) {
                 this.userFcAmount(systemCode, cUser, ownerUser,
                     SysConstants.HZB_CUSER, price);
@@ -210,7 +208,7 @@ public class HzbAOImpl implements IHzbAO {
             String bUserId = cUser.getUserReferee();
             if (StringUtils.isNotBlank(bUserId)) {
                 XN805901Res bUser = userBO.getRemoteUser(bUserId, bUserId);
-                boolean bHzbResult = hzbBO.isHzbHoldExistByUser(bUserId);
+                boolean bHzbResult = hzbBO.isHzbExistByUser(bUserId);
                 if (bHzbResult) {
                     this.userFcAmount(systemCode, bUser, ownerUser,
                         SysConstants.HZB_BUSER, price);
@@ -219,7 +217,7 @@ public class HzbAOImpl implements IHzbAO {
                 String aUserId = bUser.getUserReferee();
                 if (StringUtils.isNotBlank(aUserId)) {
                     XN805901Res aUser = userBO.getRemoteUser(aUserId, aUserId);
-                    boolean aHzbResult = hzbBO.isHzbHoldExistByUser(aUserId);
+                    boolean aHzbResult = hzbBO.isHzbExistByUser(aUserId);
                     if (aHzbResult) {
                         this.userFcAmount(systemCode, aUser, ownerUser,
                             SysConstants.HZB_AUSER, price);
@@ -298,20 +296,6 @@ public class HzbAOImpl implements IHzbAO {
         }
     }
 
-    // 分页无法统计，暂时不用
-    @Override
-    public Paginable<Hzb> queryDistanceHzbHoldPage(int start, int limit,
-            Hzb condition) {
-        String distance = sysConfigBO.getConfigValue(null, null, null,
-            SysConstants.HZB_DISTANCE);
-        if (StringUtils.isBlank(distance)) {
-            // 默认1000米
-            distance = SysConstants.HZB_DISTANCE_DEF;
-        }
-        condition.setDistance(distance);
-        return hzbBO.queryDistancePaginable(start, limit, condition);
-    }
-
     @Override
     @Transactional
     public Object queryHzbList(String latitude, String longitude,
@@ -332,7 +316,7 @@ public class HzbAOImpl implements IHzbAO {
             periodRockNum = Integer.valueOf(periodRockNumString);
         }
         condition.setPeriodRockNum(periodRockNum);
-        List<Hzb> list = hzbBO.queryDistanceHzbHoldList(condition);
+        List<Hzb> list = hzbBO.queryDistanceHzbList(condition);
         // 截取数量
         String hzbMaxNumStr = sysConfigBO.getConfigValue(null, null, null,
             SysConstants.HZB_MAX_NUM);
@@ -350,13 +334,13 @@ public class HzbAOImpl implements IHzbAO {
     }
 
     @Override
-    public Paginable<Hzb> queryHzbHoldPage(int start, int limit, Hzb condition) {
+    public Paginable<Hzb> queryHzbPage(int start, int limit, Hzb condition) {
         return hzbBO.getPaginable(start, limit, condition);
     }
 
     @Override
-    public List<Hzb> queryHzbHoldList(Hzb condition) {
-        return hzbBO.queryHzbHoldList(condition);
+    public List<Hzb> queryHzbList(Hzb condition) {
+        return hzbBO.queryHzbList(condition);
     }
 
     @Override
@@ -412,7 +396,7 @@ public class HzbAOImpl implements IHzbAO {
         Hzb condition = new Hzb();
         condition.setUserId(userId);
         condition.setStatus(EDiviFlag.EFFECT.getCode());
-        List<Hzb> list = hzbBO.queryHzbHoldList(condition);
+        List<Hzb> list = hzbBO.queryHzbList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             hzb = list.get(0);
         }
@@ -422,5 +406,32 @@ public class HzbAOImpl implements IHzbAO {
     @Override
     public void doResetRockNumDaily() {
         hzbBO.resetPeriodRockNum();
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.ao.IHzbAO#myHzb(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public List<Hzb> myHzb(String userId, String systemCode, String companyCode) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.ao.IHzbAO#putOnOff(java.lang.String)
+     */
+    @Override
+    public void putOnOff(String code) {
+        // TODO Auto-generated method stub
+
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.ao.IHzbAO#queryHzbHoldList(com.cdkj.zhpay.domain.Hzb)
+     */
+    @Override
+    public List<Hzb> queryHzbHoldList(Hzb condition) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

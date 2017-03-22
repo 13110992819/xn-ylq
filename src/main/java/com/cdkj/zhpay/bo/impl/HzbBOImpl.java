@@ -25,17 +25,7 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     private IHzbDAO hzbDAO;
 
     @Override
-    public boolean isHzbHoldExist(Long id) {
-        Hzb condition = new Hzb();
-        condition.setId(id);
-        if (hzbDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isHzbHoldExistByUser(String userId) {
+    public boolean isHzbExistByUser(String userId) {
         Hzb condition = new Hzb();
         condition.setUserId(userId);
         condition.setStatus(EDiviFlag.EFFECT.getCode());
@@ -52,7 +42,7 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         if (StringUtils.isNotBlank(userId)) {
             Hzb data = new Hzb();
             data.setUserId(userId);
-            data.setHzbCode(hzbTemplate.getCode());
+            data.setTemplateCode(hzbTemplate.getCode());
             data.setStatus(EHzbStatus.TO_PAY.getCode());
             data.setPrice(hzbTemplate.getPrice());
             data.setCurrency(hzbTemplate.getCurrency());
@@ -66,12 +56,12 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     }
 
     @Override
-    public int saveHzbHold(String userId, HzbTemplate hzbTemplate, Long amount) {
+    public int saveHzb(String userId, HzbTemplate hzbTemplate, Long amount) {
         int count = 0;
         if (StringUtils.isNotBlank(userId)) {
             Hzb data = new Hzb();
             data.setUserId(userId);
-            data.setHzbCode(hzbTemplate.getCode());
+            data.setTemplateCode(hzbTemplate.getCode());
             data.setStatus(EHzbStatus.ACTIVATED.getCode());
             data.setPrice(hzbTemplate.getPrice());
             data.setCurrency(hzbTemplate.getCurrency());
@@ -85,22 +75,6 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         }
         return count;
 
-    }
-
-    @Override
-    public int removeHzbHold(Long id) {
-        int count = 0;
-        if (id != null) {
-            Hzb data = new Hzb();
-            data.setId(id);
-            count = hzbDAO.delete(data);
-        }
-        return count;
-    }
-
-    @Override
-    public List<Hzb> queryHzbHoldList(Hzb condition) {
-        return hzbDAO.selectList(condition);
     }
 
     @Override
@@ -133,18 +107,6 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     }
 
     @Override
-    public int refreshStatus(Long id, String status) {
-        int count = 0;
-        if (id != null) {
-            Hzb data = new Hzb();
-            data.setId(id);
-            data.setStatus(status);
-            count = hzbDAO.updateStatus(data);
-        }
-        return count;
-    }
-
-    @Override
     public int refreshPayStatus(Long id, String status, String payCode,
             Long payAmount) {
         int count = 0;
@@ -163,10 +125,10 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     }
 
     /** 
-     * @see com.cdkj.zhpay.bo.IHzbBO#queryDistanceHzbHoldList(com.cdkj.zhpay.domain.Hzb)
+     * @see com.cdkj.zhpay.bo.IHzbBO#queryDistanceHzbList(com.cdkj.zhpay.domain.Hzb)
      */
     @Override
-    public List<Hzb> queryDistanceHzbHoldList(Hzb condition) {
+    public List<Hzb> queryDistanceHzbList(Hzb condition) {
         return hzbDAO.selectDistanceList(condition);
     }
 

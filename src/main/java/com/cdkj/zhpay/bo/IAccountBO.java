@@ -151,13 +151,12 @@ public interface IAccountBO {
      * @param payGroup
      * @param bizType
      * @param cnyAmount
-     * @param ip
      * @return 
      * @create: 2017年2月27日 下午3:52:09 haiqingzheng
      * @history:
      */
     public XN802180Res doWeiXinPay(String systemCode, String userId,
-            String payGroup, EBizType bizType, Long cnyAmount, String ip);
+            String payGroup, EBizType bizType, Long cnyAmount);
 
     /**
      * 获取biztype统计金额接口
