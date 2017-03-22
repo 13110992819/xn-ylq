@@ -6,6 +6,7 @@ import com.cdkj.zhpay.dto.res.XN802180Res;
 import com.cdkj.zhpay.dto.res.XN802503Res;
 import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.enums.EBizType;
+import com.cdkj.zhpay.enums.ECurrency;
 
 /**
  * @author: xieyj 
@@ -16,19 +17,16 @@ public interface IAccountBO {
 
     /**
      * 根据用户编号和币种获取账户
-     * @param systemCode
      * @param userId
      * @param currency
      * @return 
-     * @create: 2016年12月28日 下午2:29:43 xieyj
+     * @create: 2017年3月22日 下午9:49:41 myb858
      * @history:
      */
-    public XN802503Res getAccountByUserId(String systemCode, String userId,
-            String currency);
+    public XN802503Res getAccountByUserId(String userId, String currency);
 
     /**
      * 根据用户编号进行账户资金划转
-     * @param systemCode
      * @param fromUserId
      * @param toUserId
      * @param currency
@@ -36,11 +34,11 @@ public interface IAccountBO {
      * @param bizType
      * @param fromBizNote
      * @param toBizNote 
-     * @create: 2017年2月25日 下午12:57:18 xieyj
+     * @create: 2017年3月22日 下午9:49:17 myb858
      * @history:
      */
-    public void doTransferAmountByUser(String systemCode, String fromUserId,
-            String toUserId, String currency, Long amount, String bizType,
+    public void doTransferAmount(String fromUserId, String toUserId,
+            ECurrency currency, Long amount, EBizType bizType,
             String fromBizNote, String toBizNote);
 
     /**

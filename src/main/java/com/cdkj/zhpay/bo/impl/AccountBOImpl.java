@@ -37,9 +37,8 @@ public class AccountBOImpl implements IAccountBO {
     private ISYSConfigBO sysConfigBO;
 
     @Override
-    public XN802503Res getAccountByUserId(String systemCode, String userId,
-            String currency) {
-        Map<String, XN802503Res> map = getAccountsByUser(systemCode, userId);
+    public XN802503Res getAccountByUserId(String userId, String currency) {
+        Map<String, XN802503Res> map = getAccountsByUser(userId);
         XN802503Res result = map.get(currency);
         if (null == result) {
             throw new BizException("xn000000", "用户[" + userId + "]账户不存在");
@@ -47,11 +46,9 @@ public class AccountBOImpl implements IAccountBO {
         return result;
     }
 
-    private Map<String, XN802503Res> getAccountsByUser(String systemCode,
-            String userId) {
+    private Map<String, XN802503Res> getAccountsByUser(String userId) {
         Map<String, XN802503Res> resultMap = new HashMap<String, XN802503Res>();
         XN802503Req req = new XN802503Req();
-        req.setSystemCode(systemCode);
         req.setUserId(userId);
         String jsonStr = BizConnecter.getBizData("802503",
             JsonUtils.object2Json(req));
@@ -66,17 +63,16 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     @Override
-    public void doTransferAmountByUser(String systemCode, String fromUserId,
-            String toUserId, String currency, Long amount, String bizType,
+    public void doTransferAmount(String fromUserId, String toUserId,
+            ECurrency currency, Long amount, EBizType bizType,
             String fromBizNote, String toBizNote) {
         if (amount != null && amount != 0) {
             XN802530Req req = new XN802530Req();
-            req.setSystemCode(systemCode);
             req.setFromUserId(fromUserId);
             req.setToUserId(toUserId);
-            req.setCurrency(currency);
+            req.setCurrency(currency.getCode());
             req.setTransAmount(String.valueOf(amount));
-            req.setBizType(bizType);
+            req.setBizType(bizType.getCode());
             req.setFromBizNote(fromBizNote);
             req.setToBizNote(toBizNote);
             BizConnecter.getBizData("802530", JsonUtils.object2Json(req),
@@ -149,23 +145,21 @@ public class AccountBOImpl implements IAccountBO {
             gxjlPrice = Double.valueOf(price * gxjl2cny).longValue();
         }
         // 扣除贡献值
-        doTransferAmountByUser(
-            systemCode,
+        doTransferAmount(
             fromUserId,
             toUserId,
-            ECurrency.GXJL.getCode(),
+            ECurrency.GXJL,
             gxjlPrice,
-            bizType.getCode(),
+            bizType,
             UserUtil.getUserMobile(fromUserRes.getMobile())
                     + bizType.getValue(), bizType.getValue());
         // 扣除分润
-        doTransferAmountByUser(
-            systemCode,
+        doTransferAmount(
             fromUserId,
             toUserId,
-            ECurrency.FRB.getCode(),
+            ECurrency.FRB,
             frPrice,
-            bizType.getCode(),
+            bizType,
             UserUtil.getUserMobile(fromUserRes.getMobile())
                     + bizType.getValue(), bizType.getValue());
         return new PayBalanceRes(gxjlPrice, frPrice);
@@ -189,7 +183,7 @@ public class AccountBOImpl implements IAccountBO {
         frPrice = Double.valueOf(price * fr2cny).longValue();
         String fromBizNote = bizType.getValue();
         String toBizNote = "用户[" + fromUser.getMobile() + "] " + fromBizNote;
-        doTransferAmountByUser(systemCode, fromUser.getUserId(), toUserId,
+        doTransferAmount(systemCode, fromUser.getUserId(), toUserId,
             ECurrency.FRB.getCode(), frPrice, bizType.getCode(), fromBizNote,
             toBizNote);
         return frPrice;
