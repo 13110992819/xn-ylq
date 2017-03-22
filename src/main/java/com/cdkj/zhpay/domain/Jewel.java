@@ -75,6 +75,9 @@ public class Jewel extends ABaseDO {
 
     // **********db properties ******************
 
+    // 中奖者
+    private User user;
+
     public String getCode() {
         return code;
     }
@@ -225,5 +228,13 @@ public class Jewel extends ABaseDO {
 
     public void setSystemCode(String systemCode) {
         this.systemCode = systemCode;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
