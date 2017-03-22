@@ -24,6 +24,7 @@ import com.cdkj.zhpay.core.CalculationUtil;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbYy;
 import com.cdkj.zhpay.domain.Prize;
+import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.domain.UserExt;
 import com.cdkj.zhpay.dto.res.XN805060Res;
 import com.cdkj.zhpay.dto.res.XN805901Res;
@@ -32,6 +33,8 @@ import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EPrizeType;
+import com.cdkj.zhpay.enums.ESystemCode;
+import com.cdkj.zhpay.exception.BizException;
 
 @Service
 public class HzbYyAOImpl implements IHzbYyAO {
@@ -51,23 +54,47 @@ public class HzbYyAOImpl implements IHzbYyAO {
     private IUserBO userBO;
 
     /**
-     * 业务逻辑：
-     * 1、限制规则判断
-     * 2、获取参数数据
-     * 3、判断三次只能有一次领到红包
-     * 4、领到红包时，触发摇一摇分销规则
-     * @see com.cdkj.zhpay.ao.IHzbYyAO#doHzbYy(java.lang.String, java.lang.String, java.lang.String)
+     * 业务逻辑：树不同，摇一摇整个逻辑是不同的
+     * A、菜狗的摇钱树
+     * 1、能不能摇：树是否失效；人/设备是否超过次数。
+     * 2、摇到什么：摇一摇的算法。
+     * 3、刷新对应摇钱树生命值。
+     * 
+     * B、正汇的摇钱树
+     * 1、能不能摇：树是否失效；人/设备是否超过次数。
+     * 2、摇到什么：摇一摇的算法
+     * 3、刷新对应摇钱树生命值。
+     * 4、特殊处理：正汇系统摇到红包时，将促发分销规则
+     * 
      */
     @Override
     @Transactional
-    public XN808460Res doHzbYy(String userId, Long hzbHoldId, String deviceNo) {
-        XN805901Res yyUser = userBO.getRemoteUser(userId, userId);
-        Hzb hzb = hzbBO.getHzbHold(hzbHoldId);
-        // 验证次数
-        hzbYyBO.checkHzbYyCondition(hzb.getSystemCode(), hzbHoldId, userId,
-            deviceNo);
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(
-            hzb.getSystemCode(), null);
+    public XN808460Res doHzbYy(String userId, String hzbCode, String deviceNo) {
+        // A、能不能摇：树是否失效；人/设备是否超过次数
+        User yyUser = userBO.getRemoteUser(userId);
+        Hzb hzb = hzbBO.checkActivated(hzbCode);
+        hzbYyBO.checkYy(hzb, yyUser, deviceNo);
+        // B、树不同，摇一摇整个逻辑是不同的
+        if (ESystemCode.ZHPAY.getCode().equalsIgnoreCase(hzb.getSystemCode())) {
+            return doYyByZH(yyUser, hzb, deviceNo);
+        } else if (ESystemCode.Caigo.getCode().equalsIgnoreCase(
+            hzb.getSystemCode())) {
+            return doYyByCG(yyUser, hzb, deviceNo);
+        } else {
+            throw new BizException("xn0000", "所选摇钱树不属于本系统");
+        }
+
+    }
+
+    private XN808460Res doYyByCG(User yyUser, Hzb hzb, String deviceNo) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private XN808460Res doYyByZH(User yyUser, Hzb hzb, String deviceNo) {
+
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(hzb
+            .getSystemCode());
         String type = null;
         Double ycQbbWeight = getWeight(rateMap, SysConstants.YC_QBB);
         Double ycGwbWeight = getWeight(rateMap, SysConstants.YC_GWB);
@@ -94,8 +121,8 @@ public class HzbYyAOImpl implements IHzbYyAO {
         data.setQuantity(quantity);
         hzbYyBO.saveHzbYy(data);
         // 更新被摇次数
-        hzbBO.refreshRockNum(hzb.getId(),
-            hzb.getPeriodRockNum() + 1, hzb.getTotalRockNum() + 1);
+        hzbBO.refreshRockNum(hzb.getId(), hzb.getPeriodRockNum() + 1,
+            hzb.getTotalRockNum() + 1);
         String currency = null;
         if (EPrizeType.GWB.getCode().equals(type)) {
             currency = ECurrency.GWB.getCode();
@@ -103,8 +130,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
             currency = ECurrency.QBB.getCode();
         } else if (EPrizeType.HBB.getCode().equals(type)) {
             currency = ECurrency.HBB.getCode();
-            distributeAmount(hzb.getSystemCode(), yyUser,
-                hzb.getUserId());
+            distributeAmount(hzb.getSystemCode(), yyUser, hzb.getUserId());
         }
         String quantityStr = CalculationUtil.divi(Long.valueOf(quantity));
         String toBizNote = EBizType.AJ_YYJL.getValue()
@@ -113,9 +139,9 @@ public class HzbYyAOImpl implements IHzbYyAO {
         String fromBizNote = UserUtil.getUserMobile(yyUser.getMobile())
                 + toBizNote;
         // 奖励划拨
-        accountBO.doTransferFcBySystem(hzb.getSystemCode(), userId,
-            currency, Long.valueOf(quantity), EBizType.AJ_YYJL.getCode(),
-            fromBizNote, toBizNote);
+        accountBO.doTransferFcBySystem(hzb.getSystemCode(), userId, currency,
+            Long.valueOf(quantity), EBizType.AJ_YYJL.getCode(), fromBizNote,
+            toBizNote);
         return new XN808460Res(type, quantityStr);
     }
 
@@ -139,21 +165,6 @@ public class HzbYyAOImpl implements IHzbYyAO {
                     * SysConstants.AMOUNT_RADIX).intValue();
         Random rand = new Random();
         return rand.nextInt(yyAmountMAX - yyAmountMin) + yyAmountMin;
-    }
-
-    @Override
-    public Paginable<HzbYy> queryHzbYyPage(int start, int limit, HzbYy condition) {
-        return hzbYyBO.getPaginable(start, limit, condition);
-    }
-
-    @Override
-    public List<HzbYy> queryHzbYyList(HzbYy condition) {
-        return hzbYyBO.queryHzbYyList(condition);
-    }
-
-    @Override
-    public HzbYy getHzbYy(String code) {
-        return hzbYyBO.getHzbYy(code);
     }
 
     // 汇赚宝分成:
@@ -246,5 +257,10 @@ public class HzbYyAOImpl implements IHzbYyAO {
         accountBO.doTransferFcBySystem(systemCode, areaUser.getUserId(),
             ECurrency.HBYJ.getCode(), fcAmount, EBizType.AJ_YYFC.getCode(),
             fromBizNote, toBizNote);
+    }
+
+    @Override
+    public Paginable<HzbYy> queryHzbYyPage(int start, int limit, HzbYy condition) {
+        return hzbYyBO.getPaginable(start, limit, condition);
     }
 }

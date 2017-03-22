@@ -1,5 +1,6 @@
 package com.cdkj.zhpay.ao.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import com.cdkj.zhpay.ao.IJewelAO;
 import com.cdkj.zhpay.bo.IJewelBO;
 import com.cdkj.zhpay.bo.IJewelRecordBO;
 import com.cdkj.zhpay.bo.IJewelTemplateBO;
+import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelTemplate;
@@ -34,16 +36,30 @@ public class JewelAOImpl implements IJewelAO {
     IJewelRecordBO jewelRecordBO;
 
     @Autowired
+    IUserBO userBO;
+
+    @Autowired
     IJewelTemplateBO jewelTemplateBO;
 
     @Override
     public Paginable<Jewel> queryJewelPage(int start, int limit, Jewel condition) {
-        return jewelBO.getPaginable(start, limit, condition);
+        Paginable<Jewel> results = jewelBO
+            .getPaginable(start, limit, condition);
+        for (Jewel jewel : results.getList()) {
+            if (StringUtils.isNotBlank(jewel.getWinUser())) {
+                jewel.setUser(userBO.getRemoteUser(jewel.getWinUser()));
+            }
+        }
+        return results;
     }
 
     @Override
     public Jewel getJewel(String code) {
-        return jewelBO.getJewel(code);
+        Jewel jewel = jewelBO.getJewel(code);
+        if (StringUtils.isNotBlank(jewel.getWinUser())) {
+            jewel.setUser(userBO.getRemoteUser(jewel.getWinUser()));
+        }
+        return jewel;
     }
 
     @Override

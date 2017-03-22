@@ -286,9 +286,10 @@ public class HzbAOImpl implements IHzbAO {
                     + UserUtil.getUserMobile(fcUser.getMobile()) + "分成";
             String toBizNote = UserUtil.getUserMobile(ownerUser.getMobile())
                     + EBizType.AJ_GMHZBFC.getValue();
-            accountBO.doTransferFcBySystem(systemCode, fcUser.getUserId(),
-                ECurrency.FRB.getCode(), transAmount,
-                EBizType.AJ_GMHZBFC.getCode(), fromBizNote, toBizNote);
+            accountBO.doTransferAmountByUser(systemCode, fcUser.getUserId(),
+                ESysUser.SYS_USER.getCode(), ECurrency.FRB.getCode(),
+                transAmount, EBizType.AJ_GMHZBFC.getCode(), fromBizNote,
+                toBizNote);
         }
     }
 

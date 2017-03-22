@@ -104,7 +104,7 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             Hzb data = new Hzb();
-            data.setCode(payCode);
+            data.setCode(code);
             data.setStatus(status);
             data.setPayCode(payCode);
             data.setPayDatetime(new Date());
@@ -213,5 +213,16 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         condition.setCompanyCode(companyCode);
         condition.setSystemCode(systemCode);
         return hzbDAO.selectList(condition);
+
+    }
+
+    @Override
+    public Hzb checkActivated(String hzbCode) {
+        Hzb hzb = this.getHzb(hzbCode);
+        if (EHzbStatus.ACTIVATED.getCode().equalsIgnoreCase(hzb.getCode())) {
+            return hzb;
+        } else {
+            throw new BizException("xn0000", "该摇钱树不处于激活状态");
+        }
     }
 }
