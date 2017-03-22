@@ -49,6 +49,7 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
         SYSDict data = new SYSDict();
         data.setId(id);
         data.setDvalue(value);
+
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);

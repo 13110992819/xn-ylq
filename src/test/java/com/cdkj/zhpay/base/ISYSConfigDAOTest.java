@@ -5,35 +5,36 @@ import java.util.Date;
 import org.junit.Test;
 import org.unitils.spring.annotation.SpringBeanByType;
 
-import com.cdkj.zhpay.dao.ISYSDictDAO;
-import com.cdkj.zhpay.domain.SYSDict;
+import com.cdkj.zhpay.dao.ISYSConfigDAO;
+import com.cdkj.zhpay.domain.SYSConfig;
 
-public class ISysDictDAOTest extends ADAOTest {
+public class ISYSConfigDAOTest extends ADAOTest {
 
     @SpringBeanByType
-    private ISYSDictDAO sysDictDAO;
+    private ISYSConfigDAO sysConfigDAO;
 
     @Test
     public void insert() {
-        SYSDict data = new SYSDict();
+        SYSConfig data = new SYSConfig();
         data.setType("1");
-        data.setParentKey("parentKey");
-        data.setDkey("dkey");
-        data.setDvalue("dvalue");
+        data.setCkey("Ckey");
+        data.setCvalue("Cvalue");
 
         data.setUpdater("updater");
         data.setUpdateDatetime(new Date());
         data.setRemark("remark");
-        sysDictDAO.insert(data);
+        data.setSystemCode("systemCode");
+        data.setCompanyCode("companyCode");
+        sysConfigDAO.insert(data);
         logger.info("insert : {}", data.getId());
 
     }
 
     @Test
     public void select() {
-        SYSDict condition = new SYSDict();
+        SYSConfig condition = new SYSConfig();
         condition.setId(1L);
-        SYSDict data = sysDictDAO.select(condition);
+        SYSConfig data = sysConfigDAO.select(condition);
         logger.info("select : {}", data.getId());
     }
 

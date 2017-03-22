@@ -38,6 +38,7 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
         SYSConfig data = new SYSConfig();
         data.setId(id);
         data.setCvalue(cvalue);
+
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);

@@ -18,9 +18,6 @@ public class SYSConfigAOImpl implements ISYSConfigAO {
     @Autowired
     ISYSConfigBO sysConfigBO;
 
-    /** 
-     * @see com.cdkj.zhpay.ao.ISYSConfigAO#editSYSConfig(java.lang.Long, java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
     public void editSYSConfig(Long id, String cvalue, String updater,
             String remark) {
