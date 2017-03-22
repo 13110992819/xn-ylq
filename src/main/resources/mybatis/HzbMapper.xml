@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cdkj.zhpay.dao.IHzbHoldDAO">
-	<resultMap id="hzbHold_DB_Result" type="hzbHold">
+	<resultMap id="hzb_DB_Result" type="hzb">
 		<result column="id" property="id" />
 		<result column="user_id" property="userId" />
 		<result column="mobile" property="mobile" />
@@ -61,7 +61,7 @@
 		</trim>
 	</sql>
 	
-	<select id="select_hzbHold" parameterType="hzbHold" resultMap="hzbHold_DB_Result">
+	<select id="select_hzb" parameterType="hzb" resultMap="hzb_DB_Result">
 		SELECT
 		t.id
 		,t.user_id
@@ -78,7 +78,7 @@
 		,t.pay_datetime
 		,t.system_code
 		FROM
-		tact_hzb_hold t INNER JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id 
+		tyqs_hzb t INNER JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -87,13 +87,13 @@
 		</trim>
 	</select>
 	
-	<select id="select_hzbHold_count" parameterType="hzbHold"
+	<select id="select_hzb_count" parameterType="hzb"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tact_hzb_hold t
+		SELECT count(1) FROM tyqs_hzb t
 		<include refid="where_condition" />
 	</select>
 	
-	<select id="select_hzbHold_distance" parameterType="hzbHold" resultMap="hzbHold_DB_Result">
+	<select id="select_hzb_distance" parameterType="hzb" resultMap="hzb_DB_Result">
 		SELECT
 		t.id
 		,t.user_id
@@ -107,22 +107,22 @@
 		,t.system_code
 		,ROUND(6378.138*2*ASIN(SQRT(POW(SIN((#{userLatitude}*PI()/180-tu.latitude*PI()/180)/2),2)+COS(#{userLatitude}*PI()/180)*COS(tu.latitude*PI()/180)*POW(SIN((#{userLongitude}*PI()/180-tu.longitude*PI()/180)/2),2)))*1000) as distance
 		FROM
-		tact_hzb_hold t INNER JOIN ${userDB}.tstd_user_ext tu ON t.user_id = tu.user_id INNER JOIN ${userDB}.tstd_user tuser ON tu.user_id = tuser.user_id 
+		tyqs_hzb t INNER JOIN ${userDB}.tstd_user_ext tu ON t.user_id = tu.user_id INNER JOIN ${userDB}.tstd_user tuser ON tu.user_id = tuser.user_id 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			  distance asc
 		</trim>
 	</select>
 	
-	<select id="select_hzbHold_distance_count" parameterType="hzbHold"
+	<select id="select_hzb_distance_count" parameterType="hzb"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tact_hzb_hold t INNER JOIN ${userDB}.tstd_user_ext tu ON t.user_id = tu.user_id 
+		SELECT count(1) FROM tyqs_hzb t INNER JOIN ${userDB}.tstd_user_ext tu ON t.user_id = tu.user_id 
 		<include refid="where_condition" />
 	</select>
 
-	<insert id="insert_hzbHold" parameterType="hzbHold">
+	<insert id="insert_hzb" parameterType="hzb">
 		INSERT INTO
-		tact_hzb_hold(
+		tyqs_hzb(
 		user_id
 		,hzb_code
 		,status
@@ -154,29 +154,29 @@
 		)
 	</insert>
 
-	<update id="update_rockNum" parameterType="hzbHold">
-		UPDATE tact_hzb_hold
+	<update id="update_rockNum" parameterType="hzb">
+		UPDATE tyqs_hzb
 		SET
 		period_rock_num = #{periodRockNum}
 		,total_rock_num = #{totalRockNum}
 		WHERE id = #{id}
 	</update>
 	
-	<update id="update_resetPeriodRockNum" parameterType="hzbHold">
-		UPDATE tact_hzb_hold
+	<update id="update_resetPeriodRockNum" parameterType="hzb">
+		UPDATE tyqs_hzb
 		SET
 		period_rock_num = 0
 	</update>
 	
-	<update id="update_status" parameterType="hzbHold">
-		UPDATE tact_hzb_hold
+	<update id="update_status" parameterType="hzb">
+		UPDATE tyqs_hzb
 		SET
 		status = #{status}
 		WHERE id = #{id}
 	</update>
 	
-	<update id="update_pay_status" parameterType="hzbHold">
-		UPDATE tact_hzb_hold
+	<update id="update_pay_status" parameterType="hzb">
+		UPDATE tyqs_hzb
 		SET
 		status = #{status}
 		,pay_amount1 = #{payAmount1}
@@ -187,9 +187,9 @@
 		WHERE id = #{id}
 	</update>
 	
-	<select id="select_totalAmount" parameterType="hzbHold"
+	<select id="select_totalAmount" parameterType="hzb"
 		resultType="java.lang.Long">
-		SELECT sum(price) FROM tact_hzb_hold t
+		SELECT sum(price) FROM tyqs_hzb t
 		<include refid="where_condition" />
 	</select>
 </mapper>
