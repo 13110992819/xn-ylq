@@ -305,6 +305,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             for (JewelRecord jewelRecord : page.getList()) {
                 Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
                 jewelRecord.setJewel(jewel);
+                User user = userBO.getRemoteUser(jewelRecord.getUserId());
+                jewelRecord.setUser(user);
             }
         }
         return page;
