@@ -16,8 +16,6 @@ import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.req.XN802180Req;
 import com.cdkj.zhpay.dto.req.XN802503Req;
-import com.cdkj.zhpay.dto.req.XN802512Req;
-import com.cdkj.zhpay.dto.req.XN802517Req;
 import com.cdkj.zhpay.dto.req.XN802530Req;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
@@ -25,7 +23,6 @@ import com.cdkj.zhpay.dto.res.XN802503Res;
 import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
-import com.cdkj.zhpay.enums.ESysUser;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.http.BizConnecter;
 import com.cdkj.zhpay.http.JsonUtils;
@@ -51,8 +48,7 @@ public class AccountBOImpl implements IAccountBO {
         return result;
     }
 
-    @Override
-    public Map<String, XN802503Res> getAccountsByUser(String systemCode,
+    private Map<String, XN802503Res> getAccountsByUser(String systemCode,
             String userId) {
         Map<String, XN802503Res> resultMap = new HashMap<String, XN802503Res>();
         XN802503Req req = new XN802503Req();
@@ -68,40 +64,6 @@ public class AccountBOImpl implements IAccountBO {
             resultMap.put(xn802503Res.getCurrency(), xn802503Res);
         }
         return resultMap;
-    }
-
-    @Override
-    public void doTransferAmount(String systemCode, String fromAccountNumber,
-            String toAccountNumber, Long amount, String bizType, String bizNote) {
-        if (amount != null && amount != 0) {
-            XN802512Req req = new XN802512Req();
-            req.setSystemCode(systemCode);
-            req.setFromAccountNumber(fromAccountNumber);
-            req.setToAccountNumber(toAccountNumber);
-            req.setTransAmount(String.valueOf(amount));
-            req.setBizType(bizType);
-            req.setBizNote(bizNote);
-            BizConnecter.getBizData("802512", JsonUtils.object2Json(req),
-                Object.class);
-        }
-    }
-
-    @Override
-    public void doTransferAmountByUser(String systemCode, String fromUserId,
-            String toUserId, String currency, Long amount, String bizType,
-            String bizNote) {
-        if (amount != null && amount != 0) {
-            XN802517Req req = new XN802517Req();
-            req.setSystemCode(systemCode);
-            req.setFromUserId(fromUserId);
-            req.setToUserId(toUserId);
-            req.setCurrency(currency);
-            req.setTransAmount(String.valueOf(amount));
-            req.setBizType(bizType);
-            req.setBizNote(bizNote);
-            BizConnecter.getBizData("802517", JsonUtils.object2Json(req),
-                Object.class);
-        }
     }
 
     @Override
@@ -121,17 +83,6 @@ public class AccountBOImpl implements IAccountBO {
             BizConnecter.getBizData("802530", JsonUtils.object2Json(req),
                 Object.class);
         }
-    }
-
-    @Override
-    public void doTransferFcBySystem(String systemCode, String userId,
-            String currency, Long transAmount, String bizType,
-            String fromBizNote, String toBizNote) {
-        if (transAmount == null || transAmount == 0) {
-            return;
-        }
-        this.doTransferAmountByUser(systemCode, ESysUser.SYS_USER.getCode(),
-            userId, currency, transAmount, bizType, fromBizNote, toBizNote);
     }
 
     /** 

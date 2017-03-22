@@ -1,7 +1,5 @@
 package com.cdkj.zhpay.bo;
 
-import java.util.Map;
-
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
@@ -29,48 +27,6 @@ public interface IAccountBO {
             String currency);
 
     /**
-     * 获取用户所有的账户
-     * @param systemCode
-     * @param userId
-     * @return 
-     * @create: 2017年1月10日 下午8:32:36 xieyj
-     * @history:
-     */
-    public Map<String, XN802503Res> getAccountsByUser(String systemCode,
-            String userId);
-
-    /**
-     * 账户划转资金
-     * @param systemCode
-     * @param fromAccountNumber
-     * @param toAccountNumber
-     * @param amount
-     * @param bizType
-     * @param bizNote
-     * @return 
-     * @create: 2016年12月28日 下午2:16:09 xieyj
-     * @history:
-     */
-    public void doTransferAmount(String systemCode, String fromAccountNumber,
-            String toAccountNumber, Long amount, String bizType, String bizNote);
-
-    /**
-     * 根据用户编号进行账户资金划转
-     * @param systemCode
-     * @param fromUserId
-     * @param toUserId
-     * @param currency
-     * @param amount
-     * @param bizType
-     * @param bizNote
-     * @create: 2017年2月25日 下午12:57:18 xieyj
-     * @history:
-     */
-    public void doTransferAmountByUser(String systemCode, String fromUserId,
-            String toUserId, String currency, Long amount, String bizType,
-            String bizNote);
-
-    /**
      * 根据用户编号进行账户资金划转
      * @param systemCode
      * @param fromUserId
@@ -85,21 +41,6 @@ public interface IAccountBO {
      */
     public void doTransferAmountByUser(String systemCode, String fromUserId,
             String toUserId, String currency, Long amount, String bizType,
-            String fromBizNote, String toBizNote);
-
-    /**
-     * @param systemCode
-     * @param userId
-     * @param currency
-     * @param transAmount
-     * @param bizType
-     * @param fromBizNote
-     * @param toBizNote 
-     * @create: 2017年2月25日 下午1:49:56 xieyj
-     * @history:
-     */
-    public void doTransferFcBySystem(String systemCode, String userId,
-            String currency, Long transAmount, String bizType,
             String fromBizNote, String toBizNote);
 
     /**
