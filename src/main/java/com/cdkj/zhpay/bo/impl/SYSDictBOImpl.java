@@ -103,7 +103,7 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
     public void checkKeys(String parentKey, String key) {
         // 查看父节点是否存在
         SYSDict fDict = new SYSDict();
-        fDict.setParentKey(parentKey);
+        fDict.setDkey(parentKey);
         fDict.setType(EDictType.FIRST.getCode());
         if (getTotalCount(fDict) <= 0) {
             throw new BizException("xn000000", "parentKey不存在");
