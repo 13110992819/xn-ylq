@@ -1,28 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cdkj.zhpay.dao.IHzbHoldDAO">
+<mapper namespace="com.cdkj.zhpay.dao.IHzbDAO">
 	<resultMap id="hzb_DB_Result" type="hzb">
-		<result column="id" property="id" />
+		<result column="code" property="code" />
 		<result column="user_id" property="userId" />
-		<result column="mobile" property="mobile" />
-		<result column="hzb_code" property="hzbCode" />
-		<result column="status" property="status" />
+		<result column="template_code" property="templateCode" />
 		<result column="price" property="price" />
 		<result column="currency" property="currency" />
+		
 		<result column="period_rock_num" property="periodRockNum" />
 		<result column="total_rock_num" property="totalRockNum" />
-		<result column="distance" property="distance" />
-		<result column="ip" property="ip" />
+		<result column="back_amount1" property="backAmount1" />
+		<result column="back_amount2" property="backAmount2" />
+		<result column="back_amount3" property="backAmount3" />
+		
+		<result column="create_datetime" property="createDatetime" />
+		<result column="status" property="status" />
 		<result column="pay_group" property="payGroup" />
 		<result column="pay_code" property="payCode" />
 		<result column="pay_datetime" property="payDatetime" />
+		
+		<result column="pay_amount1" property="payAmount1" />
+		<result column="pay_amount2" property="payAmount2" />
+		<result column="pay_amount3" property="payAmount3" />
+		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
-		<if test="id != null and id != '' ">
-				AND t.id = #{id}
+		<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="userId != null and userId != '' ">
+				AND t.user_id = #{userId}
+			</if>
+			<!-- <if test='userList != null and userList.size() > 0'>
+				AND t.user_id in 
+                <foreach item="item" index="index" collection="userList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if> -->
+			<if test="templateCode != null and templateCode != '' ">
+				AND t.template_code = #{templateCode}
+			</if>
+			<if test="currency != null and currency != '' ">
+				AND t.currency = #{currency}
+			</if>
+			<if test="periodRockNum != null and periodRockNum != '' ">
+				<![CDATA[AND t.period_rock_num < #{periodRockNum}]]>
+			</if>
+			<if test="totalRockNum != null and totalRockNum != '' ">
+				<![CDATA[AND t.total_rock_num < #{totalRockNum}]]>
 			</if>
 			<if test="status != null and status != '' ">
 				<choose>
@@ -34,18 +63,6 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="userId != null and userId != '' ">
-				AND t.user_id = #{userId}
-			</if>
-			<if test='userList != null and userList.size() > 0'>
-				AND t.user_id in 
-                <foreach item="item" index="index" collection="userList" open="(" separator="," close=")">
-	            	#{item}
-                </foreach> 
-			</if>
-			<if test="periodRockNum != null and periodRockNum != '' ">
-				<![CDATA[AND t.period_rock_num < #{periodRockNum}]]>
-			</if>
 			<if test="distance != null and distance != '' ">
 				<![CDATA[ having distance <= #{distance}]]>
 			</if>
@@ -55,6 +72,9 @@
 			<if test="payCode != null and payCode != '' ">
 				AND t.pay_code = #{payCode}
 			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
@@ -63,22 +83,31 @@
 	
 	<select id="select_hzb" parameterType="hzb" resultMap="hzb_DB_Result">
 		SELECT
-		t.id
+		t.code
 		,t.user_id
-		,tu.mobile
-		,t.hzb_code
-		,t.status
+		,t.template_code
 		,t.price
 		,t.currency
+		
 		,t.period_rock_num
 		,t.total_rock_num
-		,t.ip
+		,t.back_amount1
+		,t.back_amount2
+		,t.back_amount3
+		
+		,t.create_datetime
+		,t.status
 		,t.pay_group
 		,t.pay_code
 		,t.pay_datetime
+		
+		,t.pay_amount1
+		,t.pay_amount2
+		,t.pay_amount3
+		,t.company_code
 		,t.system_code
 		FROM
-		tyqs_hzb t INNER JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id 
+		tyqs_hzb t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -95,101 +124,154 @@
 	
 	<select id="select_hzb_distance" parameterType="hzb" resultMap="hzb_DB_Result">
 		SELECT
-		t.id
+		t.code
 		,t.user_id
-		,tuser.mobile
-		,t.hzb_code
-		,t.status
+		,t.template_code
 		,t.price
 		,t.currency
+		
 		,t.period_rock_num
 		,t.total_rock_num
+		,t.back_amount1
+		,t.back_amount2
+		,t.back_amount3
+		
+		,t.create_datetime
+		,t.status
+		,t.pay_group
+		,t.pay_code
+		,t.pay_datetime
+		
+		,t.pay_amount1
+		,t.pay_amount2
+		,t.pay_amount3
+		,t.company_code
 		,t.system_code
 		,ROUND(6378.138*2*ASIN(SQRT(POW(SIN((#{userLatitude}*PI()/180-tu.latitude*PI()/180)/2),2)+COS(#{userLatitude}*PI()/180)*COS(tu.latitude*PI()/180)*POW(SIN((#{userLongitude}*PI()/180-tu.longitude*PI()/180)/2),2)))*1000) as distance
 		FROM
-		tyqs_hzb t INNER JOIN ${userDB}.tstd_user_ext tu ON t.user_id = tu.user_id INNER JOIN ${userDB}.tstd_user tuser ON tu.user_id = tuser.user_id 
+		tyqs_hzb t INNER JOIN ${userDB}.tstd_user_ext tue ON t.user_id = tue.user_id
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			  distance asc
 		</trim>
 	</select>
 	
-	<select id="select_hzb_distance_count" parameterType="hzb"
-		resultType="java.lang.Long">
-		SELECT count(1) FROM tyqs_hzb t INNER JOIN ${userDB}.tstd_user_ext tu ON t.user_id = tu.user_id 
-		<include refid="where_condition" />
-	</select>
-
 	<insert id="insert_hzb" parameterType="hzb">
 		INSERT INTO
 		tyqs_hzb(
-		user_id
-		,hzb_code
-		,status
+		code
+		,user_id
+		,template_code
 		,price
 		,currency
 		,period_rock_num
 		,total_rock_num
+		,back_amount1
+		,back_amount2
+		,back_amount3
+		,create_datetime
+		,status
+		,pay_group
+		,pay_code
+		,pay_datetime
 		,pay_amount1
 		,pay_amount2
 		,pay_amount3
-		,ip
-		,pay_group
+		,company_code
 		,system_code
 		)
 		VALUES(
-		#{userId}
-		,#{hzbCode}
-		,#{status}
+		#{code}
+		,#{userId}
+		,#{templateCode}
 		,#{price}
 		,#{currency}
 		,#{periodRockNum}
 		,#{totalRockNum}
+		,#{backAmount1}
+		,#{backAmount2}
+		,#{backAmount3}
+		,#{createDatetime}
+		,#{status}
+		,#{payGroup}
+		,#{payCode}
+		,#{payDatetime}
 		,#{payAmount1}
 		,#{payAmount2}
 		,#{payAmount3}
-		,#{ip}
-		,#{payGroup}
+		,#{companyCode}
 		,#{systemCode}
 		)
 	</insert>
+	
+	<insert id="insert_hzb_thirdPay" parameterType="hzb">
+		INSERT INTO
+		tyqs_hzb(
+		code
+		,user_id
+		,template_code
+		,price
+		,currency
+		,period_rock_num
+		,total_rock_num
+		,back_amount1
+		,back_amount2
+		,back_amount3
+		,create_datetime
+		,status
+		,pay_group
+		,company_code
+		,system_code
+		)
+		VALUES(
+		#{code}
+		,#{userId}
+		,#{templateCode}
+		,#{price}
+		,#{currency}
+		,#{periodRockNum}
+		,#{totalRockNum}
+		,#{backAmount1}
+		,#{backAmount2}
+		,#{backAmount3}
+		,#{createDatetime}
+		,#{status}
+		,#{payGroup}
+		,#{companyCode}
+		,#{systemCode}
+		)
+	</insert>
+	
+	<update id="update_payStatus" parameterType="hzb">
+		UPDATE tyqs_hzb
+		SET
+		status = #{status}
+		,pay_code = #{payCode}
+		,pay_datetime = #{payDatetime}
+		,pay_amount1 = #{payAmount1}
+		,pay_amount2 = #{payAmount2}
+		,pay_amount3 = #{payAmount3}
+		WHERE code = #{code}
+	</update>
 
+    <update id="update_putStatus" parameterType="hzb">
+		UPDATE tyqs_hzb
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
+	
 	<update id="update_rockNum" parameterType="hzb">
 		UPDATE tyqs_hzb
 		SET
 		period_rock_num = #{periodRockNum}
 		,total_rock_num = #{totalRockNum}
-		WHERE id = #{id}
+		WHERE code = #{code}
 	</update>
 	
-	<update id="update_resetPeriodRockNum" parameterType="hzb">
+	<update id="update_periodRockNumZero" parameterType="hzb">
 		UPDATE tyqs_hzb
 		SET
 		period_rock_num = 0
 	</update>
-	
-	<update id="update_status" parameterType="hzb">
-		UPDATE tyqs_hzb
-		SET
-		status = #{status}
-		WHERE id = #{id}
-	</update>
-	
-	<update id="update_pay_status" parameterType="hzb">
-		UPDATE tyqs_hzb
-		SET
-		status = #{status}
-		,pay_amount1 = #{payAmount1}
-		,pay_amount2 = #{payAmount2}
-		,pay_amount3 = #{payAmount3}
-		,pay_code = #{payCode}
-		,pay_datetime = #{payDatetime}
-		WHERE id = #{id}
-	</update>
-	
-	<select id="select_totalAmount" parameterType="hzb"
-		resultType="java.lang.Long">
-		SELECT sum(price) FROM tyqs_hzb t
-		<include refid="where_condition" />
-	</select>
 </mapper>

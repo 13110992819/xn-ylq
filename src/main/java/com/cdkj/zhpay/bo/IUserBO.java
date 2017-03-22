@@ -38,8 +38,7 @@ public interface IUserBO {
      * @create: 2016年12月29日 下午6:13:28 xieyj
      * @history:
      */
-    public XN805060Res getPartnerUserInfo(String province, String city,
-            String area);
+    public User getPartnerUserInfo(String province, String city, String area);
 
     /**
      * 获取用户列表

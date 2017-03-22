@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cdkj.zhpay.bo.IHzbBO;
-import com.cdkj.zhpay.bo.base.Page;
-import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
+import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IHzbDAO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.enums.EDiviFlag;
+import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EHzbStatus;
 import com.cdkj.zhpay.exception.BizException;
 
@@ -36,19 +36,29 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     }
 
     @Override
-    public int buySuccess(String userId, HzbTemplate hzbTemplate,
-            String payGroup) {
+    public int buyHzb(String userId, HzbTemplate hzbTemplate, String payGroup) {
         int count = 0;
         if (StringUtils.isNotBlank(userId)) {
             Hzb data = new Hzb();
+            String code = OrderNoGenerater.generateM(EGeneratePrefix.HZB
+                .getCode());
+            data.setCode(code);
             data.setUserId(userId);
             data.setTemplateCode(hzbTemplate.getCode());
-            data.setStatus(EHzbStatus.TO_PAY.getCode());
             data.setPrice(hzbTemplate.getPrice());
             data.setCurrency(hzbTemplate.getCurrency());
+
             data.setPeriodRockNum(0);
             data.setTotalRockNum(0);
+            data.setBackAmount1(0L);
+            data.setBackAmount2(0L);
+            data.setBackAmount3(0L);
+
+            Date date = new Date();
+            data.setCreateDatetime(date);
+            data.setStatus(EHzbStatus.TO_PAY.getCode());
             data.setPayGroup(payGroup);
+            data.setCompanyCode(hzbTemplate.getCompanyCode());
             data.setSystemCode(hzbTemplate.getSystemCode());
             count = hzbDAO.insert(data);
         }
@@ -56,25 +66,70 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     }
 
     @Override
-    public int saveHzb(String userId, HzbTemplate hzbTemplate, Long amount) {
+    public int saveHzb(String userId, HzbTemplate hzbTemplate, Long frPayAmount) {
         int count = 0;
         if (StringUtils.isNotBlank(userId)) {
             Hzb data = new Hzb();
+            String code = OrderNoGenerater.generateM(EGeneratePrefix.HZB
+                .getCode());
+            data.setCode(code);
             data.setUserId(userId);
             data.setTemplateCode(hzbTemplate.getCode());
-            data.setStatus(EHzbStatus.ACTIVATED.getCode());
             data.setPrice(hzbTemplate.getPrice());
             data.setCurrency(hzbTemplate.getCurrency());
+
             data.setPeriodRockNum(0);
             data.setTotalRockNum(0);
+            data.setBackAmount1(0L);
+            data.setBackAmount2(0L);
+            data.setBackAmount3(0L);
+
+            Date date = new Date();
+            data.setCreateDatetime(date);
+            data.setStatus(EHzbStatus.ACTIVATED.getCode());
+            data.setPayDatetime(date);
             data.setPayAmount1(0L);
-            data.setPayAmount2(0L);
-            data.setPayAmount3(amount);
+            data.setPayAmount2(frPayAmount);// 虚拟币_分润
+            data.setPayAmount3(0L);
+            data.setCompanyCode(hzbTemplate.getCompanyCode());
             data.setSystemCode(hzbTemplate.getSystemCode());
             count = hzbDAO.insert(data);
         }
         return count;
 
+    }
+
+    @Override
+    public int refreshPayStatus(String code, String status, String payCode,
+            Long payAmount) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            Hzb data = new Hzb();
+            data.setCode(payCode);
+            data.setStatus(status);
+            data.setPayCode(payCode);
+            data.setPayDatetime(new Date());
+            data.setPayAmount1(payAmount);// 人民币
+            data.setPayAmount2(0L);
+            data.setPayAmount3(0L);
+            count = hzbDAO.updatePayStatus(data);
+        }
+        return count;
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IHzbBO#refreshPutStatus(java.lang.String, java.lang.String)
+     */
+    @Override
+    public int refreshPutStatus(String code, String status) {
+        int count = 0;
+        if (StringUtils.isNotBlank(code)) {
+            Hzb data = new Hzb();
+            data.setCode(code);
+            data.setPayDatetime(new Date());
+            count = hzbDAO.updatePutStatus(data);
+        }
+        return count;
     }
 
     @Override
@@ -92,64 +147,12 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     }
 
     @Override
-    public Hzb getHzbByUser(String userId) {
-        Hzb data = null;
-        if (StringUtils.isNotBlank(userId)) {
-            Hzb condition = new Hzb();
-            condition.setUserId(userId);
-            condition.setStatus(EDiviFlag.EFFECT.getCode());
-            data = hzbDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "汇赚宝购买记录不存在");
-            }
-        }
-        return data;
-    }
-
-    @Override
-    public int refreshPayStatus(Long id, String status, String payCode,
-            Long payAmount) {
-        int count = 0;
-        if (id != null) {
-            Hzb data = new Hzb();
-            data.setId(id);
-            data.setStatus(status);
-            data.setPayAmount1(0L);
-            data.setPayAmount2(0L);
-            data.setPayAmount3(payAmount);
-            data.setPayCode(payCode);
-            data.setPayDatetime(new Date());
-            count = hzbDAO.updatePayStatus(data);
-        }
-        return count;
-    }
-
-    /** 
-     * @see com.cdkj.zhpay.bo.IHzbBO#queryDistanceHzbList(com.cdkj.zhpay.domain.Hzb)
-     */
-    @Override
-    public List<Hzb> queryDistanceHzbList(Hzb condition) {
-        return hzbDAO.selectDistanceList(condition);
-    }
-
-    @Override
-    public Paginable<Hzb> queryDistancePaginable(int start, int pageSize,
-            Hzb condition) {
-        long totalCount = hzbDAO.selectDistanceTotalCount(condition);
-        Paginable<Hzb> page = new Page<Hzb>(start, pageSize, totalCount);
-        List<Hzb> dataList = hzbDAO.selectDistanceList(condition,
-            page.getStart(), page.getPageSize());
-        page.setList(dataList);
-        return page;
-    }
-
-    @Override
-    public int refreshRockNum(Long id, Integer periodRockNum,
+    public int refreshRockNum(String code, Integer periodRockNum,
             Integer totalRockNum) {
         int count = 0;
-        if (id != null) {
+        if (StringUtils.isNotBlank(code)) {
             Hzb data = new Hzb();
-            data.setId(id);
+            data.setCode(code);
             data.setPeriodRockNum(periodRockNum);
             data.setTotalRockNum(totalRockNum);
             count = hzbDAO.updateRockNum(data);
@@ -159,14 +162,7 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
 
     @Override
     public void resetPeriodRockNum() {
-        hzbDAO.resetPeriodRockNum();
-    }
-
-    @Override
-    public Long getTotalAmount(String payGroup) {
-        Hzb data = new Hzb();
-        data.setPayGroup(payGroup);
-        return hzbDAO.getTotalAmount(data);
+        hzbDAO.updatePeriodRockNumZero();
     }
 
     /** 
@@ -182,4 +178,41 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         }
     }
 
+    /** 
+     * @see com.cdkj.zhpay.bo.IHzbBO#queryHzbList(java.lang.String)
+     */
+    @Override
+    public List<Hzb> queryHzbList(String payGroup) {
+        Hzb condition = new Hzb();
+        condition.setStatus(EHzbStatus.TO_PAY.getCode());
+        condition.setPayGroup(payGroup);
+        return hzbDAO.selectList(condition);
+    }
+
+    @Override
+    public List<Hzb> queryHzbList(Hzb condition) {
+        return hzbDAO.selectList(condition);
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IHzbBO#queryDistanceHzbList(com.cdkj.zhpay.domain.Hzb)
+     */
+    @Override
+    public List<Hzb> queryDistanceHzbList(Hzb condition) {
+        return hzbDAO.selectDistanceList(condition);
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IHzbBO#queryHzbList(java.lang.String, java.lang.String, java.lang.String)
+     */
+    @Override
+    public List<Hzb> queryHzbList(String userId, String companyCode,
+            String systemCode) {
+        Hzb condition = new Hzb();
+        condition.setUserId(userId);
+        condition.setStatus(EDiviFlag.EFFECT.getCode());
+        condition.setCompanyCode(companyCode);
+        condition.setSystemCode(systemCode);
+        return hzbDAO.selectList(condition);
+    }
 }

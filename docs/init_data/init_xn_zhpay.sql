@@ -1,11 +1,16 @@
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B1','汇赚宝价格','hzbPrice','600','汇赚宝价格(人民币)',0,NULL,'CD-CZH000001');
+/*
+-- Query: SELECT `type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code` FROM xn_zhpay.tsys_config
+LIMIT 0, 10000
 
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','县','hzbArea','0.1','购买汇赚宝分成10%',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','市','hzbCity','0.1','购买汇赚宝分成10%',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','省','hzbProvince','0.1','购买汇赚宝分成10%',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','一级推荐人','hzbCUser','0.1','购买汇赚宝分成10%',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','二级推荐人','hzbBUser','0.1','购买汇赚宝分成10%',0,NULL,'CD-CZH000001');
-INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B2','三级推荐人','hzbAUser','0.1','购买汇赚宝分成10%',0,NULL,'CD-CZH000001');
+-- Date: 2017-03-22 15:51
+*/
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('B','hzbArea','0.1','admin','2017-03-22 14:58:34','购买汇赚宝分成10%','CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('B','hzbCity','0.1','admin','2017-03-22 14:58:34','购买汇赚宝分成10%','CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('B','hzbProvince','0.1','admin','2017-03-22 14:58:34','购买汇赚宝分成10%','CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('B','hzbCUser','0.1','admin','2017-03-22 14:58:34','购买汇赚宝分成10%','CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('B','hzbBUser','0.1','admin','2017-03-22 14:58:34','购买汇赚宝分成10%','CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('B','hzbAUser','0.1','admin','2017-03-22 14:58:34','购买汇赚宝分成10%','CD-CZH000001','CD-CZH000001');
 
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B3','汇赚宝摇出距离','hzbDistance','1000','汇赚宝摇出距离(米)',0,NULL,'CD-CZH000001');
 INSERT INTO `tsys_config` (`category`,`type`,`cname`,`ckey`,`cvalue`,`remark`,`belong`,`company_code`,`system_code`) VALUES ('B','B3','汇赚宝摇出最大数量','hzbMaxNum','100','汇赚宝摇出最大数量',0,NULL,'CD-CZH000001');

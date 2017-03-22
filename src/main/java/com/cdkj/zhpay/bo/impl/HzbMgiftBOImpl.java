@@ -76,7 +76,7 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
             HzbMgift data = new HzbMgift();
             data.setCode(code);
             data.setStatus(status.getCode());
-            count = hzbMgiftDAO.updateStatus(data);
+            count = hzbMgiftDAO.updatePutStatus(data);
         }
         return count;
     }

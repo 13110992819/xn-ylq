@@ -14,60 +14,51 @@ public class HzbDAOImpl extends AMybatisTemplate implements IHzbDAO {
 
     @Override
     public int insert(Hzb data) {
-        return super.insert(NAMESPACE.concat("insert_hzbHold"), data);
+        return super.insert(NAMESPACE.concat("insert_hzb"), data);
+    }
+
+    @Override
+    public int insertThirdPay(Hzb data) {
+        return super.insert(NAMESPACE.concat("insert_hzb_thirdPay"), data);
     }
 
     @Override
     public int delete(Hzb data) {
-        return super.delete(NAMESPACE.concat("delete_hzbHold"), data);
+        return 0;
+    }
+
+    @Override
+    public int updatePayStatus(Hzb data) {
+        return super.update(NAMESPACE.concat("update_payStatus"), data);
+    }
+
+    @Override
+    public int updatePutStatus(Hzb data) {
+        return super.update(NAMESPACE.concat("update_putStatus"), data);
     }
 
     @Override
     public Hzb select(Hzb condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.select(NAMESPACE.concat("select_hzbHold"), condition,
+        return super.select(NAMESPACE.concat("select_hzb"), condition,
             Hzb.class);
     }
 
     @Override
     public Long selectTotalCount(Hzb condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.selectTotalCount(NAMESPACE.concat("select_hzbHold_count"),
+        return super.selectTotalCount(NAMESPACE.concat("select_hzb_count"),
             condition);
     }
 
     @Override
     public List<Hzb> selectList(Hzb condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.selectList(NAMESPACE.concat("select_hzbHold"), condition,
+        return super.selectList(NAMESPACE.concat("select_hzb"), condition,
             Hzb.class);
     }
 
     @Override
     public List<Hzb> selectList(Hzb condition, int start, int count) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.selectList(NAMESPACE.concat("select_hzbHold"), start,
-            count, condition, Hzb.class);
-    }
-
-    @Override
-    public int updateStatus(Hzb data) {
-        return super.update(NAMESPACE.concat("update_status"), data);
-    }
-
-    @Override
-    public int updatePayStatus(Hzb data) {
-        return super.update(NAMESPACE.concat("update_pay_status"), data);
-    }
-
-    /** 
-     * @see com.cdkj.zhpay.dao.IHzbDAO#selectDistanceTotalCount(com.cdkj.zhpay.domain.Hzb)
-     */
-    @Override
-    public Long selectDistanceTotalCount(Hzb condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.selectTotalCount(
-            NAMESPACE.concat("select_hzbHold_distance_count"), condition);
+        return super.selectList(NAMESPACE.concat("select_hzb"), start, count,
+            condition, Hzb.class);
     }
 
     /** 
@@ -76,34 +67,17 @@ public class HzbDAOImpl extends AMybatisTemplate implements IHzbDAO {
     @Override
     public List<Hzb> selectDistanceList(Hzb condition) {
         condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.selectList(NAMESPACE.concat("select_hzbHold_distance"),
+        return super.selectList(NAMESPACE.concat("select_hzb_distance"),
             condition, Hzb.class);
-    }
-
-    /** 
-     * @see com.cdkj.zhpay.dao.IHzbDAO#selectDistanceList(com.cdkj.zhpay.domain.Hzb, int, int)
-     */
-    @Override
-    public List<Hzb> selectDistanceList(Hzb condition, int start, int count) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
-        return super.selectList(NAMESPACE.concat("select_hzbHold_distance"),
-            start, count, condition, Hzb.class);
     }
 
     @Override
     public int updateRockNum(Hzb data) {
-        return super.update(NAMESPACE.concat("update_rockNum"), data);
+        return super.update(NAMESPACE.concat("update_rockNum"), null);
     }
 
     @Override
-    public int resetPeriodRockNum() {
-        return super
-            .update(NAMESPACE.concat("update_resetPeriodRockNum"), null);
-    }
-
-    @Override
-    public Long getTotalAmount(Hzb condition) {
-        return super.select(NAMESPACE.concat("select_totalAmount"), condition,
-            Long.class);
+    public int updatePeriodRockNumZero() {
+        return super.update(NAMESPACE.concat("update_periodRockNumZero"), null);
     }
 }

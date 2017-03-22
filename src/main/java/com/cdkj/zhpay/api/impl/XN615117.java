@@ -33,7 +33,7 @@ public class XN615117 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return hzbAO.queryHzbList(req.getLatitude(), req.getLongitude(),
+        return hzbAO.queryDistanceHzbList(req.getLatitude(), req.getLongitude(),
             req.getUserId(), req.getDeviceNo(), req.getCompanyCode(),
             req.getSystemCode());
     }

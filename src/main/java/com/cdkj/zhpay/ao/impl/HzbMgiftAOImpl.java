@@ -76,7 +76,7 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         // 查询已购买汇赚宝记录，发放红包
         Hzb hhCondition = new Hzb();
         hhCondition.setStatus(EDiviFlag.EFFECT.getCode());
-        List<Hzb> hzblist = hzbBO.queryHzbList(hhCondition);
+        List<Hzb> hzblist = hzbBO.queryDistanceHzbList(hhCondition);
         for (Hzb hzb : hzblist) {
             hzbMgiftBO.generateHzbMgift(hzb);
         }
