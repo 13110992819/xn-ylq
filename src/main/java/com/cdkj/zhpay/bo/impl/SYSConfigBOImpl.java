@@ -61,11 +61,18 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
 
     @Override
     public SYSConfig getSYSConfig(String key, String systemCode) {
+        return getSYSConfig(key, systemCode, systemCode);
+    }
+
+    @Override
+    public SYSConfig getSYSConfig(String key, String companyCode,
+            String systemCode) {
         SYSConfig sysConfig = null;
-        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(systemCode)) {
+        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(companyCode)
+                && StringUtils.isNotBlank(systemCode)) {
             SYSConfig condition = new SYSConfig();
             condition.setCkey(key);
-            condition.setCompanyCode(systemCode);
+            condition.setCompanyCode(companyCode);
             condition.setSystemCode(systemCode);
             List<SYSConfig> sysConfigList = sysConfigDAO.selectList(condition);
             if (CollectionUtils.isNotEmpty(sysConfigList)) {
