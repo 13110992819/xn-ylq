@@ -27,8 +27,7 @@ import com.cdkj.zhpay.enums.EPrizeCurrency;
 import com.cdkj.zhpay.exception.BizException;
 
 @Component
-public abstract class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements
-        IHzbYyBO {
+public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
 
     @Autowired
     private IHzbYyDAO hzbYyDAO;

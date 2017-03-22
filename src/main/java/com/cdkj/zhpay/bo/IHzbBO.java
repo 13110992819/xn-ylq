@@ -34,7 +34,8 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
     public List<Hzb> queryHzbList(String userId, String companyCode,
             String systemCode);
 
-    public List<Hzb> queryDistanceHzbList(Hzb condition);
+    public List<Hzb> queryDistanceHzbList(String latitude, String longitude,
+            String companyCode, String systemCode);
 
     public Hzb getHzb(String code);
 

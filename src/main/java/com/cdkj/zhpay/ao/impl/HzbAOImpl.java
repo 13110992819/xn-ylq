@@ -19,7 +19,6 @@ import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.common.DateUtil;
-import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.core.OrderNoGenerater;
@@ -134,7 +133,7 @@ public class HzbAOImpl implements IHzbAO {
     private Object doZHFRPay(User user, HzbTemplate hzbTemplate) {
         // 余额支付
         Long frPayAmount = accountBO.doFRPay(hzbTemplate.getSystemCode(), user,
-            ESysUser.SYS_USER.getCode(), hzbTemplate.getPrice(),
+            ESysUser.SYS_USER_ZHPAY.getCode(), hzbTemplate.getPrice(),
             EBizType.AJ_GMHZB);
         // 汇赚宝购买成功
         Hzb hzb = hzbBO.saveHzb(user.getUserId(), hzbTemplate, frPayAmount);
@@ -150,7 +149,7 @@ public class HzbAOImpl implements IHzbAO {
     private Object doCGOneCurrencyPay(User user, HzbTemplate hzbTemplate) {
         // 单个币种资金划转
         accountBO.doTransferAmountByUser(hzbTemplate.getSystemCode(),
-            user.getUserId(), ESysUser.SYS_USER.getCode(),
+            user.getUserId(), ESysUser.SYS_USER_CAIGO.getCode(),
             hzbTemplate.getCurrency(), hzbTemplate.getPrice(),
             EBizType.AJ_GMHZB.getCode(), "购买摇钱树", user.getMobile() + "购买摇钱树");
         hzbBO.saveHzb(user.getUserId(), hzbTemplate, hzbTemplate.getPrice());
@@ -203,7 +202,7 @@ public class HzbAOImpl implements IHzbAO {
         // 分配分成
         distributeAmount(hzb.getSystemCode(), hzb.getUserId(), hzb.getPrice());
         // 产生红包
-        // hzbMgiftBO.sendHzbMgift(hzb.getUserId());
+        hzbMgiftBO.generateHzbMgift(hzb, DateUtil.getTodayStart());
     }
 
     // 汇赚宝分成:
@@ -287,7 +286,7 @@ public class HzbAOImpl implements IHzbAO {
             String toBizNote = UserUtil.getUserMobile(ownerUser.getMobile())
                     + EBizType.AJ_GMHZBFC.getValue();
             accountBO.doTransferAmountByUser(systemCode, fcUser.getUserId(),
-                ESysUser.SYS_USER.getCode(), ECurrency.FRB.getCode(),
+                ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB.getCode(),
                 transAmount, EBizType.AJ_GMHZBFC.getCode(), fromBizNote,
                 toBizNote);
         }
@@ -305,7 +304,7 @@ public class HzbAOImpl implements IHzbAO {
             String toBizNote = UserUtil.getUserMobile(ownerUser.getMobile())
                     + EBizType.AJ_GMHZBFC.getValue() + "," + remark + "合伙人分成";
             accountBO.doTransferAmountByUser(systemCode, areaUser.getUserId(),
-                ESysUser.SYS_USER.getCode(), ECurrency.FRB.getCode(),
+                ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB.getCode(),
                 transAmount, EBizType.AJ_GMHZBFC.getCode(), fromBizNote,
                 toBizNote);
         }
@@ -313,32 +312,13 @@ public class HzbAOImpl implements IHzbAO {
 
     @Override
     @Transactional
-    public Object queryDistanceHzbList(String latitude, String longitude,
-            String userId, String deviceNo, String companyCode,
-            String systemCode) {
-        // 校验人和设备
-        // 取距离
-        Map<String, String> sysConfigMap = sysConfigBO
-            .getConfigsMap(systemCode);
-        Hzb condition = new Hzb();
-        condition.setStatus(EHzbStatus.ACTIVATED.getCode());
-        condition.setDistance(sysConfigMap.get(SysConstants.HZB_DISTANCE));
-        // 设置最多被摇次数
-        String periodRockNumCount = sysConfigMap
-            .get(SysConstants.HZB_YY_DAY_MAX_COUNT);
-        Integer periodRockNum = Integer.valueOf(periodRockNumCount);
-        condition.setPeriodRockNum(periodRockNum);
-        List<Hzb> list = hzbBO.queryDistanceHzbList(condition);
-        // 截取数量
-        String hzbMaxNumStr = sysConfigMap.get(SysConstants.HZB_MAX_NUM);
-        Integer hzbMaxNum = Integer.valueOf(hzbMaxNumStr);
-        if (CollectionUtils.isNotEmpty(list) && list.size() > hzbMaxNum) {
-            list = list.subList(0, hzbMaxNum);
-        }
-        for (Hzb hzb : list) {
-            hzb.setShareUrl(PropertiesUtil.Config.SHARE_URL);
-        }
-        return list;
+    public Object queryDistanceHzbList(String userLatitude,
+            String userLongitude, String userId, String deviceNo,
+            String companyCode, String systemCode) {
+        User yyUser = userBO.getRemoteUser(userId);
+        hzbYyBO.checkYyGlobalRule(systemCode, yyUser, deviceNo);
+        return hzbBO.queryDistanceHzbList(userLatitude, userLongitude,
+            companyCode, systemCode);
     }
 
     @Override

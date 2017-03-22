@@ -34,6 +34,17 @@ public class UserExt extends ABaseDO {
     // 区(县)
     private String area;
 
+    // 头像
+    private String photo;
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
     public String getUserId() {
         return userId;
     }

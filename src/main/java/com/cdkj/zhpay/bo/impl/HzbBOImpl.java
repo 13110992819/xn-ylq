@@ -2,13 +2,18 @@ package com.cdkj.zhpay.bo.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.cdkj.zhpay.bo.IHzbBO;
+import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
+import com.cdkj.zhpay.common.PropertiesUtil;
+import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IHzbDAO;
 import com.cdkj.zhpay.domain.Hzb;
@@ -24,6 +29,9 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
 
     @Autowired
     private IHzbDAO hzbDAO;
+
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
 
     @Override
     public boolean isHzbExistByUser(String userId) {
@@ -194,12 +202,33 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         return hzbDAO.selectList(condition);
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.IHzbBO#queryDistanceHzbList(com.cdkj.zhpay.domain.Hzb)
-     */
     @Override
-    public List<Hzb> queryDistanceHzbList(Hzb condition) {
-        return hzbDAO.selectDistanceList(condition);
+    public List<Hzb> queryDistanceHzbList(String userLatitude,
+            String userLongitude, String companyCode, String systemCode) {
+        // 查询激活，距离内的摇钱树
+        Map<String, String> sysConfigMap = sysConfigBO
+            .getConfigsMap(systemCode);
+        Hzb condition = new Hzb();
+        condition.setUserLatitude(userLatitude);
+        condition.setUserLongitude(userLongitude);
+        condition.setStatus(EHzbStatus.ACTIVATED.getCode());
+        condition.setDistance(sysConfigMap.get(SysConstants.HZB_DISTANCE));
+        condition.setCompanyCode(companyCode);
+        condition.setSystemCode(systemCode);
+        List<Hzb> resultList = hzbDAO.selectDistanceList(condition);
+        // 截取数量
+        String hzbMaxNumStr = sysConfigMap.get(SysConstants.HZB_MAX_NUM);
+        Integer hzbMaxNum = Integer.valueOf(hzbMaxNumStr);
+        if (CollectionUtils.isNotEmpty(resultList)
+                && resultList.size() > hzbMaxNum) {
+            resultList = resultList.subList(0, hzbMaxNum);
+        }
+        // 设置分享链接
+        for (Hzb hzb : resultList) {
+            hzb.setShareUrl(PropertiesUtil.Config.SHARE_URL);
+        }
+        return resultList;
+
     }
 
     /** 
