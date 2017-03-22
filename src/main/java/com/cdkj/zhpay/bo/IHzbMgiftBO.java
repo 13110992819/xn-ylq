@@ -20,15 +20,16 @@ public interface IHzbMgiftBO extends IPaginableBO<HzbMgift> {
      * @create: 2017年3月22日 下午4:11:26 myb858
      * @history:
      */
-    public void doDailyInvalid(Date createDatetimeEnd);
+    public void doInvalidHzbMgift(Date createDatetimeEnd);
 
     /**
-     * 根据摇钱树生成定向红包
-     * @param hzb 
-     * @create: 2017年3月22日 下午4:19:48 myb858
+     * 形成当天摇钱树主人们的可发红包
+     * @param hzb 摇钱树
+     * @param createDatetime
+     * @create: 2017年3月22日 下午4:27:12 myb858
      * @history:
      */
-    public void generateHzbMgift(Hzb hzb);
+    public void generateHzbMgift(Hzb hzb, Date createDatetime);
 
     /**
      * 发送定向红包
@@ -46,7 +47,7 @@ public interface IHzbMgiftBO extends IPaginableBO<HzbMgift> {
      * @create: 2017年3月22日 下午4:04:31 myb858
      * @history:
      */
-    public int doReceiveHzbMgift(HzbMgift hzbMgift, User user);
+    public void doReceiveHzbMgift(HzbMgift hzbMgift, User user);
 
     /**
      * 判断当前人员每天领取次数是否超限

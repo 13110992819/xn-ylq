@@ -70,8 +70,9 @@ public class HzbMgiftDAOImpl extends AMybatisTemplate implements IHzbMgiftDAO {
     }
 
     @Override
-    public int doDailyInvalid(List<String> codeList) {
-        // TODO Auto-generated method stub
-        return 0;
+    public int doInvalidHzbMgift(HzbMgift hzbMgift) {
+        return super.update(NAMESPACE.concat("update_doInvalidHzbMgift"),
+            hzbMgift);
     }
+
 }
