@@ -18,9 +18,9 @@ import com.cdkj.zhpay.ao.IUserAO;
 import com.cdkj.zhpay.bo.IHzbBO;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.domain.UserExt;
 import com.cdkj.zhpay.dto.res.XN805060Res;
-import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.dto.res.XN808800Res;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EUserKind;
@@ -42,7 +42,7 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public XN808800Res getParterStatistics(String userId) {
-        XN805901Res userRes = userBO.getRemoteUser(userId, userId);
+        User userRes = userBO.getRemoteUser(userId);
         if (!EUserKind.Partner.getCode().equals(userRes.getKind())) {
             throw new BizException("xn0000", "该用户类型不是辖区合伙人，无法查询统计信息");
         }

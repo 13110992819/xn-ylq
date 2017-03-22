@@ -256,7 +256,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         String toBizNote = EBizType.AJ_DUOBAO_PRIZE.getValue();
         String fromBizNote = UserUtil.getUserMobile(user.getMobile())
                 + toBizNote;
-        accountBO.doTransferFcBySystem(jewel.getSystemCode(), userId,
+        accountBO.doTransferAmount(jewel.getSystemCode(), userId,
             jewel.getToCurrency(), jewel.getToAmount(),
             EBizType.AJ_DUOBAO_PRIZE.getCode(), fromBizNote, toBizNote);
     }

@@ -24,6 +24,9 @@ public class User extends ABaseDO {
     // userId
     private String userId;
 
+    // kind
+    private String kind;
+
     // 登陆名
     private String loginName;
 
@@ -79,6 +82,14 @@ public class User extends ABaseDO {
 
     public String getNickname() {
         return nickname;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
     public void setNickname(String nickname) {
