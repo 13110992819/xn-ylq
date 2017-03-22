@@ -27,6 +27,11 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      */
     public void checkYyGlobalRule(Hzb hzb, User yyUser, String deviceNo);
 
+    public void checkYyGlobalRule(Hzb hzb);
+
+    public void checkYyGlobalRule(String systemCode, User yyUser,
+            String deviceNo);
+
     /**
      * 记录摇一摇结果
      * @param prize

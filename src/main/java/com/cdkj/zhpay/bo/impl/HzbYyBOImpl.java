@@ -123,15 +123,14 @@ public abstract class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements
 
     @Override
     public void checkYyGlobalRule(Hzb hzb, User yyUser, String deviceNo) {
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(hzb
-            .getSystemCode());
+        checkYyGlobalRule(hzb);
+        checkYyGlobalRule(hzb.getSystemCode(), yyUser, deviceNo);
+    }
+
+    @Override
+    public void checkYyGlobalRule(Hzb hzb) {
         // 取到摇钱树一天能摇的次数
-        int hzbMaxCount = SysConstants.HZB_YY_DAY_MAX_COUNT_DEF;
-        String HZB_YY_DAY_MAX_COUNT = rateMap
-            .get(SysConstants.HZB_YY_DAY_MAX_COUNT);
-        if (StringUtils.isNotBlank(HZB_YY_DAY_MAX_COUNT)) {
-            hzbMaxCount = Integer.valueOf(HZB_YY_DAY_MAX_COUNT);
-        }
+        int hzbMaxCount = 1;// 读db
         HzbYy yyCondition = new HzbYy();
         yyCondition.setHzbCode(hzb.getCode());
         yyCondition.setCreateDatetimeStart(DateUtil.getTodayStart());
@@ -140,6 +139,12 @@ public abstract class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements
             throw new BizException("xn0000", "对应树今天已摇" + hzbMaxCount
                     + "次，请明天再来哦");
         }
+    }
+
+    @Override
+    public void checkYyGlobalRule(String systemCode, User yyUser,
+            String deviceNo) {
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
         // 取到一个账号一天能摇的次数
         int userDayMaxCount = SysConstants.USER_DAY_MAX_COUNT_DEF;
         String USER_DAY_MAX_COUNT = rateMap
@@ -148,7 +153,9 @@ public abstract class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements
             userDayMaxCount = Integer.valueOf(USER_DAY_MAX_COUNT);
         }
         // 限制规则1:一个账号一天只能摇n次
-        yyCondition.setHzbCode(null);
+        HzbYy yyCondition = new HzbYy();
+        yyCondition.setCreateDatetimeStart(DateUtil.getTodayStart());
+        yyCondition.setCreateDatetimeEnd(DateUtil.getTodayEnd());
         yyCondition.setUserId(yyUser.getUserId());
         if (getTotalCount(yyCondition) >= userDayMaxCount) {
             throw new BizException("xn0000", "您的账号今天已摇" + userDayMaxCount
@@ -168,6 +175,7 @@ public abstract class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements
             throw new BizException("xn0000", "您的手机今天已摇" + DeviceDayMaxCount
                     + "次，请明天再来哦");
         }
+
     }
 
     @Override
@@ -219,4 +227,5 @@ public abstract class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements
         Random rand = new Random();
         return rand.nextInt(yyAmountMAX - yyAmountMin) + yyAmountMin;
     }
+
 }

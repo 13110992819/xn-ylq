@@ -92,10 +92,6 @@ public class SysConstants {
 
     public static final int DEVICE_DAY_MAX_COUNT_DEF = 3; // 默认设备每天摇出次数
 
-    public static final String HZB_YY_DAY_MAX_COUNT = "hzbYyDayMaxCount"; // 一个汇赚宝每天摇摇的最大次数
-
-    public static final int HZB_YY_DAY_MAX_COUNT_DEF = 900; // 一个汇赚宝每天摇摇的最大次数
-
     public static final Long JEWEL_NUM_RADIX = 10000000L; // 一元夺宝初始值
 
     public static final String JEWEL_MAX_INVEST = "jewelMaxInvest"; // 宝贝每人投资最大次数
