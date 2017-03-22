@@ -8,7 +8,7 @@ import com.cdkj.zhpay.dao.IHzbTemplateDAO;
 import com.cdkj.zhpay.dao.base.support.AMybatisTemplate;
 import com.cdkj.zhpay.domain.HzbTemplate;
 
-@Repository("hzbDAOImpl")
+@Repository("hzbTemplateDAOImpl")
 public class HzbTemplateDAOImpl extends AMybatisTemplate implements
         IHzbTemplateDAO {
 
