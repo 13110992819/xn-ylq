@@ -60,14 +60,12 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
     }
 
     @Override
-    public SYSConfig getSYSConfig(String key, String companyCode,
-            String systemCode) {
+    public SYSConfig getSYSConfig(String key, String systemCode) {
         SYSConfig sysConfig = null;
-        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(companyCode)
-                && StringUtils.isNotBlank(systemCode)) {
+        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(systemCode)) {
             SYSConfig condition = new SYSConfig();
             condition.setCkey(key);
-            condition.setCompanyCode(companyCode);
+            condition.setCompanyCode(systemCode);
             condition.setSystemCode(systemCode);
             List<SYSConfig> sysConfigList = sysConfigDAO.selectList(condition);
             if (CollectionUtils.isNotEmpty(sysConfigList)) {
@@ -78,8 +76,7 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
     }
 
     @Override
-    public Map<String, String> getConfigsMap(String systemCode,
-            String companyCode) {
+    public Map<String, String> getConfigsMap(String systemCode) {
         Map<String, String> map = new HashMap<String, String>();
         if (StringUtils.isNotBlank(systemCode)) {
             SYSConfig condition = new SYSConfig();

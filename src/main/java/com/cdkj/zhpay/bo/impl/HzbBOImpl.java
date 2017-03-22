@@ -182,4 +182,44 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         }
     }
 
+    @Override
+    public int doFRPay(String userId, HzbTemplate hzbTemplate) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int removeHzb(Long id) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int refreshStatus(Long id, String status) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int refreshPayStatus(String code, String status, String payCode,
+            Long payAmount) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public List<Hzb> queryHzbList(Hzb condition) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Hzb checkActivated(String hzbCode) {
+        Hzb hzb = this.getHzb(hzbCode);
+        if (EHzbStatus.ACTIVATED.getCode().equalsIgnoreCase(hzb.getCode())) {
+            return hzb;
+        } else {
+            throw new BizException("xn0000", "该摇钱树不处于激活状态");
+        }
+    }
 }

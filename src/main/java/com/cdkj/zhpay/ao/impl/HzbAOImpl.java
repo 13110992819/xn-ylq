@@ -301,7 +301,7 @@ public class HzbAOImpl implements IHzbAO {
     public Object queryHzbList(String latitude, String longitude,
             String userId, String deviceNo, String companyCode,
             String systemCode) {
-        XN805901Res userRes = userBO.getRemoteUser(userId, userId);
+        XN805901Res userRes = userBO.getRemoteUser(userId);
         hzbYyBO.checkHzbYyCondition(userRes.getSystemCode(), userId, deviceNo);
         // 取距离
         String distance = sysConfigBO.getConfigValue(SysConstants.HZB_DISTANCE,
