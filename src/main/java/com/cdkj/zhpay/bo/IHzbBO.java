@@ -5,6 +5,7 @@ import java.util.List;
 import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
+import com.cdkj.zhpay.dto.res.XN808460Res;
 
 public interface IHzbBO extends IPaginableBO<Hzb> {
 
@@ -45,4 +46,13 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
      * @history:
      */
     public Hzb checkActivated(String hzbCode);
+
+    /**
+     * 根据摇到奖品刷新摇钱树
+     * @param hzb
+     * @param prize 
+     * @create: 2017年3月22日 下午8:18:00 myb858
+     * @history:
+     */
+    public void refreshYy(Hzb hzb, XN808460Res prize);
 }

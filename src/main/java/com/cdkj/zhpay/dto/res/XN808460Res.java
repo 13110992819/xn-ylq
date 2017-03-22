@@ -1,33 +1,37 @@
 package com.cdkj.zhpay.dto.res;
 
-public class XN808460Res {
-    // 类型
-    private String type;
+import com.cdkj.zhpay.enums.EPrizeCurrency;
 
-    // 数量
-    private String quantity;
+public class XN808460Res {
+
+    // 摇出金额
+    private Long yyAmount;
+
+    // 摇出币种
+    private String yyCurrency;
 
     public XN808460Res() {
     }
 
-    public XN808460Res(String type, String quantity) {
-        this.type = type;
-        this.quantity = quantity;
+    public XN808460Res(Long yyAmount, EPrizeCurrency currency) {
+        this.yyAmount = yyAmount;
+        this.yyCurrency = currency.getCode();
     }
 
-    public String getType() {
-        return type;
+    public String getYyCurrency() {
+        return yyCurrency;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setYyCurrency(String yyCurrency) {
+        this.yyCurrency = yyCurrency;
     }
 
-    public String getQuantity() {
-        return quantity;
+    public Long getYyAmount() {
+        return yyAmount;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setYyAmount(Long yyAmount) {
+        this.yyAmount = yyAmount;
     }
+
 }
