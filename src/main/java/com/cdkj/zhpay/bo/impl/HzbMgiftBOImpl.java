@@ -82,7 +82,6 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
         }
     }
 
-    @Override
     public void doSendHzbMgift(HzbMgift hzbMgift) {
         if (hzbMgift != null && StringUtils.isNotBlank(hzbMgift.getCode())) {
             hzbMgift.setStatus(EHzbMgiftStatus.SENT.getCode());

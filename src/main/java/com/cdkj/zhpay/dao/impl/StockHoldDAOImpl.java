@@ -51,7 +51,7 @@ public class StockHoldDAOImpl extends AMybatisTemplate implements IStockHoldDAO 
     }
 
     /** 
-     * @see com.xnjr.mall.dao.IStockHoldDAO#updateStatus(com.xnjr.mall.domain.StockHold)
+     * @see com.xnjr.mall.dao.IStockHoldDAO#updatePutStatus(com.xnjr.mall.domain.StockHold)
      */
     @Override
     public int updateStatus(StockHold data) {

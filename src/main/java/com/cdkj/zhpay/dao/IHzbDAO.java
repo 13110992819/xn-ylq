@@ -8,15 +8,15 @@ import com.cdkj.zhpay.domain.Hzb;
 public interface IHzbDAO extends IBaseDAO<Hzb> {
     String NAMESPACE = IHzbDAO.class.getName().concat(".");
 
-    public int updateStatus(Hzb data);
+    public int insertThirdPay(Hzb data);
 
     public int updatePayStatus(Hzb data);
 
+    public int updatePutStatus(Hzb data);
+
     public int updateRockNum(Hzb data);
 
-    public int resetPeriodRockNum();
-
-    public Long selectDistanceTotalCount(Hzb condition);
+    public int updatePeriodRockNumZero();
 
     public List<Hzb> selectDistanceList(Hzb condition);
 
@@ -25,4 +25,5 @@ public interface IHzbDAO extends IBaseDAO<Hzb> {
     public Long getTotalAmount(Hzb condition);
 
     public int refreshYy(Hzb hzb);
+
 }

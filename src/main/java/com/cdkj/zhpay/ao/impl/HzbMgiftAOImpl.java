@@ -67,13 +67,13 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         // 根据有效摇钱树，生成当天红包
         Hzb hhCondition = new Hzb();
         hhCondition.setStatus(EDiviFlag.EFFECT.getCode());
+
         List<Hzb> hzblist = hzbBO.queryHzbList(hhCondition);
         if (CollectionUtils.isNotEmpty(hzblist)) {
             for (Hzb hzb : hzblist) {
                 hzbMgiftBO.generateHzbMgift(hzb, todayStart);
             }
         }
-
         logger.info("**** 定时红包扫描结束 " + todayStart + " ****");
     }
 

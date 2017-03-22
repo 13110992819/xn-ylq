@@ -36,6 +36,31 @@ public class User extends ABaseDO {
     // 手机号
     private String mobile;
 
+    // 是否实名认证
+    private String identityFlag;
+
+    // 推荐人
+    private String userReferee;
+
+    // 用户扩展信息
+    private UserExt userExt;
+
+    public UserExt getUserExt() {
+        return userExt;
+    }
+
+    public void setUserExt(UserExt userExt) {
+        this.userExt = userExt;
+    }
+
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -76,4 +101,11 @@ public class User extends ABaseDO {
         this.mobile = mobile;
     }
 
+    public String getIdentityFlag() {
+        return identityFlag;
+    }
+
+    public void setIdentityFlag(String identityFlag) {
+        this.identityFlag = identityFlag;
+    }
 }

@@ -2,8 +2,8 @@ package com.cdkj.zhpay.ao;
 
 import java.util.List;
 
+import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.Hzb;
-import com.cdkj.zhpay.dto.res.XN808802Res;
 
 public interface IHzbAO {
     static final String DEFAULT_ORDER_COLUMN = "id";
@@ -20,15 +20,15 @@ public interface IHzbAO {
 
     public void putOnOff(String code);
 
+    public Paginable<Hzb> queryHzbPage(int start, int limit, Hzb condition);
+
+    public List<Hzb> queryHzbList(Hzb condition);
+
     public Hzb getHzb(String code);
 
-    public List<Hzb> queryHzbHoldList(Hzb condition);
-
-    public Object queryHzbList(String latitude, String longitude,
+    public Object queryDistanceHzbList(String latitude, String longitude,
             String userId, String deviceNo, String companyCode,
             String systemCode);
-
-    public XN808802Res doGetHzbTotalData(String systemCode, String userId);
 
     public void doResetRockNumDaily();
 }

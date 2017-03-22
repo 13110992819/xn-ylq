@@ -13,21 +13,16 @@ import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
+import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.req.XN802180Req;
 import com.cdkj.zhpay.dto.req.XN802503Req;
-import com.cdkj.zhpay.dto.req.XN802512Req;
-import com.cdkj.zhpay.dto.req.XN802517Req;
-import com.cdkj.zhpay.dto.req.XN802519Req;
-import com.cdkj.zhpay.dto.req.XN802527Req;
 import com.cdkj.zhpay.dto.req.XN802530Req;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
 import com.cdkj.zhpay.dto.res.XN802503Res;
-import com.cdkj.zhpay.dto.res.XN802527Res;
 import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
-import com.cdkj.zhpay.enums.ESysUser;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.http.BizConnecter;
 import com.cdkj.zhpay.http.JsonUtils;
@@ -71,40 +66,6 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     @Override
-    public void doTransferAmount(String systemCode, String fromAccountNumber,
-            String toAccountNumber, Long amount, String bizType, String bizNote) {
-        if (amount != null && amount != 0) {
-            XN802512Req req = new XN802512Req();
-            req.setSystemCode(systemCode);
-            req.setFromAccountNumber(fromAccountNumber);
-            req.setToAccountNumber(toAccountNumber);
-            req.setTransAmount(String.valueOf(amount));
-            req.setBizType(bizType);
-            req.setBizNote(bizNote);
-            BizConnecter.getBizData("802512", JsonUtils.object2Json(req),
-                Object.class);
-        }
-    }
-
-    @Override
-    public void doTransferAmountByUser(String systemCode, String fromUserId,
-            String toUserId, String currency, Long amount, String bizType,
-            String bizNote) {
-        if (amount != null && amount != 0) {
-            XN802517Req req = new XN802517Req();
-            req.setSystemCode(systemCode);
-            req.setFromUserId(fromUserId);
-            req.setToUserId(toUserId);
-            req.setCurrency(currency);
-            req.setTransAmount(String.valueOf(amount));
-            req.setBizType(bizType);
-            req.setBizNote(bizNote);
-            BizConnecter.getBizData("802517", JsonUtils.object2Json(req),
-                Object.class);
-        }
-    }
-
-    @Override
     public void doTransferAmountByUser(String systemCode, String fromUserId,
             String toUserId, String currency, Long amount, String bizType,
             String fromBizNote, String toBizNote) {
@@ -121,34 +82,6 @@ public class AccountBOImpl implements IAccountBO {
             BizConnecter.getBizData("802530", JsonUtils.object2Json(req),
                 Object.class);
         }
-    }
-
-    @Override
-    public void doTransferFcBySystem(String systemCode, String userId,
-            String currency, Long transAmount, String bizType,
-            String fromBizNote, String toBizNote) {
-        if (transAmount == null || transAmount == 0) {
-            return;
-        }
-        this.doTransferAmountByUser(systemCode, ESysUser.SYS_USER.getCode(),
-            userId, currency, transAmount, bizType, fromBizNote, toBizNote);
-    }
-
-    /**
-     * @see com.cdkj.zhpay.bo.IAccountBO#doExchangeAmount(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-     */
-    @Override
-    public void doExchangeAmount(String systemCode, String code, String rate,
-            String approveResult, String approver, String approveNote) {
-        XN802519Req req = new XN802519Req();
-        req.setSystemCode(systemCode);
-        req.setCode(code);
-        req.setRate(rate);
-        req.setApproveResult(approveResult);
-        req.setApprover(approver);
-        req.setApproveNote(approveNote);
-        BizConnecter.getBizData("802519", JsonUtils.object2Json(req),
-            Object.class);
     }
 
     /** 
@@ -239,13 +172,13 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     @Override
-    public void doFRPay(String systemCode, XN805901Res userRes,
-            String toUserId, Long price, EBizType bizType) {
+    public Long doFRPay(String systemCode, User fromUser, String toUserId,
+            Long price, EBizType bizType) {
         Long frPrice = 0L;
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
         // 查询用户分润账户
         XN802503Res frAccount = this.getAccountByUserId(systemCode,
-            userRes.getUserId(), ECurrency.FRB.getCode());
+            fromUser.getUserId(), ECurrency.FRB.getCode());
         Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
         Long frCnyAmount = Double.valueOf(frAccount.getAmount() / fr2cny)
             .longValue();
@@ -255,10 +188,11 @@ public class AccountBOImpl implements IAccountBO {
         }
         frPrice = Double.valueOf(price * fr2cny).longValue();
         String fromBizNote = bizType.getValue();
-        String toBizNote = "用户[" + userRes.getMobile() + "] " + fromBizNote;
-        doTransferAmountByUser(systemCode, userRes.getUserId(), toUserId,
+        String toBizNote = "用户[" + fromUser.getMobile() + "] " + fromBizNote;
+        doTransferAmountByUser(systemCode, fromUser.getUserId(), toUserId,
             ECurrency.FRB.getCode(), frPrice, bizType.getCode(), fromBizNote,
             toBizNote);
+        return frPrice;
     }
 
     @Override
@@ -277,20 +211,5 @@ public class AccountBOImpl implements IAccountBO {
         XN802180Res res = BizConnecter.getBizData("802180",
             JsonUtil.Object2Json(req), XN802180Res.class);
         return res;
-    }
-
-    /** 
-     * @see com.cdkj.zhpay.bo.IAccountBO#doGetBizTotalAmount(java.lang.String,java.lang.String, java.lang.String, java.lang.String)
-     */
-    @Override
-    public XN802527Res doGetBizTotalAmount(String systemCode, String userId,
-            String currency, String bizType) {
-        XN802527Req req = new XN802527Req();
-        req.setSystemCode(systemCode);
-        req.setUserId(userId);
-        req.setCurrency(currency);
-        req.setBizType(bizType);
-        return BizConnecter.getBizData("802527", JsonUtil.Object2Json(req),
-            XN802527Res.class);
     }
 }

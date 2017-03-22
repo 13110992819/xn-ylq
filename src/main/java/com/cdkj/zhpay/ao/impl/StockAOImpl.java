@@ -28,15 +28,12 @@ import com.cdkj.zhpay.domain.UserExt;
 import com.cdkj.zhpay.dto.res.XN802503Res;
 import com.cdkj.zhpay.dto.res.XN805060Res;
 import com.cdkj.zhpay.dto.res.XN805901Res;
-import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EPayType;
 import com.cdkj.zhpay.enums.EStockHoldStatus;
 import com.cdkj.zhpay.enums.EStockStatus;
 import com.cdkj.zhpay.enums.EStockType;
-import com.cdkj.zhpay.enums.ESysAccount;
-import com.cdkj.zhpay.enums.ESysUser;
 import com.cdkj.zhpay.exception.BizException;
 
 @Service
@@ -264,12 +261,12 @@ public class StockAOImpl implements IStockAO {
 
     private void transStockAmount(String systemCode, String userId,
             Long BackWelfare1, Long BackWelfare2, String bizNote) {
-        accountBO.doTransferAmountByUser(systemCode,
-            ESysUser.SYS_USER.getCode(), userId, ECurrency.GXJL.getCode(),
-            BackWelfare1, EBizType.AJ_FLYKHH.getCode(), bizNote);
-        accountBO.doTransferAmountByUser(systemCode,
-            ESysUser.SYS_USER.getCode(), userId, ECurrency.GWB.getCode(),
-            BackWelfare2, EBizType.AJ_FLYKHH.getCode(), bizNote);
+        // accountBO.doTransferAmountByUser(systemCode,
+        // ESysUser.SYS_USER.getCode(), userId, ECurrency.GXJL.getCode(),
+        // BackWelfare1, EBizType.AJ_FLYKHH.getCode(), bizNote);
+        // accountBO.doTransferAmountByUser(systemCode,
+        // ESysUser.SYS_USER.getCode(), userId, ECurrency.GWB.getCode(),
+        // BackWelfare2, EBizType.AJ_FLYKHH.getCode(), bizNote);
     }
 
     @Override
@@ -412,35 +409,35 @@ public class StockAOImpl implements IStockAO {
             if (a1Amount != null && a1Amount != 0L) {
                 XN802503Res accountRes = accountBO.getAccountByUserId(
                     systemCode, aUserId, ECurrency.FRB.getCode());
-                accountBO.doTransferAmount(systemCode,
-                    ESysAccount.FRB.getCode(), accountRes.getAccountNumber(),
-                    a1Amount, EBizType.AJ_FLYKFC.getCode(), bizNote
-                            + ",推荐人分成分润");
+                // accountBO.doTransferAmount(systemCode,
+                // ESysAccount.FRB.getCode(), accountRes.getAccountNumber(),
+                // a1Amount, EBizType.AJ_FLYKFC.getCode(), bizNote
+                // + ",推荐人分成分润");
             }
             if (areaRes != null && areaAmount != null && areaAmount != 0L) {
                 XN802503Res areaAccount = accountBO.getAccountByUserId(
                     systemCode, areaRes.getUserId(), ECurrency.FRB.getCode());
-                accountBO.doTransferAmount(systemCode,
-                    ESysAccount.FRB.getCode(), areaAccount.getAccountNumber(),
-                    areaAmount, EBizType.AJ_FLYKFC.getCode(), bizNote
-                            + ",县分成分润");
+                // accountBO.doTransferAmount(systemCode,
+                // ESysAccount.FRB.getCode(), areaAccount.getAccountNumber(),
+                // areaAmount, EBizType.AJ_FLYKFC.getCode(), bizNote
+                // + ",县分成分润");
             }
             if (cityRes != null && cityAmount != null && cityAmount != 0L) {
                 XN802503Res cityAccount = accountBO.getAccountByUserId(
                     systemCode, cityRes.getUserId(), ECurrency.FRB.getCode());
-                accountBO.doTransferAmount(systemCode,
-                    ESysAccount.FRB.getCode(), cityAccount.getAccountNumber(),
-                    cityAmount, EBizType.AJ_FLYKFC.getCode(), bizNote
-                            + ",市分成分润");
+                // accountBO.doTransferAmount(systemCode,
+                // ESysAccount.FRB.getCode(), cityAccount.getAccountNumber(),
+                // cityAmount, EBizType.AJ_FLYKFC.getCode(), bizNote
+                // + ",市分成分润");
             }
             if (provinceRes != null && provinceAmount != null
                     && provinceAmount != 0L) {
                 XN802503Res provinceAccount = accountBO.getAccountByUserId(
                     systemCode, areaRes.getUserId(), ECurrency.FRB.getCode());
-                accountBO.doTransferAmount(systemCode,
-                    ESysAccount.FRB.getCode(),
-                    provinceAccount.getAccountNumber(), provinceAmount,
-                    EBizType.AJ_FLYKFC.getCode(), bizNote + ",省分成分润");
+                // accountBO.doTransferAmount(systemCode,
+                // ESysAccount.FRB.getCode(),
+                // provinceAccount.getAccountNumber(), provinceAmount,
+                // EBizType.AJ_FLYKFC.getCode(), bizNote + ",省分成分润");
             }
         }
     }

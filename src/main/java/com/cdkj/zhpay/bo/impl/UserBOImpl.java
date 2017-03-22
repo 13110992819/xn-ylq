@@ -60,15 +60,13 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setNickname(res.getNickname());
         user.setPhoto(res.getUserExt().getPhoto());
         user.setMobile(res.getMobile());
+        user.setIdentityFlag(res.getIdentityFlag());
+        user.setUserReferee(res.getUserReferee());
         return user;
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.IUserBO#getPartnerUserInfo(com.cdkj.zhpay.dto.req.XN805060Req)
-     */
     @Override
-    public XN805060Res getPartnerUserInfo(String province, String city,
-            String area) {
+    public User getPartnerUserInfo(String province, String city, String area) {
         // 只有省 province，city,area=省
         // 有省市 area=市
         if (StringUtils.isBlank(city) && StringUtils.isBlank(area)) {
@@ -90,10 +88,15 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         List<XN805060Res> list = gson.fromJson(jsonStr,
             new TypeToken<List<XN805060Res>>() {
             }.getType());
+        User user = null;
         if (CollectionUtils.isNotEmpty(list)) {
             result = list.get(0);
+            user = new User();
+            user.setUserId(result.getUserId());
+            user.setLoginName(result.getLoginName());
+            user.setMobile(result.getMobile());
         }
-        return result;
+        return user;
     }
 
     /**
