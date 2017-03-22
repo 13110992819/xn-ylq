@@ -8,8 +8,10 @@
 		<result column="parent_key" property="parentKey" />
 		<result column="dkey" property="dkey" />
 		<result column="dvalue" property="dvalue" />
-		<result column="remark" property="remark" />
-		<result column="system_code" property="systemCode" />
+		
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />	
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -19,14 +21,14 @@
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
-			<if test="dkey != null and dkey != '' ">
-				AND t.dkey = #{dkey}
-			</if>
 			<if test="parentKey != null and parentKey != '' ">
 				AND t.parent_key = #{parentKey}
 			</if>	
-			<if test="systemCode != null and systemCode != '' ">
-				AND t.system_code = #{systemCode}
+			<if test="dkey != null and dkey != '' ">
+				AND t.dkey = #{dkey}
+			</if>
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
 			</if>
 		</trim>
 	</sql>
@@ -37,8 +39,10 @@
 		,parent_key
 		,dkey
 		,dvalue
+		
+		,updater
+		,update_datetime
 		,remark
-		,system_code
 		FROM
 		tsys_dict t 
 		<include refid="where_condition" />
@@ -60,16 +64,20 @@
 		,parent_key
 		,dkey
 		,dvalue
+		
+		,updater
+		,update_datetime
 		,remark
-		,system_code
 		)
 		VALUES(
 		#{type}
 		,#{parentKey}
 		,#{dkey}
 		,#{dvalue}
+		
+		,#{updater}
+		,#{updateDatetime}
 		,#{remark}
-		,#{systemCode}
 		)
 	</insert>
 
@@ -82,6 +90,8 @@
 	<update id="update_sysDict" parameterType="sysDict">
 		UPDATE tsys_dict SET
 		dvalue = #{dvalue}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
 		,remark=#{remark}
 		WHERE id = #{id}
 	</update>

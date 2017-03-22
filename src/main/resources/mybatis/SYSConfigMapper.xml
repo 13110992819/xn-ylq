@@ -4,13 +4,13 @@
 <mapper namespace="com.cdkj.zhpay.dao.ISYSConfigDAO">
 	<resultMap id="sysConfig_DB_Result" type="sysConfig">
 		<result column="id" property="id" />
-		<result column="category" property="category" />
 		<result column="type" property="type" />
-		<result column="cname" property="cname" />
 		<result column="ckey" property="ckey" />
 		<result column="cvalue" property="cvalue" />
+		
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
 		<result column="remark" property="remark" />
-		<result column="belong" property="belong" />
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
 	</resultMap>
@@ -19,23 +19,17 @@
 			<if test="id != null">
 				AND t.id = #{id}
 			</if>	
-			<if test="category != null and category != '' ">
-				AND t.category = #{category}
-			</if>	
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>	
 			<if test="ckey != null and ckey != '' ">
 				AND t.ckey = #{ckey}
-			</if>	
-			<if test="companyCode != null and companyCode != '' ">
-				AND (t.company_code = #{companyCode} or (t.belong = 0 and NOT EXISTS (select * from tsys_config tc where tc.belong = t.id and tc.company_code = #{companyCode})))
 			</if>
 			<if test="ckeyForQuery != null and ckeyForQuery != '' ">
 				AND t.ckey like "%"#{ckeyForQuery}"%"
 			</if>
-			<if test="cname != null and cname != '' ">
-				AND t.cname = #{cname}
+			<if test="updater != null and updater != '' ">
+				AND t.updater = #{updater}
 			</if>	
 			<if test="companyCode != null and companyCode != '' ">
 				AND t.company_code = #{companyCode}
@@ -48,13 +42,13 @@
 	<select id="select_sysConfig" parameterType="sysConfig" resultMap="sysConfig_DB_Result">
 		SELECT
 		id
-		,category
 		,type
-		,cname
 		,ckey
 		,cvalue
+		
+		,updater
+		,update_datetime
 		,remark
-		,belong
 		,company_code
 		,system_code
 		FROM
@@ -74,24 +68,24 @@
 	
 	<insert id="insert_sysConfig" parameterType="sysConfig" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO tsys_config(
-		category
-		,type
-		,cname
+		type
 		,ckey
 		,cvalue
+		
+		,updater
+		,update_datetime
 		,remark
-		,belong
 		,company_code
 		,system_code
 		)
 		VALUES(
-		#{category}
-		,#{type}
-		,#{cname}
+		#{type}
 		,#{ckey}
 		,#{cvalue}
+		
+		,#{updater}
+		,#{updateDatetime}
 		,#{remark}
-		,#{belong}
 		,#{companyCode}
 		,#{systemCode}
 		)
@@ -100,6 +94,8 @@
 	<update id="update_value" parameterType="sysConfig">
 		UPDATE tsys_config SET
 		cvalue = #{cvalue}
+		,updater=#{updater}
+		,update_datetime=#{updateDatetime}
 		,remark=#{remark}
 		WHERE id = #{id}
 	</update>
