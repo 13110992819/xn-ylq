@@ -43,4 +43,7 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
      * @history:
      */
     public SYSConfig getSYSConfig(String key, String systemCode);
+
+    public SYSConfig getSYSConfig(String key, String companyCode,
+            String systemCode);
 }

@@ -54,4 +54,13 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
 
     public Long getTotalAmount(String payGroup);
 
+    /**
+     * 检查摇钱树是否是激活状态
+     * @param hzbCode
+     * @return 
+     * @create: 2017年3月22日 下午7:06:13 myb858
+     * @history:
+     */
+    public Hzb checkActivated(String hzbCode);
+
 }
