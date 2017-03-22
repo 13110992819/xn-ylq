@@ -23,12 +23,13 @@ public interface IHzbMgiftBO extends IPaginableBO<HzbMgift> {
     public void doDailyInvalid(Date createDatetimeEnd);
 
     /**
-     * 根据摇钱树生成定向红包
-     * @param hzb 
-     * @create: 2017年3月22日 下午4:19:48 myb858
+     * 形成当天摇钱树主人们的可发红包
+     * @param hzblist 摇钱树
+     * @param createDatetime
+     * @create: 2017年3月22日 下午4:27:12 myb858
      * @history:
      */
-    public void generateHzbMgift(Hzb hzb);
+    public void generateHzbMgift(List<Hzb> hzblist, Date createDatetime);
 
     /**
      * 发送定向红包
