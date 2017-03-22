@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -269,10 +268,7 @@ public class AccountBOImpl implements IAccountBO {
 
     @Override
     public XN802180Res doWeiXinPay(String systemCode, String userId,
-            String payGroup, EBizType bizType, Long cnyAmount, String ip) {
-        if (StringUtils.isBlank(ip)) {
-            throw new BizException("xn0000", "微信支付，ip地址不能为空");
-        }
+            String payGroup, EBizType bizType, Long cnyAmount) {
         // 获取微信APP支付信息
         XN802180Req req = new XN802180Req();
         req.setSystemCode(systemCode);
@@ -283,7 +279,6 @@ public class AccountBOImpl implements IAccountBO {
         req.setBizNote(bizType.getValue());
         req.setCurrency(ECurrency.CNY.getCode());
         req.setTransAmount(String.valueOf(cnyAmount));
-        req.setIp(ip);
         XN802180Res res = BizConnecter.getBizData("802180",
             JsonUtil.Object2Json(req), XN802180Res.class);
         return res;

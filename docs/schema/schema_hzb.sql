@@ -6,16 +6,21 @@ CREATE TABLE `tyqs_hzb_template` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `name` varchar(64) DEFAULT NULL COMMENT '名称',
   `pic` varchar(255) DEFAULT NULL COMMENT '照片',
-  `description` text COMMENT '玩法描述',
   `price` bigint(20) DEFAULT NULL COMMENT '价格',
   `currency` varchar(4) DEFAULT NULL COMMENT '价格币种',
+  
   `period_rock_num` int(11) DEFAULT NULL COMMENT '周期内可摇总次数',
   `total_rock_num` int(11) DEFAULT NULL COMMENT '可摇总次数',
-  
   `back_amount1` bigint(20) DEFAULT NULL COMMENT '价值1',
   `back_amount2` bigint(20) DEFAULT NULL COMMENT '价值2',
   `back_amount3` bigint(20) DEFAULT NULL COMMENT '价值3',
+  
+  `status` varchar(4) DEFAULT NULL COMMENT '状态',
+  `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
+  
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`code`) COMMENT '汇赚宝模板'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

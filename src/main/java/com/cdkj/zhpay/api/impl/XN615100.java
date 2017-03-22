@@ -13,6 +13,7 @@ import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
 import com.cdkj.zhpay.dto.req.XN615100Req;
+import com.cdkj.zhpay.dto.res.PKCodeRes;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
@@ -34,7 +35,8 @@ public class XN615100 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return hzbTemplateAO.addTemplate(req);
+        String code = hzbTemplateAO.addTemplate(req);
+        return new PKCodeRes(code);
     }
 
     /** 
@@ -46,7 +48,5 @@ public class XN615100 extends AProcessor {
         StringValidater.validateBlank(req.getName(), req.getPic(),
             req.getPrice(), req.getCurrency(), req.getUpdater(),
             req.getCompanyCode(), req.getSystemCode());
-
     }
-
 }

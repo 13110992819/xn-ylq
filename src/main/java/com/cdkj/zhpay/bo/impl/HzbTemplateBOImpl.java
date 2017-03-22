@@ -42,25 +42,6 @@ public class HzbTemplateBOImpl extends PaginableBOImpl<HzbTemplate> implements
     }
 
     @Override
-    public List<HzbTemplate> queryHzbTemplateList(HzbTemplate condition) {
-        return hzbTemplateDAO.selectList(condition);
-    }
-
-    @Override
-    public HzbTemplate getHzbTemplate(String code) {
-        HzbTemplate data = null;
-        if (StringUtils.isNotBlank(code)) {
-            HzbTemplate condition = new HzbTemplate();
-            condition.setCode(code);
-            data = hzbTemplateDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "汇赚宝模板不存在");
-            }
-        }
-        return data;
-    }
-
-    @Override
     public int putOnTemplate(String code, String updater, String remark) {
         int count = 0;
         if (StringUtils.isNotBlank(code) && StringUtils.isNotBlank(updater)) {
@@ -89,5 +70,24 @@ public class HzbTemplateBOImpl extends PaginableBOImpl<HzbTemplate> implements
             count = hzbTemplateDAO.putOffTemplate(data);
         }
         return count;
+    }
+
+    @Override
+    public List<HzbTemplate> queryHzbTemplateList(HzbTemplate condition) {
+        return hzbTemplateDAO.selectList(condition);
+    }
+
+    @Override
+    public HzbTemplate getHzbTemplate(String code) {
+        HzbTemplate data = null;
+        if (StringUtils.isNotBlank(code)) {
+            HzbTemplate condition = new HzbTemplate();
+            condition.setCode(code);
+            data = hzbTemplateDAO.select(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "汇赚宝模板不存在");
+            }
+        }
+        return data;
     }
 }

@@ -10,12 +10,11 @@ public interface IHzbTemplateBO extends IPaginableBO<HzbTemplate> {
 
     public int refreshHzbTemplate(HzbTemplate data);
 
-    public List<HzbTemplate> queryHzbTemplateList(HzbTemplate condition);
-
-    public HzbTemplate getHzbTemplate(String code);
-
     public int putOnTemplate(String code, String updater, String remark);
 
     public int putOffTemplate(String code, String updater, String remark);
 
+    public List<HzbTemplate> queryHzbTemplateList(HzbTemplate condition);
+
+    public HzbTemplate getHzbTemplate(String code);
 }
