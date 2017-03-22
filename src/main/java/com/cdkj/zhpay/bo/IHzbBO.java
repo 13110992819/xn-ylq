@@ -9,13 +9,14 @@ import com.cdkj.zhpay.domain.HzbTemplate;
 
 public interface IHzbBO extends IPaginableBO<Hzb> {
 
-    public boolean isHzbHoldExist(Long id);
-
-    public boolean isHzbHoldExistByUser(String userId);
+    public boolean isHzbExistByUser(String userId);
 
     public void checkBuy(String userId);
 
     public int doFRPay(String userId, HzbTemplate hzbTemplate);
+
+    public int buySuccess(String userId, HzbTemplate hzbTemplate,
+            String payGroup);
 
     /**
      * 余额支付落地汇赚宝记录
@@ -26,13 +27,13 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
      * @create: 2017年2月27日 下午4:12:54 haiqingzheng
      * @history:
      */
-    public int saveHzbHold(String userId, HzbTemplate hzbTemplate, Long amount);
+    public int saveHzb(String userId, HzbTemplate hzbTemplate, Long amount);
 
-    public int removeHzbHold(Long id);
+    public int removeHzb(Long id);
 
     public int refreshStatus(Long id, String status);
 
-    public int refreshPayStatus(Long id, String status, String payCode,
+    public int refreshPayStatus(String code, String status, String payCode,
             Long payAmount);
 
     public int refreshRockNum(Long id, Integer periodRockNum,
@@ -40,9 +41,9 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
 
     public void resetPeriodRockNum();
 
-    public List<Hzb> queryHzbHoldList(Hzb condition);
+    public List<Hzb> queryHzbList(Hzb condition);
 
-    public List<Hzb> queryDistanceHzbHoldList(Hzb condition);
+    public List<Hzb> queryDistanceHzbList(Hzb condition);
 
     public Paginable<Hzb> queryDistancePaginable(int start, int pageSize,
             Hzb condition);
