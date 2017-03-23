@@ -58,26 +58,11 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
         return code;
     }
 
-    @Override
-    public HzbYy getHzbYy(String code) {
-        HzbYy data = null;
-        if (StringUtils.isNotBlank(code)) {
-            HzbYy condition = new HzbYy();
-            condition.setCode(code);
-            data = hzbYyDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "该摇摇记录不存在");
-            }
-        }
-        return data;
-    }
-
     /**
      * 判断是否第三次且前面两次没有摇到红包币
      * @see com.cdkj.zhpay.bo.IHzbYyBO#isHaveHB(java.lang.String)
      */
-    @Override
-    public String isHaveHB(String userId) {
+    private String isHaveHB(String userId) {
         // 0 代表 无/1 代表有/-1 代表前面两次都没有红包
         String haveHbb = "0";
         HzbYy condition = new HzbYy();
