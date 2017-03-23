@@ -54,14 +54,6 @@ public class User extends ABaseDO {
     // 区(县)
     private String area;
 
-    public UserExt getUserExt() {
-        return userExt;
-    }
-
-    public void setUserExt(UserExt userExt) {
-        this.userExt = userExt;
-    }
-
     public String getUserReferee() {
         return userReferee;
     }
@@ -125,4 +117,29 @@ public class User extends ABaseDO {
     public void setIdentityFlag(String identityFlag) {
         this.identityFlag = identityFlag;
     }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
 }
