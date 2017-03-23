@@ -30,6 +30,28 @@ public class XN615135Req extends APageReq {
     // 接收日期止（选填）
     private String receiveDatetimeEnd;
 
+    // 系统编号（必填）
+    private String systemCode;
+
+    // 公司编号（必填）
+    private String companyCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
     public String getHzbCode() {
         return hzbCode;
     }

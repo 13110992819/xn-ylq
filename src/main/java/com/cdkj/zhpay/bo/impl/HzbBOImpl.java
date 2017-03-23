@@ -19,6 +19,7 @@ import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IHzbDAO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
+import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.XN808460Res;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
@@ -40,14 +41,17 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     private IHzbTemplateBO hzbTemplateBO;
 
     @Override
-    public boolean isHzbExistByUser(String userId) {
-        Hzb condition = new Hzb();
-        condition.setUserId(userId);
-        condition.setStatus(EDiviFlag.EFFECT.getCode());
-        if (hzbDAO.selectTotalCount(condition) > 0) {
-            return true;
+    public boolean isBuyHzb(String userId) {
+        boolean result = false;
+        if (StringUtils.isNotBlank(userId)) {
+            Hzb condition = new Hzb();
+            condition.setUserId(userId);
+            condition.setStatus(EDiviFlag.EFFECT.getCode());
+            if (hzbDAO.selectTotalCount(condition) > 0) {
+                result = true;
+            }
         }
-        return false;
+        return result;
     }
 
     @Override
@@ -81,8 +85,9 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     }
 
     @Override
-    public Hzb saveHzb(String userId, HzbTemplate hzbTemplate, Long frPayAmount) {
+    public Hzb saveHzb(User user, HzbTemplate hzbTemplate, Long frPayAmount) {
         Hzb data = null;
+        String userId = user.getUserId();
         if (StringUtils.isNotBlank(userId)) {
             data = new Hzb();
             String code = OrderNoGenerater.generateM(EGeneratePrefix.HZB
@@ -169,7 +174,7 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
             data.setCode(code);
             data.setPeriodRockNum(periodRockNum);
             data.setTotalRockNum(totalRockNum);
-            count = hzbDAO.updateRockNum(data);
+            count = hzbDAO.updateYy(data);
         }
         return count;
     }
@@ -238,24 +243,20 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     }
 
     /** 
-     * @see com.cdkj.zhpay.bo.IHzbBO#queryHzbList(java.lang.String, java.lang.String, java.lang.String)
+     * @see com.cdkj.zhpay.bo.IHzbBO#queryHzbListByUser(java.lang.String, java.lang.String, java.lang.String)
      */
     @Override
-    public List<Hzb> queryHzbList(String userId, String companyCode,
-            String systemCode) {
+    public List<Hzb> queryHzbListByUser(String userId) {
         Hzb condition = new Hzb();
         condition.setUserId(userId);
         condition.setStatus(EDiviFlag.EFFECT.getCode());
-        condition.setCompanyCode(companyCode);
-        condition.setSystemCode(systemCode);
         return hzbDAO.selectList(condition);
-
     }
 
     @Override
     public Hzb checkActivated(String hzbCode) {
         Hzb hzb = this.getHzb(hzbCode);
-        if (EHzbStatus.ACTIVATED.getCode().equalsIgnoreCase(hzb.getCode())) {
+        if (EHzbStatus.ACTIVATED.getCode().equalsIgnoreCase(hzb.getStatus())) {
             return hzb;
         } else {
             throw new BizException("xn0000", "该摇钱树不处于激活状态");
@@ -269,22 +270,21 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         if (ESystemCode.Caigo.getCode().equals(hzb.getSystemCode())) {
             if (EPrizeCurrency.CG_RMB.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount1(hzb.getBackAmount1() + prize.getYyAmount());
-            }
-            if (EPrizeCurrency.CG_CGB.getCode().equals(prize.getYyCurrency())) {
+            } else if (EPrizeCurrency.CG_CGB.getCode().equals(
+                prize.getYyCurrency())) {
                 hzb.setBackAmount2(hzb.getBackAmount2() + prize.getYyAmount());
-            }
-            if (EPrizeCurrency.CG_JF.getCode().equals(prize.getYyCurrency())) {
+            } else if (EPrizeCurrency.CG_JF.getCode().equals(
+                prize.getYyCurrency())) {
                 hzb.setBackAmount3(hzb.getBackAmount3() + prize.getYyAmount());
             }
-        }
-        if (ESystemCode.ZHPAY.getCode().equals(hzb.getSystemCode())) {
+        } else if (ESystemCode.ZHPAY.getCode().equals(hzb.getSystemCode())) {
             if (EPrizeCurrency.ZH_HBB.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount1(hzb.getBackAmount1() + prize.getYyAmount());
-            }
-            if (EPrizeCurrency.ZH_QBB.getCode().equals(prize.getYyCurrency())) {
+            } else if (EPrizeCurrency.ZH_QBB.getCode().equals(
+                prize.getYyCurrency())) {
                 hzb.setBackAmount2(hzb.getBackAmount2() + prize.getYyAmount());
-            }
-            if (EPrizeCurrency.ZH_GWB.getCode().equals(prize.getYyCurrency())) {
+            } else if (EPrizeCurrency.ZH_GWB.getCode().equals(
+                prize.getYyCurrency())) {
                 hzb.setBackAmount3(hzb.getBackAmount3() + prize.getYyAmount());
             }
         }
@@ -299,16 +299,6 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
                 && hzb.getBackAmount3() >= template.getBackAmount3()) {
             hzb.setStatus(EHzbStatus.DIED.getCode());
         }
-        hzbDAO.refreshYy(hzb);
-
-    }
-
-    /** 
-     * @see com.cdkj.zhpay.bo.IHzbBO#hasActivatedHzb(java.lang.String)
-     */
-    @Override
-    public boolean hasActivatedHzb(String userId) {
-        // TODO Auto-generated method stub
-        return false;
+        hzbDAO.updateYy(hzb);
     }
 }

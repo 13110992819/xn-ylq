@@ -4,6 +4,7 @@ import com.cdkj.zhpay.ao.IHzbMgiftAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.JsonUtil;
+import com.cdkj.zhpay.core.StringValidater;
 import com.cdkj.zhpay.domain.HzbMgift;
 import com.cdkj.zhpay.dto.req.XN615137Req;
 import com.cdkj.zhpay.exception.BizException;
@@ -34,12 +35,15 @@ public class XN615137 extends AProcessor {
         condition.setStatus(req.getStatus());
         condition.setCreateDatetimeStart(DateUtil.getFrontDate(
             req.getCreateDatetimeStart(), false));
+
         condition.setCreateDatetimeEnd(DateUtil.getFrontDate(
             req.getCreateDatetimeEnd(), true));
         condition.setReceiveDatetimeStart(DateUtil.getFrontDate(
             req.getReceiveDatetimeStart(), false));
         condition.setReceiveDatetimeEnd(DateUtil.getFrontDate(
             req.getReceiveDatetimeEnd(), true));
+        condition.setCompanyCode(req.getCompanyCode());
+        condition.setSystemCode(req.getSystemCode());
         return hzbMgiftAO.queryHzbMgiftList(condition);
     }
 
@@ -49,5 +53,7 @@ public class XN615137 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN615137Req.class);
+        StringValidater
+            .validateBlank(req.getCompanyCode(), req.getSystemCode());
     }
 }

@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.cdkj.zhpay.ao.IHzbYyAO;
 import com.cdkj.zhpay.api.AProcessor;
+import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
 import com.cdkj.zhpay.domain.HzbYy;
@@ -36,6 +37,10 @@ public class XN615125 extends AProcessor {
         condition.setSystemCode(req.getSystemCode());
         condition.setCompanyCode(req.getCompanyCode());
 
+        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
+            req.getDateStart(), false));
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(
+            req.getDateStart(), true));
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IHzbYyAO.DEFAULT_ORDER_COLUMN;

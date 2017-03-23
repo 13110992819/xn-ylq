@@ -33,8 +33,7 @@ public class XN615118 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return hzbAO.myHzb(req.getUserId(), req.getSystemCode(),
-            req.getCompanyCode());
+        return hzbAO.myHzb(req.getUserId());
     }
 
     /** 
@@ -43,8 +42,7 @@ public class XN615118 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN615118Req.class);
-        StringValidater.validateBlank(req.getUserId(), req.getSystemCode(),
-            req.getCompanyCode());
+        StringValidater.validateBlank(req.getUserId());
     }
 
 }

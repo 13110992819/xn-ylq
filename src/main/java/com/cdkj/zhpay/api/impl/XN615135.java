@@ -37,12 +37,16 @@ public class XN615135 extends AProcessor {
         condition.setStatus(req.getStatus());
         condition.setCreateDatetimeStart(DateUtil.getFrontDate(
             req.getCreateDatetimeStart(), false));
+
         condition.setCreateDatetimeEnd(DateUtil.getFrontDate(
             req.getCreateDatetimeEnd(), true));
         condition.setReceiveDatetimeStart(DateUtil.getFrontDate(
             req.getReceiveDatetimeStart(), false));
         condition.setReceiveDatetimeEnd(DateUtil.getFrontDate(
             req.getReceiveDatetimeEnd(), true));
+        condition.setCompanyCode(req.getCompanyCode());
+        condition.setSystemCode(req.getSystemCode());
+
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IHzbMgiftAO.DEFAULT_ORDER_COLUMN;
@@ -60,5 +64,7 @@ public class XN615135 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN615135Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
+        StringValidater
+            .validateBlank(req.getCompanyCode(), req.getSystemCode());
     }
 }

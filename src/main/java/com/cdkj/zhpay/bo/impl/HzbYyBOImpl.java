@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.cdkj.zhpay.bo.IHzbTemplateBO;
 import com.cdkj.zhpay.bo.IHzbYyBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
@@ -18,6 +19,7 @@ import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IHzbYyDAO;
 import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.HzbYy;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.XN808460Res;
@@ -34,6 +36,9 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private IHzbTemplateBO hzbTemplateBO;
 
     @Override
     public String saveHzbYy(XN808460Res prize, User yyUser, Hzb hzb,
@@ -103,13 +108,15 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
     @Override
     public void checkYyGlobalRule(Hzb hzb) {
         // 取到摇钱树一天能摇的次数
-        int hzbMaxCount = 1;// 读db
+        HzbTemplate hzbTemplate = hzbTemplateBO.getHzbTemplate(hzb
+            .getTemplateCode());
+        Integer periodRockNum = hzbTemplate.getPeriodRockNum();
         HzbYy yyCondition = new HzbYy();
         yyCondition.setHzbCode(hzb.getCode());
         yyCondition.setCreateDatetimeStart(DateUtil.getTodayStart());
         yyCondition.setCreateDatetimeEnd(DateUtil.getTodayEnd());
-        if (getTotalCount(yyCondition) >= hzbMaxCount) {
-            throw new BizException("xn0000", "对应树今天已摇" + hzbMaxCount
+        if (getTotalCount(yyCondition) >= periodRockNum) {
+            throw new BizException("xn0000", "对应树今天已摇" + periodRockNum
                     + "次，请明天再来哦");
         }
     }
@@ -121,26 +128,35 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
         // 取到一个账号一天能摇的次数
         int userDayMaxCount = Integer.valueOf(rateMap
             .get(SysConstants.USER_DAY_MAX_COUNT));
-        // 限制规则1:一个账号一天只能摇n次
+        // 取到一个设备一天能摇的次数
+        int deviceDayMaxCount = Integer.valueOf(rateMap
+            .get(SysConstants.DEVICE_DAY_MAX_COUNT));
+
+        // 限制规则1：手机和设备加起来总次数小于最小次数
+        int minMaxCount = userDayMaxCount > deviceDayMaxCount ? deviceDayMaxCount
+                : userDayMaxCount;
         HzbYy yyCondition = new HzbYy();
         yyCondition.setCreateDatetimeStart(DateUtil.getTodayStart());
         yyCondition.setCreateDatetimeEnd(DateUtil.getTodayEnd());
         yyCondition.setUserId(yyUser.getUserId());
+        yyCondition.setDeviceNo(deviceNo);
+        if (getTotalCount(yyCondition) >= minMaxCount) {
+            throw new BizException("xn0000", "您今天已摇" + minMaxCount + "次，请明天再来哦");
+        }
+        // 限制规则2:一个账号一天只能摇n次
+        yyCondition.setUserId(yyUser.getUserId());
+        yyCondition.setDeviceNo(null);
         if (getTotalCount(yyCondition) >= userDayMaxCount) {
             throw new BizException("xn0000", "您的账号今天已摇" + userDayMaxCount
                     + "次，请明天再来哦");
         }
-        // 取到一个设备一天能摇的次数
-        int deviceDayMaxCount = Integer.valueOf(rateMap
-            .get(SysConstants.DEVICE_DAY_MAX_COUNT));
-        // 限制规则2:一个设备一天只能摇n次
+        // 限制规则3:一个设备一天只能摇n次
         yyCondition.setUserId(null);
         yyCondition.setDeviceNo(deviceNo);
         if (getTotalCount(yyCondition) >= deviceDayMaxCount) {
             throw new BizException("xn0000", "您的手机今天已摇" + deviceDayMaxCount
                     + "次，请明天再来哦");
         }
-        // 限制规则3：手机和设备加起来总次数(暂缺)
     }
 
     @Override

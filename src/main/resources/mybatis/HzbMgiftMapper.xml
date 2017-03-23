@@ -13,9 +13,9 @@
 		<result column="receive_currency" property="receiveCurrency" />
 		<result column="receive_amount" property="receiveAmount" />
 		<result column="create_datetime" property="createDatetime" />
+		
 		<result column="remark" property="remark" />
 		<result column="status" property="status" />
-		
 		<result column="receiver" property="receiver" />
 		<result column="receive_datetime" property="receiveDatetime" />
 		<result column="system_code" property="systemCode" />
@@ -143,6 +143,7 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
+	
 	<update id="update_doReceiveHzbMgift" parameterType="hzbMgift">
 		UPDATE tyqs_hzb_mgift
 		SET

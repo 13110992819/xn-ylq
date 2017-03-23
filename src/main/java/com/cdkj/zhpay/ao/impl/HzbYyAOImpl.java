@@ -1,5 +1,6 @@
 package com.cdkj.zhpay.ao.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -55,7 +56,6 @@ public class HzbYyAOImpl implements IHzbYyAO {
      * 1、摇到什么并记录摇到结果
      * 2、刷新对应摇钱树生命值
      * 3、兑现奖励：正汇系统摇到红包时，将促发分销规则;其他币时，单纯给摇的人
-     * 
      */
     @Override
     @Transactional
@@ -129,14 +129,14 @@ public class HzbYyAOImpl implements IHzbYyAO {
         userFcAmount(yyUser.getUserId(), camount);
         // B用户摇一摇分成
         String bUserId = yyUser.getUserReferee();
-        boolean bcheck = hzbBO.hasActivatedHzb(bUserId);
+        boolean bcheck = hzbBO.isBuyHzb(yyUser.getUserId());
         if (StringUtils.isNotBlank(bUserId) && bcheck) {
             String bamount = rateMap.get(SysConstants.YY_BUSER);
             userFcAmount(bUserId, bamount);
             // A用户摇一摇分成
             User bUser = userBO.getRemoteUser(bUserId);
             String aUserId = bUser.getUserReferee();
-            boolean acheck = hzbBO.hasActivatedHzb(aUserId);
+            boolean acheck = hzbBO.isBuyHzb(aUserId);
             if (StringUtils.isNotBlank(aUserId) && acheck) {
                 String aamount = rateMap.get(SysConstants.YY_AUSER);
                 userFcAmount(aUserId, aamount);
@@ -201,6 +201,12 @@ public class HzbYyAOImpl implements IHzbYyAO {
 
     @Override
     public Paginable<HzbYy> queryHzbYyPage(int start, int limit, HzbYy condition) {
-        return hzbYyBO.getPaginable(start, limit, condition);
+        Paginable<HzbYy> page = hzbYyBO.getPaginable(start, limit, condition);
+        List<HzbYy> list = page.getList();
+        for (HzbYy hzbYy : list) {
+            User user = userBO.getRemoteUser(hzbYy.getUserId());
+            hzbYy.setUser(user);
+        }
+        return page;
     }
 }

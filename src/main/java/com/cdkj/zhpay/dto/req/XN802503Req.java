@@ -8,6 +8,17 @@ public class XN802503Req {
     // 币种(选填)
     private String currency;
 
+    // 系统编号(待删除)
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getCurrency() {
         return currency;
     }

@@ -5,15 +5,16 @@ import java.util.List;
 import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
+import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.XN808460Res;
 
 public interface IHzbBO extends IPaginableBO<Hzb> {
 
-    public boolean isHzbExistByUser(String userId);
+    public boolean isBuyHzb(String userId);
 
     public void checkBuy(String userId);
 
-    public Hzb saveHzb(String userId, HzbTemplate hzbTemplate, Long frPayAmount);
+    public Hzb saveHzb(User user, HzbTemplate hzbTemplate, Long frPayAmount);
 
     public int buyHzb(String userId, HzbTemplate hzbTemplate, String payGroup);
 
@@ -31,8 +32,7 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
 
     public List<Hzb> queryHzbList(Hzb condition);
 
-    public List<Hzb> queryHzbList(String userId, String companyCode,
-            String systemCode);
+    public List<Hzb> queryHzbListByUser(String userId);
 
     public List<Hzb> queryDistanceHzbList(String latitude, String longitude,
             String companyCode, String systemCode);
@@ -56,13 +56,4 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
      * @history:
      */
     public void refreshYy(Hzb hzb, XN808460Res prize);
-
-    /**
-     * 此人是否拥有存活的汇赚宝
-     * @param userId
-     * @return 
-     * @create: 2017年3月22日 下午10:47:48 myb858
-     * @history:
-     */
-    public boolean hasActivatedHzb(String userId);
 }

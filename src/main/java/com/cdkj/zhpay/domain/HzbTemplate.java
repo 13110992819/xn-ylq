@@ -29,7 +29,7 @@ public class HzbTemplate extends ABaseDO {
     // 价格币种
     private String currency;
 
-    // 周期内可被摇总次数
+    // 周期内可被摇总次数(每天)
     private Integer periodRockNum;
 
     // 可摇总次数

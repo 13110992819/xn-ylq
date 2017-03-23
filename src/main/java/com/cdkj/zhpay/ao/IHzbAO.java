@@ -16,7 +16,7 @@ public interface IHzbAO {
 
     public void paySuccess(String payGroup, String payCode, Long transAmount);
 
-    public List<Hzb> myHzb(String userId, String systemCode, String companyCode);
+    public List<Hzb> myHzb(String userId);
 
     public void putOnOff(String code);
 
