@@ -13,7 +13,7 @@ package com.cdkj.zhpay.dto.res;
  * @since: 2016年12月26日 下午4:46:41 
  * @history:
  */
-public class XN802180Res {
+public class XN002500Res {
 
     // 公众号id
     private String appId;

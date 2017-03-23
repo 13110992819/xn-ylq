@@ -26,7 +26,7 @@ import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.BooleanRes;
-import com.cdkj.zhpay.dto.res.XN802180Res;
+import com.cdkj.zhpay.dto.res.XN002500Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
@@ -167,15 +167,15 @@ public class HzbAOImpl implements IHzbAO {
      * @history: 
      */
     @Transactional
-    private XN802180Res doWeixinPay(String userId, HzbTemplate hzbTemplate) {
+    private XN002500Res doWeixinPay(String userId, HzbTemplate hzbTemplate) {
         // 生成支付组号
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
         // 落地本地系统消费记录，状态为未支付
         hzbBO.buyHzb(userId, hzbTemplate, payGroup);
-        XN802180Res res = accountBO.doWeiXinPayRemote(
-            hzbTemplate.getSystemCode(), userId, payGroup, EBizType.AJ_GMHZB,
-            hzbTemplate.getPrice());
+        XN002500Res res = accountBO.doWeiXinPayRemote(
+            hzbTemplate.getSystemCode(), hzbTemplate.getCompanyCode(), userId,
+            payGroup, EBizType.AJ_GMHZB, hzbTemplate.getPrice());
         return res;
     }
 
@@ -249,25 +249,24 @@ public class HzbAOImpl implements IHzbAO {
 
         if (StringUtils.isNotBlank(ownerUser.getProvince())) {
             // 省合伙人
-            User provinceUser = userBO.getPartner(
-                ownerUser.getProvince(), null, null);
+            User provinceUser = userBO.getPartner(ownerUser.getProvince(),
+                null, null);
             if (provinceUser != null) {
                 areaFcAmount(systemCode, provinceUser, ownerUser,
                     SysConstants.HZB_PROVINCE, price, "省");
             }
             if (StringUtils.isNotBlank(ownerUser.getCity())) {
                 // 市合伙人
-                User cityUser = userBO.getPartner(
-                    ownerUser.getProvince(), ownerUser.getCity(), null);
+                User cityUser = userBO.getPartner(ownerUser.getProvince(),
+                    ownerUser.getCity(), null);
                 if (cityUser != null) {
                     areaFcAmount(systemCode, cityUser, ownerUser,
                         SysConstants.HZB_CITY, price, "市");
                 }
                 if (StringUtils.isNotBlank(ownerUser.getArea())) {
                     // 县合伙人
-                    User areaUser = userBO.getPartner(
-                        ownerUser.getProvince(), ownerUser.getCity(),
-                        ownerUser.getArea());
+                    User areaUser = userBO.getPartner(ownerUser.getProvince(),
+                        ownerUser.getCity(), ownerUser.getArea());
                     if (areaUser != null) {
                         areaFcAmount(systemCode, areaUser, ownerUser,
                             SysConstants.HZB_AREA, price, "县");
