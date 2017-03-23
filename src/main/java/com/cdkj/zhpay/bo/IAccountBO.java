@@ -3,7 +3,7 @@ package com.cdkj.zhpay.bo;
 import com.cdkj.zhpay.domain.Account;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
-import com.cdkj.zhpay.dto.res.XN802180Res;
+import com.cdkj.zhpay.dto.res.XN002500Res;
 import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
@@ -84,14 +84,15 @@ public interface IAccountBO {
     /**
      * 微信支付
      * @param systemCode
+     * @param companyCode
      * @param userId
      * @param payGroup
      * @param bizType
      * @param cnyAmount
      * @return 
-     * @create: 2017年2月27日 下午3:52:09 haiqingzheng
+     * @create: 2017年3月23日 下午5:07:40 haiqingzheng
      * @history:
      */
-    public XN802180Res doWeiXinPayRemote(String systemCode, String userId,
-            String payGroup, EBizType bizType, Long cnyAmount);
+    public XN002500Res doWeiXinPayRemote(String systemCode, String companyCode,
+            String userId, String payGroup, EBizType bizType, Long cnyAmount);
 }

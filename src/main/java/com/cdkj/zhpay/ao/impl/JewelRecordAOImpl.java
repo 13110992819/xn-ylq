@@ -23,7 +23,7 @@ import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelRecord;
 import com.cdkj.zhpay.domain.JewelRecordNumber;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.dto.res.XN802180Res;
+import com.cdkj.zhpay.dto.res.XN002500Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
@@ -181,9 +181,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         // 落地小目标购买记录
         jewelRecordBO.saveJewelRecord(userId, jewel.getCode(), times,
             jewel.getFromAmount() * times, ip, payGroup, jewel.getSystemCode());
-        XN802180Res res = accountBO
-            .doWeiXinPayRemote(jewel.getSystemCode(), userId, payGroup,
-                EBizType.AJ_DUOBAO, jewel.getFromAmount() * times);
+        XN002500Res res = accountBO.doWeiXinPayRemote(jewel.getSystemCode(),
+            jewel.getCompanyCode(), userId, payGroup, EBizType.AJ_DUOBAO,
+            jewel.getFromAmount() * times);
         return res;
     }
 
