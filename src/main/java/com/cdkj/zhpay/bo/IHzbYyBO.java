@@ -1,7 +1,5 @@
 package com.cdkj.zhpay.bo;
 
-import java.util.Date;
-
 import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbYy;
@@ -9,13 +7,6 @@ import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.XN808460Res;
 
 public interface IHzbYyBO extends IPaginableBO<HzbYy> {
-
-    public Long getTotalHzbYyCount(Date startDate, Date endDate, Long hzbHoldId);
-
-    public HzbYy getHzbYy(String code);
-
-    // 判断该用户是否摇到红包
-    public String isHaveHB(String userId);
 
     /**
      * 检查所有摇一摇全局规则

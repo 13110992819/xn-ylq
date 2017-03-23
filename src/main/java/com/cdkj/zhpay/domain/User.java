@@ -48,6 +48,15 @@ public class User extends ABaseDO {
     // 用户扩展信息
     private UserExt userExt;
 
+    // 省
+    private String province;
+
+    // 市区
+    private String city;
+
+    // 区(县)
+    private String area;
+
     public UserExt getUserExt() {
         return userExt;
     }
