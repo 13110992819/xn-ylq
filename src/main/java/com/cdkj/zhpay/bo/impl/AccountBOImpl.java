@@ -1,9 +1,9 @@
 package com.cdkj.zhpay.bo.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,6 +13,7 @@ import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
+import com.cdkj.zhpay.domain.Account;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.req.XN802180Req;
 import com.cdkj.zhpay.dto.req.XN802503Req;
@@ -23,6 +24,7 @@ import com.cdkj.zhpay.dto.res.XN802503Res;
 import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
+import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.http.BizConnecter;
 import com.cdkj.zhpay.http.JsonUtils;
@@ -37,33 +39,39 @@ public class AccountBOImpl implements IAccountBO {
     private ISYSConfigBO sysConfigBO;
 
     @Override
-    public XN802503Res getAccountByUserId(String userId, String currency) {
-        Map<String, XN802503Res> map = getAccountsByUser(userId);
-        XN802503Res result = map.get(currency);
-        if (null == result) {
-            throw new BizException("xn000000", "用户[" + userId + "]账户不存在");
-        }
-        return result;
-    }
-
-    private Map<String, XN802503Res> getAccountsByUser(String userId) {
-        Map<String, XN802503Res> resultMap = new HashMap<String, XN802503Res>();
+    public Account getRemoteAccount(String userId, ECurrency currency) {
         XN802503Req req = new XN802503Req();
         req.setUserId(userId);
+        req.setCurrency(currency.getCode());
         String jsonStr = BizConnecter.getBizData("802503",
             JsonUtils.object2Json(req));
         Gson gson = new Gson();
         List<XN802503Res> list = gson.fromJson(jsonStr,
             new TypeToken<List<XN802503Res>>() {
             }.getType());
-        for (XN802503Res xn802503Res : list) {
-            resultMap.put(xn802503Res.getCurrency(), xn802503Res);
+        if (CollectionUtils.isEmpty(list)) {
+            throw new BizException("xn000000", "用户[" + userId + "]账户不存在");
         }
-        return resultMap;
+        XN802503Res res = list.get(0);
+        Account account = new Account();
+        account.setAccountNumber(res.getAccountNumber());
+        account.setUserId(res.getUserId());
+        account.setRealName(res.getRealName());
+        account.setType(res.getType());
+        account.setStatus(res.getStatus());
+
+        account.setCurrency(res.getCurrency());
+        account.setAmount(res.getAmount());
+        account.setFrozenAmount(res.getFrozenAmount());
+        account.setCreateDatetime(res.getCreateDatetime());
+        account.setLastOrder(res.getLastOrder());
+
+        account.setSystemCode(res.getSystemCode());
+        return account;
     }
 
     @Override
-    public void doTransferAmount(String fromUserId, String toUserId,
+    public void doTransferAmountRemote(String fromUserId, String toUserId,
             ECurrency currency, Long amount, EBizType bizType,
             String fromBizNote, String toBizNote) {
         if (amount != null && amount != 0) {
@@ -80,18 +88,32 @@ public class AccountBOImpl implements IAccountBO {
         }
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.IAccountBO#checkBalanceAmount(java.lang.String, java.lang.String, java.lang.Long)
-     */
     @Override
-    public void checkBalanceAmount(String systemCode, String userId, Long price) {
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
+    public XN802180Res doWeiXinPayRemote(String systemCode, String userId,
+            String payGroup, EBizType bizType, Long cnyAmount) {
+        // 获取微信APP支付信息
+        XN802180Req req = new XN802180Req();
+        req.setSystemCode(systemCode);
+        req.setCompanyCode(systemCode);
+        req.setUserId(userId);
+        req.setPayGroup(payGroup);
+        req.setBizType(bizType.getCode());
+        req.setBizNote(bizType.getValue());
+        req.setCurrency(ECurrency.CNY.getCode());
+        req.setTransAmount(String.valueOf(cnyAmount));
+        XN802180Res res = BizConnecter.getBizData("802180",
+            JsonUtil.Object2Json(req), XN802180Res.class);
+        return res;
+    }
+
+    @Override
+    public void checkBalanceAmount(String userId, Long price) {
+        Map<String, String> rateMap = sysConfigBO
+            .getConfigsMap(ESystemCode.ZHPAY.getCode());
         // 余额支付业务规则：优先扣贡献值，其次扣分润
-        XN802503Res gxjlAccount = this.getAccountByUserId(systemCode, userId,
-            ECurrency.GXJL.getCode());
+        Account gxjlAccount = this.getRemoteAccount(userId, ECurrency.GXJL);
         // 查询用户分润账户
-        XN802503Res frAccount = this.getAccountByUserId(systemCode, userId,
-            ECurrency.FRB.getCode());
+        Account frAccount = this.getRemoteAccount(userId, ECurrency.FRB);
         Double gxjl2cny = Double.valueOf(rateMap.get(SysConstants.GXJL2CNY));
         Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
         Long gxjlCnyAmount = Double.valueOf(gxjlAccount.getAmount() / gxjl2cny)
@@ -113,11 +135,9 @@ public class AccountBOImpl implements IAccountBO {
         Long frPrice = 0L;
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
         // 余额支付业务规则：优先扣贡献值，其次扣分润
-        XN802503Res gxjlAccount = this.getAccountByUserId(systemCode,
-            fromUserId, ECurrency.GXJL.getCode());
+        Account gxjlAccount = this.getRemoteAccount(fromUserId, ECurrency.GXJL);
         // 查询用户分润账户
-        XN802503Res frAccount = this.getAccountByUserId(systemCode, fromUserId,
-            ECurrency.FRB.getCode());
+        Account frAccount = this.getRemoteAccount(fromUserId, ECurrency.FRB);
         Double gxjl2cny = Double.valueOf(rateMap.get(SysConstants.GXJL2CNY));
         Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
         Long gxjlCnyAmount = Double.valueOf(gxjlAccount.getAmount() / gxjl2cny)
@@ -145,7 +165,7 @@ public class AccountBOImpl implements IAccountBO {
             gxjlPrice = Double.valueOf(price * gxjl2cny).longValue();
         }
         // 扣除贡献值
-        doTransferAmount(
+        doTransferAmountRemote(
             fromUserId,
             toUserId,
             ECurrency.GXJL,
@@ -154,7 +174,7 @@ public class AccountBOImpl implements IAccountBO {
             UserUtil.getUserMobile(fromUserRes.getMobile())
                     + bizType.getValue(), bizType.getValue());
         // 扣除分润
-        doTransferAmount(
+        doTransferAmountRemote(
             fromUserId,
             toUserId,
             ECurrency.FRB,
@@ -171,8 +191,8 @@ public class AccountBOImpl implements IAccountBO {
         Long frPrice = 0L;
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
         // 查询用户分润账户
-        XN802503Res frAccount = this.getAccountByUserId(systemCode,
-            fromUser.getUserId(), ECurrency.FRB.getCode());
+        Account frAccount = this.getRemoteAccount(fromUser.getUserId(),
+            ECurrency.FRB);
         Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
         Long frCnyAmount = Double.valueOf(frAccount.getAmount() / fr2cny)
             .longValue();
@@ -183,27 +203,9 @@ public class AccountBOImpl implements IAccountBO {
         frPrice = Double.valueOf(price * fr2cny).longValue();
         String fromBizNote = bizType.getValue();
         String toBizNote = "用户[" + fromUser.getMobile() + "] " + fromBizNote;
-        doTransferAmount(systemCode, fromUser.getUserId(), toUserId,
-            ECurrency.FRB.getCode(), frPrice, bizType.getCode(), fromBizNote,
-            toBizNote);
+        doTransferAmountRemote(fromUser.getUserId(), toUserId, ECurrency.FRB,
+            frPrice, bizType, fromBizNote, toBizNote);
         return frPrice;
     }
 
-    @Override
-    public XN802180Res doWeiXinPay(String systemCode, String userId,
-            String payGroup, EBizType bizType, Long cnyAmount) {
-        // 获取微信APP支付信息
-        XN802180Req req = new XN802180Req();
-        req.setSystemCode(systemCode);
-        req.setCompanyCode(systemCode);
-        req.setUserId(userId);
-        req.setPayGroup(payGroup);
-        req.setBizType(bizType.getCode());
-        req.setBizNote(bizType.getValue());
-        req.setCurrency(ECurrency.CNY.getCode());
-        req.setTransAmount(String.valueOf(cnyAmount));
-        XN802180Res res = BizConnecter.getBizData("802180",
-            JsonUtil.Object2Json(req), XN802180Res.class);
-        return res;
-    }
 }

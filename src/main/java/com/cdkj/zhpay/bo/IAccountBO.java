@@ -1,9 +1,9 @@
 package com.cdkj.zhpay.bo;
 
+import com.cdkj.zhpay.domain.Account;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
-import com.cdkj.zhpay.dto.res.XN802503Res;
 import com.cdkj.zhpay.dto.res.XN805901Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
@@ -20,10 +20,10 @@ public interface IAccountBO {
      * @param userId
      * @param currency
      * @return 
-     * @create: 2017年3月22日 下午9:49:41 myb858
+     * @create: 2017年3月23日 下午12:02:11 myb858
      * @history:
      */
-    public XN802503Res getAccountByUserId(String userId, String currency);
+    public Account getRemoteAccount(String userId, ECurrency currency);
 
     /**
      * 根据用户编号进行账户资金划转
@@ -34,10 +34,10 @@ public interface IAccountBO {
      * @param bizType
      * @param fromBizNote
      * @param toBizNote 
-     * @create: 2017年3月22日 下午9:49:17 myb858
+     * @create: 2017年3月23日 下午12:19:42 myb858
      * @history:
      */
-    public void doTransferAmount(String fromUserId, String toUserId,
+    public void doTransferAmountRemote(String fromUserId, String toUserId,
             ECurrency currency, Long amount, EBizType bizType,
             String fromBizNote, String toBizNote);
 
@@ -50,7 +50,7 @@ public interface IAccountBO {
      * @create: 2017年1月11日 上午10:50:05 xieyj
      * @history:
      */
-    public void checkBalanceAmount(String systemCode, String userId, Long price);
+    public void checkBalanceAmount(String userId, Long price);
 
     /**
      * 余额支付
@@ -92,6 +92,6 @@ public interface IAccountBO {
      * @create: 2017年2月27日 下午3:52:09 haiqingzheng
      * @history:
      */
-    public XN802180Res doWeiXinPay(String systemCode, String userId,
+    public XN802180Res doWeiXinPayRemote(String systemCode, String userId,
             String payGroup, EBizType bizType, Long cnyAmount);
 }

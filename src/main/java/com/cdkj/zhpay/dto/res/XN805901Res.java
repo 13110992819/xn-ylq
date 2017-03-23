@@ -1,7 +1,5 @@
 package com.cdkj.zhpay.dto.res;
 
-import com.cdkj.zhpay.domain.UserExt;
-
 public class XN805901Res {
     // 用户ID
     private String userId;
@@ -59,9 +57,6 @@ public class XN805901Res {
 
     // 系统编号
     private String systemCode;
-
-    // 用户扩展信息
-    private UserExt userExt;
 
     // 实名认证
     private String identityFlag;
@@ -216,14 +211,6 @@ public class XN805901Res {
 
     public void setTotalFansNum(String totalFansNum) {
         this.totalFansNum = totalFansNum;
-    }
-
-    public UserExt getUserExt() {
-        return userExt;
-    }
-
-    public void setUserExt(UserExt userExt) {
-        this.userExt = userExt;
     }
 
     public String getSystemCode() {

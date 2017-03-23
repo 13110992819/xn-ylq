@@ -86,11 +86,11 @@ public class HzbYyAOImpl implements IHzbYyAO {
         // 3、平台兑现奖励
         // 兑现摇的人
         ECurrency currency = ECurrency.getECurrency(prize.getYyCurrency());
-        accountBO.doTransferAmount(ESysUser.SYS_USER.getCode(),
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER.getCode(),
             yyUser.getUserId(), currency, prize.getYyAmount(),
             EBizType.AJ_YYJL, "摇一摇奖励发放", "摇一摇奖励获得");
         // 兑现树主人
-        accountBO.doTransferAmount(ESysUser.SYS_USER.getCode(),
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER.getCode(),
             yyUser.getUserId(), currency, prize.getYyAmount(),
             EBizType.AJ_YYFC, "摇一摇分成发放", "摇一摇分成获得");
         return prize;
@@ -108,7 +108,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
                 || EPrizeCurrency.ZH_QBB.getCode().equals(currency)) {
             // 兑现摇的人
             ECurrency ecurrency = ECurrency.getECurrency(currency);
-            accountBO.doTransferAmount(ESysUser.SYS_USER.getCode(),
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER.getCode(),
                 yyUser.getUserId(), ecurrency, prize.getYyAmount(),
                 EBizType.AJ_YYJL, "摇一摇奖励发放", "摇一摇奖励获得");
         } else if (EPrizeCurrency.ZH_HBB.getCode().equals(currency)) {
@@ -187,7 +187,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
         Double fc = Double.valueOf(configAmount);
         Long fcAmount = Double.valueOf(fc * SysConstants.AMOUNT_RADIX)
             .longValue();
-        accountBO.doTransferAmount(ESysUser.SYS_USER.getCode(), refUserId,
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER.getCode(), refUserId,
             ECurrency.HBYJ, fcAmount, EBizType.AJ_YYFC, "摇一摇分成发放", "摇一摇分成获得");
     }
 
@@ -202,7 +202,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
         String fromBizNote = toBizNote + "," + remark + "合伙人"
                 + UserUtil.getUserMobile(areaUser.getMobile()) + "分成";
         toBizNote = toBizNote + "," + remark + "合伙人分成";
-        accountBO.doTransferAmount(ESysUser.SYS_USER.getCode(),
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER.getCode(),
             areaUser.getUserId(), ECurrency.HBYJ, fcAmount, EBizType.AJ_YYFC,
             fromBizNote, toBizNote);
     }

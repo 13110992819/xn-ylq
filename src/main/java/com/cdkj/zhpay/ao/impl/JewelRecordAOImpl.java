@@ -157,7 +157,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         boolean result = distributeNumber(userId, jewel, times, jewelRecordCode);
         // 扣除余额
         ECurrency currency = ECurrency.getECurrency(jewel.getFromCurrency());
-        accountBO.doTransferAmount(user.getUserId(),
+        accountBO.doTransferAmountRemote(user.getUserId(),
             ESysAccount.SYS_ACCOUNT.getCode(), currency, amount,
             EBizType.AJ_DUOBAO, EBizType.AJ_DUOBAO.getValue(),
             EBizType.AJ_DUOBAO.getValue());
@@ -184,7 +184,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         // 落地小目标购买记录
         jewelRecordBO.saveJewelRecord(userId, jewel.getCode(), times,
             jewel.getFromAmount() * times, ip, payGroup, jewel.getSystemCode());
-        XN802180Res res = accountBO.doWeiXinPay(jewel.getSystemCode(), userId,
+        XN802180Res res = accountBO.doWeiXinPayRemote(jewel.getSystemCode(), userId,
             payGroup, EBizType.AJ_DUOBAO, jewel.getFromAmount() * times);
         return res;
     }
@@ -256,7 +256,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         String toBizNote = EBizType.AJ_DUOBAO_PRIZE.getValue();
         String fromBizNote = UserUtil.getUserMobile(user.getMobile())
                 + toBizNote;
-        accountBO.doTransferAmount(jewel.getSystemCode(), userId,
+        accountBO.doTransferAmountRemote(jewel.getSystemCode(), userId,
             jewel.getToCurrency(), jewel.getToAmount(),
             EBizType.AJ_DUOBAO_PRIZE.getCode(), fromBizNote, toBizNote);
     }

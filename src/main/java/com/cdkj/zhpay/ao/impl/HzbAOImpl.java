@@ -149,7 +149,7 @@ public class HzbAOImpl implements IHzbAO {
     private Object doCGOneCurrencyPay(User user, HzbTemplate hzbTemplate) {
         // 单个币种资金划转
         ECurrency currency = ECurrency.getECurrency(hzbTemplate.getCurrency());
-        accountBO.doTransferAmount(user.getUserId(),
+        accountBO.doTransferAmountRemote(user.getUserId(),
             ESysUser.SYS_USER_CAIGO.getCode(), currency,
             hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买摇钱树",
             user.getMobile() + "购买摇钱树");
@@ -173,7 +173,7 @@ public class HzbAOImpl implements IHzbAO {
             .getCode());
         // 落地本地系统消费记录，状态为未支付
         hzbBO.buyHzb(userId, hzbTemplate, payGroup);
-        XN802180Res res = accountBO.doWeiXinPay(hzbTemplate.getSystemCode(),
+        XN802180Res res = accountBO.doWeiXinPayRemote(hzbTemplate.getSystemCode(),
             userId, payGroup, EBizType.AJ_GMHZB, hzbTemplate.getPrice());
         return res;
     }
@@ -286,7 +286,7 @@ public class HzbAOImpl implements IHzbAO {
                     + UserUtil.getUserMobile(fcUser.getMobile()) + "分成";
             String toBizNote = UserUtil.getUserMobile(ownerUser.getMobile())
                     + EBizType.AJ_GMHZBFC.getValue();
-            accountBO.doTransferAmount(fcUser.getUserId(),
+            accountBO.doTransferAmountRemote(fcUser.getUserId(),
                 ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB, transAmount,
                 EBizType.AJ_GMHZBFC, fromBizNote, toBizNote);
         }
@@ -303,7 +303,7 @@ public class HzbAOImpl implements IHzbAO {
                     + UserUtil.getUserMobile(areaUser.getMobile()) + "分成";
             String toBizNote = UserUtil.getUserMobile(ownerUser.getMobile())
                     + EBizType.AJ_GMHZBFC.getValue() + "," + remark + "合伙人分成";
-            accountBO.doTransferAmount(areaUser.getUserId(),
+            accountBO.doTransferAmountRemote(areaUser.getUserId(),
                 ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB, transAmount,
                 EBizType.AJ_GMHZBFC, fromBizNote, toBizNote);
         }

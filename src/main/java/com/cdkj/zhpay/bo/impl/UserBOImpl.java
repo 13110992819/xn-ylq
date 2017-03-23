@@ -29,21 +29,6 @@ import com.google.gson.reflect.TypeToken;
 @Component
 public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
-    /** 
-     * @see com.cdkj.zhpay.bo.IUserBO#doCheckUser(java.lang.String)
-     */
-    @Override
-    public void doCheckUser(String userId) {
-        XN805901Req req = new XN805901Req();
-        req.setTokenId(userId);
-        req.setUserId(userId);
-        XN805901Res res = BizConnecter.getBizData("805901",
-            JsonUtils.object2Json(req), XN805901Res.class);
-        if (res == null) {
-            throw new BizException("XN000000", "编号为" + userId + "的用户不存在");
-        }
-    }
-
     @Override
     public User getRemoteUser(String userId) {
         XN805901Req req = new XN805901Req();
@@ -58,15 +43,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setUserId(userId);
         user.setLoginName(res.getLoginName());
         user.setNickname(res.getNickname());
-        user.setPhoto(res.getUserExt().getPhoto());
+        user.setPhoto(res.getPhoto());
         user.setMobile(res.getMobile());
         user.setIdentityFlag(res.getIdentityFlag());
         user.setUserReferee(res.getUserReferee());
         return user;
     }
 
-    @Override
-    public User getPartnerUserInfo(String province, String city, String area) {
+    private User getPartnerUserInfo(String province, String city, String area) {
         // 只有省 province，city,area=省
         // 有省市 area=市
         if (StringUtils.isBlank(city) && StringUtils.isBlank(area)) {
@@ -109,8 +93,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      * @history:
      */
     @Override
-    public List<XN805060Res> getUserList(String province, String city,
-            String area, String kind) {
+    public List<XN805060Res> queryRemoteUserList(String province, String city,
+            String area) {
         XN805060Req req = new XN805060Req();
         req.setProvince(province);
         req.setCity(city);

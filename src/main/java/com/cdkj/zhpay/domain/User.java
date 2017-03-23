@@ -45,9 +45,6 @@ public class User extends ABaseDO {
     // 推荐人
     private String userReferee;
 
-    // 用户扩展信息
-    private UserExt userExt;
-
     // 省
     private String province;
 
