@@ -53,7 +53,7 @@ public class XN615115 extends AProcessor {
         condition.setOrder(orderColumn, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return hzbAO.queryHzbHoldPage(start, limit, condition);
+        return hzbAO.queryHzbPage(start, limit, condition);
     }
 
     /** 

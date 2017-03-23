@@ -352,7 +352,7 @@ public class HzbAOImpl implements IHzbAO {
         } else if (EHzbStatus.ACTIVATED.getCode().equals(hzb.getStatus())) {
             status = EHzbStatus.OFFLINE.getCode();
         } else {
-            throw new BizException("xn0000", "待支付状态无法上下架");
+            throw new BizException("xn0000", "当前状态无法上下架");
         }
         hzbBO.refreshPutStatus(code, status);
     }

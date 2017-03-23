@@ -140,7 +140,7 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         if (StringUtils.isNotBlank(code)) {
             Hzb data = new Hzb();
             data.setCode(code);
-            data.setPayDatetime(new Date());
+            data.setStatus(status);
             count = hzbDAO.updatePutStatus(data);
         }
         return count;

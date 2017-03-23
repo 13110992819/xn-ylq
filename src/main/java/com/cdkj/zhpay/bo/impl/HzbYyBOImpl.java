@@ -134,12 +134,8 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
             String deviceNo) {
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
         // 取到一个账号一天能摇的次数
-        int userDayMaxCount = SysConstants.USER_DAY_MAX_COUNT_DEF;
-        String USER_DAY_MAX_COUNT = rateMap
-            .get(SysConstants.USER_DAY_MAX_COUNT);
-        if (StringUtils.isNotBlank(USER_DAY_MAX_COUNT)) {
-            userDayMaxCount = Integer.valueOf(USER_DAY_MAX_COUNT);
-        }
+        int userDayMaxCount = Integer.valueOf(rateMap
+            .get(SysConstants.USER_DAY_MAX_COUNT));
         // 限制规则1:一个账号一天只能摇n次
         HzbYy yyCondition = new HzbYy();
         yyCondition.setCreateDatetimeStart(DateUtil.getTodayStart());
@@ -150,20 +146,16 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
                     + "次，请明天再来哦");
         }
         // 取到一个设备一天能摇的次数
-        int DeviceDayMaxCount = SysConstants.DEVICE_DAY_MAX_COUNT_DEF;
-        String DEVICE_DAY_MAX_COUNT = rateMap
-            .get(SysConstants.DEVICE_DAY_MAX_COUNT);
-        if (StringUtils.isNotBlank(DEVICE_DAY_MAX_COUNT)) {
-            DeviceDayMaxCount = Integer.valueOf(DEVICE_DAY_MAX_COUNT);
-        }
+        int deviceDayMaxCount = Integer.valueOf(rateMap
+            .get(SysConstants.DEVICE_DAY_MAX_COUNT));
         // 限制规则2:一个设备一天只能摇n次
         yyCondition.setUserId(null);
         yyCondition.setDeviceNo(deviceNo);
-        if (getTotalCount(yyCondition) >= DeviceDayMaxCount) {
-            throw new BizException("xn0000", "您的手机今天已摇" + DeviceDayMaxCount
+        if (getTotalCount(yyCondition) >= deviceDayMaxCount) {
+            throw new BizException("xn0000", "您的手机今天已摇" + deviceDayMaxCount
                     + "次，请明天再来哦");
         }
-
+        // 限制规则3：手机和设备加起来总次数(暂缺)
     }
 
     @Override

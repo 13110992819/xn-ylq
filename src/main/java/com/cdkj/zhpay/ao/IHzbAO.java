@@ -6,7 +6,7 @@ import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.Hzb;
 
 public interface IHzbAO {
-    static final String DEFAULT_ORDER_COLUMN = "id";
+    static final String DEFAULT_ORDER_COLUMN = "code";
 
     public Object buyHzbOfZH(String userId, String hzbTemplateCode,
             String payType);

@@ -4,7 +4,7 @@
 <mapper namespace="com.cdkj.zhpay.dao.IHzbYyDAO">
 	<resultMap id="hzbYy_DB_Result" type="hzbYy">
 		<result column="code" property="code" />
-		<result column="hzb_hold_id" property="hzbHoldId" />
+		<result column="hzb_code" property="hzbCode" />
 		<result column="type" property="type" />
 		<result column="quantity" property="quantity" />
 		<result column="user_id" property="userId" />
@@ -17,7 +17,7 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-			<if test="hzbHoldId != null and hzbHoldId != '' ">
+			<if test="hzbCode != null and hzbCode != '' ">
 				AND t.hzb_hold_id = #{hzbHoldId}
 			</if>
 			<if test="type != null and type != '' ">

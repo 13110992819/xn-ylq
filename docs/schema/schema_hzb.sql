@@ -62,7 +62,7 @@ CREATE TABLE `tyqs_hzb` (
 DROP TABLE IF EXISTS `tyqs_hzb_yy`;
 CREATE TABLE `tyqs_hzb_yy` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `hzb_code` bigint(32) DEFAULT NULL COMMENT '汇赚宝',
+  `hzb_code` varchar(32) DEFAULT NULL COMMENT '汇赚宝',
   `yy_currency` varchar(32) DEFAULT NULL COMMENT '摇出币种',
   `yy_amount` bigint(20) DEFAULT NULL COMMENT '摇出金额',
   `user_id` varchar(32) DEFAULT NULL COMMENT '摇的人',
@@ -79,7 +79,7 @@ CREATE TABLE `tyqs_hzb_yy` (
 DROP TABLE IF EXISTS `tyqs_hzb_mgift`;
 CREATE TABLE `tyqs_hzb_mgift` (
   `code` varchar(32) NOT NULL COMMENT '红包编号',
-   `hzb_code` bigint(32) DEFAULT NULL COMMENT '汇赚宝',
+   `hzb_code` varchar(32) DEFAULT NULL COMMENT '汇赚宝',
   `slogan` varchar(255) DEFAULT NULL COMMENT '标语',
  `owner` varchar(32) DEFAULT NULL COMMENT '树主人编号',
  
