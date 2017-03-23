@@ -1,6 +1,6 @@
 package com.cdkj.zhpay.dto.req;
 
-public class XN805060Req {
+public class XN001401Req {
     // 省
     private String province;
 

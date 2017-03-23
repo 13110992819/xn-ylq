@@ -1,7 +1,6 @@
 package com.cdkj.zhpay.dto.req;
 
-public class XN805901Req {
-    // 应用用户的唯一编号（目前暂用UserId,后期改进）
+public class XN001400Req {
     private String tokenId;
 
     private String userId;

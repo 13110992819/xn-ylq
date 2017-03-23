@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.dto.req.XN805060Req;
-import com.cdkj.zhpay.dto.req.XN805901Req;
-import com.cdkj.zhpay.dto.res.XN805060Res;
-import com.cdkj.zhpay.dto.res.XN805901Res;
+import com.cdkj.zhpay.dto.req.XN001400Req;
+import com.cdkj.zhpay.dto.req.XN001401Req;
+import com.cdkj.zhpay.dto.res.XN001400Res;
+import com.cdkj.zhpay.dto.res.XN001401Res;
 import com.cdkj.zhpay.enums.ESysUser;
 import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.enums.EUserKind;
@@ -34,11 +34,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
 
     @Override
     public User getRemoteUser(String userId) {
-        XN805901Req req = new XN805901Req();
+        XN001400Req req = new XN001400Req();
         req.setTokenId(userId);
         req.setUserId(userId);
-        XN805901Res res = BizConnecter.getBizData("805901",
-            JsonUtils.object2Json(req), XN805901Res.class);
+        XN001400Res res = BizConnecter.getBizData("001400",
+            JsonUtils.object2Json(req), XN001400Res.class);
         if (res == null) {
             throw new BizException("XN000000", "编号为" + userId + "的用户不存在");
         }
@@ -64,18 +64,18 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         } else if (StringUtils.isBlank(area)) {
             area = city;
         }
-        XN805060Req req = new XN805060Req();
+        XN001401Req req = new XN001401Req();
         req.setProvince(province);
         req.setCity(city);
         req.setArea(area);
         req.setKind(EUserKind.Partner.getCode());
         req.setStatus(EUserStatus.NORMAL.getCode());
-        XN805060Res result = null;
-        String jsonStr = BizConnecter.getBizData("805060",
+        XN001401Res result = null;
+        String jsonStr = BizConnecter.getBizData("001401",
             JsonUtils.object2Json(req));
         Gson gson = new Gson();
-        List<XN805060Res> list = gson.fromJson(jsonStr,
-            new TypeToken<List<XN805060Res>>() {
+        List<XN001401Res> list = gson.fromJson(jsonStr,
+            new TypeToken<List<XN001401Res>>() {
             }.getType());
         User user = null;
         if (CollectionUtils.isNotEmpty(list)) {
@@ -101,19 +101,19 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     public List<User> queryRemoteUserList(String province, String city,
             String area, EUserKind kind) {
         List<User> result = new ArrayList<User>();
-        XN805060Req req = new XN805060Req();
+        XN001401Req req = new XN001401Req();
         req.setProvince(province);
         req.setCity(city);
         req.setArea(area);
         req.setKind(kind.getCode());
-        String jsonStr = BizConnecter.getBizData("805060",
+        String jsonStr = BizConnecter.getBizData("001401",
             JsonUtils.object2Json(req));
         Gson gson = new Gson();
-        List<XN805060Res> list = gson.fromJson(jsonStr,
-            new TypeToken<List<XN805060Res>>() {
+        List<XN001401Res> list = gson.fromJson(jsonStr,
+            new TypeToken<List<XN001401Res>>() {
             }.getType());
         if (CollectionUtils.isNotEmpty(list)) {
-            for (XN805060Res res : list) {
+            for (XN001401Res res : list) {
                 User user = new User();
                 user.setUserId(res.getUserId());
                 user.setLoginName(res.getLoginName());

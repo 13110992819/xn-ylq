@@ -21,7 +21,7 @@ import com.cdkj.zhpay.dto.req.XN802530Req;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
 import com.cdkj.zhpay.dto.res.XN802503Res;
-import com.cdkj.zhpay.dto.res.XN805901Res;
+import com.cdkj.zhpay.dto.res.XN001400Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.ESystemCode;
@@ -128,7 +128,7 @@ public class AccountBOImpl implements IAccountBO {
 
     @Override
     public PayBalanceRes doBalancePay(String systemCode,
-            XN805901Res fromUserRes, String toUserId, Long price,
+            XN001400Res fromUserRes, String toUserId, Long price,
             EBizType bizType) {
         String fromUserId = fromUserRes.getUserId();
         Long gxjlPrice = 0L;

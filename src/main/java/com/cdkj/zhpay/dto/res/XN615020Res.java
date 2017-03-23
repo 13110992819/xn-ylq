@@ -28,7 +28,7 @@ public class XN615020Res {
     Jewel jewel;
 
     // 夺宝人信息
-    XN805901Res user;
+    XN001400Res user;
 
     // 夺宝号码列表
     private List<JewelRecordNumber> jewelRecordNumberList;
@@ -52,11 +52,11 @@ public class XN615020Res {
         this.jewel = jewel;
     }
 
-    public XN805901Res getUser() {
+    public XN001400Res getUser() {
         return user;
     }
 
-    public void setUser(XN805901Res user) {
+    public void setUser(XN001400Res user) {
         this.user = user;
     }
 

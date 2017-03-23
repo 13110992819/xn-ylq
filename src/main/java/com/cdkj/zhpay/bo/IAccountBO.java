@@ -4,7 +4,7 @@ import com.cdkj.zhpay.domain.Account;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
-import com.cdkj.zhpay.dto.res.XN805901Res;
+import com.cdkj.zhpay.dto.res.XN001400Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 
@@ -64,7 +64,7 @@ public interface IAccountBO {
      * @history:
      */
     public PayBalanceRes doBalancePay(String systemCode,
-            XN805901Res fromUserRes, String toUserId, Long price,
+            XN001400Res fromUserRes, String toUserId, Long price,
             EBizType bizType);
 
     /**
