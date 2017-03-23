@@ -264,7 +264,6 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
 
     @Override
     public void refreshYy(Hzb hzb, XN808460Res prize) {
-
         hzb.setPeriodRockNum(hzb.getPeriodRockNum() + 1);
         hzb.setTotalRockNum(hzb.getTotalRockNum() + 1);
         if (ESystemCode.Caigo.getCode().equals(hzb.getSystemCode())) {

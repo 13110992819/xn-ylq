@@ -3,7 +3,7 @@ package com.cdkj.zhpay.bo;
 import java.util.List;
 
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.dto.res.XN805060Res;
+import com.cdkj.zhpay.enums.EUserKind;
 
 /**
  * 走协议的带Remote
@@ -32,8 +32,8 @@ public interface IUserBO {
      * @create: 2017年1月15日 下午5:56:30 xieyj
      * @history:
      */
-    public List<XN805060Res> queryRemoteUserList(String province, String city,
-            String area);
+    public List<User> queryRemoteUserList(String province, String city,
+            String area, EUserKind kind);
 
     /**
      * 根据systemCode获取系统userId
@@ -43,4 +43,6 @@ public interface IUserBO {
      * @history:
      */
     public String getSystemUser(String systemCode);
+
+    public User getPartner(String province, String city, String area);
 }

@@ -19,7 +19,6 @@ import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbYy;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.domain.UserExt;
 import com.cdkj.zhpay.dto.res.XN808460Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
@@ -86,11 +85,11 @@ public class HzbYyAOImpl implements IHzbYyAO {
         // 3、平台兑现奖励
         // 兑现摇的人
         ECurrency currency = ECurrency.getECurrency(prize.getYyCurrency());
-        accountBO.doTransferAmountRemote(ESysUser.SYS_USER.getCode(),
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
             yyUser.getUserId(), currency, prize.getYyAmount(),
             EBizType.AJ_YYJL, "摇一摇奖励发放", "摇一摇奖励获得");
         // 兑现树主人
-        accountBO.doTransferAmountRemote(ESysUser.SYS_USER.getCode(),
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
             yyUser.getUserId(), currency, prize.getYyAmount(),
             EBizType.AJ_YYFC, "摇一摇分成发放", "摇一摇分成获得");
         return prize;
@@ -108,11 +107,12 @@ public class HzbYyAOImpl implements IHzbYyAO {
                 || EPrizeCurrency.ZH_QBB.getCode().equals(currency)) {
             // 兑现摇的人
             ECurrency ecurrency = ECurrency.getECurrency(currency);
-            accountBO.doTransferAmountRemote(ESysUser.SYS_USER.getCode(),
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
                 yyUser.getUserId(), ecurrency, prize.getYyAmount(),
                 EBizType.AJ_YYJL, "摇一摇奖励发放", "摇一摇奖励获得");
         } else if (EPrizeCurrency.ZH_HBB.getCode().equals(currency)) {
             // 促发分销规则
+            fcAmount(yyUser);
         }
         return prize;
     }
@@ -120,9 +120,10 @@ public class HzbYyAOImpl implements IHzbYyAO {
     // 汇赚宝分成:
     // 1、数据准备
     // 2、计算分成:针对用户_已购买汇赚宝的一级二级推荐人和所在辖区用户
-    private void fcAmount(String systemCode, User yyUser) {
+    private void fcAmount(User yyUser) {
         // 分销规则
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
+        Map<String, String> rateMap = sysConfigBO
+            .getConfigsMap(ESystemCode.ZHPAY.getCode());
         // C用户摇一摇分成
         String camount = rateMap.get(SysConstants.YY_CUSER);
         userFcAmount(yyUser.getUserId(), camount);
@@ -142,53 +143,44 @@ public class HzbYyAOImpl implements IHzbYyAO {
             }
         }
         // 辖区分成
-        UserExt userExt = yyUser.getUserExt();
-        if (userExt != null) {
-            if (StringUtils.isNotBlank(userExt.getProvince())) {
-                // 省合伙人
-                User provinceUser = userBO.getPartnerUserInfo(
-                    userExt.getProvince(), null, null);
-                if (provinceUser != null) {
-                    areaFcAmount(rateMap, yyUser, provinceUser,
-                        SysConstants.YY_PROVINCE, "省");
+
+        if (StringUtils.isNotBlank(yyUser.getProvince())) {
+            // 省合伙人
+            User provinceUser = userBO.getPartner(yyUser.getProvince(), null,
+                null);
+            if (provinceUser != null) {
+                areaFcAmount(rateMap, yyUser, provinceUser,
+                    SysConstants.YY_PROVINCE, "省");
+            }
+            if (StringUtils.isNotBlank(yyUser.getCity())) {
+                // 市合伙人
+                User cityUser = userBO.getPartner(yyUser.getProvince(),
+                    yyUser.getCity(), null);
+                if (cityUser != null) {
+                    areaFcAmount(rateMap, yyUser, cityUser,
+                        SysConstants.YY_CITY, "市");
                 }
-                if (StringUtils.isNotBlank(userExt.getCity())) {
-                    // 市合伙人
-                    User cityUser = userBO.getPartnerUserInfo(
-                        userExt.getProvince(), userExt.getCity(), null);
-                    if (cityUser != null) {
-                        areaFcAmount(rateMap, yyUser, cityUser,
-                            SysConstants.YY_CITY, "市");
-                    }
-                    if (StringUtils.isNotBlank(userExt.getArea())) {
-                        // 县合伙人
-                        User areaRes = userBO.getPartnerUserInfo(
-                            userExt.getProvince(), userExt.getCity(),
-                            userExt.getArea());
-                        if (areaRes != null) {
-                            areaFcAmount(rateMap, yyUser, areaRes,
-                                SysConstants.YY_AREA, "县");
-                        }
+                if (StringUtils.isNotBlank(yyUser.getArea())) {
+                    // 县合伙人
+                    User areaRes = userBO.getPartner(yyUser.getProvince(),
+                        yyUser.getCity(), yyUser.getArea());
+                    if (areaRes != null) {
+                        areaFcAmount(rateMap, yyUser, areaRes,
+                            SysConstants.YY_AREA, "县");
                     }
                 }
             }
+
         }
     }
 
-    /**
-     * 摇一摇推荐人的分销金额划转
-     * @param refUserId 推荐人
-     * @param fcAmount 分成金额
-     * @return 
-     * @create: 2017年3月22日 下午10:32:41 myb858
-     * @history:
-     */
     private void userFcAmount(String refUserId, String configAmount) {
         Double fc = Double.valueOf(configAmount);
         Long fcAmount = Double.valueOf(fc * SysConstants.AMOUNT_RADIX)
             .longValue();
-        accountBO.doTransferAmountRemote(ESysUser.SYS_USER.getCode(), refUserId,
-            ECurrency.HBYJ, fcAmount, EBizType.AJ_YYFC, "摇一摇分成发放", "摇一摇分成获得");
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
+            refUserId, ECurrency.HBYJ, fcAmount, EBizType.AJ_YYFC, "摇一摇分成发放",
+            "摇一摇分成获得");
     }
 
     private void areaFcAmount(Map<String, String> rateMap, User yyUser,
@@ -202,7 +194,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
         String fromBizNote = toBizNote + "," + remark + "合伙人"
                 + UserUtil.getUserMobile(areaUser.getMobile()) + "分成";
         toBizNote = toBizNote + "," + remark + "合伙人分成";
-        accountBO.doTransferAmountRemote(ESysUser.SYS_USER.getCode(),
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
             areaUser.getUserId(), ECurrency.HBYJ, fcAmount, EBizType.AJ_YYFC,
             fromBizNote, toBizNote);
     }

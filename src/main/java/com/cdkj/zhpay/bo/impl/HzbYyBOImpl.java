@@ -145,7 +145,7 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
 
     @Override
     public XN808460Res calculatePrizeByCG() {
-        return new XN808460Res(1L, EPrizeCurrency.CG_CGB);
+        return new XN808460Res(1000L, EPrizeCurrency.CG_CGB);
     }
 
     @Override
@@ -167,7 +167,7 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
          * Prize(EPrizeType.GWB.getCode(), ycGwbWeight)); // 获取数量 int quantity =
          * getQuantity(rateMap);
          */
-        return new XN808460Res(1L, EPrizeCurrency.ZH_QBB);
+        return new XN808460Res(1000L, EPrizeCurrency.ZH_QBB);
 
     }
 

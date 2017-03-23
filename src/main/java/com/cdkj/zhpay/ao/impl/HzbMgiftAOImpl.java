@@ -25,7 +25,6 @@ import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EHzbMgiftStatus;
-import com.cdkj.zhpay.enums.ESysUser;
 import com.cdkj.zhpay.exception.BizException;
 
 /**
@@ -118,17 +117,18 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
                 + ownerToBizNote;
         ECurrency currency = ECurrency
             .getECurrency(hzbMgift.getOwnerCurrency());
-        accountBO.doTransferAmountRemote(ESysUser.SYS_USER.getCode(),
-            hzbMgift.getOwner(), currency, hzbMgift.getOwnerAmount(),
-            EBizType.AJ_FSDHB, ownerFromBizNote, ownerToBizNote);
+        String systemUserId = userBO.getSystemUser(hzbMgift.getSystemCode());
+        accountBO.doTransferAmountRemote(systemUserId, hzbMgift.getOwner(),
+            currency, hzbMgift.getOwnerAmount(), EBizType.AJ_FSDHB,
+            ownerFromBizNote, ownerToBizNote);
         // 领取用户
         String reToBizNote = EBizType.AJ_LQHB.getValue();
         String reFromBizNote = UserUtil.getUserMobile(user.getMobile())
                 + reToBizNote;
         currency = ECurrency.getECurrency(hzbMgift.getReceiveCurrency());
-        accountBO.doTransferAmountRemote(ESysUser.SYS_USER.getCode(),
-            user.getUserId(), currency, hzbMgift.getReceiveAmount(),
-            EBizType.AJ_LQHB, reFromBizNote, reToBizNote);
+        accountBO.doTransferAmountRemote(systemUserId, user.getUserId(),
+            currency, hzbMgift.getReceiveAmount(), EBizType.AJ_LQHB,
+            reFromBizNote, reToBizNote);
 
     }
 

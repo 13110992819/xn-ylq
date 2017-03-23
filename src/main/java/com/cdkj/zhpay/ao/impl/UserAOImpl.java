@@ -19,8 +19,6 @@ import com.cdkj.zhpay.bo.IHzbBO;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.domain.UserExt;
-import com.cdkj.zhpay.dto.res.XN805060Res;
 import com.cdkj.zhpay.dto.res.XN808800Res;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EUserKind;
@@ -46,23 +44,22 @@ public class UserAOImpl implements IUserAO {
         if (!EUserKind.Partner.getCode().equals(userRes.getKind())) {
             throw new BizException("xn0000", "该用户类型不是辖区合伙人，无法查询统计信息");
         }
-        UserExt userExt = userRes.getUserExt();
-        List<XN805060Res> bUsers = null;
+
+        List<User> bUsers = null;
         List<String> bUserList = new ArrayList<String>();
-        List<XN805060Res> cUsers = null;
+        List<User> cUsers = null;
         List<String> cUserList = new ArrayList<String>();
-        if (userExt != null) {
-            cUsers = userBO.getUserList(userExt.getProvince(),
-                userExt.getCity(), userExt.getArea(), EUserKind.F1.getCode());
-            bUsers = userBO.getUserList(userExt.getProvince(),
-                userExt.getCity(), userExt.getArea(), EUserKind.F2.getCode());
-            for (XN805060Res cUser : cUsers) {
-                cUserList.add(cUser.getUserId());
-            }
-            for (XN805060Res bUser : bUsers) {
-                bUserList.add(bUser.getUserId());
-            }
+        cUsers = userBO.queryRemoteUserList(userRes.getProvince(),
+            userRes.getCity(), userRes.getArea(), EUserKind.F1);
+        bUsers = userBO.queryRemoteUserList(userRes.getProvince(),
+            userRes.getCity(), userRes.getArea(), EUserKind.F2);
+        for (User cUser : cUsers) {
+            cUserList.add(cUser.getUserId());
         }
+        for (User bUser : bUsers) {
+            bUserList.add(bUser.getUserId());
+        }
+
         Hzb hzbHoldCondition = new Hzb();
         hzbHoldCondition.setUserList(cUserList);
         hzbHoldCondition.setStatus(EDiviFlag.EFFECT.getCode());

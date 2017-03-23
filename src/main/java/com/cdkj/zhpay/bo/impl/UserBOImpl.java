@@ -1,5 +1,6 @@
 package com.cdkj.zhpay.bo.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -42,7 +43,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             throw new BizException("XN000000", "编号为" + userId + "的用户不存在");
         }
         User user = new User();
-        user.setUserId(userId);
+        user.setUserId(res.getUserId());
         user.setLoginName(res.getLoginName());
         user.setNickname(res.getNickname());
         user.setPhoto(res.getPhoto());
@@ -50,9 +51,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setIdentityFlag(res.getIdentityFlag());
         user.setUserReferee(res.getUserReferee());
         return user;
+
     }
 
-    private User getPartnerUserInfo(String province, String city, String area) {
+    @Override
+    public User getPartner(String province, String city, String area) {
         // 只有省 province，city,area=省
         // 有省市 area=市
         if (StringUtils.isBlank(city) && StringUtils.isBlank(area)) {
@@ -95,20 +98,31 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
      * @history:
      */
     @Override
-    public List<XN805060Res> queryRemoteUserList(String province, String city,
-            String area) {
+    public List<User> queryRemoteUserList(String province, String city,
+            String area, EUserKind kind) {
+        List<User> result = new ArrayList<User>();
         XN805060Req req = new XN805060Req();
         req.setProvince(province);
         req.setCity(city);
         req.setArea(area);
-        req.setKind(EUserKind.FCB.getCode());
+        req.setKind(kind.getCode());
         String jsonStr = BizConnecter.getBizData("805060",
             JsonUtils.object2Json(req));
         Gson gson = new Gson();
         List<XN805060Res> list = gson.fromJson(jsonStr,
             new TypeToken<List<XN805060Res>>() {
             }.getType());
-        return list;
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (XN805060Res res : list) {
+                User user = new User();
+                user.setUserId(res.getUserId());
+                user.setLoginName(res.getLoginName());
+                user.setPhoto(res.getPhoto());
+                user.setMobile(res.getMobile());
+                result.add(user);
+            }
+        }
+        return result;
     }
 
     @Override

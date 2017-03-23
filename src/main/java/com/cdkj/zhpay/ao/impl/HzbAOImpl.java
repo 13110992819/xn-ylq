@@ -25,7 +25,6 @@ import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.domain.UserExt;
 import com.cdkj.zhpay.dto.res.BooleanRes;
 import com.cdkj.zhpay.dto.res.XN802180Res;
 import com.cdkj.zhpay.enums.EBizType;
@@ -36,6 +35,7 @@ import com.cdkj.zhpay.enums.EHzbStatus;
 import com.cdkj.zhpay.enums.EHzbTemplateStatus;
 import com.cdkj.zhpay.enums.EPayType;
 import com.cdkj.zhpay.enums.ESysUser;
+import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
 @Service
@@ -173,8 +173,9 @@ public class HzbAOImpl implements IHzbAO {
             .getCode());
         // 落地本地系统消费记录，状态为未支付
         hzbBO.buyHzb(userId, hzbTemplate, payGroup);
-        XN802180Res res = accountBO.doWeiXinPayRemote(hzbTemplate.getSystemCode(),
-            userId, payGroup, EBizType.AJ_GMHZB, hzbTemplate.getPrice());
+        XN802180Res res = accountBO.doWeiXinPayRemote(
+            hzbTemplate.getSystemCode(), userId, payGroup, EBizType.AJ_GMHZB,
+            hzbTemplate.getPrice());
         return res;
     }
 
@@ -200,8 +201,11 @@ public class HzbAOImpl implements IHzbAO {
         // 更新状态
         hzbBO.refreshPayStatus(hzb.getCode(), EHzbStatus.ACTIVATED.getCode(),
             payCode, transAmount);
-        // 分配分成
-        distributeAmount(hzb.getSystemCode(), hzb.getUserId(), hzb.getPrice());
+        // 正汇才有分配分成
+        if (ESystemCode.ZHPAY.getCode().equals(hzb.getSystemCode())) {
+            distributeAmount(hzb.getSystemCode(), hzb.getUserId(),
+                hzb.getPrice());
+        }
         // 产生红包
         hzbMgiftBO.generateHzbMgift(hzb, DateUtil.getTodayStart());
     }
@@ -242,36 +246,35 @@ public class HzbAOImpl implements IHzbAO {
             }
         }
         // 辖区分成
-        UserExt userExt = ownerUser.getUserExt();
-        if (userExt != null) {
-            if (StringUtils.isNotBlank(userExt.getProvince())) {
-                // 省合伙人
-                User provinceUser = userBO.getPartnerUserInfo(
-                    userExt.getProvince(), null, null);
-                if (provinceUser != null) {
-                    areaFcAmount(systemCode, provinceUser, ownerUser,
-                        SysConstants.HZB_PROVINCE, price, "省");
+
+        if (StringUtils.isNotBlank(ownerUser.getProvince())) {
+            // 省合伙人
+            User provinceUser = userBO.getPartner(
+                ownerUser.getProvince(), null, null);
+            if (provinceUser != null) {
+                areaFcAmount(systemCode, provinceUser, ownerUser,
+                    SysConstants.HZB_PROVINCE, price, "省");
+            }
+            if (StringUtils.isNotBlank(ownerUser.getCity())) {
+                // 市合伙人
+                User cityUser = userBO.getPartner(
+                    ownerUser.getProvince(), ownerUser.getCity(), null);
+                if (cityUser != null) {
+                    areaFcAmount(systemCode, cityUser, ownerUser,
+                        SysConstants.HZB_CITY, price, "市");
                 }
-                if (StringUtils.isNotBlank(userExt.getCity())) {
-                    // 市合伙人
-                    User cityUser = userBO.getPartnerUserInfo(
-                        userExt.getProvince(), userExt.getCity(), null);
-                    if (cityUser != null) {
-                        areaFcAmount(systemCode, cityUser, ownerUser,
-                            SysConstants.HZB_CITY, price, "市");
-                    }
-                    if (StringUtils.isNotBlank(userExt.getArea())) {
-                        // 县合伙人
-                        User areaUser = userBO.getPartnerUserInfo(
-                            userExt.getProvince(), userExt.getCity(),
-                            userExt.getArea());
-                        if (areaUser != null) {
-                            areaFcAmount(systemCode, areaUser, ownerUser,
-                                SysConstants.HZB_AREA, price, "县");
-                        }
+                if (StringUtils.isNotBlank(ownerUser.getArea())) {
+                    // 县合伙人
+                    User areaUser = userBO.getPartner(
+                        ownerUser.getProvince(), ownerUser.getCity(),
+                        ownerUser.getArea());
+                    if (areaUser != null) {
+                        areaFcAmount(systemCode, areaUser, ownerUser,
+                            SysConstants.HZB_AREA, price, "县");
                     }
                 }
             }
+
         }
     }
 

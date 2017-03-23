@@ -21,13 +21,11 @@ import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.SysConstants;
+import com.cdkj.zhpay.domain.Account;
 import com.cdkj.zhpay.domain.Stock;
 import com.cdkj.zhpay.domain.StockBack;
 import com.cdkj.zhpay.domain.StockHold;
-import com.cdkj.zhpay.domain.UserExt;
-import com.cdkj.zhpay.dto.res.XN802503Res;
-import com.cdkj.zhpay.dto.res.XN805060Res;
-import com.cdkj.zhpay.dto.res.XN805901Res;
+import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EPayType;
@@ -131,7 +129,8 @@ public class StockAOImpl implements IStockAO {
         String systemCode = stock.getSystemCode();
         if (EPayType.YEFR.getCode().equals(payType)) {
             // 校验余额是否充足
-            accountBO.checkBalanceAmount(systemCode, userId, stock.getPrice());
+            // accountBO.checkBalanceAmount(systemCode, userId,
+            // stock.getPrice());
             StockHold stockHold = new StockHold();
             stockHold.setUserId(userId);
             stockHold.setStockCode(code);
@@ -302,14 +301,10 @@ public class StockAOImpl implements IStockAO {
     private void distributeAmount(StockHold stockHold) {
         String systemCode = stockHold.getSystemCode();
         // 分销规则
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
-            null);
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
         // 获取当前用户的推荐人，判断A用户是否有购买股份
-        XN805901Res res = userBO.getRemoteUser(stockHold.getUserId(),
-            stockHold.getUserId());
-        UserExt userExt = res.getUserExt();
-        XN805901Res refereeUser = userBO.getRemoteUser(res.getUserReferee(),
-            res.getUserReferee());
+        User user = userBO.getRemoteUser(stockHold.getUserId());
+        User refereeUser = userBO.getRemoteUser(user.getUserReferee());
         // 推荐人不存在无分销
         if (refereeUser == null) {
             logger.info("用户" + stockHold.getUserId() + "无推荐人,不分配福利月卡分成");
@@ -379,52 +374,51 @@ public class StockAOImpl implements IStockAO {
         }
         distributeFrAmount(a1FrAmount, areaFrAmount, cityFrAmount,
             provinceFrAmount, bizNote, stock.getSystemCode(),
-            refereeUser.getUserId(), userExt);
+            refereeUser.getUserId(), user);
     }
 
     private void distributeFrAmount(Long a1Amount, Long areaAmount,
             Long cityAmount, Long provinceAmount, String bizNote,
-            String systemCode, String aUserId, UserExt userExt) {
+            String systemCode, String aUserId, User userExt) {
         if (userExt != null) {
-            XN805060Res areaRes = null;
-            XN805060Res cityRes = null;
-            XN805060Res provinceRes = null;
+            User areaRes = null;
+            User cityRes = null;
+            User provinceRes = null;
             if (StringUtils.isNotBlank(userExt.getProvince())) {
                 // 省合伙人
-                provinceRes = userBO.getPartnerUserInfo(userExt.getProvince(),
-                    null, null);
+                provinceRes = userBO.getPartner(userExt.getProvince(), null,
+                    null);
                 if (StringUtils.isNotBlank(userExt.getCity())) {
                     // 市合伙人
-                    cityRes = userBO.getPartnerUserInfo(userExt.getProvince(),
+                    cityRes = userBO.getPartner(userExt.getProvince(),
                         userExt.getCity(), null);
                     if (StringUtils.isNotBlank(userExt.getArea())) {
                         // 县合伙人
-                        areaRes = userBO.getPartnerUserInfo(
-                            userExt.getProvince(), userExt.getCity(),
-                            userExt.getArea());
+                        areaRes = userBO.getPartner(userExt.getProvince(),
+                            userExt.getCity(), userExt.getArea());
                     }
                 }
             }
             // a1分成
             if (a1Amount != null && a1Amount != 0L) {
-                XN802503Res accountRes = accountBO.getAccountByUserId(
-                    systemCode, aUserId, ECurrency.FRB.getCode());
+                Account accountRes = accountBO.getRemoteAccount(aUserId,
+                    ECurrency.FRB);
                 // accountBO.doTransferAmount(systemCode,
                 // ESysAccount.FRB.getCode(), accountRes.getAccountNumber(),
                 // a1Amount, EBizType.AJ_FLYKFC.getCode(), bizNote
                 // + ",推荐人分成分润");
             }
             if (areaRes != null && areaAmount != null && areaAmount != 0L) {
-                XN802503Res areaAccount = accountBO.getAccountByUserId(
-                    systemCode, areaRes.getUserId(), ECurrency.FRB.getCode());
+                Account areaAccount = accountBO.getRemoteAccount(
+                    areaRes.getUserId(), ECurrency.FRB);
                 // accountBO.doTransferAmount(systemCode,
                 // ESysAccount.FRB.getCode(), areaAccount.getAccountNumber(),
                 // areaAmount, EBizType.AJ_FLYKFC.getCode(), bizNote
                 // + ",县分成分润");
             }
             if (cityRes != null && cityAmount != null && cityAmount != 0L) {
-                XN802503Res cityAccount = accountBO.getAccountByUserId(
-                    systemCode, cityRes.getUserId(), ECurrency.FRB.getCode());
+                Account cityAccount = accountBO.getRemoteAccount(
+                    cityRes.getUserId(), ECurrency.FRB);
                 // accountBO.doTransferAmount(systemCode,
                 // ESysAccount.FRB.getCode(), cityAccount.getAccountNumber(),
                 // cityAmount, EBizType.AJ_FLYKFC.getCode(), bizNote
@@ -432,8 +426,8 @@ public class StockAOImpl implements IStockAO {
             }
             if (provinceRes != null && provinceAmount != null
                     && provinceAmount != 0L) {
-                XN802503Res provinceAccount = accountBO.getAccountByUserId(
-                    systemCode, areaRes.getUserId(), ECurrency.FRB.getCode());
+                Account provinceAccount = accountBO.getRemoteAccount(
+                    areaRes.getUserId(), ECurrency.FRB);
                 // accountBO.doTransferAmount(systemCode,
                 // ESysAccount.FRB.getCode(),
                 // provinceAccount.getAccountNumber(), provinceAmount,
