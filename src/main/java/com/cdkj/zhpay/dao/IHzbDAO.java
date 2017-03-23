@@ -14,16 +14,10 @@ public interface IHzbDAO extends IBaseDAO<Hzb> {
 
     public int updatePutStatus(Hzb data);
 
-    public int updateRockNum(Hzb data);
-
     public int updatePeriodRockNumZero();
 
     public List<Hzb> selectDistanceList(Hzb condition);
 
-    public List<Hzb> selectDistanceList(Hzb condition, int start, int count);
-
-    public Long getTotalAmount(Hzb condition);
-
-    public int refreshYy(Hzb hzb);
+    public int updateYy(Hzb data);
 
 }

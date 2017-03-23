@@ -79,13 +79,12 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
     @Override
     public void doSendHzbMgift(String hzbMgiftCode) {
         HzbMgift hzbMgift = hzbMgiftBO.getHzbMgift(hzbMgiftCode);
-        if (EHzbMgiftStatus.TO_SEND.getCode().equals(hzbMgift.getStatus())
-                || EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
+        if (EHzbMgiftStatus.TO_SEND.getCode().equals(hzbMgift.getStatus())) {
             hzbMgiftBO.doSendHzbMgift(hzbMgift);
+        } else if (EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {// 已发送可再次发送，无需更改状态
         } else {
             throw new BizException("xn0000", "该红包不是待发送或已发送待领取状态，无法发送!");
         }
-
     }
 
     @Override

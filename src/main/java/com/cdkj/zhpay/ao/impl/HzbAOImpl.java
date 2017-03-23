@@ -26,7 +26,7 @@ import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.BooleanRes;
-import com.cdkj.zhpay.dto.res.XN802180Res;
+import com.cdkj.zhpay.dto.res.XN002500Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
@@ -78,16 +78,12 @@ public class HzbAOImpl implements IHzbAO {
             throw new BizException("xn0000", "该汇赚宝模板未上线，不可购买");
         }
         // 购买摇钱树
-        if (ECurrency.CNY.getCode().equals(hzbTemplate.getCurrency())) {
-            if (EPayType.YEFR.getCode().equals(payType)) {
-                result = doZHFRPay(user, hzbTemplate);
-            } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-                result = doWeixinPay(userId, hzbTemplate);
-            } else if (EPayType.ALIPAY.getCode().equals(payType)) {
-                return null;
-            }
-        } else {
-
+        if (EPayType.YEFR.getCode().equals(payType)) {
+            result = buyHzbFRPay(user, hzbTemplate);
+        } else if (EPayType.WEIXIN.getCode().equals(payType)) {
+            result = buyHzbWXPay(userId, hzbTemplate);
+        } else if (EPayType.ALIPAY.getCode().equals(payType)) {
+            result = buyHzbZFBPay(userId, hzbTemplate);
         }
         return result;
     }
@@ -97,7 +93,7 @@ public class HzbAOImpl implements IHzbAO {
     public Object buyHzbOfCG(String userId, String hzbTemplateCode,
             String payType) {
         Object result = null;
-        // 判断用户是否实名认证
+        // 验证当前用户是否实名认证
         User user = userBO.getRemoteUser(userId);
         if (!EBoolean.YES.getCode().equals(user.getIdentityFlag())) {
             throw new BizException("xn0000", "用户未实名认证，请先实名认证");
@@ -109,14 +105,14 @@ public class HzbAOImpl implements IHzbAO {
         }
         if (ECurrency.CNY.getCode().equals(hzbTemplate.getCurrency())) {
             if (EPayType.YEFR.getCode().equals(payType)) {
-                result = doCGOneCurrencyPay(user, hzbTemplate);
+                result = buyHzbCGPay(user, hzbTemplate);
             } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-                result = doWeixinPay(userId, hzbTemplate);
+                result = buyHzbWXPay(userId, hzbTemplate);
             } else if (EPayType.ALIPAY.getCode().equals(payType)) {
-                return null;
+                result = buyHzbZFBPay(userId, hzbTemplate);
             }
         } else {
-            result = doCGOneCurrencyPay(user, hzbTemplate);
+            result = buyHzbCGPay(user, hzbTemplate);
         }
         return result;
     }
@@ -130,13 +126,13 @@ public class HzbAOImpl implements IHzbAO {
      * @history:
      */
     @Transactional
-    private Object doZHFRPay(User user, HzbTemplate hzbTemplate) {
+    private Object buyHzbFRPay(User user, HzbTemplate hzbTemplate) {
         // 余额支付
         Long frPayAmount = accountBO.doFRPay(hzbTemplate.getSystemCode(), user,
             ESysUser.SYS_USER_ZHPAY.getCode(), hzbTemplate.getPrice(),
             EBizType.AJ_GMHZB);
         // 汇赚宝购买成功
-        Hzb hzb = hzbBO.saveHzb(user.getUserId(), hzbTemplate, frPayAmount);
+        Hzb hzb = hzbBO.saveHzb(user, hzbTemplate, frPayAmount);
         // 分销规则
         distributeAmount(hzbTemplate.getSystemCode(), user.getUserId(),
             hzbTemplate.getPrice());
@@ -146,14 +142,16 @@ public class HzbAOImpl implements IHzbAO {
     }
 
     @Transactional
-    private Object doCGOneCurrencyPay(User user, HzbTemplate hzbTemplate) {
+    private Object buyHzbCGPay(User user, HzbTemplate hzbTemplate) {
         // 单个币种资金划转
         ECurrency currency = ECurrency.getECurrency(hzbTemplate.getCurrency());
         accountBO.doTransferAmountRemote(user.getUserId(),
             ESysUser.SYS_USER_CAIGO.getCode(), currency,
             hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买摇钱树",
-            user.getMobile() + "购买摇钱树");
-        hzbBO.saveHzb(user.getUserId(), hzbTemplate, hzbTemplate.getPrice());
+            UserUtil.getUserMobile(user.getMobile()) + "购买摇钱树");
+        Hzb hzb = hzbBO.saveHzb(user, hzbTemplate, hzbTemplate.getPrice());
+        // 产生红包
+        hzbMgiftBO.generateHzbMgift(hzb, DateUtil.getTodayStart());
         return new BooleanRes(true);
     }
 
@@ -167,24 +165,26 @@ public class HzbAOImpl implements IHzbAO {
      * @history: 
      */
     @Transactional
-    private XN802180Res doWeixinPay(String userId, HzbTemplate hzbTemplate) {
+    private XN002500Res buyHzbWXPay(String userId, HzbTemplate hzbTemplate) {
         // 生成支付组号
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
         // 落地本地系统消费记录，状态为未支付
         hzbBO.buyHzb(userId, hzbTemplate, payGroup);
-        XN802180Res res = accountBO.doWeiXinPayRemote(
-            hzbTemplate.getSystemCode(), userId, payGroup, EBizType.AJ_GMHZB,
-            hzbTemplate.getPrice());
+        XN002500Res res = accountBO.doWeiXinPayRemote(
+            hzbTemplate.getSystemCode(), hzbTemplate.getCompanyCode(), userId,
+            payGroup, EBizType.AJ_GMHZB, hzbTemplate.getPrice());
         return res;
+    }
+
+    @Transactional
+    private Object buyHzbZFBPay(String userId, HzbTemplate hzbTemplate) {
+        throw new BizException("XN000000", "暂不支持支付宝支付");
     }
 
     /**
      * 支付回调
-     * @param payCode
-     * @return 
-     * @create: 2017年1月6日 下午9:25:22 xieyj
-     * @history:
+     * @see com.cdkj.zhpay.ao.IHzbAO#paySuccess(java.lang.String, java.lang.String, java.lang.Long)
      */
     @Override
     @Transactional
@@ -211,76 +211,72 @@ public class HzbAOImpl implements IHzbAO {
     }
 
     // 汇赚宝分成:
-    // 1、数据准备
-    // 2、计算分成:针对用户_已购买汇赚宝的一级二级推荐人和所在辖区用户
+    // 分成对象:购买用户_已购买汇赚宝的一级二级三级推荐人和所在辖区用户
     private void distributeAmount(String systemCode, String userId, Long price) {
         User ownerUser = userBO.getRemoteUser(userId);
         // 用户分成
         String cUserId = ownerUser.getUserReferee();
         if (StringUtils.isNotBlank(cUserId)) {
             User cUser = userBO.getRemoteUser(userId);
-            boolean cHzbResult = hzbBO.isHzbExistByUser(cUserId);
+            boolean cHzbResult = hzbBO.isBuyHzb(cUserId);
             if (cHzbResult) {
-                this.userFcAmount(systemCode, cUser, ownerUser,
-                    SysConstants.HZB_CUSER, price);
+                userFcAmount(cUser, ownerUser, SysConstants.HZB_CUSER, price);
             }
             // B用户分成
             String bUserId = cUser.getUserReferee();
             if (StringUtils.isNotBlank(bUserId)) {
                 User bUser = userBO.getRemoteUser(bUserId);
-                boolean bHzbResult = hzbBO.isHzbExistByUser(bUserId);
+                boolean bHzbResult = hzbBO.isBuyHzb(bUserId);
                 if (bHzbResult) {
-                    this.userFcAmount(systemCode, bUser, ownerUser,
-                        SysConstants.HZB_BUSER, price);
+                    userFcAmount(bUser, ownerUser, SysConstants.HZB_BUSER,
+                        price);
                 }
                 // A用户分成
                 String aUserId = bUser.getUserReferee();
                 if (StringUtils.isNotBlank(aUserId)) {
                     User aUser = userBO.getRemoteUser(aUserId);
-                    boolean aHzbResult = hzbBO.isHzbExistByUser(aUserId);
+                    boolean aHzbResult = hzbBO.isBuyHzb(aUserId);
                     if (aHzbResult) {
-                        this.userFcAmount(systemCode, aUser, ownerUser,
-                            SysConstants.HZB_AUSER, price);
+                        userFcAmount(aUser, ownerUser, SysConstants.HZB_AUSER,
+                            price);
                     }
                 }
             }
         }
         // 辖区分成
-
         if (StringUtils.isNotBlank(ownerUser.getProvince())) {
             // 省合伙人
-            User provinceUser = userBO.getPartner(
-                ownerUser.getProvince(), null, null);
+            User provinceUser = userBO.getPartner(ownerUser.getProvince(),
+                null, null);
             if (provinceUser != null) {
-                areaFcAmount(systemCode, provinceUser, ownerUser,
+                areaFcAmount(provinceUser, ownerUser,
                     SysConstants.HZB_PROVINCE, price, "省");
             }
             if (StringUtils.isNotBlank(ownerUser.getCity())) {
                 // 市合伙人
-                User cityUser = userBO.getPartner(
-                    ownerUser.getProvince(), ownerUser.getCity(), null);
+                User cityUser = userBO.getPartner(ownerUser.getProvince(),
+                    ownerUser.getCity(), null);
                 if (cityUser != null) {
-                    areaFcAmount(systemCode, cityUser, ownerUser,
-                        SysConstants.HZB_CITY, price, "市");
+                    areaFcAmount(cityUser, ownerUser, SysConstants.HZB_CITY,
+                        price, "市");
                 }
                 if (StringUtils.isNotBlank(ownerUser.getArea())) {
                     // 县合伙人
-                    User areaUser = userBO.getPartner(
-                        ownerUser.getProvince(), ownerUser.getCity(),
-                        ownerUser.getArea());
+                    User areaUser = userBO.getPartner(ownerUser.getProvince(),
+                        ownerUser.getCity(), ownerUser.getArea());
                     if (areaUser != null) {
-                        areaFcAmount(systemCode, areaUser, ownerUser,
+                        areaFcAmount(areaUser, ownerUser,
                             SysConstants.HZB_AREA, price, "县");
                     }
                 }
             }
-
         }
     }
 
-    private void userFcAmount(String systemCode, User fcUser, User ownerUser,
-            String sysConstants, Long price) {
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
+    private void userFcAmount(User fcUser, User ownerUser, String sysConstants,
+            Long price) {
+        Map<String, String> rateMap = sysConfigBO
+            .getConfigsMap(ESystemCode.ZHPAY.getCode());
         Double hzbUserRate = Double.valueOf(rateMap.get(sysConstants));
         Long transAmount = Double.valueOf(hzbUserRate * price).longValue();
         if (transAmount != null && transAmount != 0) {
@@ -289,15 +285,16 @@ public class HzbAOImpl implements IHzbAO {
                     + UserUtil.getUserMobile(fcUser.getMobile()) + "分成";
             String toBizNote = UserUtil.getUserMobile(ownerUser.getMobile())
                     + EBizType.AJ_GMHZBFC.getValue();
-            accountBO.doTransferAmountRemote(fcUser.getUserId(),
-                ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB, transAmount,
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
+                fcUser.getUserId(), ECurrency.FRB, transAmount,
                 EBizType.AJ_GMHZBFC, fromBizNote, toBizNote);
         }
     }
 
-    private void areaFcAmount(String systemCode, User areaUser, User ownerUser,
+    private void areaFcAmount(User areaUser, User ownerUser,
             String sysConstants, Long price, String remark) {
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
+        Map<String, String> rateMap = sysConfigBO
+            .getConfigsMap(ESystemCode.ZHPAY.getCode());
         Double rate = Double.valueOf(rateMap.get(sysConstants));
         Long transAmount = Double.valueOf(price * rate).longValue();
         if (transAmount != null && transAmount != 0) {
@@ -306,8 +303,8 @@ public class HzbAOImpl implements IHzbAO {
                     + UserUtil.getUserMobile(areaUser.getMobile()) + "分成";
             String toBizNote = UserUtil.getUserMobile(ownerUser.getMobile())
                     + EBizType.AJ_GMHZBFC.getValue() + "," + remark + "合伙人分成";
-            accountBO.doTransferAmountRemote(areaUser.getUserId(),
-                ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB, transAmount,
+            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
+                areaUser.getUserId(), ECurrency.FRB, transAmount,
                 EBizType.AJ_GMHZBFC, fromBizNote, toBizNote);
         }
     }
@@ -338,12 +335,9 @@ public class HzbAOImpl implements IHzbAO {
         return hzbBO.getHzb(code);
     }
 
-    /** 
-     * @see com.cdkj.zhpay.ao.IHzbAO#myHzb(java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
-    public List<Hzb> myHzb(String userId, String companyCode, String systemCode) {
-        return hzbBO.queryHzbList(userId, companyCode, systemCode);
+    public List<Hzb> myHzb(String userId) {
+        return hzbBO.queryHzbListByUser(userId);
     }
 
     @Override

@@ -5,12 +5,13 @@
 	<resultMap id="hzbYy_DB_Result" type="hzbYy">
 		<result column="code" property="code" />
 		<result column="hzb_code" property="hzbCode" />
-		<result column="type" property="type" />
-		<result column="quantity" property="quantity" />
+		<result column="yy_currency" property="yyCurrency" />
+		<result column="yy_amount" property="yyAmount" />
 		<result column="user_id" property="userId" />
-		<result column="mobile" property="mobile" />
 		<result column="device_no" property="deviceNo" />
 		<result column="create_datetime" property="createDatetime" />
+		<result column="company_code" property="companyCode" />
+		<result column="system_code" property="systemCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -18,10 +19,10 @@
 				AND t.code = #{code}
 			</if>
 			<if test="hzbCode != null and hzbCode != '' ">
-				AND t.hzb_hold_id = #{hzbHoldId}
+				AND t.hzb_code = #{hzbCode}
 			</if>
-			<if test="type != null and type != '' ">
-				AND t.type = #{type}
+			<if test="yyCurrency != null and yyCurrency != '' ">
+				AND t.yy_currency = #{yyCurrency}
 			</if>
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
@@ -35,20 +36,27 @@
 			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
 				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_hzbYy" parameterType="hzbYy" resultMap="hzbYy_DB_Result">
 		SELECT
 		t.code
-		,t.hzb_hold_id
-		,t.type
-		,t.quantity
+		,t.hzb_code
+		,t.yy_currency
+		,t.yy_amount
 		,t.user_id
-		,tu.mobile
 		,t.device_no
 		,t.create_datetime
+		,t.company_code
+		,t.system_code
 		FROM
-		tact_hzb_yy t LEFT JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id 
+		tyqs_hzb_yy t 
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -59,43 +67,33 @@
 
 	<select id="select_hzbYy_count" parameterType="hzbYy"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tact_hzb_yy t INNER JOIN ${userDB}.tstd_user tu ON t.user_id = tu.user_id 
+		SELECT count(1) FROM tyqs_hzb_yy t 
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_hzbYy" parameterType="hzbYy">
 		INSERT INTO
-		tact_hzb_yy(
+		tyqs_hzb_yy(
 		code
-		,hzb_hold_id
-		,type
-		,quantity
+		,hzb_code
+		,yy_currency
+		,yy_amount
 		,user_id
 		,device_no
 		,create_datetime
+		,company_code
+		,system_code
 		)
 		VALUES(
 		#{code}
-		,#{hzbHoldId}
-		,#{type}
-		,#{quantity}
+		,#{hzbCode}
+		,#{yyCurrency}
+		,#{yyAmount}
 		,#{userId}
 		,#{deviceNo}
 		,#{createDatetime}
+		,#{companyCode}
+		,#{systemCode}
 		)
 	</insert>
-
-	<update id="update_hzbYy" parameterType="hzbYy">
-		UPDATE tact_hzb_yy
-		SET
-		hzb_hold_id = #{hzbHoldId}
-		,type = #{type}
-		,quantity = #{quantity}
-		,user_id = #{userId}
-		,device_no = #{deviceNo}
-		,create_datetime = #{createDatetime}
-		WHERE code = #{code}
-	</update>
-
-
 </mapper>

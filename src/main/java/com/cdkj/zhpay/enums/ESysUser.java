@@ -20,7 +20,7 @@ public enum ESysUser {
     SYS_USER_ZHPAY("SYS_USER_ZHPAY", "正汇系统用户编号"), SYS_USER_CAIGO(
             "SYS_USER_CAIGO", "菜狗系统用户编号");
 
-    public static Map<String, ESysUser> getDirectionMap() {
+    public static Map<String, ESysUser> getMap() {
         Map<String, ESysUser> map = new HashMap<String, ESysUser>();
         for (ESysUser direction : ESysUser.values()) {
             map.put(direction.getCode(), direction);

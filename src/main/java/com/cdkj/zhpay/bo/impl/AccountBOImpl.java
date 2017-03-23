@@ -19,7 +19,7 @@ import com.cdkj.zhpay.dto.req.XN802180Req;
 import com.cdkj.zhpay.dto.req.XN802503Req;
 import com.cdkj.zhpay.dto.req.XN802530Req;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
-import com.cdkj.zhpay.dto.res.XN802180Res;
+import com.cdkj.zhpay.dto.res.XN002500Res;
 import com.cdkj.zhpay.dto.res.XN802503Res;
 import com.cdkj.zhpay.dto.res.XN001400Res;
 import com.cdkj.zhpay.enums.EBizType;
@@ -43,7 +43,7 @@ public class AccountBOImpl implements IAccountBO {
         XN802503Req req = new XN802503Req();
         req.setUserId(userId);
         req.setCurrency(currency.getCode());
-        String jsonStr = BizConnecter.getBizData("802503",
+        String jsonStr = BizConnecter.getBizData("002000",
             JsonUtils.object2Json(req));
         Gson gson = new Gson();
         List<XN802503Res> list = gson.fromJson(jsonStr,
@@ -83,26 +83,26 @@ public class AccountBOImpl implements IAccountBO {
             req.setBizType(bizType.getCode());
             req.setFromBizNote(fromBizNote);
             req.setToBizNote(toBizNote);
-            BizConnecter.getBizData("802530", JsonUtils.object2Json(req),
+            BizConnecter.getBizData("002100", JsonUtils.object2Json(req),
                 Object.class);
         }
     }
 
     @Override
-    public XN802180Res doWeiXinPayRemote(String systemCode, String userId,
-            String payGroup, EBizType bizType, Long cnyAmount) {
+    public XN002500Res doWeiXinPayRemote(String systemCode, String companyCode,
+            String userId, String payGroup, EBizType bizType, Long cnyAmount) {
         // 获取微信APP支付信息
         XN802180Req req = new XN802180Req();
         req.setSystemCode(systemCode);
-        req.setCompanyCode(systemCode);
+        req.setCompanyCode(companyCode);
         req.setUserId(userId);
         req.setPayGroup(payGroup);
         req.setBizType(bizType.getCode());
         req.setBizNote(bizType.getValue());
         req.setCurrency(ECurrency.CNY.getCode());
         req.setTransAmount(String.valueOf(cnyAmount));
-        XN802180Res res = BizConnecter.getBizData("802180",
-            JsonUtil.Object2Json(req), XN802180Res.class);
+        XN002500Res res = BizConnecter.getBizData("002500",
+            JsonUtil.Object2Json(req), XN002500Res.class);
         return res;
     }
 

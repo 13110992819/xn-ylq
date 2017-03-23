@@ -46,7 +46,15 @@ public class HzbYy extends ABaseDO {
 
     private Date createDatetimeEnd;
 
-    private String mobile;
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public String getCode() {
         return code;
@@ -135,13 +143,4 @@ public class HzbYy extends ABaseDO {
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
     }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
 }

@@ -149,7 +149,7 @@
 		,t.system_code
 		,ROUND(6378.138*2*ASIN(SQRT(POW(SIN((#{userLatitude}*PI()/180-tu.latitude*PI()/180)/2),2)+COS(#{userLatitude}*PI()/180)*COS(tu.latitude*PI()/180)*POW(SIN((#{userLongitude}*PI()/180-tu.longitude*PI()/180)/2),2)))*1000) as distance
 		FROM
-		tyqs_hzb t INNER JOIN ${userDB}.tstd_user_ext tue ON t.user_id = tue.user_id
+		tyqs_hzb t INNER JOIN ${userDB}.tstd_user_ext tu ON t.user_id = tu.user_id
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			  distance asc
@@ -261,17 +261,18 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_rockNum" parameterType="hzb">
-		UPDATE tyqs_hzb
-		SET
-		period_rock_num = #{periodRockNum}
-		,total_rock_num = #{totalRockNum}
-		WHERE code = #{code}
-	</update>
-	
 	<update id="update_periodRockNumZero" parameterType="hzb">
 		UPDATE tyqs_hzb
 		SET
 		period_rock_num = 0
+	</update>
+	
+	<update id="update_yy" parameterType="hzb">
+		UPDATE tyqs_hzb
+		SET
+		period_rock_num = #{periodRockNum}
+		,total_rock_num = #{totalRockNum}
+		,status = #{status}
+		WHERE code = #{code}
 	</update>
 </mapper>
