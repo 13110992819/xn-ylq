@@ -84,13 +84,11 @@ public class JewelBOImpl extends PaginableBOImpl<Jewel> implements IJewelBO {
     }
 
     @Override
-    public int refreshInvestInfo(String code, Integer investNum) {
+    public int refreshInvestInfo(Jewel jewel, Integer investNum) {
         int count = 0;
-        if (StringUtils.isNotBlank(code)) {
-            Jewel data = new Jewel();
-            data.setCode(code);
-            data.setInvestNum(investNum);
-            count = jewelDAO.updateInvestInfo(data);
+        if (jewel != null && StringUtils.isNotBlank(jewel.getCode())) {
+            jewel.setInvestNum(investNum);
+            count = jewelDAO.updateInvestInfo(jewel);
         }
         return count;
     }

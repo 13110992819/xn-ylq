@@ -13,20 +13,6 @@ public interface IJewelRecordAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     /**
-     * 购买宝贝
-     * @param userId
-     * @param jewelCode
-     * @param times
-     * @param payType
-     * @param ip
-     * @return 
-     * @create: 2017年1月11日 下午7:35:31 xieyj
-     * @history:
-     */
-    public Object buyJewel(String userId, String jewelCode, Integer times,
-            String payType, String ip);
-
-    /**
      * 根据支付组号，找到对应消费记录，更新支付状态
      * @param payGroup
      * @param payCode
@@ -58,5 +44,14 @@ public interface IJewelRecordAO {
      * @history:
      */
     public JewelRecord getJewelRecord(String code);
+
+    public boolean buyJewelByYE(String userId, String jewelCode, Integer times,
+            String ip);
+
+    public Object buyJewelByWX(String userId, String jewelCode, Integer times,
+            String ip);
+
+    public Object buyJewelByZFB(String userId, String jewelCode, Integer times,
+            String ip);
 
 }

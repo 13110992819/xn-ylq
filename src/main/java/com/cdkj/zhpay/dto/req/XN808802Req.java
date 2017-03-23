@@ -6,19 +6,9 @@ package com.cdkj.zhpay.dto.req;
  * @history:
  */
 public class XN808802Req {
-    // 系统编号（必填）
-    private String systemCode;
 
     // 用户编号（必填）
     private String userId;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public String getUserId() {
         return userId;
@@ -27,4 +17,5 @@ public class XN808802Req {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
 }

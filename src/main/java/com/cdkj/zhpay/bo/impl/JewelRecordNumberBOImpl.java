@@ -7,7 +7,10 @@ import org.springframework.stereotype.Component;
 
 import com.cdkj.zhpay.bo.IJewelRecordNumberBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
+import com.cdkj.zhpay.common.SysConstants;
+import com.cdkj.zhpay.core.LuckyNumberGenerator;
 import com.cdkj.zhpay.dao.IJewelRecordNumberDAO;
+import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelRecordNumber;
 
 /**
@@ -20,15 +23,6 @@ public class JewelRecordNumberBOImpl extends PaginableBOImpl<JewelRecordNumber>
         implements IJewelRecordNumberBO {
     @Autowired
     private IJewelRecordNumberDAO jewelRecordNumberDAO;
-
-    @Override
-    public String saveJewelRecordNumber(JewelRecordNumber data) {
-        String code = null;
-        if (data != null) {
-            jewelRecordNumberDAO.insert(data);
-        }
-        return code;
-    }
 
     @Override
     public List<JewelRecordNumber> queryJewelRecordNumberList(
@@ -63,4 +57,25 @@ public class JewelRecordNumberBOImpl extends PaginableBOImpl<JewelRecordNumber>
         return jewelRecordNumberDAO.selectTotalCount(condition);
     }
 
+    @Override
+    public void saveJewelRecordNumber(String jewelRecordCode, Jewel jewel,
+            Integer times) {
+        String jewelCode = jewel.getCode();
+        // 查询已有号码列表，自动生成号码
+        List<String> existNumbers = queryExistNumbers(jewelCode);
+        // existNumbers 将包含全部号码
+        List<String> numbers = LuckyNumberGenerator.generateLuckyNumbers(
+            SysConstants.JEWEL_NUM_RADIX, Long.valueOf(jewel.getTotalNum()),
+            existNumbers, Long.valueOf(times));
+        for (int i = 0; i < numbers.size(); i++) {
+            JewelRecordNumber data = new JewelRecordNumber();
+            data.setJewelCode(jewelCode);
+            data.setRecordCode(jewelRecordCode);
+            data.setNumber(numbers.get(i));
+            data.setCompanyCode(jewel.getCompanyCode());
+            data.setSystemCode(jewel.getSystemCode());
+            jewelRecordNumberDAO.insert(data);
+        }
+
+    }
 }

@@ -3,6 +3,7 @@ package com.cdkj.zhpay.bo.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import com.cdkj.zhpay.dao.IJewelRecordDAO;
 import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelRecord;
 import com.cdkj.zhpay.domain.JewelRecordNumber;
+import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EJewelRecordStatus;
 import com.cdkj.zhpay.exception.BizException;
@@ -160,21 +162,22 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
         return outRandomA;
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.IJewelRecordBO#checkTimes(java.lang.String, java.lang.String)
-     */
     @Override
-    public void checkTimes(String userId, String jewelCode,
-            Integer maxInvestTimes, Integer times) {
+    public void checkTimes(User user, Jewel jewel, Integer times) {
         if (times <= 0) {
             throw new BizException("xn0000", "购买人次请选择");
         }
         // 验证最大投资人次
-        Long numberTimes = jewelRecordNumberBO.getJewelNumberTotalCount(userId,
-            jewelCode);
-        if (maxInvestTimes != null && maxInvestTimes < (numberTimes + times)) {
-            throw new BizException("xn0000", "投资人次超限，每个用户最多投资" + maxInvestTimes
-                    + "人次");
+        Long numberTimes = jewelRecordNumberBO.getJewelNumberTotalCount(
+            user.getUserId(), jewel.getCode());
+        // 单人最大投资次数
+        Integer maxNum = jewel.getMaxNum();
+        if (maxNum != null && maxNum < (numberTimes + times)) {
+            throw new BizException("xn0000", "投资人次超限，每个用户最多投资" + maxNum + "人次");
+        }
+        // 判断是否大于剩余购买份数
+        if (jewel.getTotalNum() - jewel.getInvestNum() < times) {
+            throw new BizException("xn0000", "剩余份数不足");
         }
     }
 
@@ -210,5 +213,16 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
         JewelRecord data = new JewelRecord();
         data.setPayGroup(payGroup);
         return jewelRecordDAO.getTotalAmount(data);
+    }
+
+    @Override
+    public JewelRecord getJewelRecordByPayGroup(String payGroup) {
+        JewelRecord condition = new JewelRecord();
+        condition.setPayGroup(payGroup);
+        List<JewelRecord> list = this.queryJewelRecordList(condition);
+        if (CollectionUtils.isEmpty(list)) {
+            throw new BizException("XN000000", "找不到对应的消费记录");
+        }
+        return list.get(0);
     }
 }

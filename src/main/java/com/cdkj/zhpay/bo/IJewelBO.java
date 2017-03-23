@@ -40,7 +40,7 @@ public interface IJewelBO extends IPaginableBO<Jewel> {
      */
     public boolean isExist(String templateCode, EJewelStatus status);
 
-    public int refreshInvestInfo(String code, Integer investNum);
+    public int refreshInvestInfo(Jewel jewel, Integer investNum);
 
     public int refreshWinInfo(String code, String winNumber, String winUserId);
 }

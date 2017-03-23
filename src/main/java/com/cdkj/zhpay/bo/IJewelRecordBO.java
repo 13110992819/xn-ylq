@@ -6,6 +6,7 @@ import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelRecord;
+import com.cdkj.zhpay.domain.User;
 
 /**
  * @author: shan 
@@ -15,15 +16,13 @@ import com.cdkj.zhpay.domain.JewelRecord;
 public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
     /**
      * 验证是否大于最大次数
-     * @param userId
-     * @param jewelCode
-     * @param maxInvesttimes
+     * @param user
+     * @param jewel
      * @param times 
-     * @create: 2017年2月21日 下午8:08:01 haiqingzheng
+     * @create: 2017年3月23日 下午1:15:09 myb858
      * @history:
      */
-    public void checkTimes(String userId, String jewelCode,
-            Integer maxInvestTimes, Integer times);
+    public void checkTimes(User user, Jewel jewel, Integer times);
 
     public String saveJewelRecord(String userId, String jewelCode,
             Integer times, Long amount, String ip, String companyCode,
@@ -91,4 +90,7 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
     public JewelRecord getWinJewelRecord(String jewelCode, String luckyNumber);
 
     public Long getTotalAmount(String payGroup);
+
+    public JewelRecord getJewelRecordByPayGroup(String payGroup);
+
 }

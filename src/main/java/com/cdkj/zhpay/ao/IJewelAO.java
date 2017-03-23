@@ -31,4 +31,6 @@ public interface IJewelAO {
     public Paginable<Jewel> queryJewelPage(int start, int limit, Jewel condition);
 
     public Jewel getJewel(String code);
+
+    public String doManBiao(String jewelCode);
 }

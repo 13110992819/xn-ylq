@@ -13,6 +13,8 @@ import com.cdkj.zhpay.dto.req.XN805060Req;
 import com.cdkj.zhpay.dto.req.XN805901Req;
 import com.cdkj.zhpay.dto.res.XN805060Res;
 import com.cdkj.zhpay.dto.res.XN805901Res;
+import com.cdkj.zhpay.enums.ESysUser;
+import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.enums.EUserKind;
 import com.cdkj.zhpay.enums.EUserStatus;
 import com.cdkj.zhpay.exception.BizException;
@@ -107,5 +109,16 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             new TypeToken<List<XN805060Res>>() {
             }.getType());
         return list;
+    }
+
+    @Override
+    public String getSystemUser(String systemCode) {
+        if (ESystemCode.ZHPAY.getCode().equals(systemCode)) {
+            return ESysUser.SYS_USER_ZHPAY.getCode();
+        }
+        if (ESystemCode.Caigo.getCode().equals(systemCode)) {
+            return ESysUser.SYS_USER_CAIGO.getCode();
+        }
+        return null;
     }
 }

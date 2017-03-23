@@ -8,19 +8,19 @@ package com.cdkj.zhpay.dto.req;
  */
 public class XN615020Req {
 
-    // 用户编号
+    // 用户编号（必填）
     public String userId;
 
-    // 宝贝编号
+    // 宝贝编号（必填）
     public String jewelCode;
 
-    // 购买次数
+    // 购买次数（必填）
     public String times;
 
-    // 支付类型
+    // 支付类型（必填）
     private String payType;
 
-    // ip 地址
+    // ip 地址（必填）
     private String ip;
 
     public String getPayType() {

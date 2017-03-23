@@ -1,9 +1,11 @@
 package com.cdkj.zhpay.api.impl;
 
+import com.cdkj.zhpay.ao.IJewelAO;
 import com.cdkj.zhpay.ao.IJewelRecordAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.core.StringValidater;
 import com.cdkj.zhpay.dto.req.XN615020Req;
+import com.cdkj.zhpay.enums.EPayType;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.http.JsonUtils;
@@ -16,6 +18,8 @@ import com.cdkj.zhpay.spring.SpringContextHolder;
  * @history:
  */
 public class XN615020 extends AProcessor {
+    private IJewelAO jewelAO = SpringContextHolder.getBean(IJewelAO.class);
+
     private IJewelRecordAO jewelRecordAO = SpringContextHolder
         .getBean(IJewelRecordAO.class);
 
@@ -24,8 +28,26 @@ public class XN615020 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Integer times = StringValidater.toInteger(req.getTimes());
-        return jewelRecordAO.buyJewel(req.getUserId(), req.getJewelCode(),
-            times, req.getPayType(), req.getIp());
+        String payType = req.getPayType();
+        // 开始业务处理
+        if (EPayType.YEFR.getCode().equals(req.getPayType())) {
+            boolean isManBiao = jewelRecordAO.buyJewelByYE(req.getUserId(),
+                req.getJewelCode(), times, req.getIp());
+            if (isManBiao) {
+                String jewelTemplateCode = jewelAO
+                    .doManBiao(req.getJewelCode());
+                jewelAO.publishNextPeriods(jewelTemplateCode);
+            }
+            return true;
+        } else if (EPayType.WEIXIN.getCode().equals(payType)) {
+            return jewelRecordAO.buyJewelByWX(req.getUserId(),
+                req.getJewelCode(), times, req.getIp());
+        } else if (EPayType.ALIPAY.getCode().equals(payType)) {
+            return jewelRecordAO.buyJewelByZFB(req.getUserId(),
+                req.getJewelCode(), times, req.getIp());
+        } else {
+            throw new BizException("xn0000", "支付类型不支持");
+        }
     }
 
     @Override

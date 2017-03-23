@@ -34,4 +34,13 @@ public interface IUserBO {
      */
     public List<XN805060Res> queryRemoteUserList(String province, String city,
             String area);
+
+    /**
+     * 根据systemCode获取系统userId
+     * @param systemCode
+     * @return 
+     * @create: 2017年3月23日 下午2:03:03 myb858
+     * @history:
+     */
+    public String getSystemUser(String systemCode);
 }
