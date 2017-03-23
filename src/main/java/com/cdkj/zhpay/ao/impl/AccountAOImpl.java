@@ -10,7 +10,6 @@ package com.cdkj.zhpay.ao.impl;
 
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +17,9 @@ import com.cdkj.zhpay.ao.IAccountAO;
 import com.cdkj.zhpay.bo.IAccountBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.common.SysConstants;
-import com.cdkj.zhpay.dto.res.XN802503Res;
+import com.cdkj.zhpay.domain.Account;
 import com.cdkj.zhpay.dto.res.XN808803Res;
 import com.cdkj.zhpay.enums.EBizType;
-import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.exception.BizException;
 
@@ -55,15 +53,15 @@ public class AccountAOImpl implements IAccountAO {
         } else if (EBizType.AJ_HBYJ2GXJL.getCode().equals(bizType)) {
             ckey = SysConstants.HBYJ2GXJL;
         }
-        rate = sysConfigBO.getConfigValue(systemCode, null, null, ckey);
-        if (StringUtils.isBlank(rate)) {
-            throw new BizException("xn000000", "兑换比例不存在，请检查钱包汇率规则参数");
-        }
-        if (rate.equals(EBoolean.NO.getCode())) {
-            throw new BizException("xn000000", "兑换比例为0，不能兑换");
-        }
-        accountBO.doExchangeAmount(systemCode, code, rate, approveResult,
-            approver, approveNote);
+        // rate = sysConfigBO.getConfigValue(ckey);
+        // if (StringUtils.isBlank(rate)) {
+        // throw new BizException("xn000000", "兑换比例不存在，请检查钱包汇率规则参数");
+        // }
+        // if (rate.equals(EBoolean.NO.getCode())) {
+        // throw new BizException("xn000000", "兑换比例为0，不能兑换");
+        // }
+        // accountBO.doExchangeAmount(systemCode, code, rate, approveResult,
+        // approver, approveNote);
     }
 
     /** 
@@ -72,14 +70,12 @@ public class AccountAOImpl implements IAccountAO {
     @Override
     public Long getBalanceByUser(String systemCode, String userId) {
         Long balance = 0L;
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
-            null);
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
         // 查询用户贡献值账户
-        XN802503Res gxjlAccount = accountBO.getAccountByUserId(systemCode,
-            userId, ECurrency.GXJL.getCode());
+        Account gxjlAccount = accountBO
+            .getRemoteAccount(userId, ECurrency.GXJL);
         // 查询用户分润账户
-        XN802503Res frAccount = accountBO.getAccountByUserId(systemCode,
-            userId, ECurrency.FRB.getCode());
+        Account frAccount = accountBO.getRemoteAccount(userId, ECurrency.FRB);
         Double gxjl2cny = Double.valueOf(rateMap.get(SysConstants.GXJL2CNY));
         Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
         balance = Double.valueOf(gxjlAccount.getAmount() / gxjl2cny)
@@ -95,11 +91,10 @@ public class AccountAOImpl implements IAccountAO {
                 && !ECurrency.GXJL.getCode().equals(currency)) {
             throw new BizException("xn000000", "现只有人民币和贡献奖励支持转人民币");
         }
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode,
-            null);
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
         // 查询用户分润账户
-        XN802503Res account = accountBO.getAccountByUserId(systemCode, userId,
-            currency);
+        ECurrency ecurrency = ECurrency.getECurrency(currency);
+        Account account = accountBO.getRemoteAccount(userId, ecurrency);
         Double rate = 0.00D;
         if (currency.equals(ECurrency.FRB.getCode())) {
             rate = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
