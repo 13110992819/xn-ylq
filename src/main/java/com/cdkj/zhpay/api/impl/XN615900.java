@@ -36,7 +36,8 @@ public class XN615900 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Long id = sysDictAO.addSYSDict(req.getParentKey(), req.getDkey(),
-            req.getDvalue(), req.getUpdater(), req.getRemark());
+            req.getDvalue(), req.getUpdater(), req.getRemark(),
+            req.getSystemCode());
         return new PKIdRes(id);
     }
 
@@ -47,6 +48,6 @@ public class XN615900 extends AProcessor {
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN615900Req.class);
         StringValidater.validateBlank(req.getParentKey(), req.getDkey(),
-            req.getDvalue(), req.getUpdater());
+            req.getDvalue(), req.getUpdater(), req.getSystemCode());
     }
 }

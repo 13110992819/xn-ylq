@@ -84,7 +84,7 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
 
     @Override
     public Long saveSecondDict(String parentKey, String key, String value,
-            String updater, String remark) {
+            String updater, String remark, String systemCode) {
         SYSDict sysDict = new SYSDict();
         sysDict.setType(EDictType.SECOND.getCode());
         sysDict.setParentKey(parentKey);
@@ -94,17 +94,19 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
         sysDict.setUpdater(updater);
         sysDict.setUpdateDatetime(new Date());
         sysDict.setRemark(remark);
+        sysDict.setSystemCode(systemCode);
         sysDictDAO.insert(sysDict);
         return sysDict.getId();
 
     }
 
     @Override
-    public void checkKeys(String parentKey, String key) {
+    public void checkKeys(String parentKey, String key, String systemCode) {
         // 查看父节点是否存在
         SYSDict fDict = new SYSDict();
         fDict.setDkey(parentKey);
         fDict.setType(EDictType.FIRST.getCode());
+        fDict.setSystemCode(systemCode);
         if (getTotalCount(fDict) <= 0) {
             throw new BizException("xn000000", "parentKey不存在");
         }
@@ -113,6 +115,7 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
         condition.setParentKey(parentKey);
         condition.setDkey(key);
         condition.setType(EDictType.SECOND.getCode());
+        condition.setSystemCode(systemCode);
         if (getTotalCount(condition) > 0) {
             throw new BizException("xn000000", "当前节点下，key重复");
         }

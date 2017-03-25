@@ -40,6 +40,8 @@ public class XN615907 extends AProcessor {
         condition.setType(req.getType());
         condition.setParentKey(req.getParentKey());
         condition.setDkey(req.getDkey());
+        condition.setSystemCode(req.getSystemCode());
+
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = ISYSDictAO.DEFAULT_ORDER_COLUMN;
