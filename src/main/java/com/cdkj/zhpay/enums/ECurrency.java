@@ -11,15 +11,17 @@ package com.cdkj.zhpay.enums;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.cdkj.zhpay.exception.BizException;
+
 /**
  * @author: xieyj 
  * @since: 2016年12月24日 下午1:51:38 
  * @history:
  */
 public enum ECurrency {
-    CNY("CNY", "人民币"), XNB("XNB", "虚拟币"), FRB("FRB", "分润币"), GXJL("GXJL", "贡献值"), QBB(
-            "QBB", "钱包币"), GWB("GWB", "购物币"), HBB("HBB", "红包币"), HBYJ("HBYJ",
-            "红包业绩");
+    CNY("CNY", "人民币"), XNB("XNB", "虚拟币"), CGB("CGB", "菜狗币"), FRB("FRB", "分润币"), GXJL(
+            "GXJL", "贡献值"), QBB("QBB", "钱包币"), GWB("GWB", "购物币"), HBB("HBB",
+            "红包币"), HBYJ("HBYJ", "红包业绩");
 
     public static Map<String, ECurrency> getResultMap() {
         Map<String, ECurrency> map = new HashMap<String, ECurrency>();
@@ -31,7 +33,11 @@ public enum ECurrency {
 
     public static ECurrency getECurrency(String code) {
         Map<String, ECurrency> map = getResultMap();
-        return map.get(code);
+        ECurrency currency = map.get(code);
+        if (null == currency) {
+            throw new BizException("xn0000", "币种不存在");
+        }
+        return currency;
     }
 
     ECurrency(String code, String value) {

@@ -88,11 +88,19 @@ public class Hzb extends ABaseDO {
     // 分享URL
     private String shareUrl;
 
-    // 手机号
-    private String mobile;
+    // 用户
+    private User user;
 
     // 用户列表编号
     private List<String> userList;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Long getPayAmount1() {
         return payAmount1;
@@ -124,14 +132,6 @@ public class Hzb extends ABaseDO {
 
     public void setUserList(List<String> userList) {
         this.userList = userList;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 
     public String getShareUrl() {

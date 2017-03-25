@@ -83,7 +83,7 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
     public List<JewelRecord> queryJewelRecordList(JewelRecord condition);
 
     public Paginable<Jewel> queryMyJewelRecordPage(int start, int pageSize,
-            JewelRecord condition);
+            String userId);
 
     public Long getLastRecordsTimes(String jewelCode);
 

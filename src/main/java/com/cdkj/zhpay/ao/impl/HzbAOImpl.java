@@ -95,9 +95,6 @@ public class HzbAOImpl implements IHzbAO {
         Object result = null;
         // 验证当前用户是否实名认证
         User user = userBO.getRemoteUser(userId);
-        if (!EBoolean.YES.getCode().equals(user.getIdentityFlag())) {
-            throw new BizException("xn0000", "用户未实名认证，请先实名认证");
-        }
         hzbBO.checkBuy(userId);
         HzbTemplate hzbTemplate = hzbTemplateBO.getHzbTemplate(hzbTemplateCode);
         if (!EHzbTemplateStatus.ON.getCode().equals(hzbTemplate.getStatus())) {
@@ -171,9 +168,10 @@ public class HzbAOImpl implements IHzbAO {
             .getCode());
         // 落地本地系统消费记录，状态为未支付
         hzbBO.buyHzb(userId, hzbTemplate, payGroup);
-        XN002500Res res = accountBO.doWeiXinPayRemote(
-            hzbTemplate.getSystemCode(), hzbTemplate.getCompanyCode(), userId,
-            payGroup, EBizType.AJ_GMHZB, hzbTemplate.getPrice());
+        String systemUserId = userBO.getSystemUser(hzbTemplate.getSystemCode());
+        XN002500Res res = accountBO.doWeiXinPayRemote(userId, systemUserId,
+            hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买汇赚宝", "用户购买汇赚宝",
+            payGroup);
         return res;
     }
 
@@ -322,22 +320,42 @@ public class HzbAOImpl implements IHzbAO {
 
     @Override
     public Paginable<Hzb> queryHzbPage(int start, int limit, Hzb condition) {
-        return hzbBO.getPaginable(start, limit, condition);
+        Paginable<Hzb> page = hzbBO.getPaginable(start, limit, condition);
+        if (page != null && CollectionUtils.isNotEmpty(page.getList())) {
+            doGetUsers(page.getList());
+        }
+        return page;
     }
 
     @Override
     public List<Hzb> queryHzbList(Hzb condition) {
-        return hzbBO.queryHzbList(condition);
+        List<Hzb> results = hzbBO.queryHzbList(condition);
+        doGetUsers(results);
+        return results;
     }
 
     @Override
     public Hzb getHzb(String code) {
-        return hzbBO.getHzb(code);
+        Hzb result = hzbBO.getHzb(code);
+        doGetUserDetail(result);
+        return result;
     }
 
     @Override
     public List<Hzb> myHzb(String userId) {
         return hzbBO.queryHzbListByUser(userId);
+    }
+
+    private void doGetUsers(List<Hzb> hzbList) {
+        for (Hzb hzb : hzbList) {
+            doGetUserDetail(hzb);
+        }
+    }
+
+    private void doGetUserDetail(Hzb hzb) {
+        if (StringUtils.isNotBlank(hzb.getUserId())) {
+            hzb.setUser(userBO.getRemoteUser(hzb.getUserId()));
+        }
     }
 
     @Override

@@ -83,16 +83,18 @@ public interface IAccountBO {
 
     /**
      * 微信支付
-     * @param systemCode
-     * @param companyCode
-     * @param userId
-     * @param payGroup
+     * @param fromUserId
+     * @param toUserId
+     * @param amount
      * @param bizType
-     * @param cnyAmount
+     * @param fromBizNote
+     * @param toBizNote
+     * @param payGroup
      * @return 
-     * @create: 2017年3月23日 下午5:07:40 haiqingzheng
+     * @create: 2017年3月23日 下午8:34:24 xieyj
      * @history:
      */
-    public XN002500Res doWeiXinPayRemote(String systemCode, String companyCode,
-            String userId, String payGroup, EBizType bizType, Long cnyAmount);
+    public XN002500Res doWeiXinPayRemote(String fromUserId, String toUserId,
+            Long amount, EBizType bizType, String fromBizNote,
+            String toBizNote, String payGroup);
 }

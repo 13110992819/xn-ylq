@@ -1,43 +1,41 @@
+/**
+ * @Title XN802180Req.java 
+ * @Package com.std.account.dto.req 
+ * @Description 
+ * @author haiqingzheng  
+ * @date 2016年12月23日 上午9:25:46 
+ * @version V1.0   
+ */
 package com.cdkj.zhpay.dto.req;
 
-/**
- * 内部转账(指定用户编号和币种进行转账，备注分开)比517接口详细
- * @author: xieyj 
- * @since: 2016年12月25日 下午3:25:44 
+/** 
+ * 微信APP支付请求接口，返回预付单信息
+ * @author: haiqingzheng 
+ * @since: 2016年12月23日 上午9:25:46 
  * @history:
  */
-public class XN802530Req {
-    // 系统编号(必填)
-    private String systemCode;
+public class XN002500Req {
 
-    // 来方用户编号(必填)
+    // 付款方用户编号（必填）
     private String fromUserId;
 
-    // 接收方用户编号(必填)
+    // 收款方用户编号（必填）
     private String toUserId;
 
-    // 币种
-    private String currency;
+    // 业务类型（必填）
+    private String bizType;
+
+    // 付款方业务备注（必填）
+    private String fromBizNote;
+
+    // 收款方业务备注（必填）
+    private String toBizNote;
 
     // 划转资金(必填)
     private String transAmount;
 
-    // 业务类型
-    private String bizType;
-
-    // 来方业务说明
-    private String fromBizNote;
-
-    // 去方业务说明
-    private String toBizNote;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
+    // 支付组号(必填)
+    private String payGroup;
 
     public String getFromUserId() {
         return fromUserId;
@@ -53,22 +51,6 @@ public class XN802530Req {
 
     public void setToUserId(String toUserId) {
         this.toUserId = toUserId;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public String getTransAmount() {
-        return transAmount;
-    }
-
-    public void setTransAmount(String transAmount) {
-        this.transAmount = transAmount;
     }
 
     public String getBizType() {
@@ -94,4 +76,21 @@ public class XN802530Req {
     public void setToBizNote(String toBizNote) {
         this.toBizNote = toBizNote;
     }
+
+    public String getTransAmount() {
+        return transAmount;
+    }
+
+    public void setTransAmount(String transAmount) {
+        this.transAmount = transAmount;
+    }
+
+    public String getPayGroup() {
+        return payGroup;
+    }
+
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
+
 }

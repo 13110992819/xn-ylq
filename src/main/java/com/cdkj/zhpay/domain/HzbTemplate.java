@@ -35,13 +35,13 @@ public class HzbTemplate extends ABaseDO {
     // 可摇总次数
     private Integer totalRockNum;
 
-    // 价值1
+    // 价值1(人民币)
     private Long backAmount1;
 
-    // 价值2
+    // 价值2(菜狗币)
     private Long backAmount2;
 
-    // 价值3
+    // 价值3(积分币)
     private Long backAmount3;
 
     // 状态（0 待上架 1 已上架 2 已下架）

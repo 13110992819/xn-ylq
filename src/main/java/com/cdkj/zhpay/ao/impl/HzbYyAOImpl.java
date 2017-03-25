@@ -3,6 +3,7 @@ package com.cdkj.zhpay.ao.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,6 +77,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
 
     }
 
+    // 菜狗摇出币种 backAmount1=人民币 backAmount2=菜狗币 backAmount3=积分币
     private XN808460Res doYyByCG(User yyUser, Hzb hzb, String deviceNo) {
         // 1、摇到什么并记录摇到结果
         XN808460Res prize = hzbYyBO.calculatePrizeByCG();
@@ -90,8 +92,8 @@ public class HzbYyAOImpl implements IHzbYyAO {
             EBizType.AJ_YYJL, "摇一摇奖励发放", "摇一摇奖励获得");
         // 兑现树主人
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
-            yyUser.getUserId(), currency, prize.getYyAmount(),
-            EBizType.AJ_YYFC, "摇一摇分成发放", "摇一摇分成获得");
+            hzb.getUserId(), currency, prize.getYyAmount(), EBizType.AJ_YYFC,
+            "摇一摇分成发放", "摇一摇分成获得");
         return prize;
     }
 
@@ -202,10 +204,12 @@ public class HzbYyAOImpl implements IHzbYyAO {
     @Override
     public Paginable<HzbYy> queryHzbYyPage(int start, int limit, HzbYy condition) {
         Paginable<HzbYy> page = hzbYyBO.getPaginable(start, limit, condition);
-        List<HzbYy> list = page.getList();
-        for (HzbYy hzbYy : list) {
-            User user = userBO.getRemoteUser(hzbYy.getUserId());
-            hzbYy.setUser(user);
+        if (page != null && CollectionUtils.isNotEmpty(page.getList())) {
+            List<HzbYy> list = page.getList();
+            for (HzbYy hzbYy : list) {
+                User user = userBO.getRemoteUser(hzbYy.getUserId());
+                hzbYy.setUser(user);
+            }
         }
         return page;
     }

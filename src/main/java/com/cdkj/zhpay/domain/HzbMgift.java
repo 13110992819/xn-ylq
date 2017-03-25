@@ -73,6 +73,28 @@ public class HzbMgift extends ABaseDO {
     // 接收日期止
     private Date receiveDatetimeEnd;
 
+    // 树主人用户
+    private User ownerUser;
+
+    // 接收人用户
+    private User receiverUser;
+
+    public User getOwnerUser() {
+        return ownerUser;
+    }
+
+    public void setOwnerUser(User ownerUser) {
+        this.ownerUser = ownerUser;
+    }
+
+    public User getReceiverUser() {
+        return receiverUser;
+    }
+
+    public void setReceiverUser(User receiverUser) {
+        this.receiverUser = receiverUser;
+    }
+
     public Date getCreateDatetimeStart() {
         return createDatetimeStart;
     }

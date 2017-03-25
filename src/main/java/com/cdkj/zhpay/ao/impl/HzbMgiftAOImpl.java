@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -134,16 +135,41 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
     @Override
     public Paginable<HzbMgift> queryHzbMgiftPage(int start, int limit,
             HzbMgift condition) {
-        return hzbMgiftBO.getPaginable(start, limit, condition);
+        Paginable<HzbMgift> page = hzbMgiftBO.getPaginable(start, limit,
+            condition);
+        if (page != null && CollectionUtils.isNotEmpty(page.getList())) {
+            doGetUsers(page.getList());
+        }
+        return page;
     }
 
     @Override
     public List<HzbMgift> queryHzbMgiftList(HzbMgift condition) {
-        return hzbMgiftBO.queryHzbMgiftList(condition);
+        List<HzbMgift> result = hzbMgiftBO.queryHzbMgiftList(condition);
+        doGetUsers(result);
+        return result;
     }
 
     @Override
     public HzbMgift getHzbMgift(String code) {
-        return hzbMgiftBO.getHzbMgift(code);
+        HzbMgift result = hzbMgiftBO.getHzbMgift(code);
+        doGetUserDetail(result);
+        return result;
+    }
+
+    private void doGetUsers(List<HzbMgift> list) {
+        for (HzbMgift hzbMgift : list) {
+            doGetUserDetail(hzbMgift);
+        }
+    }
+
+    private void doGetUserDetail(HzbMgift hzbMgift) {
+        if (StringUtils.isNotBlank(hzbMgift.getOwner())) {
+            hzbMgift.setOwnerUser(userBO.getRemoteUser(hzbMgift.getOwner()));
+        }
+        if (StringUtils.isNotBlank(hzbMgift.getReceiver())) {
+            hzbMgift.setReceiverUser(userBO.getRemoteUser(hzbMgift
+                .getReceiver()));
+        }
     }
 }
