@@ -209,6 +209,8 @@ public class HzbYyAOImpl implements IHzbYyAO {
             for (HzbYy hzbYy : list) {
                 User user = userBO.getRemoteUser(hzbYy.getUserId());
                 hzbYy.setUser(user);
+                Hzb hzb = hzbBO.getHzb(hzbYy.getHzbCode());
+                hzbYy.setHzb(hzb);
             }
         }
         return page;

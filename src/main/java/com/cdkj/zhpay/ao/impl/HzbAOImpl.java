@@ -314,8 +314,10 @@ public class HzbAOImpl implements IHzbAO {
             String companyCode, String systemCode) {
         User yyUser = userBO.getRemoteUser(userId);
         hzbYyBO.checkYyGlobalRule(systemCode, yyUser, deviceNo);
-        return hzbBO.queryDistanceHzbList(userLatitude, userLongitude,
-            companyCode, systemCode);
+        List<Hzb> hzbList = hzbBO.queryDistanceHzbList(userLatitude,
+            userLongitude, companyCode, systemCode);
+        this.doGetUsers(hzbList);
+        return hzbList;
     }
 
     @Override

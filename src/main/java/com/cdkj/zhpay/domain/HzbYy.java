@@ -48,6 +48,16 @@ public class HzbYy extends ABaseDO {
 
     private User user;
 
+    private Hzb hzb;
+
+    public Hzb getHzb() {
+        return hzb;
+    }
+
+    public void setHzb(Hzb hzb) {
+        this.hzb = hzb;
+    }
+
     public User getUser() {
         return user;
     }
