@@ -14,7 +14,7 @@ package com.cdkj.zhpay.dto.req;
  * @since: 2016年12月23日 上午9:25:46 
  * @history:
  */
-public class XN802180Req {
+public class XN002500Req {
     // 系统编号（必填）
     private String systemCode;
 

@@ -1,14 +1,14 @@
 package com.cdkj.zhpay.dto.res;
 
-public class XN808800Res {
+public class XN000003Res {
 
     // 汇赚宝数量
     private String hzbHoldNum;
 
-    public XN808800Res() {
+    public XN000003Res() {
     }
 
-    public XN808800Res(long hzbHoldNum) {
+    public XN000003Res(long hzbHoldNum) {
         this.hzbHoldNum = String.valueOf(hzbHoldNum);
     }
 

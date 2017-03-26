@@ -4,7 +4,7 @@ import com.cdkj.zhpay.ao.IAccountAO;
 import com.cdkj.zhpay.api.AProcessor;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.core.StringValidater;
-import com.cdkj.zhpay.dto.req.XN808803Req;
+import com.cdkj.zhpay.dto.req.XN000002Req;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
@@ -20,7 +20,7 @@ public class XN000002 extends AProcessor {
     private IAccountAO accountAO = SpringContextHolder
         .getBean(IAccountAO.class);
 
-    private XN808803Req req = null;
+    private XN000002Req req = null;
 
     /** 
      * @see com.cdkj.zhpay.api.IProcessor#doBusiness()
@@ -36,7 +36,7 @@ public class XN000002 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN808803Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN000002Req.class);
         StringValidater.validateBlank(req.getSystemCode(), req.getUserId(),
             req.getCurrency());
     }

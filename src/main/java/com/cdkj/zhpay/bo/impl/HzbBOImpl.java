@@ -20,7 +20,7 @@ import com.cdkj.zhpay.dao.IHzbDAO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.dto.res.XN808460Res;
+import com.cdkj.zhpay.dto.res.XN000001Res;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EHzbStatus;
@@ -264,7 +264,7 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     }
 
     @Override
-    public void refreshYy(Hzb hzb, XN808460Res prize) {
+    public void refreshYy(Hzb hzb, XN000001Res prize) {
         hzb.setPeriodRockNum(hzb.getPeriodRockNum() + 1);
         hzb.setTotalRockNum(hzb.getTotalRockNum() + 1);
         if (ESystemCode.Caigo.getCode().equals(hzb.getSystemCode())) {

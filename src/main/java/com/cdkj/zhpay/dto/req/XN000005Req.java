@@ -1,6 +1,6 @@
 package com.cdkj.zhpay.dto.req;
 
-public class XN805905Req {
+public class XN000005Req {
     // tokenId(必填)
     private String tokenId;
 

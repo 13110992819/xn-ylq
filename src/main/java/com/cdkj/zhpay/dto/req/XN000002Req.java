@@ -2,21 +2,18 @@ package com.cdkj.zhpay.dto.req;
 
 /**
  * @author: xieyj 
- * @since: 2016年12月25日 下午3:25:44 
+ * @since: 2017年1月15日 下午5:46:35 
  * @history:
  */
-public class XN802527Req {
-    // 系统编号(必填)
+public class XN000002Req {
+    // 系统编号（必填）
     private String systemCode;
 
-    // 用户编号(必填)
+    // 用户编号（必填）
     private String userId;
 
-    // 币种(必填)
+    // 币种（必填）
     private String currency;
-
-    // 业务类型(必填)
-    private String bizType;
 
     public String getSystemCode() {
         return systemCode;
@@ -40,13 +37,5 @@ public class XN802527Req {
 
     public void setCurrency(String currency) {
         this.currency = currency;
-    }
-
-    public String getBizType() {
-        return bizType;
-    }
-
-    public void setBizType(String bizType) {
-        this.bizType = bizType;
     }
 }

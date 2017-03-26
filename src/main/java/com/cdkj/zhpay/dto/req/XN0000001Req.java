@@ -2,18 +2,18 @@ package com.cdkj.zhpay.dto.req;
 
 /**
  * @author: xieyj 
- * @since: 2016年12月25日 下午3:25:44 
+ * @since: 2017年1月4日 下午10:10:02 
  * @history:
  */
-public class XN802519Req {
+public class XN0000001Req {
     // 系统编号(必填)
     private String systemCode;
 
     // 流水编号(必填)
     private String code;
 
-    // 兑换费率(必填)
-    private String rate;
+    // 业务类型(必填)
+    private String bizType;
 
     // 审批结果
     private String approveResult;
@@ -40,12 +40,12 @@ public class XN802519Req {
         this.code = code;
     }
 
-    public String getRate() {
-        return rate;
+    public String getBizType() {
+        return bizType;
     }
 
-    public void setRate(String rate) {
-        this.rate = rate;
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
     }
 
     public String getApproveResult() {

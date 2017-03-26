@@ -6,7 +6,7 @@ import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.dto.res.XN808460Res;
+import com.cdkj.zhpay.dto.res.XN000001Res;
 
 public interface IHzbBO extends IPaginableBO<Hzb> {
 
@@ -55,5 +55,5 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
      * @create: 2017年3月22日 下午8:18:00 myb858
      * @history:
      */
-    public void refreshYy(Hzb hzb, XN808460Res prize);
+    public void refreshYy(Hzb hzb, XN000001Res prize);
 }

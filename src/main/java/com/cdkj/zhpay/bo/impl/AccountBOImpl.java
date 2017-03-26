@@ -15,12 +15,12 @@ import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.domain.Account;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.dto.req.XN802180Req;
-import com.cdkj.zhpay.dto.req.XN802503Req;
-import com.cdkj.zhpay.dto.req.XN802530Req;
+import com.cdkj.zhpay.dto.req.XN002500Req;
+import com.cdkj.zhpay.dto.req.XN002000Req;
+import com.cdkj.zhpay.dto.req.XN002100Req;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN002500Res;
-import com.cdkj.zhpay.dto.res.XN802503Res;
+import com.cdkj.zhpay.dto.res.XN002000Res;
 import com.cdkj.zhpay.dto.res.XN001400Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
@@ -40,19 +40,19 @@ public class AccountBOImpl implements IAccountBO {
 
     @Override
     public Account getRemoteAccount(String userId, ECurrency currency) {
-        XN802503Req req = new XN802503Req();
+        XN002000Req req = new XN002000Req();
         req.setUserId(userId);
         req.setCurrency(currency.getCode());
         String jsonStr = BizConnecter.getBizData("002000",
             JsonUtils.object2Json(req));
         Gson gson = new Gson();
-        List<XN802503Res> list = gson.fromJson(jsonStr,
-            new TypeToken<List<XN802503Res>>() {
+        List<XN002000Res> list = gson.fromJson(jsonStr,
+            new TypeToken<List<XN002000Res>>() {
             }.getType());
         if (CollectionUtils.isEmpty(list)) {
             throw new BizException("xn000000", "用户[" + userId + "]账户不存在");
         }
-        XN802503Res res = list.get(0);
+        XN002000Res res = list.get(0);
         Account account = new Account();
         account.setAccountNumber(res.getAccountNumber());
         account.setUserId(res.getUserId());
@@ -75,7 +75,7 @@ public class AccountBOImpl implements IAccountBO {
             ECurrency currency, Long amount, EBizType bizType,
             String fromBizNote, String toBizNote) {
         if (amount != null && amount != 0) {
-            XN802530Req req = new XN802530Req();
+            XN002100Req req = new XN002100Req();
             req.setFromUserId(fromUserId);
             req.setToUserId(toUserId);
             req.setCurrency(currency.getCode());
@@ -92,7 +92,7 @@ public class AccountBOImpl implements IAccountBO {
     public XN002500Res doWeiXinPayRemote(String systemCode, String companyCode,
             String userId, String payGroup, EBizType bizType, Long cnyAmount) {
         // 获取微信APP支付信息
-        XN802180Req req = new XN802180Req();
+        XN002500Req req = new XN002500Req();
         req.setSystemCode(systemCode);
         req.setCompanyCode(companyCode);
         req.setUserId(userId);

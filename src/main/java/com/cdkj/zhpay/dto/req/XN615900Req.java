@@ -30,6 +30,12 @@ public class XN615900Req {
     // 备注（选填）
     private String remark;
 
+    // 系统编号(必填)
+    private String systemCode;
+
+    // 公司编号(必填)
+    private String companyCode;
+
     public String getParentKey() {
         return parentKey;
     }
@@ -68,6 +74,22 @@ public class XN615900Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
 }
