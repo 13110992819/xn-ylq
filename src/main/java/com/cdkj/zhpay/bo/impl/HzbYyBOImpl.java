@@ -22,7 +22,7 @@ import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.HzbYy;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.dto.res.XN808460Res;
+import com.cdkj.zhpay.dto.res.XN000001Res;
 import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EPrizeCurrency;
@@ -41,7 +41,7 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
     private IHzbTemplateBO hzbTemplateBO;
 
     @Override
-    public String saveHzbYy(XN808460Res prize, User yyUser, Hzb hzb,
+    public String saveHzbYy(XN000001Res prize, User yyUser, Hzb hzb,
             String deviceNo) {
         String code = null;
         if (prize != null && hzb != null) {
@@ -160,12 +160,12 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
     }
 
     @Override
-    public XN808460Res calculatePrizeByCG() {
-        return new XN808460Res(1000L, EPrizeCurrency.CG_CGB);
+    public XN000001Res calculatePrizeByCG() {
+        return new XN000001Res(1000L, EPrizeCurrency.CG_CGB);
     }
 
     @Override
-    public XN808460Res calculatePrizeByZH(User yyUser) {
+    public XN000001Res calculatePrizeByZH(User yyUser) {
         /*
          * List<Prize> prizeList = new ArrayList<Prize>(); String haveHb =
          * hzbYyBO.isHaveHB(yyUser.getUserId()); String type = null; if
@@ -183,7 +183,7 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
          * Prize(EPrizeType.GWB.getCode(), ycGwbWeight)); // 获取数量 int quantity =
          * getQuantity(rateMap);
          */
-        return new XN808460Res(1000L, EPrizeCurrency.ZH_QBB);
+        return new XN000001Res(1000L, EPrizeCurrency.ZH_QBB);
 
     }
 

@@ -92,5 +92,4 @@ public class XN002500Req {
     public void setPayGroup(String payGroup) {
         this.payGroup = payGroup;
     }
-
 }

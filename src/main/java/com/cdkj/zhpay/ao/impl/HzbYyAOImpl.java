@@ -21,7 +21,7 @@ import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbYy;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.dto.res.XN808460Res;
+import com.cdkj.zhpay.dto.res.XN000001Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EPrizeCurrency;
@@ -60,7 +60,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
      */
     @Override
     @Transactional
-    public XN808460Res doHzbYy(String userId, String hzbCode, String deviceNo) {
+    public XN000001Res doHzbYy(String userId, String hzbCode, String deviceNo) {
         // A、能不能摇：树是否失效；人/设备是否超过次数
         User yyUser = userBO.getRemoteUser(userId);
         Hzb hzb = hzbBO.checkActivated(hzbCode);
@@ -78,9 +78,9 @@ public class HzbYyAOImpl implements IHzbYyAO {
     }
 
     // 菜狗摇出币种 backAmount1=人民币 backAmount2=菜狗币 backAmount3=积分币
-    private XN808460Res doYyByCG(User yyUser, Hzb hzb, String deviceNo) {
+    private XN000001Res doYyByCG(User yyUser, Hzb hzb, String deviceNo) {
         // 1、摇到什么并记录摇到结果
-        XN808460Res prize = hzbYyBO.calculatePrizeByCG();
+        XN000001Res prize = hzbYyBO.calculatePrizeByCG();
         hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo);
         // 2、刷新对应摇钱树生命值
         hzbBO.refreshYy(hzb, prize);
@@ -97,9 +97,9 @@ public class HzbYyAOImpl implements IHzbYyAO {
         return prize;
     }
 
-    private XN808460Res doYyByZH(User yyUser, Hzb hzb, String deviceNo) {
+    private XN000001Res doYyByZH(User yyUser, Hzb hzb, String deviceNo) {
         // 1、摇到什么并记录摇到结果
-        XN808460Res prize = hzbYyBO.calculatePrizeByZH(yyUser);
+        XN000001Res prize = hzbYyBO.calculatePrizeByZH(yyUser);
         hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo);
         // 2、刷新对应摇钱树生命值
         hzbBO.refreshYy(hzb, prize);

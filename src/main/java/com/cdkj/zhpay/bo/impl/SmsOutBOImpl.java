@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.cdkj.zhpay.bo.ISmsOutBO;
-import com.cdkj.zhpay.dto.req.XN805905Req;
+import com.cdkj.zhpay.dto.req.XN000005Req;
 import com.cdkj.zhpay.http.BizConnecter;
 import com.cdkj.zhpay.http.JsonUtils;
 
@@ -20,7 +20,7 @@ public class SmsOutBOImpl implements ISmsOutBO {
     @Override
     public void sentContent(String tokenId, String ownerId, String content) {
         try {
-            XN805905Req req = new XN805905Req();
+            XN000005Req req = new XN000005Req();
             req.setTokenId(tokenId);
             req.setOwnerId(ownerId);
             req.setContent(content);

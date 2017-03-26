@@ -20,8 +20,8 @@ import com.cdkj.zhpay.dto.req.XN002100Req;
 import com.cdkj.zhpay.dto.req.XN002500Req;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN001400Res;
+import com.cdkj.zhpay.dto.res.XN002000Res;
 import com.cdkj.zhpay.dto.res.XN002500Res;
-import com.cdkj.zhpay.dto.res.XN802503Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.ESystemCode;
@@ -46,13 +46,13 @@ public class AccountBOImpl implements IAccountBO {
         String jsonStr = BizConnecter.getBizData("002000",
             JsonUtils.object2Json(req));
         Gson gson = new Gson();
-        List<XN802503Res> list = gson.fromJson(jsonStr,
-            new TypeToken<List<XN802503Res>>() {
+        List<XN002000Res> list = gson.fromJson(jsonStr,
+            new TypeToken<List<XN002000Res>>() {
             }.getType());
         if (CollectionUtils.isEmpty(list)) {
             throw new BizException("xn000000", "用户[" + userId + "]账户不存在");
         }
-        XN802503Res res = list.get(0);
+        XN002000Res res = list.get(0);
         Account account = new Account();
         account.setAccountNumber(res.getAccountNumber());
         account.setUserId(res.getUserId());

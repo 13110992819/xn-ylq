@@ -4,7 +4,7 @@ import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbYy;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.dto.res.XN808460Res;
+import com.cdkj.zhpay.dto.res.XN000001Res;
 
 public interface IHzbYyBO extends IPaginableBO<HzbYy> {
 
@@ -32,7 +32,7 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      * @create: 2017年3月22日 下午8:10:39 myb858
      * @history:
      */
-    public String saveHzbYy(XN808460Res prize, User yyUser, Hzb hzb,
+    public String saveHzbYy(XN000001Res prize, User yyUser, Hzb hzb,
             String deviceNo);
 
     /**
@@ -41,7 +41,7 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      * @create: 2017年3月22日 下午8:14:06 myb858
      * @history:
      */
-    public XN808460Res calculatePrizeByCG();
+    public XN000001Res calculatePrizeByCG();
 
     /**
      * 正汇钱包摇一摇算法
@@ -50,6 +50,6 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      * @create: 2017年3月22日 下午8:29:44 myb858
      * @history:
      */
-    public XN808460Res calculatePrizeByZH(User yyUser);
+    public XN000001Res calculatePrizeByZH(User yyUser);
 
 }

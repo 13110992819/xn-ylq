@@ -5,7 +5,7 @@ package com.cdkj.zhpay.dto.res;
  * @since: 2017年1月15日 下午5:46:35 
  * @history:
  */
-public class XN808803Res {
+public class XN000000Res {
 
     // 虚拟币
     private Long xnbAmount;
@@ -16,11 +16,11 @@ public class XN808803Res {
     // 人民币
     private Long cnyAmount;
 
-    XN808803Res() {
+    XN000000Res() {
 
     }
 
-    public XN808803Res(Long xnbAmount, Double rate, Long cnyAmount) {
+    public XN000000Res(Long xnbAmount, Double rate, Long cnyAmount) {
         this.xnbAmount = xnbAmount;
         this.rate = rate;
         this.cnyAmount = cnyAmount;
