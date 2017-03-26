@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cdkj.zhpay.ao.IJewelAO;
 import com.cdkj.zhpay.ao.IJewelRecordAO;
@@ -96,29 +97,21 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         Paginable<JewelRecord> page = jewelRecordBO.getPaginable(start, limit,
             condition);
         if (page != null && CollectionUtils.isNotEmpty(page.getList())) {
-            for (JewelRecord jewelRecord : page.getList()) {
-                Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
-                jewelRecord.setJewel(jewel);
-                User user = userBO.getRemoteUser(jewelRecord.getUserId());
-                jewelRecord.setUser(user);
-            }
+            doGetJewelRecordsExt(page.getList());
         }
         return page;
     }
 
     public Paginable<Jewel> queryMyJewelPage(int start, int limit, String userId) {
-        JewelRecord condition = new JewelRecord();
-        condition.setUserId(userId);
-        return jewelRecordBO.queryMyJewelRecordPage(start, limit, condition);
+        return jewelRecordBO.queryMyJewelRecordPage(start, limit, userId);
     }
 
     @Override
     public JewelRecord getJewelRecord(String code) {
         // 夺宝记录
         JewelRecord jewelRecord = jewelRecordBO.getJewelRecord(code);
-        // 宝贝
-        Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
-        jewelRecord.setJewel(jewel);
+        // 宝贝和用户
+        doGetJewelRecordExtDetail(jewelRecord);
         // 参与号码
         List<JewelRecordNumber> jewelRecordNumberList = jewelRecordNumberBO
             .queryJewelRecordNumberList(code);
@@ -126,7 +119,21 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         return jewelRecord;
     }
 
+    private void doGetJewelRecordsExt(List<JewelRecord> list) {
+        for (JewelRecord jewelRecord : list) {
+            doGetJewelRecordExtDetail(jewelRecord);
+        }
+    }
+
+    private void doGetJewelRecordExtDetail(JewelRecord jewelRecord) {
+        Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
+        jewelRecord.setJewel(jewel);
+        User user = userBO.getRemoteUser(jewelRecord.getUserId());
+        jewelRecord.setUser(user);
+    }
+
     @Override
+    @Transactional
     public boolean buyJewelByYE(String userId, String jewelCode, Integer times,
             String ip) {
         // 入参业务检查
@@ -162,6 +169,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     }
 
     @Override
+    @Transactional
     public Object buyJewelByWX(String userId, String jewelCode, Integer times,
             String ip) {
         // 入参业务检查
@@ -181,13 +189,15 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         // 落地小目标购买记录
         jewelRecordBO.saveJewelRecord(userId, jewel.getCode(), times,
             jewel.getFromAmount() * times, ip, payGroup, jewel.getSystemCode());
-        XN002500Res res = accountBO.doWeiXinPayRemote(jewel.getSystemCode(),
-            jewel.getCompanyCode(), userId, payGroup, EBizType.AJ_DUOBAO,
-            jewel.getFromAmount() * times);
+        String systemUserId = userBO.getSystemUser(jewel.getSystemCode());
+        XN002500Res res = accountBO.doWeiXinPayRemote(userId, systemUserId,
+            jewel.getFromAmount() * times, EBizType.AJ_DUOBAO, "参与小目标",
+            "用户参与小目标", payGroup);
         return res;
     }
 
     @Override
+    @Transactional
     public Object buyJewelByZFB(String userId, String jewelCode, Integer times,
             String ip) {
         throw new BizException("xn0000", "暂不支付支付宝支付");

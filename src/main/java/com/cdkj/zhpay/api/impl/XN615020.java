@@ -26,7 +26,7 @@ public class XN615020 extends AProcessor {
     private XN615020Req req = null;
 
     @Override
-    public Object doBusiness() throws BizException {
+    public synchronized Object doBusiness() throws BizException {
         Integer times = StringValidater.toInteger(req.getTimes());
         String payType = req.getPayType();
         // 开始业务处理

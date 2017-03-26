@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum EPrizeCurrency {
-    ZH_HBB("HB", "红包"), ZH_QBB("QBB", "钱包币"), ZH_GWB("GWB", "购物币"), CG_RMB(
-            "CG1", "人民币"), CG_CGB("CG2", "菜狗币"), CG_JF("CG3", "积分");
+    ZH_HBB("ZH_HB", "红包"), ZH_QBB("ZH_QBB", "钱包币"), ZH_GWB("ZH_GWB", "购物币"), CG_RMB(
+            "CG_RMB", "人民币"), CG_CGB("CG_CGB", "菜狗币"), CG_JF("CG_JF", "积分");
 
     public static Map<String, EPrizeCurrency> getResultMap() {
         Map<String, EPrizeCurrency> map = new HashMap<String, EPrizeCurrency>();

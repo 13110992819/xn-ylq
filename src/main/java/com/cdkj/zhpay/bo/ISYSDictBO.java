@@ -20,11 +20,11 @@ import com.cdkj.zhpay.domain.SYSDict;
  */
 public interface ISYSDictBO extends IPaginableBO<SYSDict> {
     public Long saveSecondDict(String parentKey, String key, String value,
-            String updater, String remark);
+            String updater, String remark, String systemCode);
 
     public int removeSYSDict(Long id);
 
-    public void checkKeys(String parentKey, String key);
+    public void checkKeys(String parentKey, String key, String systemCode);
 
     public int refreshSYSDict(Long id, String value, String updater,
             String remark);

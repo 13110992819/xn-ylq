@@ -2,22 +2,11 @@ package com.cdkj.zhpay.dto.req;
 
 public class XN002000Req {
 
-    // 用户编号(必填)
+    // 账户编号(必填)
     private String userId;
 
     // 币种(选填)
     private String currency;
-
-    // 系统编号(待删除)
-    private String systemCode;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public String getCurrency() {
         return currency;

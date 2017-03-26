@@ -30,9 +30,10 @@ public class SYSDictAOImpl implements ISYSDictAO {
 
     @Override
     public Long addSYSDict(String parentKey, String key, String value,
-            String updater, String remark) {
-        sysDictBO.checkKeys(parentKey, key);
-        return sysDictBO.saveSecondDict(parentKey, key, value, updater, remark);
+            String updater, String remark, String systemCode) {
+        sysDictBO.checkKeys(parentKey, key, systemCode);
+        return sysDictBO.saveSecondDict(parentKey, key, value, updater, remark,
+            systemCode);
     }
 
     @Override

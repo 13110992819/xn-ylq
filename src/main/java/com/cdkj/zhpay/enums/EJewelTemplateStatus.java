@@ -14,7 +14,7 @@ package com.cdkj.zhpay.enums;
  * @history:
  */
 public enum EJewelTemplateStatus {
-    NEW("0", "未上架"), PUTON("1", "已上架"), PUTOFF("2", "已下架");
+    NEW("0", "待上架"), PUTON("1", "已上架"), PUTOFF("2", "已下架");
 
     EJewelTemplateStatus(String code, String value) {
         this.code = code;

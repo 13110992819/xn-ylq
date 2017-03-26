@@ -183,7 +183,9 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
 
     @Override
     public Paginable<Jewel> queryMyJewelRecordPage(int start, int pageSize,
-            JewelRecord condition) {
+            String userId) {
+        JewelRecord condition = new JewelRecord();
+        condition.setUserId(userId);
         long totalCount = jewelRecordDAO.selectMyJewelTotalCount(condition);
         Paginable<Jewel> page = new Page<Jewel>(start, pageSize, totalCount);
         List<Jewel> dataList = jewelRecordDAO.selectMyJewelList(condition,

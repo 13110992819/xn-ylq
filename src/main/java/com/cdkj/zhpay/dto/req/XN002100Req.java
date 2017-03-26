@@ -7,8 +7,6 @@ package com.cdkj.zhpay.dto.req;
  * @history:
  */
 public class XN002100Req {
-    // 系统编号(必填)
-    private String systemCode;
 
     // 来方用户编号(必填)
     private String fromUserId;
@@ -30,14 +28,6 @@ public class XN002100Req {
 
     // 去方业务说明
     private String toBizNote;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public String getFromUserId() {
         return fromUserId;
