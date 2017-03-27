@@ -29,9 +29,6 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
     @Autowired
     private ISYSConfigDAO sysConfigDAO;
 
-    /** 
-     * @see com.cdkj.zhpay.bo.ISYSConfigBO#refreshSYSConfig(java.lang.Long, java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
     public int refreshSYSConfig(Long id, String cvalue, String updater,
             String remark) {
@@ -61,18 +58,11 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
 
     @Override
     public SYSConfig getSYSConfig(String key, String systemCode) {
-        return getSYSConfig(key, systemCode, systemCode);
-    }
-
-    @Override
-    public SYSConfig getSYSConfig(String key, String companyCode,
-            String systemCode) {
         SYSConfig sysConfig = null;
-        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(companyCode)
-                && StringUtils.isNotBlank(systemCode)) {
+        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(systemCode)) {
             SYSConfig condition = new SYSConfig();
             condition.setCkey(key);
-            condition.setCompanyCode(companyCode);
+            condition.setCompanyCode(systemCode);
             condition.setSystemCode(systemCode);
             List<SYSConfig> sysConfigList = sysConfigDAO.selectList(condition);
             if (CollectionUtils.isNotEmpty(sysConfigList)) {

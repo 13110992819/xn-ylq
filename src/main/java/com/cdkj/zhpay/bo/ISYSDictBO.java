@@ -19,14 +19,15 @@ import com.cdkj.zhpay.domain.SYSDict;
  * @history:
  */
 public interface ISYSDictBO extends IPaginableBO<SYSDict> {
-    public Long saveSecondDict(String parentKey, String key, String value,
-            String updater, String remark, String systemCode);
 
-    public int removeSYSDict(Long id);
+    public Long saveSecondDict(SYSDict sysDict);
 
-    public void checkKeys(String parentKey, String key, String systemCode);
+    public void removeSYSDict(Long id);
 
-    public int refreshSYSDict(Long id, String value, String updater,
+    public void checkKeys(String parentKey, String key, String systemCode,
+            String companyCode);
+
+    public void refreshSYSDict(Long id, String value, String updater,
             String remark);
 
     public List<SYSDict> querySYSDictList(SYSDict condition);

@@ -59,7 +59,6 @@ public class SYSDictAOImpl implements ISYSDictAO {
 
     @Override
     public SYSDict getSYSDict(Long id) {
-
         return sysDictBO.getSYSDict(id);
 
     }

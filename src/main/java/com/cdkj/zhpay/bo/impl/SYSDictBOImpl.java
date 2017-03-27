@@ -33,18 +33,16 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
     private ISYSDictDAO sysDictDAO;
 
     @Override
-    public int removeSYSDict(Long id) {
-        int count = 0;
+    public void removeSYSDict(Long id) {
         if (id > 0) {
             SYSDict data = new SYSDict();
             data.setId(id);
-            count = sysDictDAO.delete(data);
+            sysDictDAO.delete(data);
         }
-        return count;
     }
 
     @Override
-    public int refreshSYSDict(Long id, String value, String updater,
+    public void refreshSYSDict(Long id, String value, String updater,
             String remark) {
         SYSDict data = new SYSDict();
         data.setId(id);
@@ -53,12 +51,9 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
-        return sysDictDAO.update(data);
+        sysDictDAO.update(data);
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.ISYSDictBO#getSYSDict(java.lang.Long)
-     */
     @Override
     public SYSDict getSYSDict(Long id) {
         SYSDict sysDict = null;
@@ -74,39 +69,20 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
 
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.ISYSDictBO#querySYSDictList(com.cdkj.zhpay.domain.SYSDict)
-     */
     @Override
     public List<SYSDict> querySYSDictList(SYSDict condition) {
         return sysDictDAO.selectList(condition);
     }
 
     @Override
-    public Long saveSecondDict(String parentKey, String key, String value,
-            String updater, String remark, String systemCode) {
-        SYSDict sysDict = new SYSDict();
-        sysDict.setType(EDictType.SECOND.getCode());
-        sysDict.setParentKey(parentKey);
-        sysDict.setDkey(key);
-        sysDict.setDvalue(value);
-
-        sysDict.setUpdater(updater);
-        sysDict.setUpdateDatetime(new Date());
-        sysDict.setRemark(remark);
-        sysDict.setSystemCode(systemCode);
-        sysDictDAO.insert(sysDict);
-        return sysDict.getId();
-
-    }
-
-    @Override
-    public void checkKeys(String parentKey, String key, String systemCode) {
+    public void checkKeys(String parentKey, String key, String systemCode,
+            String companyCode) {
         // 查看父节点是否存在
         SYSDict fDict = new SYSDict();
         fDict.setDkey(parentKey);
         fDict.setType(EDictType.FIRST.getCode());
         fDict.setSystemCode(systemCode);
+        fDict.setCompanyCode(companyCode);
         if (getTotalCount(fDict) <= 0) {
             throw new BizException("xn000000", "parentKey不存在");
         }
@@ -116,9 +92,19 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
         condition.setDkey(key);
         condition.setType(EDictType.SECOND.getCode());
         condition.setSystemCode(systemCode);
+        condition.setCompanyCode(companyCode);
         if (getTotalCount(condition) > 0) {
             throw new BizException("xn000000", "当前节点下，key重复");
         }
     }
 
+    @Override
+    public Long saveSecondDict(SYSDict sysDict) {
+        Long id = null;
+        if (sysDict != null) {
+            sysDictDAO.insert(sysDict);
+            id = sysDict.getId();
+        }
+        return id;
+    }
 }

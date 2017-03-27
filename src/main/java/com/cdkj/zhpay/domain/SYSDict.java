@@ -50,6 +50,9 @@ public class SYSDict extends ABaseDO {
     // 系统编号
     private String systemCode;
 
+    // 公司编号
+    private String companyCode;
+
     public String getSystemCode() {
         return systemCode;
     }
@@ -120,6 +123,14 @@ public class SYSDict extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
 }
