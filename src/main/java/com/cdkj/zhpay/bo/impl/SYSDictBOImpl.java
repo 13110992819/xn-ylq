@@ -99,12 +99,13 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
     }
 
     @Override
-    public Long saveSecondDict(SYSDict sysDict) {
+    public Long saveSecondDict(String parentKey, String key, String value,
+            String updater, String remark, String systemCode) {
         Long id = null;
-        if (sysDict != null) {
-            sysDictDAO.insert(sysDict);
-            id = sysDict.getId();
-        }
+        SYSDict data = new SYSDict();
+        sysDictDAO.insert(data);
+        id = data.getId();
+
         return id;
     }
 }
