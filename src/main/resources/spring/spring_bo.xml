@@ -52,15 +52,4 @@
 		<property name="paginableDAO" ref="hzbMgiftDAOImpl"/>
 	</bean>
 	
-	<bean id="stockBO" class="com.cdkj.zhpay.bo.impl.StockBOImpl">
-		<property name="paginableDAO" ref="stockDAOImpl"/>
-	</bean>
-	
-	<bean id="stockHoldBO" class="com.cdkj.zhpay.bo.impl.StockHoldBOImpl">
-		<property name="paginableDAO" ref="stockHoldDAOImpl"/>
-	</bean>
-	
-	<bean id="stockBackBO" class="com.cdkj.zhpay.bo.impl.StockBackBOImpl">
-		<property name="paginableDAO" ref="stockBackDAOImpl"/>
-	</bean>
 </beans>

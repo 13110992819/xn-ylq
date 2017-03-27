@@ -14,10 +14,7 @@
 	    <typeAlias alias="hzb" type="com.cdkj.zhpay.domain.Hzb" />
 	    <typeAlias alias="hzbYy" type="com.cdkj.zhpay.domain.HzbYy" />
 	    <typeAlias alias="hzbMgift" type="com.cdkj.zhpay.domain.HzbMgift" />
-	    
-	    <typeAlias alias="stock" type="com.cdkj.zhpay.domain.Stock" />
-	    <typeAlias alias="stockHold" type="com.cdkj.zhpay.domain.StockHold" />
-	    <typeAlias alias="stockBack" type="com.cdkj.zhpay.domain.StockBack" />
+
 	</typeAliases>	
 </configuration>
 

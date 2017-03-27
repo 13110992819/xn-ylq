@@ -29,9 +29,6 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
     @Autowired
     private ISYSConfigDAO sysConfigDAO;
 
-    /** 
-     * @see com.cdkj.zhpay.bo.ISYSConfigBO#refreshSYSConfig(java.lang.Long, java.lang.String, java.lang.String, java.lang.String)
-     */
     @Override
     public int refreshSYSConfig(Long id, String cvalue, String updater,
             String remark) {
@@ -65,6 +62,22 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
     }
 
     @Override
+    public Map<String, String> getConfigsMap(String systemCode) {
+        Map<String, String> map = new HashMap<String, String>();
+        if (StringUtils.isNotBlank(systemCode)) {
+            SYSConfig condition = new SYSConfig();
+            condition.setSystemCode(systemCode);
+            List<SYSConfig> list = sysConfigDAO.selectList(condition);
+            if (CollectionUtils.isNotEmpty(list)) {
+                for (SYSConfig sysConfig : list) {
+                    map.put(sysConfig.getCkey(), sysConfig.getCvalue());
+                }
+            }
+        }
+        return map;
+    }
+
+    @Override
     public SYSConfig getSYSConfig(String key, String companyCode,
             String systemCode) {
         SYSConfig sysConfig = null;
@@ -80,22 +93,6 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
             }
         }
         return sysConfig;
-    }
-
-    @Override
-    public Map<String, String> getConfigsMap(String systemCode) {
-        Map<String, String> map = new HashMap<String, String>();
-        if (StringUtils.isNotBlank(systemCode)) {
-            SYSConfig condition = new SYSConfig();
-            condition.setSystemCode(systemCode);
-            List<SYSConfig> list = sysConfigDAO.selectList(condition);
-            if (CollectionUtils.isNotEmpty(list)) {
-                for (SYSConfig sysConfig : list) {
-                    map.put(sysConfig.getCkey(), sysConfig.getCvalue());
-                }
-            }
-        }
-        return map;
     }
 
 }

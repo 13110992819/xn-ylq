@@ -19,7 +19,6 @@ import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.domain.Account;
 import com.cdkj.zhpay.dto.res.XN000000Res;
-import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.exception.BizException;
 
@@ -44,15 +43,15 @@ public class AccountAOImpl implements IAccountAO {
     public void approveExchangeAmount(String systemCode, String code,
             String bizType, String approveResult, String approver,
             String approveNote) {
-        String rate = null;
-        String ckey = null;
-        if (EBizType.AJ_HB2FR.getCode().equals(bizType)) {
-            ckey = SysConstants.HB2FR;
-        } else if (EBizType.AJ_HBYJ2FR.getCode().equals(bizType)) {
-            ckey = SysConstants.HBYJ2FR;
-        } else if (EBizType.AJ_HBYJ2GXJL.getCode().equals(bizType)) {
-            ckey = SysConstants.HBYJ2GXJL;
-        }
+        /*
+         * String rate = null; String ckey = null; if
+         * (EBizType.AJ_HB2FR.getCode().equals(bizType)) { ckey =
+         * SysConstants.HB2FR; } else if
+         * (EBizType.AJ_HBYJ2FR.getCode().equals(bizType)) { ckey =
+         * SysConstants.HBYJ2FR; } else if
+         * (EBizType.HBYJ2GXJL.getCode().equals(bizType)) { ckey =
+         * SysConstants.HBYJ2GXJL; }
+         */
         // rate = sysConfigBO.getConfigValue(ckey);
         // if (StringUtils.isBlank(rate)) {
         // throw new BizException("xn000000", "兑换比例不存在，请检查钱包汇率规则参数");
