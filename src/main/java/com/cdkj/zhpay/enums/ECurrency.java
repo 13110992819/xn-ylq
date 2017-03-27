@@ -19,7 +19,7 @@ import com.cdkj.zhpay.exception.BizException;
  * @history:
  */
 public enum ECurrency {
-    CNY("CNY", "人民币"), XNB("XNB", "虚拟币"), CGB("CGB", "菜狗币"), FRB("FRB", "分润币"), GXJL(
+    CNY("CNY", "人民币"), JF("JF", "积分"), CGB("CGB", "菜狗币"), FRB("FRB", "分润币"), GXJL(
             "GXJL", "贡献值"), QBB("QBB", "钱包币"), GWB("GWB", "购物币"), HBB("HBB",
             "红包币"), HBYJ("HBYJ", "红包业绩");
 
