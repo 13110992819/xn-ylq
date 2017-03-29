@@ -228,8 +228,9 @@ public class StockAOImpl implements IStockAO {
         stockBack.setSystemCode(stockHold.getSystemCode());
         stockBackBO.saveStockBack(stockBack);
         // 发放贡献奖励和购物币
-        transStockAmount(stockHold.getSystemCode(), userId, backWelfare1,
-            backWelfare2, "用户[" + userId + "]福利月卡返还，已返第" + backNum + "期");
+        transStockAmount(stockHold.getSystemCode(), userId,
+            stock.getWelfare1(), stock.getWelfare2(), "用户[" + userId
+                    + "]福利月卡返还，已返第" + backNum + "期");
     }
 
     @Override
