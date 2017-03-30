@@ -45,25 +45,17 @@ public class UserAOImpl implements IUserAO {
             throw new BizException("xn0000", "该用户类型不是辖区合伙人，无法查询统计信息");
         }
 
-        List<User> bUsers = null;
-        List<String> bUserList = new ArrayList<String>();
-        List<User> cUsers = null;
         List<String> cUserList = new ArrayList<String>();
-        cUsers = userBO.queryRemoteUserList(userRes.getProvince(),
+        List<User> cUsers = userBO.queryRemoteUserList(userRes.getProvince(),
             userRes.getCity(), userRes.getArea(), EUserKind.F1);
-        bUsers = userBO.queryRemoteUserList(userRes.getProvince(),
-            userRes.getCity(), userRes.getArea(), EUserKind.F2);
         for (User cUser : cUsers) {
             cUserList.add(cUser.getUserId());
         }
-        for (User bUser : bUsers) {
-            bUserList.add(bUser.getUserId());
-        }
 
-        Hzb hzbHoldCondition = new Hzb();
-        hzbHoldCondition.setUserList(cUserList);
-        hzbHoldCondition.setStatus(EDiviFlag.EFFECT.getCode());
-        long hzbNum = hzbBO.getTotalCount(hzbHoldCondition);
+        Hzb condition = new Hzb();
+        condition.setUserList(cUserList);
+        condition.setStatus(EDiviFlag.EFFECT.getCode());
+        long hzbNum = hzbBO.getTotalCount(condition);
         return new XN000003Res(hzbNum);
     }
 }

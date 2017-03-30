@@ -58,6 +58,34 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
+    public List<User> queryRemoteUserList(String province, String city,
+            String area, EUserKind kind) {
+        List<User> result = new ArrayList<User>();
+        XN001401Req req = new XN001401Req();
+        req.setProvince(province);
+        req.setCity(city);
+        req.setArea(area);
+        req.setKind(kind.getCode());
+        String jsonStr = BizConnecter.getBizData("001401",
+            JsonUtils.object2Json(req));
+        Gson gson = new Gson();
+        List<XN001401Res> list = gson.fromJson(jsonStr,
+            new TypeToken<List<XN001401Res>>() {
+            }.getType());
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (XN001401Res res : list) {
+                User user = new User();
+                user.setUserId(res.getUserId());
+                user.setLoginName(res.getLoginName());
+                user.setPhoto(res.getPhoto());
+                user.setMobile(res.getMobile());
+                result.add(user);
+            }
+        }
+        return result;
+    }
+
+    @Override
     public User getPartner(String province, String city, String area) {
         // 只有省 province，city,area=省
         // 有省市 area=市
@@ -89,43 +117,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             user.setMobile(result.getMobile());
         }
         return user;
-    }
-
-    /**
-     * @param province
-     * @param city
-     * @param area
-     * @param kind
-     * @return 
-     * @create: 2017年1月15日 下午5:56:14 xieyj
-     * @history:
-     */
-    @Override
-    public List<User> queryRemoteUserList(String province, String city,
-            String area, EUserKind kind) {
-        List<User> result = new ArrayList<User>();
-        XN001401Req req = new XN001401Req();
-        req.setProvince(province);
-        req.setCity(city);
-        req.setArea(area);
-        req.setKind(kind.getCode());
-        String jsonStr = BizConnecter.getBizData("001401",
-            JsonUtils.object2Json(req));
-        Gson gson = new Gson();
-        List<XN001401Res> list = gson.fromJson(jsonStr,
-            new TypeToken<List<XN001401Res>>() {
-            }.getType());
-        if (CollectionUtils.isNotEmpty(list)) {
-            for (XN001401Res res : list) {
-                User user = new User();
-                user.setUserId(res.getUserId());
-                user.setLoginName(res.getLoginName());
-                user.setPhoto(res.getPhoto());
-                user.setMobile(res.getMobile());
-                result.add(user);
-            }
-        }
-        return result;
     }
 
     @Override
