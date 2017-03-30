@@ -17,7 +17,7 @@ CREATE TABLE `tsys_config` (
 
 
 
-
+DROP TABLE IF EXISTS `tsys_dict`;
 CREATE TABLE `tsys_dict` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
   `type` char(1) NOT NULL COMMENT '类型（0=下拉框意义 1=下拉框选项）',
