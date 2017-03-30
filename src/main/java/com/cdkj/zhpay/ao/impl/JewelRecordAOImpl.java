@@ -16,7 +16,6 @@ import com.cdkj.zhpay.bo.IJewelBO;
 import com.cdkj.zhpay.bo.IJewelRecordBO;
 import com.cdkj.zhpay.bo.IJewelRecordNumberBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
-import com.cdkj.zhpay.bo.ISmsOutBO;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.core.OrderNoGenerater;
@@ -56,9 +55,6 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
 
     @Autowired
     private IJewelRecordNumberBO jewelRecordNumberBO;
-
-    @Autowired
-    private ISmsOutBO smsOutBO;
 
     @Autowired
     private IJewelAO jewelAO;

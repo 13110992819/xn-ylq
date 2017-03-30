@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.domain.User;
+import com.cdkj.zhpay.dto.req.XN000005Req;
 import com.cdkj.zhpay.dto.req.XN001400Req;
 import com.cdkj.zhpay.dto.req.XN001401Req;
 import com.cdkj.zhpay.dto.res.XN001400Res;
@@ -31,6 +33,7 @@ import com.google.gson.reflect.TypeToken;
  */
 @Component
 public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
+    static Logger logger = Logger.getLogger(UserBOImpl.class);
 
     @Override
     public User getRemoteUser(String userId) {
@@ -134,5 +137,19 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             return ESysUser.SYS_USER_CAIGO.getCode();
         }
         return null;
+    }
+
+    @Override
+    public void sentContent(String tokenId, String ownerId, String content) {
+        try {
+            XN000005Req req = new XN000005Req();
+            req.setTokenId(tokenId);
+            req.setOwnerId(ownerId);
+            req.setContent(content);
+            BizConnecter.getBizData("805905", JsonUtils.object2Json(req),
+                Object.class);
+        } catch (Exception e) {
+            logger.error("调用短信发送服务异常");
+        }
     }
 }
