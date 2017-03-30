@@ -25,7 +25,7 @@ import com.cdkj.zhpay.domain.SYSConfig;
 public class SYSConfigDAOImpl extends AMybatisTemplate implements ISYSConfigDAO {
 
     /** 
-     * @see com.cdkj.zhpay.dao.base.IBaseDAO#insert(java.lang.Object)
+     * @see com.xnjr.mall.dao.base.IBaseDAO#insert(java.lang.Object)
      */
     @Override
     public int insert(SYSConfig data) {
@@ -33,15 +33,16 @@ public class SYSConfigDAOImpl extends AMybatisTemplate implements ISYSConfigDAO 
     }
 
     /** 
-     * @see com.cdkj.zhpay.dao.base.IBaseDAO#delete(java.lang.Object)
+     * @see com.xnjr.mall.dao.base.IBaseDAO#delete(java.lang.Object)
      */
     @Override
     public int delete(SYSConfig data) {
+        // TODO Auto-generated method stub
         return 0;
     }
 
     /** 
-     * @see com.cdkj.zhpay.dao.base.IBaseDAO#select(java.lang.Object)
+     * @see com.xnjr.mall.dao.base.IBaseDAO#select(java.lang.Object)
      */
     @Override
     public SYSConfig select(SYSConfig condition) {
@@ -50,7 +51,7 @@ public class SYSConfigDAOImpl extends AMybatisTemplate implements ISYSConfigDAO 
     }
 
     /** 
-     * @see com.cdkj.zhpay.dao.base.IBaseDAO#selectTotalCount(java.lang.Object)
+     * @see com.xnjr.mall.dao.base.IBaseDAO#selectTotalCount(java.lang.Object)
      */
     @Override
     public Long selectTotalCount(SYSConfig condition) {
@@ -59,7 +60,7 @@ public class SYSConfigDAOImpl extends AMybatisTemplate implements ISYSConfigDAO 
     }
 
     /** 
-     * @see com.cdkj.zhpay.dao.base.IBaseDAO#selectList(java.lang.Object)
+     * @see com.xnjr.mall.dao.base.IBaseDAO#selectList(java.lang.Object)
      */
     @Override
     public List<SYSConfig> selectList(SYSConfig condition) {
@@ -68,7 +69,7 @@ public class SYSConfigDAOImpl extends AMybatisTemplate implements ISYSConfigDAO 
     }
 
     /** 
-     * @see com.cdkj.zhpay.dao.base.IBaseDAO#selectList(java.lang.Object, int, int)
+     * @see com.xnjr.mall.dao.base.IBaseDAO#selectList(java.lang.Object, int, int)
      */
     @Override
     public List<SYSConfig> selectList(SYSConfig condition, int start, int count) {

@@ -24,17 +24,17 @@ public class XN615910 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        Long id = StringValidater.toLong(req.getId());
-        sysConfigAO.editSYSConfig(id, req.getCvalue(), req.getUpdater(),
-            req.getRemark());
+        sysConfigAO.editSYSConfig(StringValidater.toLong(req.getId()),
+            req.getCvalue(), req.getUpdater(), req.getRemark());
         return new BooleanRes(true);
     }
 
     @Override
     public void doCheck(String inputparams) throws ParaException {
+
         req = JsonUtil.json2Bean(inputparams, XN615910Req.class);
-        StringValidater.validateBlank(req.getId(), req.getCvalue(),
-            req.getUpdater());
+        StringValidater.validateBlank(req.getId(), req.getUpdater(),
+            req.getCvalue());
     }
 
 }

@@ -24,7 +24,7 @@
 			</if>	
 			<if test="ckey != null and ckey != '' ">
 				AND t.ckey = #{ckey}
-			</if>
+			</if>	
 			<if test="ckeyForQuery != null and ckeyForQuery != '' ">
 				AND t.ckey like "%"#{ckeyForQuery}"%"
 			</if>
@@ -56,7 +56,7 @@
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
-				t.id
+				${order}
 			</if>
 		</trim>	
 	</select>
