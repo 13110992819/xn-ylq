@@ -28,9 +28,10 @@ public class XN615020 extends AProcessor {
     @Override
     public synchronized Object doBusiness() throws BizException {
         Integer times = StringValidater.toInteger(req.getTimes());
-        String payType = req.getPayType();
+
         // 开始业务处理
-        if (EPayType.YEFR.getCode().equals(req.getPayType())) {
+        String payType = req.getPayType();
+        if (EPayType.YEFR.getCode().equals(payType)) {
             boolean isManBiao = jewelRecordAO.buyJewelByYE(req.getUserId(),
                 req.getJewelCode(), times, req.getIp());
             if (isManBiao) {

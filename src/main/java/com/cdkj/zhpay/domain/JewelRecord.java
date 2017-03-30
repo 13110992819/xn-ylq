@@ -57,6 +57,7 @@ public class JewelRecord extends ABaseDO {
     // 系统编号
     private String systemCode;
 
+    // **********db properties********
     // 对应宝贝
     private Jewel jewel;
 

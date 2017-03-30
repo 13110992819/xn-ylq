@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cdkj.zhpay.ao.IJewelAO;
 import com.cdkj.zhpay.ao.IJewelTemplateAO;
 import com.cdkj.zhpay.bo.IJewelTemplateBO;
 import com.cdkj.zhpay.bo.base.Paginable;
@@ -29,9 +28,6 @@ public class JewelTemplateAOImpl implements IJewelTemplateAO {
 
     @Autowired
     private IJewelTemplateBO jewelTemplateBO;
-
-    @Autowired
-    private IJewelAO jewelAO;
 
     @Override
     public String addJewelTemplate(XN615000Req req) {

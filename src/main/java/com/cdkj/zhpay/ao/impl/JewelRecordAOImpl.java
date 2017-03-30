@@ -63,6 +63,42 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     private ISYSConfigBO sysConfigBO;
 
     @Override
+    public Paginable<JewelRecord> queryJewelRecordPage(int start, int limit,
+            JewelRecord condition) {
+        Paginable<JewelRecord> page = jewelRecordBO.getPaginable(start, limit,
+            condition);
+        if (page != null && CollectionUtils.isNotEmpty(page.getList())) {
+            for (JewelRecord jewelRecord : page.getList()) {
+                // Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
+                // jewelRecord.setJewel(jewel);
+                User user = userBO.getRemoteUser(jewelRecord.getUserId());
+                jewelRecord.setUser(user);
+            }
+        }
+        return page;
+    }
+
+    public Paginable<Jewel> queryMyJewelPage(int start, int limit, String userId) {
+        return jewelRecordBO.queryMyJewelRecordPage(start, limit, userId);
+    }
+
+    @Override
+    public JewelRecord getJewelRecord(String code) {
+        // 夺宝记录
+        JewelRecord jewelRecord = jewelRecordBO.getJewelRecord(code);
+        // 宝贝和用户
+        Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
+        jewelRecord.setJewel(jewel);
+        User user = userBO.getRemoteUser(jewelRecord.getUserId());
+        jewelRecord.setUser(user);
+        // 参与号码
+        List<JewelRecordNumber> jewelRecordNumberList = jewelRecordNumberBO
+            .queryJewelRecordNumberList(code);
+        jewelRecord.setJewelRecordNumberList(jewelRecordNumberList);
+        return jewelRecord;
+    }
+
+    @Override
     public void paySuccess(String payGroup, String payCode, Long transAmount) {
         JewelRecord jewelRecord = jewelRecordBO
             .getJewelRecordByPayGroup(payGroup);
@@ -88,47 +124,6 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     }
 
     @Override
-    public Paginable<JewelRecord> queryJewelRecordPage(int start, int limit,
-            JewelRecord condition) {
-        Paginable<JewelRecord> page = jewelRecordBO.getPaginable(start, limit,
-            condition);
-        if (page != null && CollectionUtils.isNotEmpty(page.getList())) {
-            doGetJewelRecordsExt(page.getList());
-        }
-        return page;
-    }
-
-    public Paginable<Jewel> queryMyJewelPage(int start, int limit, String userId) {
-        return jewelRecordBO.queryMyJewelRecordPage(start, limit, userId);
-    }
-
-    @Override
-    public JewelRecord getJewelRecord(String code) {
-        // 夺宝记录
-        JewelRecord jewelRecord = jewelRecordBO.getJewelRecord(code);
-        // 宝贝和用户
-        doGetJewelRecordExtDetail(jewelRecord);
-        // 参与号码
-        List<JewelRecordNumber> jewelRecordNumberList = jewelRecordNumberBO
-            .queryJewelRecordNumberList(code);
-        jewelRecord.setJewelRecordNumberList(jewelRecordNumberList);
-        return jewelRecord;
-    }
-
-    private void doGetJewelRecordsExt(List<JewelRecord> list) {
-        for (JewelRecord jewelRecord : list) {
-            doGetJewelRecordExtDetail(jewelRecord);
-        }
-    }
-
-    private void doGetJewelRecordExtDetail(JewelRecord jewelRecord) {
-        Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
-        jewelRecord.setJewel(jewel);
-        User user = userBO.getRemoteUser(jewelRecord.getUserId());
-        jewelRecord.setUser(user);
-    }
-
-    @Override
     @Transactional
     public boolean buyJewelByYE(String userId, String jewelCode, Integer times,
             String ip) {
@@ -139,9 +134,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         }
         User user = userBO.getRemoteUser(userId);
         jewelRecordBO.checkTimes(user, jewel, times);
-
-        Long amount = jewel.getFromAmount() * times;// 本次购买总金额
         // 购买记录落地
+        Long amount = jewel.getFromAmount() * times;// 本次购买总金额
         String jewelRecordCode = jewelRecordBO.saveJewelRecord(userId,
             jewelCode, times, amount, ip, jewel.getCompanyCode(),
             jewel.getSystemCode());
@@ -197,6 +191,5 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     public Object buyJewelByZFB(String userId, String jewelCode, Integer times,
             String ip) {
         throw new BizException("xn0000", "暂不支付支付宝支付");
-
     }
 }

@@ -35,7 +35,7 @@ public enum ECurrency {
         Map<String, ECurrency> map = getResultMap();
         ECurrency currency = map.get(code);
         if (null == currency) {
-            throw new BizException("xn0000", "币种不存在");
+            throw new BizException("xn0000", code + "对应币种不存在");
         }
         return currency;
     }
