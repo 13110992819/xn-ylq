@@ -45,8 +45,8 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
         if (hzb != null && hzb.getUserId() != null) {
             String userId = hzb.getUserId();
             // 发放红包
-            Map<String, String> rateMap = sysConfigBO
-                .getConfigsMap(ESystemCode.ZHPAY.getCode());
+            String systemCode = hzb.getSystemCode();
+            Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
             Long dayNumbers = Long
                 .valueOf(rateMap.get(SysConstants.DAY_NUMBER));
             String advTitle = rateMap.get(SysConstants.ADV_TITLE);
@@ -75,8 +75,8 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
                 data.setCreateDatetime(createDatetime);
                 data.setStatus(EHzbMgiftStatus.TO_SEND.getCode());
                 data.setRemark("程序每日自动生成的定向红包");
-                data.setCompanyCode(ESystemCode.ZHPAY.getCode());
-                data.setSystemCode(ESystemCode.ZHPAY.getCode());
+                data.setCompanyCode(systemCode);
+                data.setSystemCode(systemCode);
                 hzbMgiftDAO.insert(data);
             }
         }

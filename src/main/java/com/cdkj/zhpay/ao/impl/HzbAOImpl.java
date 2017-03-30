@@ -93,7 +93,6 @@ public class HzbAOImpl implements IHzbAO {
     public Object buyHzbOfCG(String userId, String hzbTemplateCode,
             String payType) {
         Object result = null;
-        // 验证当前用户是否实名认证
         User user = userBO.getRemoteUser(userId);
         hzbBO.checkBuy(userId);
         HzbTemplate hzbTemplate = hzbTemplateBO.getHzbTemplate(hzbTemplateCode);

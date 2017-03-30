@@ -148,11 +148,14 @@
 	
 	<select id="select_myjewel_count" parameterType="jewelRecord"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM
-		tyydb_jewel t
-		LEFT JOIN tyydb_jewel_record tjr ON  t.code = tjr.jewel_code 
-		WHERE tjr.status not in(0) 
-		GROUP BY t.code 
+		SELECT COUNT(1) FROM
+        (SELECT COUNT(1)
+    	FROM
+        tyydb_jewel t
+    	LEFT JOIN tyydb_jewel_record tjr ON t.code = tjr.jewel_code
+    	WHERE
+        tjr.status NOT IN (0)
+    	GROUP BY t.code) AS jewel_num
 	</select>
 	
 	<insert id="insert_jewelRecord" parameterType="jewelRecord">

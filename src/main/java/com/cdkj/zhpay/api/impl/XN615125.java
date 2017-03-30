@@ -57,8 +57,8 @@ public class XN615125 extends AProcessor {
     @Override
     public void doCheck(String inputparams) throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN615125Req.class);
-        StringValidater.validateBlank(req.getHzbCode(), req.getSystemCode(),
-            req.getCompanyCode());
+        StringValidater
+            .validateBlank(req.getSystemCode(), req.getCompanyCode());
         StringValidater.validateNumber(req.getStart(), req.getLimit());
     }
 }
