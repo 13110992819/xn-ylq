@@ -1,5 +1,6 @@
 package com.cdkj.zhpay.bo.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import com.cdkj.zhpay.bo.IHzbYyBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.common.DateUtil;
+import com.cdkj.zhpay.common.PrizeUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IHzbYyDAO;
@@ -24,8 +26,10 @@ import com.cdkj.zhpay.domain.HzbYy;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.XN000001Res;
 import com.cdkj.zhpay.enums.EBoolean;
+import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EPrizeCurrency;
+import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
 @Component
@@ -160,8 +164,71 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
     }
 
     @Override
-    public XN000001Res calculatePrizeByCG() {
-        return new XN000001Res(1000L, EPrizeCurrency.CG_CGB);
+    public XN000001Res calculatePrizeByCG(Hzb hzb) {
+        // 产生随机数
+        Long randAmount = doGeneralAmount();
+        // 判断人民币，菜狗币和积分币是否有机会参与中奖抽取
+        List<String> result = new ArrayList<String>();
+        HzbTemplate hzbTemplate = hzbTemplateBO.getHzbTemplate(hzb
+            .getTemplateCode());
+        Long backAmount1 = hzbTemplate.getBackAmount1() - hzb.getBackAmount1();
+        if (backAmount1 > 0) {
+            result.add(ECurrency.CNY.getCode());
+            if (backAmount1 < randAmount) {
+                randAmount = backAmount1;
+            }
+        }
+        Long backAmount2 = hzbTemplate.getBackAmount2() - hzb.getBackAmount2();
+        if (backAmount2 > 0) {
+            result.add(ECurrency.CGB.getCode());
+            if (backAmount2 < randAmount) {
+                randAmount = backAmount2;
+            }
+        }
+        Long backAmount3 = hzbTemplate.getBackAmount3() - hzb.getBackAmount3();
+        if (backAmount3 > 0) {
+            result.add(ECurrency.JF.getCode());
+            if (backAmount3 < randAmount) {
+                randAmount = backAmount3;
+            }
+        }
+        Map<String, String> rateMap = sysConfigBO
+            .getConfigsMap(ESystemCode.Caigo.getCode());
+        List<Double> prizeList = new ArrayList<Double>();
+        for (String currency : result) {
+            if (ECurrency.CNY.getCode().equals(currency)) {
+                prizeList.add(Double.valueOf(rateMap
+                    .get(SysConstants.CG_YC_CNY_WEIGHT)));
+            } else if (ECurrency.CGB.getCode().equals(currency)) {
+                prizeList.add(Double.valueOf(rateMap
+                    .get(SysConstants.CG_YC_CGB_WEIGHT)));
+            } else if (ECurrency.JF.getCode().equals(currency)) {
+                prizeList.add(Double.valueOf(rateMap
+                    .get(SysConstants.CG_YC_JF_WEIGHT)));
+            }
+        }
+        int prizeIndex = PrizeUtil.getPrizeIndex(prizeList);
+        // 产生随机数
+        return new XN000001Res(randAmount, result.get(prizeIndex));
+    }
+
+    /** 
+     *  产生随机数
+     * @create: 2017年3月30日 下午9:25:38 xieyj
+     * @history: 
+     */
+    private Long doGeneralAmount() {
+        Map<String, String> rateMap = sysConfigBO
+            .getConfigsMap(ESystemCode.Caigo.getCode());
+        Long yyAmountMin = Long
+            .valueOf(rateMap.get(SysConstants.YY_AMOUNT_MIN));
+        Long yyAmountMax = Long
+            .valueOf(rateMap.get(SysConstants.YY_AMOUNT_MAX));
+        Long randAmount = Double.valueOf(
+            (SysConstants.AMOUNT_RADIX
+                    * (yyAmountMin + (yyAmountMax - yyAmountMin)) * Math
+                .random())).longValue();
+        return randAmount;
     }
 
     @Override
@@ -183,7 +250,7 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
          * Prize(EPrizeType.GWB.getCode(), ycGwbWeight)); // 获取数量 int quantity =
          * getQuantity(rateMap);
          */
-        return new XN000001Res(1000L, EPrizeCurrency.ZH_QBB);
+        return new XN000001Res(1000L, ECurrency.QBB.getCode());
 
     }
 
