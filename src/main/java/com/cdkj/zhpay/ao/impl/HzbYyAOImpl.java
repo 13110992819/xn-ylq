@@ -80,7 +80,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
     // 菜狗摇出币种 backAmount1=人民币 backAmount2=菜狗币 backAmount3=积分币
     private XN000001Res doYyByCG(User yyUser, Hzb hzb, String deviceNo) {
         // 1、摇到什么并记录摇到结果
-        XN000001Res prize = hzbYyBO.calculatePrizeByCG();
+        XN000001Res prize = hzbYyBO.calculatePrizeByCG(hzb);
         hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo);
         // 2、刷新对应摇钱树生命值
         hzbBO.refreshYy(hzb, prize);

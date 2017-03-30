@@ -41,7 +41,7 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      * @create: 2017年3月22日 下午8:14:06 myb858
      * @history:
      */
-    public XN000001Res calculatePrizeByCG();
+    public XN000001Res calculatePrizeByCG(Hzb hzb);
 
     /**
      * 正汇钱包摇一摇算法

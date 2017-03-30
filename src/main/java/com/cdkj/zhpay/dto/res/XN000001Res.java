@@ -1,6 +1,5 @@
 package com.cdkj.zhpay.dto.res;
 
-import com.cdkj.zhpay.enums.EPrizeCurrency;
 
 public class XN000001Res {
 
@@ -13,9 +12,9 @@ public class XN000001Res {
     public XN000001Res() {
     }
 
-    public XN000001Res(Long yyAmount, EPrizeCurrency currency) {
+    public XN000001Res(Long yyAmount, String currency) {
         this.yyAmount = yyAmount;
-        this.yyCurrency = currency.getCode();
+        this.yyCurrency = currency;
     }
 
     public String getYyCurrency() {

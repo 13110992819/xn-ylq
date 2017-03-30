@@ -1,33 +1,6 @@
 package com.cdkj.zhpay.common;
 
 public class SysConstants {
-
-    public static final String ST_AREA = "stArea"; // 福利月卡辖区县
-
-    public static final String ST_CITY = "stCity"; // 福利月卡辖区市
-
-    public static final String ST_PROVINCE = "stProvince"; // 福利月卡辖区省
-
-    public static final String ST_AREA_NOTA1 = "stAreaNotA1"; // A1未买福利月卡辖区县
-
-    public static final String ST_CITY_NOTA1 = "stCityNotA1"; // A1未买福利月卡辖区市
-
-    public static final String ST_PROVINCE_NOTA1 = "stProvinceNotA1"; // A1未买福利月卡辖区省
-
-    public static final String ST_A10 = "stA10"; // A1未购买福利月卡
-
-    public static final String ST_A12000 = "stA12000"; // A1购买2000福利月卡
-
-    public static final String ST_A110000 = "stA110000"; // A1购买10000福利月卡
-
-    public static final String ST_A130000 = "stA130000"; // A1购买30000福利月卡
-
-    public static final String ST_A150000 = "stA150000"; // A1购买50000福利月卡
-
-    public static final String ST_BACKNUM = "stBackNum"; // 福利月卡返还期数
-
-    public static final String ST_BACKNUM_DEF = "10"; // 福利月卡默认返还期数
-
     public static final String HB2FR = "hb2Fr"; // 红包兑分润
 
     public static final String HBYJ2FR = "hbyj2Fr"; // 红包业绩兑分润
@@ -103,4 +76,15 @@ public class SysConstants {
     public static final String HZB_RECEIVE_AMOUNT = "hzbReceiveAmount"; // 领取金额
 
     public static final String DAY_RECEVIE_NUMBER = "dayReceiveNumber"; // 单人每天红包领取数量
+
+    public static final String CG_HB_MIN = "yyAmountMin"; // 菜狗摇一摇最小值
+
+    public static final String CG_HB_MAX = "yyAmountMax"; // 菜狗摇一摇最大值
+
+    public static final String CG_YC_CNY_WEIGHT = "ycCnyWeight"; // 摇出人民币权重
+
+    public static final String CG_YC_CGB_WEIGHT = "ycCGBWeight"; // 摇出菜狗币权重
+
+    public static final String CG_YC_JF_WEIGHT = "ycJfWeight"; // 摇出积分权重
+
 }
