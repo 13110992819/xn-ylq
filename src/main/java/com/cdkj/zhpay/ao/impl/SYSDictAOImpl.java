@@ -8,6 +8,7 @@
  */
 package com.cdkj.zhpay.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import com.cdkj.zhpay.ao.ISYSDictAO;
 import com.cdkj.zhpay.bo.ISYSDictBO;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.SYSDict;
+import com.cdkj.zhpay.dto.req.XN615900Req;
+import com.cdkj.zhpay.enums.EDictType;
 
 /** 
  * @author: haiqingzheng 
@@ -29,11 +32,25 @@ public class SYSDictAOImpl implements ISYSDictAO {
     ISYSDictBO sysDictBO;
 
     @Override
-    public Long addSYSDict(String parentKey, String key, String value,
-            String updater, String remark, String systemCode) {
-        sysDictBO.checkKeys(parentKey, key, systemCode, systemCode);
-        return sysDictBO.saveSecondDict(parentKey, key, value, updater, remark,
-            systemCode);
+    public Long addSecondDict(XN615900Req req) {
+        String parentKey = req.getParentKey();
+        String key = req.getDkey();
+        String companyCode = req.getCompanyCode();
+        String systemCode = req.getSystemCode();
+        sysDictBO.checkKeys(parentKey, key, systemCode, companyCode);
+        SYSDict sysDict = new SYSDict();
+        sysDict.setType(EDictType.SECOND.getCode());
+        sysDict.setParentKey(parentKey);
+        sysDict.setDkey(key);
+        sysDict.setDvalue(req.getDvalue());
+
+        sysDict.setUpdater(req.getUpdater());
+        sysDict.setUpdateDatetime(new Date());
+        sysDict.setRemark(req.getRemark());
+        sysDict.setSystemCode(req.getSystemCode());
+        sysDict.setCompanyCode(req.getCompanyCode());
+
+        return sysDictBO.saveSecondDict(sysDict);
     }
 
     @Override
@@ -60,6 +77,6 @@ public class SYSDictAOImpl implements ISYSDictAO {
     @Override
     public SYSDict getSYSDict(Long id) {
         return sysDictBO.getSYSDict(id);
-
     }
+
 }
