@@ -11,7 +11,7 @@ import com.cdkj.zhpay.exception.ParaException;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
- * 上下架
+ * 冻结解冻
  * @author: xieyj 
  * @since: 2017年3月21日 下午2:22:50 
  * @history:
