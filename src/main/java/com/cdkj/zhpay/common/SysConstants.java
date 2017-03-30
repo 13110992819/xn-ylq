@@ -81,10 +81,4 @@ public class SysConstants {
 
     public static final String CG_HB_MAX = "yyAmountMax"; // 菜狗摇一摇最大值
 
-    public static final String CG_YC_CNY_WEIGHT = "ycCnyWeight"; // 摇出人民币权重
-
-    public static final String CG_YC_CGB_WEIGHT = "ycCGBWeight"; // 摇出菜狗币权重
-
-    public static final String CG_YC_JF_WEIGHT = "ycJfWeight"; // 摇出积分权重
-
 }

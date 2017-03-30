@@ -85,7 +85,7 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     }
 
     @Override
-    public Hzb saveHzb(User user, HzbTemplate hzbTemplate, Long frPayAmount) {
+    public Hzb saveHzb(User user, HzbTemplate hzbTemplate) {
         Hzb data = null;
         String userId = user.getUserId();
         if (StringUtils.isNotBlank(userId)) {
@@ -108,8 +108,8 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
             data.setCreateDatetime(date);
             data.setStatus(EHzbStatus.ACTIVATED.getCode());
             data.setPayDatetime(date);
-            data.setPayAmount1(0L);
-            data.setPayAmount2(frPayAmount);// 虚拟币_分润
+            data.setPayAmount1(hzbTemplate.getPrice());
+            data.setPayAmount2(0L);
             data.setPayAmount3(0L);
             data.setCompanyCode(hzbTemplate.getCompanyCode());
             data.setSystemCode(hzbTemplate.getSystemCode());

@@ -14,7 +14,6 @@ import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.domain.Account;
-import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.req.XN002000Req;
 import com.cdkj.zhpay.dto.req.XN002100Req;
 import com.cdkj.zhpay.dto.req.XN002500Req;
@@ -183,29 +182,6 @@ public class AccountBOImpl implements IAccountBO {
             UserUtil.getUserMobile(fromUserRes.getMobile())
                     + bizType.getValue(), bizType.getValue());
         return new PayBalanceRes(gxjlPrice, frPrice);
-    }
-
-    @Override
-    public Long doFRPay(String systemCode, User fromUser, String toUserId,
-            Long price, EBizType bizType) {
-        Long frPrice = 0L;
-        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
-        // 查询用户分润账户
-        Account frAccount = this.getRemoteAccount(fromUser.getUserId(),
-            ECurrency.FRB);
-        Double fr2cny = Double.valueOf(rateMap.get(SysConstants.FR2CNY));
-        Long frCnyAmount = Double.valueOf(frAccount.getAmount() / fr2cny)
-            .longValue();
-        // 分润<价格 分润币不足
-        if (frCnyAmount < price) {
-            throw new BizException("xn0000", "分润币不足");
-        }
-        frPrice = Double.valueOf(price * fr2cny).longValue();
-        String fromBizNote = bizType.getValue();
-        String toBizNote = "用户[" + fromUser.getMobile() + "] " + fromBizNote;
-        doTransferAmountRemote(fromUser.getUserId(), toUserId, ECurrency.FRB,
-            frPrice, bizType, fromBizNote, toBizNote);
-        return frPrice;
     }
 
 }

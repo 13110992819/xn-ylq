@@ -27,7 +27,7 @@ public class Hzb extends ABaseDO {
     // 购买时价格
     private Long price;
 
-    // 购买时价格币种
+    // 购买时价格币种(一定是人民币)
     private String currency;
 
     // 周期内已被摇总次数

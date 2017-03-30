@@ -1,7 +1,6 @@
 package com.cdkj.zhpay.bo;
 
 import com.cdkj.zhpay.domain.Account;
-import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN001400Res;
 import com.cdkj.zhpay.dto.res.XN002500Res;
@@ -66,20 +65,6 @@ public interface IAccountBO {
     public PayBalanceRes doBalancePay(String systemCode,
             XN001400Res fromUserRes, String toUserId, Long price,
             EBizType bizType);
-
-    /**
-     * 分润支付，返回支付分润值
-     * @param systemCode
-     * @param fromUser
-     * @param toUserId
-     * @param price
-     * @param bizType
-     * @return 
-     * @create: 2017年3月22日 下午4:21:19 xieyj
-     * @history:
-     */
-    public Long doFRPay(String systemCode, User fromUser, String toUserId,
-            Long price, EBizType bizType);
 
     /**
      * 微信支付

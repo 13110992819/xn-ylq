@@ -16,7 +16,6 @@ import com.cdkj.zhpay.bo.IHzbYyBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.common.DateUtil;
-import com.cdkj.zhpay.common.PrizeUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IHzbYyDAO;
@@ -165,9 +164,11 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
 
     @Override
     public XN000001Res calculatePrizeByCG(Hzb hzb) {
-        // 产生随机数
-        Long randAmount = doGeneralAmount();
-        // 判断人民币，菜狗币和积分币是否有机会参与中奖抽取
+        // 确定金额
+        Long randAmount = doGeneralAmount(ESystemCode.Caigo.getCode());
+        // 开始确定币种-------
+        // 首先判断参与的币种种类
+        String currency = null;
         List<String> result = new ArrayList<String>();
         HzbTemplate hzbTemplate = hzbTemplateBO.getHzbTemplate(hzb
             .getTemplateCode());
@@ -192,43 +193,33 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
                 randAmount = backAmount3;
             }
         }
-        Map<String, String> rateMap = sysConfigBO
-            .getConfigsMap(ESystemCode.Caigo.getCode());
-        List<Double> prizeList = new ArrayList<Double>();
-        for (String currency : result) {
-            if (ECurrency.CNY.getCode().equals(currency)) {
-                prizeList.add(Double.valueOf(rateMap
-                    .get(SysConstants.CG_YC_CNY_WEIGHT)));
-            } else if (ECurrency.CGB.getCode().equals(currency)) {
-                prizeList.add(Double.valueOf(rateMap
-                    .get(SysConstants.CG_YC_CGB_WEIGHT)));
-            } else if (ECurrency.JF.getCode().equals(currency)) {
-                prizeList.add(Double.valueOf(rateMap
-                    .get(SysConstants.CG_YC_JF_WEIGHT)));
-            }
+        if (result.size() > 1) {
+            currency = result.get(getRandom(0, result.size()));
+        } else if (result.size() == 1) {
+            currency = result.get(0);
         }
-        int prizeIndex = PrizeUtil.getPrizeIndex(prizeList);
         // 产生随机数
-        return new XN000001Res(randAmount, result.get(prizeIndex));
+        return new XN000001Res(randAmount, currency);
     }
 
-    /** 
-     *  产生随机数
-     * @create: 2017年3月30日 下午9:25:38 xieyj
-     * @history: 
-     */
-    private Long doGeneralAmount() {
-        Map<String, String> rateMap = sysConfigBO
-            .getConfigsMap(ESystemCode.Caigo.getCode());
-        Long yyAmountMin = Long
-            .valueOf(rateMap.get(SysConstants.YY_AMOUNT_MIN));
-        Long yyAmountMax = Long
-            .valueOf(rateMap.get(SysConstants.YY_AMOUNT_MAX));
+    // 随机产生金额
+    private Long doGeneralAmount(String systemCode) {
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
+        Double yyAmountMin = Double.valueOf(rateMap
+            .get(SysConstants.YY_AMOUNT_MIN));
+        Double yyAmountMax = Double.valueOf(rateMap
+            .get(SysConstants.YY_AMOUNT_MAX)) + 1;
         Long randAmount = Double.valueOf(
             (SysConstants.AMOUNT_RADIX
                     * (yyAmountMin + (yyAmountMax - yyAmountMin)) * Math
                 .random())).longValue();
         return randAmount;
+    }
+
+    private static int getRandom(int min, int max) {
+        Random random = new Random();
+        return random.nextInt(max) % (max - min + 1) + min;
+
     }
 
     @Override

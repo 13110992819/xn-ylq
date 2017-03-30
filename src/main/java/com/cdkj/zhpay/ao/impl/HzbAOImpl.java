@@ -67,15 +67,15 @@ public class HzbAOImpl implements IHzbAO {
     public Object buyHzbOfZH(String userId, String hzbTemplateCode,
             String payType) {
         Object result = null;
-        // 判断用户是否实名认证
-        User user = userBO.getRemoteUser(userId);
-        if (!EBoolean.YES.getCode().equals(user.getIdentityFlag())) {
-            throw new BizException("xn0000", "用户未实名认证，请先实名认证");
-        }
         hzbBO.checkBuy(userId);
         HzbTemplate hzbTemplate = hzbTemplateBO.getHzbTemplate(hzbTemplateCode);
         if (!EHzbTemplateStatus.ON.getCode().equals(hzbTemplate.getStatus())) {
             throw new BizException("xn0000", "该汇赚宝模板未上线，不可购买");
+        }
+        // 判断用户是否实名认证
+        User user = userBO.getRemoteUser(userId);
+        if (!EBoolean.YES.getCode().equals(user.getIdentityFlag())) {
+            throw new BizException("xn0000", "用户未实名认证，请先实名认证");
         }
         // 购买摇钱树
         if (EPayType.YEFR.getCode().equals(payType)) {
@@ -93,22 +93,19 @@ public class HzbAOImpl implements IHzbAO {
     public Object buyHzbOfCG(String userId, String hzbTemplateCode,
             String payType) {
         Object result = null;
-        User user = userBO.getRemoteUser(userId);
         hzbBO.checkBuy(userId);
         HzbTemplate hzbTemplate = hzbTemplateBO.getHzbTemplate(hzbTemplateCode);
         if (!EHzbTemplateStatus.ON.getCode().equals(hzbTemplate.getStatus())) {
             throw new BizException("xn0000", "该摇钱树模板未上线，不可购买");
         }
-        if (ECurrency.CNY.getCode().equals(hzbTemplate.getCurrency())) {
-            if (EPayType.YEFR.getCode().equals(payType)) {
-                result = buyHzbCGPay(user, hzbTemplate);
-            } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-                result = buyHzbWXPay(userId, hzbTemplate);
-            } else if (EPayType.ALIPAY.getCode().equals(payType)) {
-                result = buyHzbZFBPay(userId, hzbTemplate);
-            }
-        } else {
-            result = buyHzbCGPay(user, hzbTemplate);
+        // 单一币种支付
+        User user = userBO.getRemoteUser(userId);
+        if (EPayType.YEFR.getCode().equals(payType)) {
+            result = buyHzbYEPayCG(user, hzbTemplate);
+        } else if (EPayType.WEIXIN.getCode().equals(payType)) {
+            result = buyHzbWXPay(userId, hzbTemplate);
+        } else if (EPayType.ALIPAY.getCode().equals(payType)) {
+            result = buyHzbZFBPay(userId, hzbTemplate);
         }
         return result;
     }
@@ -123,31 +120,32 @@ public class HzbAOImpl implements IHzbAO {
      */
     @Transactional
     private Object buyHzbFRPay(User user, HzbTemplate hzbTemplate) {
-        // 余额支付
-        Long frPayAmount = accountBO.doFRPay(hzbTemplate.getSystemCode(), user,
-            ESysUser.SYS_USER_ZHPAY.getCode(), hzbTemplate.getPrice(),
-            EBizType.AJ_GMHZB);
         // 汇赚宝购买成功
-        Hzb hzb = hzbBO.saveHzb(user, hzbTemplate, frPayAmount);
+        Hzb hzb = hzbBO.saveHzb(user, hzbTemplate);// 人民币=分润
+        // 产生红包
+        hzbMgiftBO.generateHzbMgift(hzb, DateUtil.getTodayStart());
+        // 单个币种资金划转
+        accountBO.doTransferAmountRemote(user.getUserId(),
+            ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB,
+            hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买汇赚宝",
+            UserUtil.getUserMobile(user.getMobile()) + "购买汇赚宝");
         // 分销规则
         distributeAmount(hzbTemplate.getSystemCode(), user.getUserId(),
             hzbTemplate.getPrice());
-        // 产生红包
-        hzbMgiftBO.generateHzbMgift(hzb, DateUtil.getTodayStart());
         return new BooleanRes(true);
     }
 
     @Transactional
-    private Object buyHzbCGPay(User user, HzbTemplate hzbTemplate) {
-        // 单个币种资金划转
-        ECurrency currency = ECurrency.getECurrency(hzbTemplate.getCurrency());
-        accountBO.doTransferAmountRemote(user.getUserId(),
-            ESysUser.SYS_USER_CAIGO.getCode(), currency,
-            hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买摇钱树",
-            UserUtil.getUserMobile(user.getMobile()) + "购买摇钱树");
-        Hzb hzb = hzbBO.saveHzb(user, hzbTemplate, hzbTemplate.getPrice());
+    private Object buyHzbYEPayCG(User user, HzbTemplate hzbTemplate) {
+        // 汇赚宝购买成功
+        Hzb hzb = hzbBO.saveHzb(user, hzbTemplate);
         // 产生红包
         hzbMgiftBO.generateHzbMgift(hzb, DateUtil.getTodayStart());
+        // 单个币种资金划转
+        accountBO.doTransferAmountRemote(user.getUserId(),
+            ESysUser.SYS_USER_CAIGO.getCode(), ECurrency.CNY,
+            hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买摇钱树",
+            UserUtil.getUserMobile(user.getMobile()) + "购买摇钱树");
         return new BooleanRes(true);
     }
 

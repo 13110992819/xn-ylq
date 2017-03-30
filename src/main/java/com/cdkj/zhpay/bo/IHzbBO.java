@@ -14,7 +14,8 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
 
     public void checkBuy(String userId);
 
-    public Hzb saveHzb(User user, HzbTemplate hzbTemplate, Long frPayAmount);
+    // 汇赚宝的标价一定是人民币
+    public Hzb saveHzb(User user, HzbTemplate hzbTemplate);
 
     public int buyHzb(String userId, HzbTemplate hzbTemplate, String payGroup);
 
