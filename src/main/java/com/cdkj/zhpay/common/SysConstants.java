@@ -77,8 +77,9 @@ public class SysConstants {
 
     public static final String DAY_RECEVIE_NUMBER = "dayReceiveNumber"; // 单人每天红包领取数量
 
+    // ***********************************caigo***********************************
+
     public static final String CG_HB_MIN = "yyAmountMin"; // 菜狗摇一摇最小值
 
     public static final String CG_HB_MAX = "yyAmountMax"; // 菜狗摇一摇最大值
-
 }

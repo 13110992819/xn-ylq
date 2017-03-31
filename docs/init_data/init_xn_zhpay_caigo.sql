@@ -1,4 +1,12 @@
 /*
+-- Query: SELECT * FROM xn_zhpay.tyqs_hzb_template where code = 'HT201703241545109884'
+LIMIT 0, 10000
+
+-- Date: 2017-03-31 15:34
+*/
+INSERT INTO `tyqs_hzb_template` (`code`,`name`,`pic`,`price`,`currency`,`period_rock_num`,`total_rock_num`,`back_amount1`,`back_amount2`,`back_amount3`,`status`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('HT20170000000000001','摇钱树','6e2dc159-ff20-4d91-b8bf-8a62d95c97d7_1490601324124.jpg',100000,'CNY',1000000,100000,100000,100000,100000,'0','admin',now(),NULL,'CD-CCG000007','CD-CCG000007');
+
+/*
 -- Query: SELECT `type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code` FROM xn_zhpay.tsys_config where system_code = 'CD-CCG000007'
 LIMIT 0, 10000
 
@@ -10,9 +18,6 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('B','deviceDayMaxCount','5','admin',now(),'设备每天摇最大次数','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('B','hzbYyDayMaxCount','900','admin',now(),'一个摇钱树每天摇最大次数','CD-CCG000007','CD-CCG000007');
 
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('C','ycCnyWeight','0.5','admin',now(),'摇出人民币权重','CD-CCG000007','CD-CCG000007');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('C','ycCgbWeight','0.33','admin',now(),'摇出菜狗币权重','CD-CCG000007','CD-CCG000007');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('C','ycJfWeight','','admin',now(),'摇出积分权重','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('C','yyAmountMin','1','admin',now(),'摇出金额最小值','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('C','yyAmountMax','10','admin',now(),'摇出金额最大值','CD-CCG000007','CD-CCG000007');
 

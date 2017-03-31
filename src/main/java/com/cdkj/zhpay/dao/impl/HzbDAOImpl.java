@@ -83,4 +83,20 @@ public class HzbDAOImpl extends AMybatisTemplate implements IHzbDAO {
     public int updateYy(Hzb data) {
         return super.update(NAMESPACE.concat("update_yy"), data);
     }
+
+    /** 
+     * @see com.cdkj.zhpay.dao.IHzbDAO#updateYyAmount(com.cdkj.zhpay.domain.Hzb)
+     */
+    @Override
+    public int updateYyAmount(Hzb data) {
+        return super.update(NAMESPACE.concat("update_yy_amount"), data);
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.dao.IHzbDAO#updateYyTimes(com.cdkj.zhpay.domain.Hzb)
+     */
+    @Override
+    public int updateYyTimes(Hzb data) {
+        return super.update(NAMESPACE.concat("update_yy_times"), data);
+    }
 }

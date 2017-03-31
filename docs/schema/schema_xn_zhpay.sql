@@ -215,13 +215,3 @@ CREATE TABLE `tsys_dict` (
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`) COMMENT '数据字典'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-
-
-
-
-
-
-

@@ -24,7 +24,6 @@ import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.XN000001Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
-import com.cdkj.zhpay.enums.EPrizeCurrency;
 import com.cdkj.zhpay.enums.ESysUser;
 import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
@@ -83,7 +82,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
         XN000001Res prize = hzbYyBO.calculatePrizeByCG(hzb);
         hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo);
         // 2、刷新对应摇钱树生命值
-        hzbBO.refreshYy(hzb, prize);
+        hzbBO.refreshYyAmount(hzb, prize);
         // 3、平台兑现奖励
         // 兑现摇的人
         ECurrency currency = ECurrency.getECurrency(prize.getYyCurrency());
@@ -102,17 +101,17 @@ public class HzbYyAOImpl implements IHzbYyAO {
         XN000001Res prize = hzbYyBO.calculatePrizeByZH(yyUser);
         hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo);
         // 2、刷新对应摇钱树生命值
-        hzbBO.refreshYy(hzb, prize);
+        hzbBO.refreshYyTimes(hzb, prize);
         // 3、特殊处理：正汇系统摇到红包时，将促发分销规则
         String currency = prize.getYyCurrency();
-        if (EPrizeCurrency.ZH_GWB.getCode().equals(currency)
-                || EPrizeCurrency.ZH_QBB.getCode().equals(currency)) {
+        if (ECurrency.GWB.getCode().equals(currency)
+                || ECurrency.QBB.getCode().equals(currency)) {
             // 兑现摇的人
             ECurrency ecurrency = ECurrency.getECurrency(currency);
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
                 yyUser.getUserId(), ecurrency, prize.getYyAmount(),
                 EBizType.AJ_YYJL, "摇一摇奖励发放", "摇一摇奖励获得");
-        } else if (EPrizeCurrency.ZH_HBB.getCode().equals(currency)) {
+        } else if (ECurrency.HBB.getCode().equals(currency)) {
             // 促发分销规则
             fcAmount(yyUser);
         }

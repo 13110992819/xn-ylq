@@ -27,7 +27,6 @@ import com.cdkj.zhpay.dto.res.XN000001Res;
 import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
-import com.cdkj.zhpay.enums.EPrizeCurrency;
 import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
@@ -82,8 +81,7 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
             // 判断前面1次，2次是否有红包
             if (count % 3 != 0) {
                 for (HzbYy hzbYy : dataList) {
-                    if (EPrizeCurrency.ZH_HBB.getCode().equals(
-                        hzbYy.getYyCurrency())) {
+                    if (ECurrency.HBB.getCode().equals(hzbYy.getYyCurrency())) {
                         haveHbb = "1";
                         break;
                     }

@@ -20,4 +20,8 @@ public interface IHzbDAO extends IBaseDAO<Hzb> {
 
     public int updateYy(Hzb data);
 
+    public int updateYyAmount(Hzb data);
+
+    public int updateYyTimes(Hzb data);
+
 }

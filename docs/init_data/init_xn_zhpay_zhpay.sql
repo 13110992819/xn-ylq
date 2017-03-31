@@ -1,16 +1,4 @@
 /*
--- Query: SELECT code,type,parent_code,name,pic,order_no,status,company_code,system_code FROM std_mall_200.tmall_category where system_code = 'CD-CZH000001' and type = '1'
-LIMIT 0, 10000
-
--- Date: 2017-03-29 16:22
-*/
-INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('FL201700000000000001','1','0','剁手合集','',1,'1','CD-CZH000001','CD-CZH000001');
-INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('FL201700000000000002','1','0','0元试购','',2,'1','CD-CZH000001','CD-CZH000001');
-INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('FL201700000000000003','1','FL201700000000000001','剁手合集1','',1,'1','CD-CZH000001','CD-CZH000001');
-INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('FL201700000000000004','1','FL201700000000000001','剁手合集2','',2,'1','CD-CZH000001','CD-CZH000001');
-INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('FL201700000000000005','1','FL201700000000000002','0元试购1','',1,'1','CD-CZH000001','CD-CZH000001');
-INSERT INTO `tmall_category` (`code`,`type`,`parent_code`,`name`,`pic`,`order_no`,`status`,`company_code`,`system_code`) VALUES ('FL201700000000000005','1','FL201700000000000002','0元试购2','',2,'1','CD-CZH000001','CD-CZH000001');
-/*
 -- Query: SELECT `type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code` FROM xn_zhpay.tsys_config
 LIMIT 0, 10000
 
@@ -57,16 +45,6 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 LIMIT 0, 10000
 -- Date: 2017-03-25 12:57
 */
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('0',NULL,'biz_type','业务类型','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','biz_type','-36','购买摇钱树','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','biz_type','37','购买摇钱树分成','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','biz_type','38','摇钱树摇一摇奖励','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','biz_type','39','摇一摇分成','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','biz_type','60','发一发得红包','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','biz_type','61','领取红包','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','biz_type','-64','参与小目标','admin',now(),'','CD-CZH000001');
-INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','biz_type','65','小目标中奖','admin',now(),'','CD-CZH000001');
-
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('0',NULL,'config_type','规则种类','admin',now(),'','CD-CZH000001');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','config_type','B','摇钱树规则','admin',now(),'','CD-CZH000001');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('1','config_type','C','摇一摇规则','admin',now(),'','CD-CZH000001');

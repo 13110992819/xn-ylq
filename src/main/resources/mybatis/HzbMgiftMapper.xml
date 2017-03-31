@@ -53,6 +53,12 @@
 			<if test="receiveDatetimeEnd != null and receiveDatetimeEnd != '' ">
 				<![CDATA[AND t.receive_datetime <= #{receiveDatetimeEnd}]]>
 			</if>	
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
 		</trim>
 	</sql>
 	

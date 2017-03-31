@@ -21,10 +21,10 @@ import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.XN000001Res;
+import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EHzbStatus;
-import com.cdkj.zhpay.enums.EPrizeCurrency;
 import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
@@ -263,42 +263,52 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         }
     }
 
+    /** 
+     * @see com.cdkj.zhpay.bo.IHzbBO#refreshYyAmount(com.cdkj.zhpay.domain.Hzb, com.cdkj.zhpay.dto.res.XN000001Res)
+     */
     @Override
-    public void refreshYy(Hzb hzb, XN000001Res prize) {
-        hzb.setPeriodRockNum(hzb.getPeriodRockNum() + 1);
-        hzb.setTotalRockNum(hzb.getTotalRockNum() + 1);
+    public void refreshYyAmount(Hzb hzb, XN000001Res prize) {
         if (ESystemCode.Caigo.getCode().equals(hzb.getSystemCode())) {
-            if (EPrizeCurrency.CG_RMB.getCode().equals(prize.getYyCurrency())) {
+            if (ECurrency.CNY.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount1(hzb.getBackAmount1() + prize.getYyAmount());
-            } else if (EPrizeCurrency.CG_CGB.getCode().equals(
-                prize.getYyCurrency())) {
+            } else if (ECurrency.CGB.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount2(hzb.getBackAmount2() + prize.getYyAmount());
-            } else if (EPrizeCurrency.CG_JF.getCode().equals(
-                prize.getYyCurrency())) {
+            } else if (ECurrency.JF.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount3(hzb.getBackAmount3() + prize.getYyAmount());
             }
         } else if (ESystemCode.ZHPAY.getCode().equals(hzb.getSystemCode())) {
-            if (EPrizeCurrency.ZH_HBB.getCode().equals(prize.getYyCurrency())) {
+            if (ECurrency.HBB.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount1(hzb.getBackAmount1() + prize.getYyAmount());
-            } else if (EPrizeCurrency.ZH_QBB.getCode().equals(
-                prize.getYyCurrency())) {
+            } else if (ECurrency.QBB.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount2(hzb.getBackAmount2() + prize.getYyAmount());
-            } else if (EPrizeCurrency.ZH_GWB.getCode().equals(
-                prize.getYyCurrency())) {
+            } else if (ECurrency.GWB.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount3(hzb.getBackAmount3() + prize.getYyAmount());
             }
         }
         // 判断树是否“耗尽”
         HzbTemplate template = hzbTemplateBO.getHzbTemplate(hzb
             .getTemplateCode());
-        if (hzb.getTotalRockNum() >= template.getTotalRockNum()) {
-            hzb.setStatus(EHzbStatus.DIED.getCode());
-        }
         if (hzb.getBackAmount1() >= template.getBackAmount1()
                 && hzb.getBackAmount2() >= template.getBackAmount2()
                 && hzb.getBackAmount3() >= template.getBackAmount3()) {
             hzb.setStatus(EHzbStatus.DIED.getCode());
         }
-        hzbDAO.updateYy(hzb);
+        hzbDAO.updateYyAmount(hzb);
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IHzbBO#refreshYyTimes(com.cdkj.zhpay.domain.Hzb, com.cdkj.zhpay.dto.res.XN000001Res)
+     */
+    @Override
+    public void refreshYyTimes(Hzb hzb, XN000001Res prize) {
+        hzb.setPeriodRockNum(hzb.getPeriodRockNum() + 1);
+        hzb.setTotalRockNum(hzb.getTotalRockNum() + 1);
+        // 判断树是否“耗尽”
+        HzbTemplate template = hzbTemplateBO.getHzbTemplate(hzb
+            .getTemplateCode());
+        if (hzb.getTotalRockNum() >= template.getTotalRockNum()) {
+            hzb.setStatus(EHzbStatus.DIED.getCode());
+        }
+        hzbDAO.updateYyTimes(hzb);
     }
 }
