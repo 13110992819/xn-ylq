@@ -37,5 +37,7 @@ public class PropertiesUtil {
 
         public static String LAST_INVEST_RECORDS = props
             .getProperty("LAST_INVEST_RECORDS");
+
+        public static String BACK_URL = props.getProperty("BACK_URL");
     }
 }

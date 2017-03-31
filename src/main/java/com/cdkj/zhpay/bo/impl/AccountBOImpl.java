@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.cdkj.zhpay.bo.IAccountBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.common.JsonUtil;
+import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.domain.Account;
@@ -102,6 +103,7 @@ public class AccountBOImpl implements IAccountBO {
         req.setToBizNote(toBizNote);
         req.setTransAmount(String.valueOf(amount));
         req.setPayGroup(payGroup);
+        req.setBackUrl(PropertiesUtil.Config.BACK_URL);
         XN002500Res res = BizConnecter.getBizData("002500",
             JsonUtil.Object2Json(req), XN002500Res.class);
         return res;
@@ -134,6 +136,7 @@ public class AccountBOImpl implements IAccountBO {
         req.setFromBizNote(fromBizNote);
         req.setToBizNote(toBizNote);
         req.setPayGroup(payGroup);
+        req.setBackUrl(PropertiesUtil.Config.BACK_URL);
         XN002501Res res = BizConnecter.getBizData("002501",
             JsonUtil.Object2Json(req), XN002501Res.class);
         return res;
