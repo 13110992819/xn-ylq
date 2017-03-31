@@ -24,6 +24,7 @@ import com.cdkj.zhpay.domain.JewelRecord;
 import com.cdkj.zhpay.domain.JewelRecordNumber;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.XN002500Res;
+import com.cdkj.zhpay.dto.res.XN002501Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
@@ -160,8 +161,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
 
     @Override
     @Transactional
-    public Object buyJewelByWX(String userId, String jewelCode, Integer times,
-            String ip) {
+    public Object buyJewelByWxApp(String userId, String jewelCode,
+            Integer times, String ip) {
         // 入参业务检查
         Jewel jewel = jewelBO.getJewel(jewelCode);
         if (!EJewelStatus.RUNNING.getCode().equals(jewel.getStatus())) {
@@ -180,9 +181,37 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         jewelRecordBO.saveJewelRecord(userId, jewel.getCode(), times,
             jewel.getFromAmount() * times, ip, payGroup, jewel.getSystemCode());
         String systemUserId = userBO.getSystemUser(jewel.getSystemCode());
-        XN002500Res res = accountBO.doWeiXinPayRemote(userId, systemUserId,
+        XN002500Res res = accountBO.doWeiXinAppPayRemote(userId, systemUserId,
             jewel.getFromAmount() * times, EBizType.AJ_DUOBAO, "参与小目标",
             "用户参与小目标", payGroup);
+        return res;
+    }
+
+    @Override
+    @Transactional
+    public Object buyJewelByWxH5(String userId, String jewelCode,
+            Integer times, String ip) {
+        // 入参业务检查
+        Jewel jewel = jewelBO.getJewel(jewelCode);
+        if (!EJewelStatus.RUNNING.getCode().equals(jewel.getStatus())) {
+            throw new BizException("xn0000", "夺宝标的不处于募集中状态，不能进行购买操作");
+        }
+        User user = userBO.getRemoteUser(userId);
+        jewelRecordBO.checkTimes(user, jewel, times);
+        if (!ECurrency.CNY.getCode().equals(jewel.getFromCurrency())) {
+            throw new BizException("xn0000", "购买币种不是人民币，不能使用微信支付");
+        }
+
+        // 生成支付组号
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        // 落地小目标购买记录
+        jewelRecordBO.saveJewelRecord(userId, jewel.getCode(), times,
+            jewel.getFromAmount() * times, ip, payGroup, jewel.getSystemCode());
+        String systemUserId = userBO.getSystemUser(jewel.getSystemCode());
+        XN002501Res res = accountBO.doWeiXinH5PayRemote(user.getUserId(),
+            user.getOpenId(), systemUserId, jewel.getFromAmount() * times,
+            EBizType.AJ_DUOBAO, "参与小目标", "用户参与小目标", payGroup);
         return res;
     }
 
