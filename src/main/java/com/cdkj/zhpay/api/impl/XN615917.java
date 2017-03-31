@@ -34,6 +34,7 @@ public class XN615917 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
+
         return sysConfigAO.getSYSConfig(req.getKey(), req.getCompanyCode(),
             req.getSystemCode());
     }
@@ -43,6 +44,7 @@ public class XN615917 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
+
         req = JsonUtil.json2Bean(inputparams, XN615917Req.class);
         StringValidater.validateBlank(req.getKey(), req.getCompanyCode(),
             req.getSystemCode());

@@ -57,11 +57,6 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
     }
 
     @Override
-    public SYSConfig getSYSConfig(String key, String systemCode) {
-        return getSYSConfig(key, systemCode, systemCode);
-    }
-
-    @Override
     public Map<String, String> getConfigsMap(String systemCode) {
         Map<String, String> map = new HashMap<String, String>();
         if (StringUtils.isNotBlank(systemCode)) {
@@ -75,14 +70,15 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
             }
         }
         return map;
+
     }
 
     @Override
     public SYSConfig getSYSConfig(String key, String companyCode,
             String systemCode) {
         SYSConfig sysConfig = null;
-        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(companyCode)
-                && StringUtils.isNotBlank(systemCode)) {
+        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(systemCode)
+                && StringUtils.isNotBlank(companyCode)) {
             SYSConfig condition = new SYSConfig();
             condition.setCkey(key);
             condition.setCompanyCode(companyCode);
@@ -93,6 +89,11 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
             }
         }
         return sysConfig;
+    }
+
+    @Override
+    public SYSConfig getSYSConfig(String key, String systemCode) {
+        return getSYSConfig(key, systemCode, systemCode);
     }
 
 }

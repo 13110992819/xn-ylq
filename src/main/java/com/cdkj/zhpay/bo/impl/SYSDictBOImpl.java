@@ -52,6 +52,7 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
         sysDictDAO.update(data);
+
     }
 
     @Override
@@ -66,12 +67,21 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
             throw new BizException("xn000000", "id记录不存在");
         }
         return sysDict;
-
     }
 
     @Override
     public List<SYSDict> querySYSDictList(SYSDict condition) {
         return sysDictDAO.selectList(condition);
+    }
+
+    @Override
+    public Long saveSecondDict(SYSDict sysDict) {
+        Long id = null;
+        if (sysDict != null) {
+            sysDictDAO.insert(sysDict);
+            id = sysDict.getId();
+        }
+        return id;
     }
 
     @Override
@@ -96,16 +106,7 @@ public class SYSDictBOImpl extends PaginableBOImpl<SYSDict> implements
         if (getTotalCount(condition) > 0) {
             throw new BizException("xn000000", "当前节点下，key重复");
         }
+
     }
 
-    @Override
-    public Long saveSecondDict(String parentKey, String key, String value,
-            String updater, String remark, String systemCode) {
-        Long id = null;
-        SYSDict data = new SYSDict();
-        sysDictDAO.insert(data);
-        id = data.getId();
-
-        return id;
-    }
 }

@@ -34,8 +34,7 @@ public class XN615916 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        Long id = StringValidater.toLong(req.getId());
-        return sysConfigAO.getSYSConfig(id);
+        return sysConfigAO.getSYSConfig(StringValidater.toLong(req.getId()));
     }
 
     /** 
@@ -43,6 +42,7 @@ public class XN615916 extends AProcessor {
      */
     @Override
     public void doCheck(String inputparams) throws ParaException {
+
         req = JsonUtil.json2Bean(inputparams, XN615916Req.class);
         StringValidater.validateBlank(req.getId());
     }

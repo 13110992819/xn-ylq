@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.SYSDict;
+import com.cdkj.zhpay.dto.req.XN615900Req;
 
 /** 
  * @author: haiqingzheng 
@@ -21,8 +22,7 @@ import com.cdkj.zhpay.domain.SYSDict;
 public interface ISYSDictAO {
     static String DEFAULT_ORDER_COLUMN = "id";
 
-    public Long addSYSDict(String parentKey, String key, String value,
-            String updater, String remark, String systemCode);
+    public Long addSecondDict(XN615900Req req);
 
     public void dropSYSDict(Long id);
 
@@ -34,4 +34,5 @@ public interface ISYSDictAO {
     public List<SYSDict> querySysDictList(SYSDict condition);
 
     public SYSDict getSYSDict(Long id);
+
 }

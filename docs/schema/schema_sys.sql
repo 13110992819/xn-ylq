@@ -1,4 +1,3 @@
-
 DROP TABLE IF EXISTS `tsys_config`;
 CREATE TABLE `tsys_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
@@ -14,6 +13,10 @@ CREATE TABLE `tsys_config` (
   PRIMARY KEY (`id`) COMMENT '系统参数'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+
+
+
 DROP TABLE IF EXISTS `tsys_dict`;
 CREATE TABLE `tsys_dict` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号（自增长）',
@@ -25,9 +28,12 @@ CREATE TABLE `tsys_dict` (
   `updater` varchar(32) NOT NULL COMMENT '更新人',
   `update_datetime` datetime NOT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
+  `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`) COMMENT '数据字典'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 
 
