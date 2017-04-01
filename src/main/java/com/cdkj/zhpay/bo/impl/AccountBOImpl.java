@@ -19,11 +19,13 @@ import com.cdkj.zhpay.dto.req.XN002000Req;
 import com.cdkj.zhpay.dto.req.XN002100Req;
 import com.cdkj.zhpay.dto.req.XN002500Req;
 import com.cdkj.zhpay.dto.req.XN002501Req;
+import com.cdkj.zhpay.dto.req.XN002510Req;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN001400Res;
 import com.cdkj.zhpay.dto.res.XN002000Res;
 import com.cdkj.zhpay.dto.res.XN002500Res;
 import com.cdkj.zhpay.dto.res.XN002501Res;
+import com.cdkj.zhpay.dto.res.XN002510Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.ESystemCode;
@@ -103,7 +105,7 @@ public class AccountBOImpl implements IAccountBO {
         req.setToBizNote(toBizNote);
         req.setTransAmount(String.valueOf(amount));
         req.setPayGroup(payGroup);
-        req.setBackUrl(PropertiesUtil.Config.BACK_URL);
+        req.setBackUrl(PropertiesUtil.Config.PAY_BACK_URL);
         XN002500Res res = BizConnecter.getBizData("002500",
             JsonUtil.Object2Json(req), XN002500Res.class);
         return res;
@@ -136,7 +138,7 @@ public class AccountBOImpl implements IAccountBO {
         req.setFromBizNote(fromBizNote);
         req.setToBizNote(toBizNote);
         req.setPayGroup(payGroup);
-        req.setBackUrl(PropertiesUtil.Config.BACK_URL);
+        req.setBackUrl(PropertiesUtil.Config.PAY_BACK_URL);
         XN002501Res res = BizConnecter.getBizData("002501",
             JsonUtil.Object2Json(req), XN002501Res.class);
         return res;
@@ -219,5 +221,23 @@ public class AccountBOImpl implements IAccountBO {
             UserUtil.getUserMobile(fromUserRes.getMobile())
                     + bizType.getValue(), bizType.getValue());
         return new PayBalanceRes(gxjlPrice, frPrice);
+    }
+
+    @Override
+    public XN002510Res doAlipayRemote(String fromUserId, String toUserId,
+            Long amount, EBizType bizType, String fromBizNote,
+            String toBizNote, String payGroup) {
+        // 获取支付宝APP支付信息
+        XN002510Req req = new XN002510Req();
+        req.setFromUserId(fromUserId);
+        req.setToUserId(toUserId);
+        req.setBizType(bizType.getCode());
+        req.setFromBizNote(fromBizNote);
+        req.setToBizNote(toBizNote);
+        req.setTransAmount(String.valueOf(amount));
+        req.setPayGroup(payGroup);
+        XN002510Res res = BizConnecter.getBizData("002510",
+            JsonUtil.Object2Json(req), XN002510Res.class);
+        return res;
     }
 }

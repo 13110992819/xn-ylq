@@ -70,8 +70,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             condition);
         if (page != null && CollectionUtils.isNotEmpty(page.getList())) {
             for (JewelRecord jewelRecord : page.getList()) {
-                // Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
-                // jewelRecord.setJewel(jewel);
+                // 滚动条轮播，读取中奖币种和金额
+                Jewel jewel = jewelBO.getJewel(jewelRecord.getJewelCode());
+                jewelRecord.setJewel(jewel);
                 User user = userBO.getRemoteUser(jewelRecord.getUserId());
                 jewelRecord.setUser(user);
             }
@@ -219,6 +220,29 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     @Transactional
     public Object buyJewelByZFB(String userId, String jewelCode, Integer times,
             String ip) {
-        throw new BizException("xn0000", "暂不支付支付宝支付");
+        // 入参业务检查
+        Jewel jewel = jewelBO.getJewel(jewelCode);
+        if (!EJewelStatus.RUNNING.getCode().equals(jewel.getStatus())) {
+            throw new BizException("xn0000", "夺宝标的不处于募集中状态，不能进行购买操作");
+        }
+        User user = userBO.getRemoteUser(userId);
+        jewelRecordBO.checkTimes(user, jewel, times);
+        if (!ECurrency.CNY.getCode().equals(jewel.getFromCurrency())) {
+            throw new BizException("xn0000", "购买币种不是人民币，不能使用支付宝支付");
+        }
+
+        // 生成支付组号
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        // 落地小目标购买记录
+        jewelRecordBO.saveJewelRecord(userId, jewel.getCode(), times,
+            jewel.getFromAmount() * times, ip, payGroup, jewel.getSystemCode());
+        String systemUserId = userBO.getSystemUser(jewel.getSystemCode());
+
+        // 资金划转开始--------------
+        // RMB调用支付宝渠道至商家
+        return accountBO.doAlipayRemote(user.getUserId(), systemUserId,
+            jewel.getToAmount(), EBizType.AJ_DUOBAO, "参与抽奖", "参与抽奖", payGroup);
+        // 资金划转结束--------------
     }
 }
