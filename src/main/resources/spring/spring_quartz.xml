@@ -19,7 +19,7 @@
        <property name="triggers">  
            <list>
               <ref bean="hzbMgiftTrigger"/>
-              <ref bean="hzbHoldTrigger"/>
+              <ref bean="hzbTrigger"/>
            </list>  
        </property>  
        <property name="autoStartup" value="true"/>  
@@ -37,7 +37,7 @@
 	</bean> 
 	
 	<!-- 将汇赚宝周期被摇次数重置为0 -->
-	<bean id="hzbHoldTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+	<bean id="hzbTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="doResetRockNumDaily"/>  
        <property name="cronExpression" value="59 59 23 * * ?"/><!-- 每天23:59:59开始执行 -->
 	</bean>

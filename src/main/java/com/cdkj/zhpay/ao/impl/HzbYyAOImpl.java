@@ -123,13 +123,16 @@ public class HzbYyAOImpl implements IHzbYyAO {
     // 汇赚宝分成:
     // 1、数据准备
     // 2、计算分成:针对用户_已购买汇赚宝的一级二级推荐人和所在辖区用户
-    private String fcAmount(User yyUser) {
+    private Long fcAmount(User yyUser) {
         // 分销规则
         Map<String, String> rateMap = sysConfigBO
             .getConfigsMap(ESystemCode.ZHPAY.getCode());
         // C用户摇一摇分成
         String camount = rateMap.get(SysConstants.YY_CUSER);
         userFcAmount(yyUser.getUserId(), camount);
+        // 树主人分成
+        Long ownerfcAmount = Double.valueOf(
+            Double.valueOf(camount) * SysConstants.AMOUNT_RADIX).longValue();
         // B用户摇一摇分成
         String bUserId = yyUser.getUserReferee();
         boolean bcheck = hzbBO.isBuyHzb(yyUser.getUserId());
@@ -175,7 +178,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
             }
 
         }
-        return camount;
+        return ownerfcAmount;
     }
 
     private void userFcAmount(String refUserId, String configAmount) {

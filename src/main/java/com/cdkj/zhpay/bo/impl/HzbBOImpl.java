@@ -1,5 +1,6 @@
 package com.cdkj.zhpay.bo.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -226,13 +227,22 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         condition.setDistance(sysConfigMap.get(SysConstants.HZB_DISTANCE));
         condition.setCompanyCode(companyCode);
         condition.setSystemCode(systemCode);
-        List<Hzb> resultList = hzbDAO.selectDistanceList(condition);
+        List<Hzb> distanceList = hzbDAO.selectDistanceList(condition);
         // 截取数量
         String hzbMaxNumStr = sysConfigMap.get(SysConstants.HZB_MAX_NUM);
         Integer hzbMaxNum = Integer.valueOf(hzbMaxNumStr);
-        if (CollectionUtils.isNotEmpty(resultList)
-                && resultList.size() > hzbMaxNum) {
-            resultList = resultList.subList(0, hzbMaxNum);
+        if (CollectionUtils.isNotEmpty(distanceList)
+                && distanceList.size() > hzbMaxNum) {
+            distanceList = distanceList.subList(0, hzbMaxNum);
+        }
+        List<Hzb> resultList = new ArrayList<Hzb>();
+        // 根据模板,判断今天被摇摇次数是否超限制
+        for (Hzb hzb : distanceList) {
+            HzbTemplate hzbTemplate = hzbTemplateBO.getHzbTemplate(hzb
+                .getTemplateCode());
+            if (hzbTemplate.getPeriodRockNum() > hzb.getPeriodRockNum()) {
+                resultList.add(hzb);
+            }
         }
         // 设置分享链接
         for (Hzb hzb : resultList) {

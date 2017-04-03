@@ -23,7 +23,6 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('B','hzbMaxNum','100','admin',now(),'汇赚宝摇出最大数量','CD-CZH000001','CD-CZH000001');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('B','userDayMaxCount','5','admin',now(),'用户每天摇最大次数','CD-CZH000001','CD-CZH000001');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('B','deviceDayMaxCount','5','admin',now(),'设备每天摇最大次数','CD-CZH000001','CD-CZH000001');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('B','hzbYyDayMaxCount','900','admin',now(),'一个汇赚宝每天摇最大次数','CD-CZH000001','CD-CZH000001');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('C','yyArea','0.23','admin',now(),'摇一摇红包业绩分成值','CD-CZH000001','CD-CZH000001');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('C','yyCity','0','admin',now(),'摇一摇红包业绩分成值','CD-CZH000001','CD-CZH000001');
