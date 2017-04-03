@@ -25,7 +25,7 @@ public class XN615119 extends AProcessor {
      */
     @Override
     public Object doBusiness() throws BizException {
-        return hzbAO.myHzb(req.getUserId());
+        return hzbAO.doGetHzbTotalData(req.getUserId());
     }
 
     /** 
@@ -36,5 +36,4 @@ public class XN615119 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN615119Req.class);
         StringValidater.validateBlank(req.getUserId());
     }
-
 }

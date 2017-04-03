@@ -45,7 +45,7 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
 
     @Override
     public String saveHzbYy(XN000001Res prize, User yyUser, Hzb hzb,
-            String deviceNo) {
+            String deviceNo, String ownerFcCurrency, Long ownerFcAmount) {
         String code = null;
         if (prize != null && hzb != null) {
             HzbYy data = new HzbYy();
@@ -57,6 +57,8 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
 
             data.setUserId(yyUser.getUserId());
             data.setDeviceNo(deviceNo);
+            data.setOwnerFcCurrency(ownerFcCurrency);
+            data.setOwnerFcAmount(ownerFcAmount);
 
             data.setCreateDatetime(new Date());
             data.setSystemCode(hzb.getSystemCode());
@@ -288,5 +290,23 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
         condition.setCreateDatetimeEnd(dateEnd);
         condition.setHzbCode(hzbCode);
         return hzbYyDAO.selectTotalCount(condition);
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IHzbYyBO#getTotalOwnerFcAmount(java.util.Date, java.util.Date, java.lang.String)
+     */
+    @Override
+    public Long getTotalOwnerFcAmount(Date dateStart, Date dateEnd,
+            String hzbCode) {
+        Long ownerFcAmount = 0l;
+        HzbYy condition = new HzbYy();
+        condition.setCreateDatetimeStart(dateStart);
+        condition.setCreateDatetimeEnd(dateEnd);
+        condition.setHzbCode(hzbCode);
+        List<HzbYy> list = hzbYyDAO.selectList(condition);
+        for (HzbYy hzbYy : list) {
+            ownerFcAmount += hzbYy.getOwnerFcAmount();
+        }
+        return ownerFcAmount;
     }
 }

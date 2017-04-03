@@ -423,10 +423,10 @@ public class HzbAOImpl implements IHzbAO {
         Long todayYyTimes = hzbYyBO.getTotalHzbYyCount(todayStart, todayEnd,
             hzb.getCode());
         res.setTodayYyTimes(todayYyTimes);
-        // // 总的摇一摇分成
-        // XN802527Res accountRes = accountBO.doGetBizTotalAmount(systemCode,
-        // userId, ECurrency.HBYJ.getCode(), EBizType.AJ_YYFC.getCode());
-        // res.setYyTotalAmount(accountRes.getAmount());
+        // 总的摇一摇分成
+        Long yyTotalAmount = hzbYyBO.getTotalOwnerFcAmount(todayStart,
+            todayEnd, hzb.getCode());
+        res.setYyTotalAmount(yyTotalAmount);
         // 历史发一发次数
         Long historyMgiftTimes = hzbMgiftBO.getReceiveHzbMgiftCount(null,
             yesterdayEnd, userId);

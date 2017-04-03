@@ -80,7 +80,8 @@ public class HzbYyAOImpl implements IHzbYyAO {
     private XN000001Res doYyByCG(User yyUser, Hzb hzb, String deviceNo) {
         // 1、摇到什么并记录摇到结果
         XN000001Res prize = hzbYyBO.calculatePrizeByCG(hzb);
-        hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo);
+        hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo, prize.getYyCurrency(),
+            prize.getYyAmount());
         // 2、刷新对应摇钱树生命值
         hzbBO.refreshYyAmount(hzb, prize);
         // 3、平台兑现奖励
@@ -97,17 +98,20 @@ public class HzbYyAOImpl implements IHzbYyAO {
     }
 
     private XN000001Res doYyByZH(User yyUser, Hzb hzb, String deviceNo) {
-        // 1、摇到什么并记录摇到结果
+        // 1、确定摇到什么
         XN000001Res prize = hzbYyBO.calculatePrizeByZH(hzb, yyUser);
-        hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo);
         // 2、刷新对应摇钱树生命值
         hzbBO.refreshYyTimes(hzb, prize);
         // 3、特殊处理：正汇系统摇到红包时，将促发分销规则
         String currency = prize.getYyCurrency();
+        Long ownerFcAmount = 0L;
         if (ECurrency.HBB.getCode().equals(currency)) {
             // 促发分销规则
-            fcAmount(yyUser);
+            ownerFcAmount = Long.valueOf(fcAmount(yyUser));
         }
+        // 4、记录摇到结果
+        hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo,
+            ECurrency.HBYJ.getCode(), ownerFcAmount);
         // 兑现摇的人
         ECurrency ecurrency = ECurrency.getECurrency(currency);
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
@@ -119,7 +123,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
     // 汇赚宝分成:
     // 1、数据准备
     // 2、计算分成:针对用户_已购买汇赚宝的一级二级推荐人和所在辖区用户
-    private void fcAmount(User yyUser) {
+    private String fcAmount(User yyUser) {
         // 分销规则
         Map<String, String> rateMap = sysConfigBO
             .getConfigsMap(ESystemCode.ZHPAY.getCode());
@@ -171,6 +175,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
             }
 
         }
+        return camount;
     }
 
     private void userFcAmount(String refUserId, String configAmount) {

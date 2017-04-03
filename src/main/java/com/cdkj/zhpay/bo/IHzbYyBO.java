@@ -33,7 +33,7 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      * @history:
      */
     public String saveHzbYy(XN000001Res prize, User yyUser, Hzb hzb,
-            String deviceNo);
+            String deviceNo, String ownerFcCurrency, Long ownerFcAmount);
 
     /**
      * 菜狗摇一摇算法
@@ -62,4 +62,16 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      * @history:
      */
     public Long getTotalHzbYyCount(Date dateStart, Date dateEnd, String hzbCode);
+
+    /**
+     * 获取树主人分成
+     * @param dateStart
+     * @param dateEnd
+     * @param hzbCode
+     * @return 
+     * @create: 2017年4月3日 下午4:49:31 xieyj
+     * @history:
+     */
+    public Long getTotalOwnerFcAmount(Date dateStart, Date dateEnd,
+            String hzbCode);
 }
