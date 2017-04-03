@@ -168,14 +168,15 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
             .get(SysConstants.YY_AMOUNT_MIN));
         Double yyAmountMax = Double.valueOf(rateMap
             .get(SysConstants.YY_AMOUNT_MAX)) + 1;
-        Long randAmount = Double.valueOf(
-            (SysConstants.AMOUNT_RADIX
-                    * (yyAmountMin + (yyAmountMax - yyAmountMin)) * Math
-                .random())).longValue();
-        return randAmount;
+        // 取随机金额
+        Double randAmount = yyAmountMin + (yyAmountMax - yyAmountMin)
+                * Math.random();
+        Long resultAmount = Double.valueOf(
+            SysConstants.AMOUNT_RADIX * randAmount).longValue();
+        return resultAmount;
     }
 
-    private static int getRandom(int min, int max) {
+    private int getRandom(int min, int max) {
         Random random = new Random();
         return random.nextInt(max) % (max - min + 1) + min;
     }
