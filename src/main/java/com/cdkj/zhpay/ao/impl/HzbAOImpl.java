@@ -1,5 +1,6 @@
 package com.cdkj.zhpay.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,11 +24,13 @@ import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.domain.HzbMgift;
 import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.BooleanRes;
 import com.cdkj.zhpay.dto.res.XN002500Res;
 import com.cdkj.zhpay.dto.res.XN002501Res;
+import com.cdkj.zhpay.dto.res.XN615119Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
@@ -399,5 +402,47 @@ public class HzbAOImpl implements IHzbAO {
     @Override
     public void doResetRockNumDaily() {
         hzbBO.resetPeriodRockNum();
+    }
+
+    @Override
+    public XN615119Res doGetHzbTotalData(String userId) {
+        XN615119Res res = new XN615119Res();
+        List<Hzb> hzbList = hzbBO.queryHzbListByUser(userId);
+        Hzb hzb = null;
+        if (CollectionUtils.isNotEmpty(hzbList)) {
+            hzb = hzbList.get(0);
+        }
+        Date todayStart = DateUtil.getTodayStart();
+        Date todayEnd = DateUtil.getTodayEnd();
+        Date yesterdayEnd = DateUtil.getRelativeDate(todayStart, -1);
+        // 历史被摇一摇次数
+        Long historyYyTimes = hzbYyBO.getTotalHzbYyCount(null, yesterdayEnd,
+            hzb.getCode());
+        res.setHistoryYyTimes(historyYyTimes);
+        // 今日被摇一摇次数
+        Long todayYyTimes = hzbYyBO.getTotalHzbYyCount(todayStart, todayEnd,
+            hzb.getCode());
+        res.setTodayYyTimes(todayYyTimes);
+        // // 总的摇一摇分成
+        // XN802527Res accountRes = accountBO.doGetBizTotalAmount(systemCode,
+        // userId, ECurrency.HBYJ.getCode(), EBizType.AJ_YYFC.getCode());
+        // res.setYyTotalAmount(accountRes.getAmount());
+        // 历史发一发次数
+        Long historyMgiftTimes = hzbMgiftBO.getReceiveHzbMgiftCount(null,
+            yesterdayEnd, userId);
+        res.setHistoryHbTimes(historyMgiftTimes);
+        // 今日发一发次数
+        Long todayMgiftTimes = hzbMgiftBO.getReceiveHzbMgiftCount(todayStart,
+            todayEnd, userId);
+        res.setTodayHbTimes(todayMgiftTimes);
+        // 总的发一发福利
+        List<HzbMgift> hzbMgiftList = hzbMgiftBO.queryReceiveHzbMgift(null,
+            null, userId);
+        Long ffTotalAmount = 0L;
+        for (HzbMgift hzbMgift : hzbMgiftList) {
+            ffTotalAmount += hzbMgift.getOwnerAmount();
+        }
+        res.setFfTotalHbAmount(ffTotalAmount);
+        return res;
     }
 }

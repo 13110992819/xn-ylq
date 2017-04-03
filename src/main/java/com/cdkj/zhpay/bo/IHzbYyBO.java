@@ -1,5 +1,7 @@
 package com.cdkj.zhpay.bo;
 
+import java.util.Date;
+
 import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbYy;
@@ -17,6 +19,9 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      * @history:
      */
     public void checkYyGlobalRule(Hzb hzb, User yyUser, String deviceNo);
+
+    public void checkYyGlobalRule(String systemCode, User yyUser,
+            String deviceNo);
 
     /**
      * 记录摇一摇结果
@@ -46,4 +51,15 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      * @history:
      */
     public XN000001Res calculatePrizeByZH(Hzb hzb, User yyUser);
+
+    /**
+     * 获取某个时间段摇一摇次数
+     * @param dateStart
+     * @param dateEnd
+     * @param code
+     * @return 
+     * @create: 2017年4月3日 下午2:52:47 xieyj
+     * @history:
+     */
+    public Long getTotalHzbYyCount(Date dateStart, Date dateEnd, String hzbCode);
 }

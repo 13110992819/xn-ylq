@@ -87,7 +87,8 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
         }
     }
 
-    private void checkYyGlobalRule(String systemCode, User yyUser,
+    @Override
+    public void checkYyGlobalRule(String systemCode, User yyUser,
             String deviceNo) {
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
         // 取到一个账号一天能摇的次数
@@ -275,5 +276,17 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
             result = Double.valueOf(weight);
         }
         return result;
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.bo.IHzbYyBO#getTotalHzbYyCount(java.lang.Object, java.util.Date, java.lang.String)
+     */
+    @Override
+    public Long getTotalHzbYyCount(Date dateStart, Date dateEnd, String hzbCode) {
+        HzbYy condition = new HzbYy();
+        condition.setCreateDatetimeStart(dateStart);
+        condition.setCreateDatetimeEnd(dateEnd);
+        condition.setHzbCode(hzbCode);
+        return hzbYyDAO.selectTotalCount(condition);
     }
 }

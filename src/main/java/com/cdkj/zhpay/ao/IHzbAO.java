@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.dto.res.XN615119Res;
 
 public interface IHzbAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
@@ -31,4 +32,6 @@ public interface IHzbAO {
             String systemCode);
 
     public void doResetRockNumDaily();
+
+    public XN615119Res doGetHzbTotalData(String userId);
 }
