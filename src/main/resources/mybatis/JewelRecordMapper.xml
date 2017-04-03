@@ -142,7 +142,7 @@
 		FROM
 		tyydb_jewel t
 		LEFT JOIN tyydb_jewel_record tjr ON  t.code = tjr.jewel_code 
-		WHERE tjr.status not in(0) 
+		WHERE tjr.status not in(0) and tjr.user_id=#{userId}
 		GROUP BY t.code 
 	</select>
 	
@@ -154,7 +154,7 @@
         tyydb_jewel t
     	LEFT JOIN tyydb_jewel_record tjr ON t.code = tjr.jewel_code
     	WHERE
-        tjr.status NOT IN (0)
+        tjr.status NOT IN (0)  and tjr.user_id=#{userId}
     	GROUP BY t.code) AS jewel_num
 	</select>
 	
