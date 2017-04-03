@@ -98,23 +98,21 @@ public class HzbYyAOImpl implements IHzbYyAO {
 
     private XN000001Res doYyByZH(User yyUser, Hzb hzb, String deviceNo) {
         // 1、摇到什么并记录摇到结果
-        XN000001Res prize = hzbYyBO.calculatePrizeByZH(yyUser);
+        XN000001Res prize = hzbYyBO.calculatePrizeByZH(hzb, yyUser);
         hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo);
         // 2、刷新对应摇钱树生命值
         hzbBO.refreshYyTimes(hzb, prize);
         // 3、特殊处理：正汇系统摇到红包时，将促发分销规则
         String currency = prize.getYyCurrency();
-        if (ECurrency.GWB.getCode().equals(currency)
-                || ECurrency.QBB.getCode().equals(currency)) {
-            // 兑现摇的人
-            ECurrency ecurrency = ECurrency.getECurrency(currency);
-            accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
-                yyUser.getUserId(), ecurrency, prize.getYyAmount(),
-                EBizType.AJ_YYJL, "摇一摇奖励发放", "摇一摇奖励获得");
-        } else if (ECurrency.HBB.getCode().equals(currency)) {
+        if (ECurrency.HBB.getCode().equals(currency)) {
             // 促发分销规则
             fcAmount(yyUser);
         }
+        // 兑现摇的人
+        ECurrency ecurrency = ECurrency.getECurrency(currency);
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
+            yyUser.getUserId(), ecurrency, prize.getYyAmount(),
+            EBizType.AJ_YYJL, "摇一摇奖励发放", "摇一摇奖励获得");
         return prize;
     }
 

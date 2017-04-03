@@ -16,6 +16,7 @@ import com.cdkj.zhpay.bo.IHzbYyBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.common.DateUtil;
+import com.cdkj.zhpay.common.PrizeUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IHzbYyDAO;
@@ -65,49 +66,13 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
         return code;
     }
 
-    /**
-     * 判断是否第三次且前面两次没有摇到红包币
-     * @see com.cdkj.zhpay.bo.IHzbYyBO#isHaveHB(java.lang.String)
-     */
-    private String isHaveHB(String userId) {
-        // 0 代表 无/1 代表有/-1 代表前面两次都没有红包
-        String haveHbb = "0";
-        HzbYy condition = new HzbYy();
-        condition.setUserId(userId);
-        int count = hzbYyDAO.selectTotalCount(condition).intValue();
-        int start = (count - 2) < 0 ? 0 : (count - 2);
-        List<HzbYy> dataList = hzbYyDAO.selectList(condition, start, count);
-        if (CollectionUtils.isNotEmpty(dataList)) {
-            // 判断前面1次，2次是否有红包
-            if (count % 3 != 0) {
-                for (HzbYy hzbYy : dataList) {
-                    if (ECurrency.HBB.getCode().equals(hzbYy.getYyCurrency())) {
-                        haveHbb = "1";
-                        break;
-                    }
-                }
-                // 判断当前是否第三次，且前面两次无红包
-                if (count % 3 == 2 && haveHbb.equals(EBoolean.NO.getCode())) {
-                    haveHbb = "-1";
-                }
-            }
-        }
-        return haveHbb;
-    }
-
-    // 摇一摇全局规则：
-    // 摇钱树一天只能摇n次
-    // 一个设备一天只能摇n次
-    // 一个账号一天只能摇n次
-
     @Override
     public void checkYyGlobalRule(Hzb hzb, User yyUser, String deviceNo) {
         checkYyGlobalRule(hzb);
         checkYyGlobalRule(hzb.getSystemCode(), yyUser, deviceNo);
     }
 
-    @Override
-    public void checkYyGlobalRule(Hzb hzb) {
+    private void checkYyGlobalRule(Hzb hzb) {
         // 取到摇钱树一天能摇的次数
         HzbTemplate hzbTemplate = hzbTemplateBO.getHzbTemplate(hzb
             .getTemplateCode());
@@ -122,8 +87,7 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
         }
     }
 
-    @Override
-    public void checkYyGlobalRule(String systemCode, User yyUser,
+    private void checkYyGlobalRule(String systemCode, User yyUser,
             String deviceNo) {
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
         // 取到一个账号一天能摇的次数
@@ -133,28 +97,22 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
         int deviceDayMaxCount = Integer.valueOf(rateMap
             .get(SysConstants.DEVICE_DAY_MAX_COUNT));
 
-        // 限制规则1：手机和设备加起来总次数小于最小次数
-        int minMaxCount = userDayMaxCount > deviceDayMaxCount ? deviceDayMaxCount
-                : userDayMaxCount;
         HzbYy yyCondition = new HzbYy();
         yyCondition.setCreateDatetimeStart(DateUtil.getTodayStart());
         yyCondition.setCreateDatetimeEnd(DateUtil.getTodayEnd());
-        yyCondition.setUserId(yyUser.getUserId());
-        yyCondition.setDeviceNo(deviceNo);
-        if (getTotalCount(yyCondition) >= minMaxCount) {
-            throw new BizException("xn0000", "您今天已摇" + minMaxCount + "次，请明天再来哦");
-        }
-        // 限制规则2:一个账号一天只能摇n次
+        // 限制规则1:一个账号一天只能摇n次
         yyCondition.setUserId(yyUser.getUserId());
         yyCondition.setDeviceNo(null);
-        if (getTotalCount(yyCondition) >= userDayMaxCount) {
+        long userTodayYyNum = getTotalCount(yyCondition);
+        if (userTodayYyNum >= userDayMaxCount) {
             throw new BizException("xn0000", "您的账号今天已摇" + userDayMaxCount
                     + "次，请明天再来哦");
         }
-        // 限制规则3:一个设备一天只能摇n次
+        // 限制规则2:一个设备一天只能摇n次
         yyCondition.setUserId(null);
         yyCondition.setDeviceNo(deviceNo);
-        if (getTotalCount(yyCondition) >= deviceDayMaxCount) {
+        long deviceTodayYyNum = getTotalCount(yyCondition);
+        if (deviceTodayYyNum >= deviceDayMaxCount) {
             throw new BizException("xn0000", "您的手机今天已摇" + deviceDayMaxCount
                     + "次，请明天再来哦");
         }
@@ -217,32 +175,97 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
     private static int getRandom(int min, int max) {
         Random random = new Random();
         return random.nextInt(max) % (max - min + 1) + min;
-
     }
 
     @Override
-    public XN000001Res calculatePrizeByZH(User yyUser) {
-        /*
-         * List<Prize> prizeList = new ArrayList<Prize>(); String haveHb =
-         * hzbYyBO.isHaveHB(yyUser.getUserId()); String type = null; if
-         * (EBoolean.YES.getCode().equals(haveHb)) { type =
-         * String.valueOf(PrizeUtil.getPrizeIndex(prizeList) + 1); } else if
-         * (EBoolean.NO.getCode().equals(haveHb)) { prizeList.add(new
-         * Prize(EPrizeType.HBB.getCode(), ycHbbWeight)); type =
-         * String.valueOf(PrizeUtil.getPrizeIndex(prizeList) + 1); } else { type
-         * = EPrizeType.HBB.getCode(); } Map<String, String> rateMap =
-         * sysConfigBO.getConfigsMap(hzb .getSystemCode()); Double ycQbbWeight =
-         * getWeight(rateMap, SysConstants.YC_QBB); Double ycGwbWeight =
-         * getWeight(rateMap, SysConstants.YC_GWB); Double ycHbbWeight =
-         * Double.valueOf(rateMap.get(SysConstants.YC_HBB)); prizeList.add(new
-         * Prize(EPrizeType.QBB.getCode(), ycQbbWeight)); prizeList.add(new
-         * Prize(EPrizeType.GWB.getCode(), ycGwbWeight)); // 获取数量 int quantity =
-         * getQuantity(rateMap);
-         */
-        return new XN000001Res(1000L, ECurrency.QBB.getCode());
-
+    public XN000001Res calculatePrizeByZH(Hzb hzb, User yyUser) {
+        // 1、确定参与币种
+        String yyCurrency = doGeneralCurrency(hzb, yyUser);
+        // 2、抽奖确定金额
+        Long yyAmount = doGeneralAmount(ESystemCode.ZHPAY.getCode());
+        return new XN000001Res(yyAmount, yyCurrency);
     }
 
+    /** 
+     * @param hzb
+     * @param yyUser
+     * @return 
+     * @create: 2017年4月3日 下午2:04:59 xieyj
+     * @history: 
+     */
+    private String doGeneralCurrency(Hzb hzb, User yyUser) {
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(hzb
+            .getSystemCode());
+        // 0 代表 无/1 代表有/-1 代表前面两次都没有红包
+        String hbFlag = isHaveHB(hzb.getCode(), yyUser.getUserId());
+        List<String> currencyList = new ArrayList<String>();
+        List<Double> prizeList = new ArrayList<Double>();
+        Double ycQbbWeight = getWeight(rateMap, SysConstants.YC_QBB);
+        Double ycGwbWeight = getWeight(rateMap, SysConstants.YC_GWB);
+        Double ycHbbWeight = getWeight(rateMap, SysConstants.YC_HBB);
+        if (EBoolean.NO.getCode().equals(hbFlag)) {
+            currencyList.add(ECurrency.GWB.getCode());
+            currencyList.add(ECurrency.QBB.getCode());
+            currencyList.add(ECurrency.HBB.getCode());
+            prizeList.add(ycGwbWeight);
+            prizeList.add(ycQbbWeight);
+            prizeList.add(ycHbbWeight);
+        } else if (EBoolean.YES.getCode().equals(hbFlag)) {
+            currencyList.add(ECurrency.GWB.getCode());
+            currencyList.add(ECurrency.QBB.getCode());
+            prizeList.add(ycGwbWeight);
+            prizeList.add(ycQbbWeight);
+        } else {// 前面两次都没有红包
+            currencyList.add(ECurrency.HBB.getCode());
+            prizeList.add(ycHbbWeight);
+        }
+        int prizeIndex = PrizeUtil.getPrizeIndex(prizeList);
+        return currencyList.get(prizeIndex);
+    }
+
+    /**
+     * 判断是否第三次且前面两次没有摇到红包币
+     * @param hzbCode
+     * @param userId
+     * @return 
+     * @create: 2017年4月3日 下午1:06:59 xieyj
+     * @history:
+     */
+    private String isHaveHB(String hzbCode, String userId) {
+        // 0 代表 无/1 代表有/-1 代表前面两次都没有红包
+        String haveHbb = "0";
+        HzbYy condition = new HzbYy();
+        condition.setHzbCode(hzbCode);
+        condition.setUserId(userId);
+        int count = hzbYyDAO.selectTotalCount(condition).intValue();
+        int start = (count - 2) < 0 ? 0 : (count - 2);
+        List<HzbYy> dataList = hzbYyDAO.selectList(condition, start, count);
+        if (CollectionUtils.isNotEmpty(dataList)) {
+            // 判断前面第1次，第2次是否有红包
+            if (count % 3 != 0) {
+                for (HzbYy hzbYy : dataList) {
+                    if (ECurrency.HBB.getCode().equals(hzbYy.getYyCurrency())) {
+                        haveHbb = "1";
+                        break;
+                    }
+                }
+                // 判断当前是否第三次，且前面两次无红包
+                if (count % 3 == 2 && haveHbb.equals(EBoolean.NO.getCode())) {
+                    haveHbb = "-1";
+                }
+            }
+        }
+        return haveHbb;
+    }
+
+    /**
+     * 获取权重，没有权重则随机产生一个
+     * @param rateMap
+     * @param ycType
+     * @return 
+     * @create: 2017年4月3日 下午2:10:30 xieyj
+     * @history:
+     */
     private Double getWeight(Map<String, String> rateMap, String ycType) {
         Double result = 0.0D;
         String weight = rateMap.get(ycType);
@@ -253,16 +276,4 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
         }
         return result;
     }
-
-    private int getQuantity(Map<String, String> rateMap) {
-        Integer yyAmountMin = Double.valueOf(
-            Double.valueOf(rateMap.get(SysConstants.YY_AMOUNT_MIN))
-                    * SysConstants.AMOUNT_RADIX).intValue();
-        Integer yyAmountMAX = Double.valueOf(
-            Double.valueOf(rateMap.get(SysConstants.YY_AMOUNT_MAX))
-                    * SysConstants.AMOUNT_RADIX).intValue();
-        Random rand = new Random();
-        return rand.nextInt(yyAmountMAX - yyAmountMin) + yyAmountMin;
-    }
-
 }

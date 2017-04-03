@@ -18,11 +18,6 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      */
     public void checkYyGlobalRule(Hzb hzb, User yyUser, String deviceNo);
 
-    public void checkYyGlobalRule(Hzb hzb);
-
-    public void checkYyGlobalRule(String systemCode, User yyUser,
-            String deviceNo);
-
     /**
      * 记录摇一摇结果
      * @param prize
@@ -50,6 +45,5 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      * @create: 2017年3月22日 下午8:29:44 myb858
      * @history:
      */
-    public XN000001Res calculatePrizeByZH(User yyUser);
-
+    public XN000001Res calculatePrizeByZH(Hzb hzb, User yyUser);
 }
