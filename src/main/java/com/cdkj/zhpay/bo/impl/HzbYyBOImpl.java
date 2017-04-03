@@ -23,7 +23,7 @@ import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.HzbYy;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.dto.res.XN000001Res;
+import com.cdkj.zhpay.dto.res.XN615120Res;
 import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
@@ -44,7 +44,7 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
     private IHzbTemplateBO hzbTemplateBO;
 
     @Override
-    public String saveHzbYy(XN000001Res prize, User yyUser, Hzb hzb,
+    public String saveHzbYy(XN615120Res prize, User yyUser, Hzb hzb,
             String deviceNo) {
         String code = null;
         if (prize != null && hzb != null) {
@@ -163,7 +163,7 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
     }
 
     @Override
-    public XN000001Res calculatePrizeByCG(Hzb hzb) {
+    public XN615120Res calculatePrizeByCG(Hzb hzb) {
         // 确定金额
         Long randAmount = doGeneralAmount(ESystemCode.Caigo.getCode());
         // 开始确定币种-------
@@ -199,7 +199,7 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
             currency = result.get(0);
         }
         // 产生随机数
-        return new XN000001Res(randAmount, currency);
+        return new XN615120Res(randAmount, currency);
     }
 
     // 随机产生金额
@@ -223,7 +223,7 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
     }
 
     @Override
-    public XN000001Res calculatePrizeByZH(User yyUser) {
+    public XN615120Res calculatePrizeByZH(User yyUser) {
         /*
          * List<Prize> prizeList = new ArrayList<Prize>(); String haveHb =
          * hzbYyBO.isHaveHB(yyUser.getUserId()); String type = null; if
@@ -241,7 +241,7 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
          * Prize(EPrizeType.GWB.getCode(), ycGwbWeight)); // 获取数量 int quantity =
          * getQuantity(rateMap);
          */
-        return new XN000001Res(1000L, ECurrency.QBB.getCode());
+        return new XN615120Res(1000L, ECurrency.QBB.getCode());
 
     }
 

@@ -19,7 +19,6 @@ import com.cdkj.zhpay.bo.IHzbBO;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.dto.res.XN000003Res;
 import com.cdkj.zhpay.enums.EDiviFlag;
 import com.cdkj.zhpay.enums.EUserKind;
 import com.cdkj.zhpay.exception.BizException;
@@ -39,7 +38,7 @@ public class UserAOImpl implements IUserAO {
     private IUserBO userBO;
 
     @Override
-    public XN000003Res getParterStatistics(String userId) {
+    public Long getParterStatistics(String userId) {
         User userRes = userBO.getRemoteUser(userId);
         if (!EUserKind.Partner.getCode().equals(userRes.getKind())) {
             throw new BizException("xn0000", "该用户类型不是辖区合伙人，无法查询统计信息");
@@ -55,7 +54,6 @@ public class UserAOImpl implements IUserAO {
         Hzb condition = new Hzb();
         condition.setUserList(cUserList);
         condition.setStatus(EDiviFlag.EFFECT.getCode());
-        long hzbNum = hzbBO.getTotalCount(condition);
-        return new XN000003Res(hzbNum);
+        return hzbBO.getTotalCount(condition);
     }
 }

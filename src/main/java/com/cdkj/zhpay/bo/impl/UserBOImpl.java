@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.domain.User;
-import com.cdkj.zhpay.dto.req.XN000005Req;
 import com.cdkj.zhpay.dto.req.XN001400Req;
 import com.cdkj.zhpay.dto.req.XN001401Req;
 import com.cdkj.zhpay.dto.res.XN001400Res;
@@ -130,17 +129,4 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return null;
     }
 
-    @Override
-    public void sentContent(String tokenId, String ownerId, String content) {
-        try {
-            XN000005Req req = new XN000005Req();
-            req.setTokenId(tokenId);
-            req.setOwnerId(ownerId);
-            req.setContent(content);
-            BizConnecter.getBizData("805905", JsonUtils.object2Json(req),
-                Object.class);
-        } catch (Exception e) {
-            logger.error("调用短信发送服务异常");
-        }
-    }
 }

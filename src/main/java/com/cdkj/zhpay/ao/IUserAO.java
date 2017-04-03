@@ -8,7 +8,6 @@
  */
 package com.cdkj.zhpay.ao;
 
-import com.cdkj.zhpay.dto.res.XN000003Res;
 
 /** 
  * @author: xieyj 
@@ -17,6 +16,6 @@ import com.cdkj.zhpay.dto.res.XN000003Res;
  */
 public interface IUserAO {
 
-    public XN000003Res getParterStatistics(String userId);
+    public Long getParterStatistics(String userId);
 
 }

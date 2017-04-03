@@ -1,27 +1,15 @@
 package com.cdkj.zhpay.dto.res;
 
-
-public class XN000001Res {
-
-    // 摇出金额
+public class XN615120Res {
     private Long yyAmount;
 
-    // 摇出币种
     private String yyCurrency;
 
-    public XN000001Res() {
+    public XN615120Res() {
     }
 
-    public XN000001Res(Long yyAmount, String currency) {
+    public XN615120Res(Long yyAmount, String yyCurrency) {
         this.yyAmount = yyAmount;
-        this.yyCurrency = currency;
-    }
-
-    public String getYyCurrency() {
-        return yyCurrency;
-    }
-
-    public void setYyCurrency(String yyCurrency) {
         this.yyCurrency = yyCurrency;
     }
 
@@ -31,6 +19,14 @@ public class XN000001Res {
 
     public void setYyAmount(Long yyAmount) {
         this.yyAmount = yyAmount;
+    }
+
+    public String getYyCurrency() {
+        return yyCurrency;
+    }
+
+    public void setYyCurrency(String yyCurrency) {
+        this.yyCurrency = yyCurrency;
     }
 
 }
