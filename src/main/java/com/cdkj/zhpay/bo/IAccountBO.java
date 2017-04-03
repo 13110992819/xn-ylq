@@ -4,6 +4,8 @@ import com.cdkj.zhpay.domain.Account;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN001400Res;
 import com.cdkj.zhpay.dto.res.XN002500Res;
+import com.cdkj.zhpay.dto.res.XN002501Res;
+import com.cdkj.zhpay.dto.res.XN002510Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 
@@ -67,7 +69,7 @@ public interface IAccountBO {
             EBizType bizType);
 
     /**
-     * 微信支付
+     * 微信app支付
      * @param fromUserId
      * @param toUserId
      * @param amount
@@ -79,7 +81,41 @@ public interface IAccountBO {
      * @create: 2017年3月23日 下午8:34:24 xieyj
      * @history:
      */
-    public XN002500Res doWeiXinPayRemote(String fromUserId, String toUserId,
+    public XN002500Res doWeiXinAppPayRemote(String fromUserId, String toUserId,
+            Long amount, EBizType bizType, String fromBizNote,
+            String toBizNote, String payGroup);
+
+    /**
+     * 微信h5支付
+     * @param fromUserId
+     * @param fromOpenId
+     * @param toUserId
+     * @param amount
+     * @param bizType
+     * @param fromBizNote
+     * @param toBizNote
+     * @param payGroup 
+     * @create: 2017年3月31日 下午11:18:57 xieyj
+     * @history:
+     */
+    public XN002501Res doWeiXinH5PayRemote(String fromUserId,
+            String fromOpenId, String toUserId, Long amount, EBizType bizType,
+            String fromBizNote, String toBizNote, String payGroup);
+
+    /**
+     * 支付宝支付
+     * @param fromUserId
+     * @param toUserId
+     * @param amount
+     * @param bizType
+     * @param fromBizNote
+     * @param toBizNote
+     * @param payGroup
+     * @return 
+     * @create: 2017年4月1日 上午11:48:35 xieyj
+     * @history:
+     */
+    public XN002510Res doAlipayRemote(String fromUserId, String toUserId,
             Long amount, EBizType bizType, String fromBizNote,
             String toBizNote, String payGroup);
 }

@@ -40,8 +40,11 @@ public class XN615020 extends AProcessor {
                 jewelAO.publishNextPeriods(jewelTemplateCode);
             }
             return true;
-        } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-            return jewelRecordAO.buyJewelByWX(req.getUserId(),
+        } else if (EPayType.WEIXIN_APP.getCode().equals(payType)) {
+            return jewelRecordAO.buyJewelByWxApp(req.getUserId(),
+                req.getJewelCode(), times, req.getIp());
+        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+            return jewelRecordAO.buyJewelByWxApp(req.getUserId(),
                 req.getJewelCode(), times, req.getIp());
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
             return jewelRecordAO.buyJewelByZFB(req.getUserId(),

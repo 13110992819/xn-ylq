@@ -24,6 +24,9 @@ public class User extends ABaseDO {
     // userId
     private String userId;
 
+    // openId
+    private String openId;
+
     // kind
     private String kind;
 
@@ -53,6 +56,14 @@ public class User extends ABaseDO {
 
     // 区(县)
     private String area;
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
 
     public String getUserReferee() {
         return userReferee;

@@ -1,5 +1,6 @@
 package com.cdkj.zhpay.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,10 +24,13 @@ import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.domain.Hzb;
+import com.cdkj.zhpay.domain.HzbMgift;
 import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.BooleanRes;
 import com.cdkj.zhpay.dto.res.XN002500Res;
+import com.cdkj.zhpay.dto.res.XN002501Res;
+import com.cdkj.zhpay.dto.res.XN615119Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
@@ -80,8 +84,8 @@ public class HzbAOImpl implements IHzbAO {
         // 购买摇钱树
         if (EPayType.YEFR.getCode().equals(payType)) {
             result = buyHzbFRPay(user, hzbTemplate);
-        } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-            result = buyHzbWXPay(userId, hzbTemplate);
+        } else if (EPayType.WEIXIN_APP.getCode().equals(payType)) {
+            result = buyHzbWxAppPay(userId, hzbTemplate);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
             result = buyHzbZFBPay(userId, hzbTemplate);
         }
@@ -102,8 +106,8 @@ public class HzbAOImpl implements IHzbAO {
         User user = userBO.getRemoteUser(userId);
         if (EPayType.YEFR.getCode().equals(payType)) {
             result = buyHzbYEPayCG(user, hzbTemplate);
-        } else if (EPayType.WEIXIN.getCode().equals(payType)) {
-            result = buyHzbWXPay(userId, hzbTemplate);
+        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+            result = buyHzbWxH5Pay(userId, hzbTemplate);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
             result = buyHzbZFBPay(userId, hzbTemplate);
         }
@@ -150,7 +154,7 @@ public class HzbAOImpl implements IHzbAO {
     }
 
     /** 
-     * 微信支付
+     * 微信app支付
      * @param userId
      * @param hzbTemplate
      * @param ip
@@ -159,16 +163,40 @@ public class HzbAOImpl implements IHzbAO {
      * @history: 
      */
     @Transactional
-    private XN002500Res buyHzbWXPay(String userId, HzbTemplate hzbTemplate) {
+    private XN002500Res buyHzbWxAppPay(String userId, HzbTemplate hzbTemplate) {
         // 生成支付组号
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
         // 落地本地系统消费记录，状态为未支付
         hzbBO.buyHzb(userId, hzbTemplate, payGroup);
         String systemUserId = userBO.getSystemUser(hzbTemplate.getSystemCode());
-        XN002500Res res = accountBO.doWeiXinPayRemote(userId, systemUserId,
+        XN002500Res res = accountBO.doWeiXinAppPayRemote(userId, systemUserId,
             hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买汇赚宝", "用户购买汇赚宝",
             payGroup);
+        return res;
+    }
+
+    /** 
+     * 微信h5支付
+     * @param userId
+     * @param hzbTemplate
+     * @param ip
+     * @return 
+     * @create: 2017年2月22日 下午4:43:17 xieyj
+     * @history: 
+     */
+    @Transactional
+    private XN002501Res buyHzbWxH5Pay(String userId, HzbTemplate hzbTemplate) {
+        User user = userBO.getRemoteUser(userId);
+        // 生成支付组号
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        // 落地本地系统消费记录，状态为未支付
+        hzbBO.buyHzb(userId, hzbTemplate, payGroup);
+        String systemUserId = userBO.getSystemUser(hzbTemplate.getSystemCode());
+        XN002501Res res = accountBO.doWeiXinH5PayRemote(userId,
+            user.getOpenId(), systemUserId, hzbTemplate.getPrice(),
+            EBizType.AJ_GMHZB, "购买汇赚宝", "用户购买汇赚宝", payGroup);
         return res;
     }
 
@@ -374,5 +402,47 @@ public class HzbAOImpl implements IHzbAO {
     @Override
     public void doResetRockNumDaily() {
         hzbBO.resetPeriodRockNum();
+    }
+
+    @Override
+    public XN615119Res doGetHzbTotalData(String userId) {
+        XN615119Res res = new XN615119Res();
+        List<Hzb> hzbList = hzbBO.queryHzbListByUser(userId);
+        Hzb hzb = null;
+        if (CollectionUtils.isNotEmpty(hzbList)) {
+            hzb = hzbList.get(0);
+        }
+        Date todayStart = DateUtil.getTodayStart();
+        Date todayEnd = DateUtil.getTodayEnd();
+        Date yesterdayEnd = DateUtil.getRelativeDate(todayStart, -1);
+        // 历史被摇一摇次数
+        Long historyYyTimes = hzbYyBO.getTotalHzbYyCount(null, yesterdayEnd,
+            hzb.getCode());
+        res.setHistoryYyTimes(historyYyTimes);
+        // 今日被摇一摇次数
+        Long todayYyTimes = hzbYyBO.getTotalHzbYyCount(todayStart, todayEnd,
+            hzb.getCode());
+        res.setTodayYyTimes(todayYyTimes);
+        // 总的摇一摇分成
+        Long yyTotalAmount = hzbYyBO.getTotalOwnerFcAmount(todayStart,
+            todayEnd, hzb.getCode());
+        res.setYyTotalAmount(yyTotalAmount);
+        // 历史发一发次数
+        Long historyMgiftTimes = hzbMgiftBO.getReceiveHzbMgiftCount(null,
+            yesterdayEnd, userId);
+        res.setHistoryHbTimes(historyMgiftTimes);
+        // 今日发一发次数
+        Long todayMgiftTimes = hzbMgiftBO.getReceiveHzbMgiftCount(todayStart,
+            todayEnd, userId);
+        res.setTodayHbTimes(todayMgiftTimes);
+        // 总的发一发福利
+        List<HzbMgift> hzbMgiftList = hzbMgiftBO.queryReceiveHzbMgift(null,
+            null, userId);
+        Long ffTotalAmount = 0L;
+        for (HzbMgift hzbMgift : hzbMgiftList) {
+            ffTotalAmount += hzbMgift.getOwnerAmount();
+        }
+        res.setFfTotalHbAmount(ffTotalAmount);
+        return res;
     }
 }

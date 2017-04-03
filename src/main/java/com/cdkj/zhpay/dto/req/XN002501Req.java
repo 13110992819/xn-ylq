@@ -9,15 +9,18 @@
 package com.cdkj.zhpay.dto.req;
 
 /** 
- * 微信APP支付请求接口，返回预付单信息
+ * 微信公众号支付请求接口，返回预付单信息
  * @author: haiqingzheng 
  * @since: 2016年12月23日 上午9:25:46 
  * @history:
  */
-public class XN002500Req {
+public class XN002501Req {
 
     // 付款方用户编号（必填）
     private String fromUserId;
+
+    // 付款方微信openId（必填）
+    private String fromOpenId;
 
     // 收款方用户编号（必填）
     private String toUserId;
@@ -54,6 +57,14 @@ public class XN002500Req {
 
     public void setFromUserId(String fromUserId) {
         this.fromUserId = fromUserId;
+    }
+
+    public String getFromOpenId() {
+        return fromOpenId;
+    }
+
+    public void setFromOpenId(String fromOpenId) {
+        this.fromOpenId = fromOpenId;
     }
 
     public String getToUserId() {
@@ -103,4 +114,5 @@ public class XN002500Req {
     public void setPayGroup(String payGroup) {
         this.payGroup = payGroup;
     }
+
 }

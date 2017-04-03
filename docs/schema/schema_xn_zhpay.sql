@@ -153,6 +153,8 @@ CREATE TABLE `tyqs_hzb_yy` (
   `yy_amount` bigint(20) DEFAULT NULL COMMENT '摇出金额',
   `user_id` varchar(32) DEFAULT NULL COMMENT '摇的人',
   `device_no` varchar(255) DEFAULT NULL COMMENT '设备编号',
+  `owner_fc_currency` varchar(32) DEFAULT NULL COMMENT '树主人分成币种',
+  `owner_fc_amount` bigint(20) DEFAULT NULL COMMENT '树主人分成金额',
   `create_datetime` datetime DEFAULT NULL COMMENT '产生时间',
   `company_code` varchar(32) DEFAULT NULL COMMENT '公司编号',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
@@ -215,13 +217,3 @@ CREATE TABLE `tsys_dict` (
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`) COMMENT '数据字典'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-
-
-
-
-
-
-

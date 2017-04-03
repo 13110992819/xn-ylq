@@ -56,7 +56,7 @@
 			<if test="status != null and status != '' ">
 				<choose>
 					<when test='status == "effect"'>
-						AND t.status in(1,2)
+						AND t.status in(1,91,92)
 					</when>
 				    <otherwise>
 						AND t.status = #{status}
@@ -276,6 +276,25 @@
 		,back_amount1 = #{backAmount1}
 		,back_amount2 = #{backAmount2}
 		,back_amount3 = #{backAmount3}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_yy_amount" parameterType="hzb">
+		UPDATE tyqs_hzb
+		SET
+		status = #{status}
+		,back_amount1 = #{backAmount1}
+		,back_amount2 = #{backAmount2}
+		,back_amount3 = #{backAmount3}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_yy_times" parameterType="hzb">
+		UPDATE tyqs_hzb
+		SET
+		status = #{status}
+		,period_rock_num = #{periodRockNum}
+		,total_rock_num = #{totalRockNum}
 		WHERE code = #{code}
 	</update>
 </mapper>

@@ -9,6 +9,8 @@
 		<result column="yy_amount" property="yyAmount" />
 		<result column="user_id" property="userId" />
 		<result column="device_no" property="deviceNo" />
+		<result column="owner_fc_currency" property="ownerFcCurrency" />
+		<result column="owner_fc_amount" property="ownerFcAmount" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
@@ -52,6 +54,8 @@
 		,t.yy_amount
 		,t.user_id
 		,t.device_no
+		,t.owner_fc_currency
+		,t.owner_fc_amount
 		,t.create_datetime
 		,t.company_code
 		,t.system_code
@@ -79,7 +83,10 @@
 		,yy_currency
 		,yy_amount
 		,user_id
+		
 		,device_no
+		,owner_fc_currency
+		,owner_fc_amount
 		,create_datetime
 		,company_code
 		,system_code
@@ -90,7 +97,10 @@
 		,#{yyCurrency}
 		,#{yyAmount}
 		,#{userId}
+		
 		,#{deviceNo}
+		,#{ownerFcCurrency}
+		,#{ownerFcAmount}
 		,#{createDatetime}
 		,#{companyCode}
 		,#{systemCode}

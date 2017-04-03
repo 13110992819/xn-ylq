@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.cdkj.zhpay.ao.IJewelRecordNumberAO;
 import com.cdkj.zhpay.bo.IJewelRecordNumberBO;
+import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.JewelRecordNumber;
 
 /**
@@ -23,5 +24,14 @@ public class JewelRecordNumberAOImpl implements IJewelRecordNumberAO {
     public List<JewelRecordNumber> queryJewelRecordNumberList(
             JewelRecordNumber condition) {
         return jewelRecordNumberBO.queryJewelRecordNumberList(condition);
+    }
+
+    /** 
+     * @see com.cdkj.zhpay.ao.IJewelRecordNumberAO#queryJewelRecordNumberPage(int, int, com.cdkj.zhpay.domain.JewelRecordNumber)
+     */
+    @Override
+    public Paginable<JewelRecordNumber> queryJewelRecordNumberPage(int start,
+            int limit, JewelRecordNumber condition) {
+        return jewelRecordNumberBO.getPaginable(start, limit, condition);
     }
 }

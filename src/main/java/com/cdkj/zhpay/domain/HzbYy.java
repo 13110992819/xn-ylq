@@ -32,6 +32,12 @@ public class HzbYy extends ABaseDO {
     // 设备编号
     private String deviceNo;
 
+    // 分成币种
+    private String ownerFcCurrency;
+
+    // 分成金额
+    private Long ownerFcAmount;
+
     // 生成时间
     private Date createDatetime;
 
@@ -152,5 +158,21 @@ public class HzbYy extends ABaseDO {
 
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getOwnerFcCurrency() {
+        return ownerFcCurrency;
+    }
+
+    public void setOwnerFcCurrency(String ownerFcCurrency) {
+        this.ownerFcCurrency = ownerFcCurrency;
+    }
+
+    public Long getOwnerFcAmount() {
+        return ownerFcAmount;
+    }
+
+    public void setOwnerFcAmount(Long ownerFcAmount) {
+        this.ownerFcAmount = ownerFcAmount;
     }
 }

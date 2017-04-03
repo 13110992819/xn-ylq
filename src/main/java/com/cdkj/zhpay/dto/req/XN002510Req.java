@@ -1,5 +1,5 @@
 /**
- * @Title XN802180Req.java 
+ * @Title XN802184Req.java 
  * @Package com.std.account.dto.req 
  * @Description 
  * @author haiqingzheng  
@@ -9,12 +9,12 @@
 package com.cdkj.zhpay.dto.req;
 
 /** 
- * 微信APP支付请求接口，返回预付单信息
+ * 支付宝APP支付请求接口，返回签名后的订单信息
  * @author: haiqingzheng 
  * @since: 2016年12月23日 上午9:25:46 
  * @history:
  */
-public class XN002500Req {
+public class XN002510Req {
 
     // 付款方用户编号（必填）
     private String fromUserId;
@@ -36,17 +36,6 @@ public class XN002500Req {
 
     // 支付组号(必填)
     private String payGroup;
-
-    // 回调地址(必填)
-    private String backUrl;
-
-    public String getBackUrl() {
-        return backUrl;
-    }
-
-    public void setBackUrl(String backUrl) {
-        this.backUrl = backUrl;
-    }
 
     public String getFromUserId() {
         return fromUserId;
@@ -103,4 +92,5 @@ public class XN002500Req {
     public void setPayGroup(String payGroup) {
         this.payGroup = payGroup;
     }
+
 }

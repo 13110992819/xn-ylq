@@ -56,5 +56,15 @@ public interface IHzbBO extends IPaginableBO<Hzb> {
      * @create: 2017年3月22日 下午8:18:00 myb858
      * @history:
      */
-    public void refreshYy(Hzb hzb, XN615120Res prize);
+
+    public void refreshYyAmount(Hzb hzb, XN615120Res prize);
+
+    /**
+     * 根据摇到奖品刷新摇钱树
+     * @param hzb
+     * @param prize 
+     * @create: 2017年3月22日 下午8:18:00 myb858
+     * @history:
+     */
+    public void refreshYyTimes(Hzb hzb, XN615120Res prize);
 }

@@ -1,5 +1,7 @@
 package com.cdkj.zhpay.bo;
 
+import java.util.Date;
+
 import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbYy;
@@ -18,8 +20,6 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      */
     public void checkYyGlobalRule(Hzb hzb, User yyUser, String deviceNo);
 
-    public void checkYyGlobalRule(Hzb hzb);
-
     public void checkYyGlobalRule(String systemCode, User yyUser,
             String deviceNo);
 
@@ -32,8 +32,9 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      * @create: 2017年3月22日 下午8:10:39 myb858
      * @history:
      */
+
     public String saveHzbYy(XN615120Res prize, User yyUser, Hzb hzb,
-            String deviceNo);
+            String deviceNo, String ownerFcCurrency, Long ownerFcAmount);
 
     /**
      * 菜狗摇一摇算法
@@ -50,6 +51,29 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      * @create: 2017年3月22日 下午8:29:44 myb858
      * @history:
      */
-    public XN615120Res calculatePrizeByZH(User yyUser);
 
+    public XN615120Res calculatePrizeByZH(Hzb hzb, User yyUser);
+
+    /**
+     * 获取某个时间段摇一摇次数
+     * @param dateStart
+     * @param dateEnd
+     * @param code
+     * @return 
+     * @create: 2017年4月3日 下午2:52:47 xieyj
+     * @history:
+     */
+    public Long getTotalHzbYyCount(Date dateStart, Date dateEnd, String hzbCode);
+
+    /**
+     * 获取树主人分成
+     * @param dateStart
+     * @param dateEnd
+     * @param hzbCode
+     * @return 
+     * @create: 2017年4月3日 下午4:49:31 xieyj
+     * @history:
+     */
+    public Long getTotalOwnerFcAmount(Date dateStart, Date dateEnd,
+            String hzbCode);
 }

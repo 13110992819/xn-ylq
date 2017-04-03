@@ -11,16 +11,21 @@ import org.springframework.stereotype.Component;
 import com.cdkj.zhpay.bo.IAccountBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.common.JsonUtil;
+import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.domain.Account;
 import com.cdkj.zhpay.dto.req.XN002000Req;
 import com.cdkj.zhpay.dto.req.XN002100Req;
 import com.cdkj.zhpay.dto.req.XN002500Req;
+import com.cdkj.zhpay.dto.req.XN002501Req;
+import com.cdkj.zhpay.dto.req.XN002510Req;
 import com.cdkj.zhpay.dto.res.PayBalanceRes;
 import com.cdkj.zhpay.dto.res.XN001400Res;
 import com.cdkj.zhpay.dto.res.XN002000Res;
 import com.cdkj.zhpay.dto.res.XN002500Res;
+import com.cdkj.zhpay.dto.res.XN002501Res;
+import com.cdkj.zhpay.dto.res.XN002510Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.ESystemCode;
@@ -88,7 +93,7 @@ public class AccountBOImpl implements IAccountBO {
     }
 
     @Override
-    public XN002500Res doWeiXinPayRemote(String fromUserId, String toUserId,
+    public XN002500Res doWeiXinAppPayRemote(String fromUserId, String toUserId,
             Long amount, EBizType bizType, String fromBizNote,
             String toBizNote, String payGroup) {
         // 获取微信APP支付信息
@@ -100,8 +105,42 @@ public class AccountBOImpl implements IAccountBO {
         req.setToBizNote(toBizNote);
         req.setTransAmount(String.valueOf(amount));
         req.setPayGroup(payGroup);
+        req.setBackUrl(PropertiesUtil.Config.PAY_BACK_URL);
         XN002500Res res = BizConnecter.getBizData("002500",
             JsonUtil.Object2Json(req), XN002500Res.class);
+        return res;
+    }
+
+    /**
+     * 微信H5支付
+     * @param fromUserId 来方用户
+     * @param fromOpenId 来方openId
+     * @param toUserId 去方用户
+     * @param amount 发生金额
+     * @param bizType 业务类型
+     * @param fromBizNote 来方说明
+     * @param toBizNote 去方说明
+     * @param payGroup 支付组号
+     * @return 
+     * @create: 2017年3月31日 下午5:44:32 xieyj
+     * @history:
+     */
+    @Override
+    public XN002501Res doWeiXinH5PayRemote(String fromUserId,
+            String fromOpenId, String toUserId, Long amount, EBizType bizType,
+            String fromBizNote, String toBizNote, String payGroup) {
+        // 获取微信APP支付信息
+        XN002501Req req = new XN002501Req();
+        req.setFromUserId(fromUserId);
+        req.setToUserId(toUserId);
+        req.setTransAmount(String.valueOf(amount));
+        req.setBizType(bizType.getCode());
+        req.setFromBizNote(fromBizNote);
+        req.setToBizNote(toBizNote);
+        req.setPayGroup(payGroup);
+        req.setBackUrl(PropertiesUtil.Config.PAY_BACK_URL);
+        XN002501Res res = BizConnecter.getBizData("002501",
+            JsonUtil.Object2Json(req), XN002501Res.class);
         return res;
     }
 
@@ -184,4 +223,21 @@ public class AccountBOImpl implements IAccountBO {
         return new PayBalanceRes(gxjlPrice, frPrice);
     }
 
+    @Override
+    public XN002510Res doAlipayRemote(String fromUserId, String toUserId,
+            Long amount, EBizType bizType, String fromBizNote,
+            String toBizNote, String payGroup) {
+        // 获取支付宝APP支付信息
+        XN002510Req req = new XN002510Req();
+        req.setFromUserId(fromUserId);
+        req.setToUserId(toUserId);
+        req.setBizType(bizType.getCode());
+        req.setFromBizNote(fromBizNote);
+        req.setToBizNote(toBizNote);
+        req.setTransAmount(String.valueOf(amount));
+        req.setPayGroup(payGroup);
+        XN002510Res res = BizConnecter.getBizData("002510",
+            JsonUtil.Object2Json(req), XN002510Res.class);
+        return res;
+    }
 }
