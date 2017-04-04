@@ -22,7 +22,6 @@ import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
-import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbMgift;
 import com.cdkj.zhpay.domain.HzbTemplate;
@@ -34,7 +33,6 @@ import com.cdkj.zhpay.dto.res.XN615119Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
-import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EHzbStatus;
 import com.cdkj.zhpay.enums.EHzbTemplateStatus;
 import com.cdkj.zhpay.enums.EPayType;
@@ -164,11 +162,8 @@ public class HzbAOImpl implements IHzbAO {
      */
     @Transactional
     private XN002500Res buyHzbWxAppPay(String userId, HzbTemplate hzbTemplate) {
-        // 生成支付组号
-        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
-            .getCode());
-        // 落地本地系统消费记录，状态为未支付
-        hzbBO.buyHzb(userId, hzbTemplate, payGroup);
+        // 生成支付组号,落地本地系统消费记录，状态为未支付
+        String payGroup = hzbBO.buyHzb(userId, hzbTemplate);
         String systemUserId = userBO.getSystemUser(hzbTemplate.getSystemCode());
         XN002500Res res = accountBO.doWeiXinAppPayRemote(userId, systemUserId,
             hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买汇赚宝", "用户购买汇赚宝",
@@ -188,11 +183,8 @@ public class HzbAOImpl implements IHzbAO {
     @Transactional
     private XN002501Res buyHzbWxH5Pay(String userId, HzbTemplate hzbTemplate) {
         User user = userBO.getRemoteUser(userId);
-        // 生成支付组号
-        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
-            .getCode());
-        // 落地本地系统消费记录，状态为未支付
-        hzbBO.buyHzb(userId, hzbTemplate, payGroup);
+        // 生成支付组号,落地本地系统消费记录，状态为未支付
+        String payGroup = hzbBO.buyHzb(userId, hzbTemplate);
         String systemUserId = userBO.getSystemUser(hzbTemplate.getSystemCode());
         XN002501Res res = accountBO.doWeiXinH5PayRemote(userId,
             user.getOpenId(), systemUserId, hzbTemplate.getPrice(),
@@ -202,7 +194,15 @@ public class HzbAOImpl implements IHzbAO {
 
     @Transactional
     private Object buyHzbZFBPay(String userId, HzbTemplate hzbTemplate) {
-        throw new BizException("XN000000", "暂不支持支付宝支付");
+        // 生成支付组号,落地本地系统消费记录，状态为未支付
+        String payGroup = hzbBO.buyHzb(userId, hzbTemplate);
+        String systemUserId = userBO.getSystemUser(hzbTemplate.getSystemCode());
+        // 资金划转开始--------------
+        // RMB调用支付宝渠道至系统
+        return accountBO.doAlipayRemote(userId, systemUserId,
+            hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买汇赚宝支付宝支付",
+            "购买汇赚宝支付宝支付", payGroup);
+        // 资金划转结束--------------
     }
 
     /**
@@ -237,7 +237,7 @@ public class HzbAOImpl implements IHzbAO {
     // 分成对象:购买用户_已购买汇赚宝的一级二级三级推荐人和所在辖区用户
     private void distributeAmount(String systemCode, String userId, Long price) {
         User ownerUser = userBO.getRemoteUser(userId);
-        // 用户分成
+        // C用户分成
         String cUserId = ownerUser.getUserReferee();
         if (StringUtils.isNotBlank(cUserId)) {
             User cUser = userBO.getRemoteUser(cUserId);

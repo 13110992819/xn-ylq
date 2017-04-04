@@ -56,9 +56,12 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     }
 
     @Override
-    public int buyHzb(String userId, HzbTemplate hzbTemplate, String payGroup) {
-        int count = 0;
+    public String buyHzb(String userId, HzbTemplate hzbTemplate) {
+        String payGroup = null;
         if (StringUtils.isNotBlank(userId)) {
+            // 生成支付组号
+            payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+                .getCode());
             Hzb data = new Hzb();
             String code = OrderNoGenerater.generateM(EGeneratePrefix.HZB
                 .getCode());
@@ -66,23 +69,23 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
             data.setUserId(userId);
             data.setTemplateCode(hzbTemplate.getCode());
             data.setPrice(hzbTemplate.getPrice());
-            data.setCurrency(hzbTemplate.getCurrency());
 
+            data.setCurrency(hzbTemplate.getCurrency());
             data.setPeriodRockNum(0);
             data.setTotalRockNum(0);
             data.setBackAmount1(0L);
             data.setBackAmount2(0L);
-            data.setBackAmount3(0L);
 
+            data.setBackAmount3(0L);
             Date date = new Date();
             data.setCreateDatetime(date);
             data.setStatus(EHzbStatus.TO_PAY.getCode());
             data.setPayGroup(payGroup);
             data.setCompanyCode(hzbTemplate.getCompanyCode());
             data.setSystemCode(hzbTemplate.getSystemCode());
-            count = hzbDAO.insert(data);
+            hzbDAO.insert(data);
         }
-        return count;
+        return payGroup;
     }
 
     @Override

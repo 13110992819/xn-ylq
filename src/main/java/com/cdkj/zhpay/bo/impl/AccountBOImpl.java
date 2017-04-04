@@ -236,6 +236,7 @@ public class AccountBOImpl implements IAccountBO {
         req.setToBizNote(toBizNote);
         req.setTransAmount(String.valueOf(amount));
         req.setPayGroup(payGroup);
+        req.setBackUrl(PropertiesUtil.Config.PAY_BACK_URL);
         XN002510Res res = BizConnecter.getBizData("002510",
             JsonUtil.Object2Json(req), XN002510Res.class);
         return res;

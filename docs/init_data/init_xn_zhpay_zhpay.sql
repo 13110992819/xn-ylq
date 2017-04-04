@@ -4,7 +4,7 @@ LIMIT 0, 10000
 
 -- Date: 2017-03-31 15:34
 */
-INSERT INTO `tyqs_hzb_template` (`code`,`name`,`pic`,`price`,`currency`,`period_rock_num`,`total_rock_num`,`back_amount1`,`back_amount2`,`back_amount3`,`status`,`updater`,`update_datetime`,`remark`,`company_code`,`company_code`,`system_code`) VALUES ('HT20170000000000001','汇赚宝模板','tree_big.png',600000,'CNY',100000,200000,0,0,0,'1','admin',now(),NULL,'CD-CZH000001','CD-CZH000001');
+INSERT INTO `tyqs_hzb_template` (`code`,`name`,`pic`,`price`,`currency`,`period_rock_num`,`total_rock_num`,`back_amount1`,`back_amount2`,`back_amount3`,`status`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('HT20170000000000001','汇赚宝模板','tree_big.png',600000,'CNY',1000,2000,0,0,0,'1','admin',now(),NULL,'CD-CZH000001','CD-CZH000001');
 
 /*
 -- Query: SELECT `type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code` FROM xn_zhpay.tsys_config
