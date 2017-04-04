@@ -14,6 +14,7 @@ import com.cdkj.zhpay.domain.User;
  * @history:
  */
 public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
+
     /**
      * 验证是否大于最大次数
      * @param user
@@ -24,8 +25,21 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
      */
     public void checkTimes(User user, Jewel jewel, Integer times);
 
+    /**
+     * 保存宝贝
+     * @param userId
+     * @param jewelCode
+     * @param times
+     * @param amount
+     * @param ip
+     * @param payGroup
+     * @param systemCode
+     * @return 
+     * @create: 2017年4月4日 下午4:36:57 xieyj
+     * @history:
+     */
     public String saveJewelRecord(String userId, String jewelCode,
-            Integer times, Long amount, String ip, String companyCode,
+            Integer times, Long amount, String ip, String payGroup,
             String systemCode);
 
     /**

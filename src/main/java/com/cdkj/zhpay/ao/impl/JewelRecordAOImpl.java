@@ -139,8 +139,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         // 购买记录落地
         Long amount = jewel.getFromAmount() * times;// 本次购买总金额
         String jewelRecordCode = jewelRecordBO.saveJewelRecord(userId,
-            jewelCode, times, amount, ip, jewel.getCompanyCode(),
-            jewel.getSystemCode());
+            jewelCode, times, amount, ip, null, jewel.getSystemCode());
         // 号码落地
         jewelRecordNumberBO
             .saveJewelRecordNumber(jewelRecordCode, jewel, times);
@@ -241,8 +240,10 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
 
         // 资金划转开始--------------
         // RMB调用支付宝渠道至商家
-        return accountBO.doAlipayRemote(user.getUserId(), systemUserId,
-            jewel.getToAmount(), EBizType.AJ_DUOBAO, "参与抽奖", "参与抽奖", payGroup);
+        return accountBO
+            .doAlipayRemote(user.getUserId(), systemUserId,
+                jewel.getToAmount(), EBizType.AJ_DUOBAO, "参与小目标", "参与小目标",
+                payGroup);
         // 资金划转结束--------------
     }
 }

@@ -28,7 +28,6 @@ public class XN615020 extends AProcessor {
     @Override
     public synchronized Object doBusiness() throws BizException {
         Integer times = StringValidater.toInteger(req.getTimes());
-
         // 开始业务处理
         String payType = req.getPayType();
         if (EPayType.YEFR.getCode().equals(payType)) {
