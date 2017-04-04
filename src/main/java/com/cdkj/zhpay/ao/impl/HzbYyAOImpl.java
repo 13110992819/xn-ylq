@@ -108,72 +108,71 @@ public class HzbYyAOImpl implements IHzbYyAO {
         String currency = prize.getYyCurrency();
         Long ownerFcAmount = 0L;
         if (ECurrency.HBB.getCode().equals(currency)) {
-            // 促发分销规则
-            ownerFcAmount = Long.valueOf(fcAmount(yyUser));
+            // 促发摇一摇分销规则
+            ownerFcAmount = Long.valueOf(fcAmount(hzb.getUserId()));
         }
         // 4、记录摇到结果
         hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo,
             ECurrency.HBYJ.getCode(), ownerFcAmount);
-        // 兑现摇的人
-        ECurrency ecurrency = ECurrency.getECurrency(currency);
+        // 5、兑现摇的人
+        ECurrency yyEurrency = ECurrency.getECurrency(currency);
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
-            yyUser.getUserId(), ecurrency, prize.getYyAmount(),
+            yyUser.getUserId(), yyEurrency, prize.getYyAmount(),
             EBizType.AJ_YYJL, "摇一摇奖励发放", "摇一摇奖励获得");
         return prize;
     }
 
     // 汇赚宝分成:
     // 1、数据准备
-    // 2、计算分成:针对用户_已购买汇赚宝的一级二级推荐人和所在辖区用户
-    private Long fcAmount(User yyUser) {
-        // 分销规则
+    // 2、计算分成:针对用户：树主人已经树主人已购买汇赚宝的一级二级推荐人和所在辖区用户
+    private Long fcAmount(String hzbOwner) {
         Map<String, String> rateMap = sysConfigBO
             .getConfigsMap(ESystemCode.ZHPAY.getCode());
-        // C用户摇一摇分成
-        String camount = rateMap.get(SysConstants.YY_CUSER);
-        userFcAmount(yyUser.getUserId(), camount);
-        // 树主人分成
+        // C用户树主人分成
+        String cAmount = rateMap.get(SysConstants.YY_CUSER);
+        userFcAmount(hzbOwner, cAmount);
         Long ownerfcAmount = Double.valueOf(
-            Double.valueOf(camount) * SysConstants.AMOUNT_RADIX).longValue();
-        // B用户摇一摇分成
-        String bUserId = yyUser.getUserReferee();
-        boolean bcheck = hzbBO.isBuyHzb(yyUser.getUserId());
+            Double.valueOf(cAmount) * SysConstants.AMOUNT_RADIX).longValue();
+        // B用户分成
+        User cHzbUser = userBO.getRemoteUser(hzbOwner);
+        String bUserId = cHzbUser.getUserReferee();
+        boolean bcheck = hzbBO.isBuyHzb(bUserId);
         if (StringUtils.isNotBlank(bUserId) && bcheck) {
-            String bamount = rateMap.get(SysConstants.YY_BUSER);
-            userFcAmount(bUserId, bamount);
-            // A用户摇一摇分成
+            String bAmount = rateMap.get(SysConstants.YY_BUSER);
+            userFcAmount(bUserId, bAmount);
+            // A用户分成
             User bUser = userBO.getRemoteUser(bUserId);
             String aUserId = bUser.getUserReferee();
             boolean acheck = hzbBO.isBuyHzb(aUserId);
             if (StringUtils.isNotBlank(aUserId) && acheck) {
-                String aamount = rateMap.get(SysConstants.YY_AUSER);
-                userFcAmount(aUserId, aamount);
+                String aAmount = rateMap.get(SysConstants.YY_AUSER);
+                userFcAmount(aUserId, aAmount);
             }
         }
-        // 辖区分成
 
-        if (StringUtils.isNotBlank(yyUser.getProvince())) {
+        // 辖区分成
+        if (StringUtils.isNotBlank(cHzbUser.getProvince())) {
             // 省合伙人
-            User provinceUser = userBO.getPartner(yyUser.getProvince(), null,
+            User provinceUser = userBO.getPartner(cHzbUser.getProvince(), null,
                 null);
             if (provinceUser != null) {
-                areaFcAmount(rateMap, yyUser, provinceUser,
+                areaFcAmount(rateMap, cHzbUser, provinceUser,
                     SysConstants.YY_PROVINCE, "省");
             }
-            if (StringUtils.isNotBlank(yyUser.getCity())) {
+            if (StringUtils.isNotBlank(cHzbUser.getCity())) {
                 // 市合伙人
-                User cityUser = userBO.getPartner(yyUser.getProvince(),
-                    yyUser.getCity(), null);
+                User cityUser = userBO.getPartner(cHzbUser.getProvince(),
+                    cHzbUser.getCity(), null);
                 if (cityUser != null) {
-                    areaFcAmount(rateMap, yyUser, cityUser,
+                    areaFcAmount(rateMap, cHzbUser, cityUser,
                         SysConstants.YY_CITY, "市");
                 }
-                if (StringUtils.isNotBlank(yyUser.getArea())) {
+                if (StringUtils.isNotBlank(cHzbUser.getArea())) {
                     // 县合伙人
-                    User areaRes = userBO.getPartner(yyUser.getProvince(),
-                        yyUser.getCity(), yyUser.getArea());
+                    User areaRes = userBO.getPartner(cHzbUser.getProvince(),
+                        cHzbUser.getCity(), cHzbUser.getArea());
                     if (areaRes != null) {
-                        areaFcAmount(rateMap, yyUser, areaRes,
+                        areaFcAmount(rateMap, cHzbUser, areaRes,
                             SysConstants.YY_AREA, "县");
                     }
                 }
@@ -192,13 +191,13 @@ public class HzbYyAOImpl implements IHzbYyAO {
             "摇一摇分成获得");
     }
 
-    private void areaFcAmount(Map<String, String> rateMap, User yyUser,
+    private void areaFcAmount(Map<String, String> rateMap, User hzbUser,
             User areaUser, String sysConstants, String remark) {
         // 分销规则
         Double fc = Double.valueOf(rateMap.get(sysConstants));
         Long fcAmount = Double.valueOf(fc * SysConstants.AMOUNT_RADIX)
             .longValue();
-        String toBizNote = UserUtil.getUserMobile(yyUser.getMobile())
+        String toBizNote = UserUtil.getUserMobile(hzbUser.getMobile()) + "的汇赚宝"
                 + EBizType.AJ_YYFC.getValue();
         String fromBizNote = toBizNote + "," + remark + "合伙人"
                 + UserUtil.getUserMobile(areaUser.getMobile()) + "分成";

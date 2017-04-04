@@ -15,10 +15,10 @@ import com.cdkj.zhpay.dto.req.XN001400Req;
 import com.cdkj.zhpay.dto.req.XN001403Req;
 import com.cdkj.zhpay.dto.res.XN001400Res;
 import com.cdkj.zhpay.dto.res.XN001401Res;
+import com.cdkj.zhpay.dto.res.XN001403Res;
 import com.cdkj.zhpay.enums.ESysUser;
 import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.enums.EUserKind;
-import com.cdkj.zhpay.enums.EUserStatus;
 import com.cdkj.zhpay.exception.BizException;
 import com.cdkj.zhpay.http.BizConnecter;
 import com.cdkj.zhpay.http.JsonUtils;
@@ -73,11 +73,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         String jsonStr = BizConnecter.getBizData("001403",
             JsonUtils.object2Json(req));
         Gson gson = new Gson();
-        List<XN001401Res> list = gson.fromJson(jsonStr,
-            new TypeToken<List<XN001401Res>>() {
+        List<XN001403Res> list = gson.fromJson(jsonStr,
+            new TypeToken<List<XN001403Res>>() {
             }.getType());
         if (CollectionUtils.isNotEmpty(list)) {
-            for (XN001401Res res : list) {
+            for (XN001403Res res : list) {
                 User user = new User();
                 user.setUserId(res.getUserId());
                 user.setLoginName(res.getLoginName());
@@ -104,7 +104,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         req.setCity(city);
         req.setArea(area);
         req.setKind(EUserKind.Partner.getCode());
-        req.setStatus(EUserStatus.NORMAL.getCode());
         req.setSystemCode(ESystemCode.ZHPAY.getCode());
         XN001401Res result = null;
         String jsonStr = BizConnecter.getBizData("001403",
