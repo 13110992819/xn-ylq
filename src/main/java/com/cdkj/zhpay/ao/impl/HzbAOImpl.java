@@ -123,13 +123,17 @@ public class HzbAOImpl implements IHzbAO {
     @Transactional
     private Object buyHzbFRPay(User user, HzbTemplate hzbTemplate) {
         // 汇赚宝购买成功
-        Hzb hzb = hzbBO.saveHzb(user, hzbTemplate);// 人民币=分润
+        Hzb hzb = hzbBO.saveHzb(user, hzbTemplate);
         // 产生红包
         hzbMgiftBO.generateHzbMgift(hzb, DateUtil.getTodayStart());
-        // 单个币种资金划转
+        // 人民币兑分润比例
+        Double cny2frRate = accountBO.getExchangeRateRemote(ECurrency.FRB);
+        // 人民币兑分润金额
+        Long frPrice = Double.valueOf(cny2frRate * hzbTemplate.getPrice())
+            .longValue();
         accountBO.doTransferAmountRemote(user.getUserId(),
-            ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB,
-            hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买汇赚宝",
+            ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB, frPrice,
+            EBizType.AJ_GMHZB, "购买汇赚宝",
             UserUtil.getUserMobile(user.getMobile()) + "购买汇赚宝");
         // 分销规则
         distributeAmount(hzbTemplate.getSystemCode(), user.getUserId(),

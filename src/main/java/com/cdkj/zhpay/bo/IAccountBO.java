@@ -1,8 +1,6 @@
 package com.cdkj.zhpay.bo;
 
 import com.cdkj.zhpay.domain.Account;
-import com.cdkj.zhpay.dto.res.PayBalanceRes;
-import com.cdkj.zhpay.dto.res.XN001400Res;
 import com.cdkj.zhpay.dto.res.XN002500Res;
 import com.cdkj.zhpay.dto.res.XN002501Res;
 import com.cdkj.zhpay.dto.res.XN002510Res;
@@ -27,6 +25,15 @@ public interface IAccountBO {
     public Account getRemoteAccount(String userId, ECurrency currency);
 
     /**
+     * 获取虚拟币的价值：1人民币等于多少虚拟币
+     * @param currency
+     * @return 
+     * @create: 2017年4月4日 下午7:38:14 xieyj
+     * @history:
+     */
+    public Double getExchangeRateRemote(ECurrency currency);
+
+    /**
      * 根据用户编号进行账户资金划转
      * @param fromUserId
      * @param toUserId
@@ -41,32 +48,6 @@ public interface IAccountBO {
     public void doTransferAmountRemote(String fromUserId, String toUserId,
             ECurrency currency, Long amount, EBizType bizType,
             String fromBizNote, String toBizNote);
-
-    /**
-     * 检查余额是否足够支付
-     * @param systemCode
-     * @param fromUserId
-     * @param toUserId
-     * @param price 
-     * @create: 2017年1月11日 上午10:50:05 xieyj
-     * @history:
-     */
-    public void checkBalanceAmount(String userId, Long price);
-
-    /**
-     * 余额支付
-     * @param systemCode
-     * @param fromUserRes
-     * @param toUserId
-     * @param price
-     * @param bizType
-     * @return 
-     * @create: 2017年2月25日 下午4:35:16 xieyj
-     * @history:
-     */
-    public PayBalanceRes doBalancePay(String systemCode,
-            XN001400Res fromUserRes, String toUserId, Long price,
-            EBizType bizType);
 
     /**
      * 微信app支付
