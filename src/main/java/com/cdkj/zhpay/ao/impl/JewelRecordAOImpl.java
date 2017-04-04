@@ -211,7 +211,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         String systemUserId = userBO.getSystemUser(jewel.getSystemCode());
         XN002501Res res = accountBO.doWeiXinH5PayRemote(user.getUserId(),
             user.getOpenId(), systemUserId, jewel.getFromAmount() * times,
-            EBizType.AJ_DUOBAO, "参与小目标", "用户参与小目标", payGroup);
+            EBizType.AJ_DUOBAO, "参与夺宝", "用户参与夺宝", payGroup);
         return res;
     }
 
@@ -240,10 +240,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
 
         // 资金划转开始--------------
         // RMB调用支付宝渠道至商家
-        return accountBO
-            .doAlipayRemote(user.getUserId(), systemUserId,
-                jewel.getToAmount(), EBizType.AJ_DUOBAO, "参与小目标", "参与小目标",
-                payGroup);
+        return accountBO.doAlipayRemote(user.getUserId(), systemUserId,
+            jewel.getToAmount(), EBizType.AJ_DUOBAO, "参与小目标", "用户参与小目标",
+            payGroup);
         // 资金划转结束--------------
     }
 }

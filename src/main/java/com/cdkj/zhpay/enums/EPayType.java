@@ -7,7 +7,7 @@ package com.cdkj.zhpay.enums;
  */
 public enum EPayType {
     YEFR("1", "余额/分润支付"), WEIXIN_APP("2", "微信APP"), WEIXIN_H5("5", "微信H5"), ALIPAY(
-            "3", "支付宝");
+            "3", "支付宝"), INTEGRAL("90", "单一虚拟币支付");
 
     EPayType(String code, String value) {
         this.code = code;

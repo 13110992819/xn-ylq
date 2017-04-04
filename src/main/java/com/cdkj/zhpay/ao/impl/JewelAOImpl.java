@@ -26,7 +26,6 @@ import com.cdkj.zhpay.enums.ECurrency;
 import com.cdkj.zhpay.enums.EJewelRecordStatus;
 import com.cdkj.zhpay.enums.EJewelStatus;
 import com.cdkj.zhpay.enums.EJewelTemplateStatus;
-import com.cdkj.zhpay.exception.BizException;
 
 /**
  * @author: xieyj 
@@ -79,10 +78,10 @@ public class JewelAOImpl implements IJewelAO {
     public void publishNextPeriods(String templateCode) {
         JewelTemplate jewelTemplate = jewelTemplateBO
             .getJewelTemplate(templateCode);
+        // 模板必须属于上架状态
         if (!EJewelTemplateStatus.PUTON.getCode().equals(
             jewelTemplate.getStatus())) {
-            // 模板必须属于上架状态
-            throw new BizException("xn0000", "模板不处于上架状态，不能发布标的");
+            return;
         }
         // 如果没有正在募集中的宝贝,发布新一期
         if (!jewelBO.isExist(templateCode, EJewelStatus.RUNNING)) {

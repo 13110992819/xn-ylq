@@ -30,7 +30,7 @@ public class XN615020 extends AProcessor {
         Integer times = StringValidater.toInteger(req.getTimes());
         // 开始业务处理
         String payType = req.getPayType();
-        if (EPayType.YEFR.getCode().equals(payType)) {
+        if (EPayType.INTEGRAL.getCode().equals(payType)) {
             boolean isManBiao = jewelRecordAO.buyJewelByYE(req.getUserId(),
                 req.getJewelCode(), times, req.getIp());
             if (isManBiao) {
