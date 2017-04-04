@@ -12,7 +12,7 @@ import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.req.XN001400Req;
-import com.cdkj.zhpay.dto.req.XN001401Req;
+import com.cdkj.zhpay.dto.req.XN001403Req;
 import com.cdkj.zhpay.dto.res.XN001400Res;
 import com.cdkj.zhpay.dto.res.XN001401Res;
 import com.cdkj.zhpay.enums.ESysUser;
@@ -53,6 +53,9 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setMobile(res.getMobile());
         user.setIdentityFlag(res.getIdentityFlag());
         user.setUserReferee(res.getUserReferee());
+        user.setProvince(res.getProvince());
+        user.setCity(res.getCity());
+        user.setArea(res.getArea());
         return user;
 
     }
@@ -61,12 +64,13 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     public List<User> queryRemoteUserList(String province, String city,
             String area, EUserKind kind) {
         List<User> result = new ArrayList<User>();
-        XN001401Req req = new XN001401Req();
+        XN001403Req req = new XN001403Req();
         req.setProvince(province);
         req.setCity(city);
         req.setArea(area);
         req.setKind(kind.getCode());
-        String jsonStr = BizConnecter.getBizData("001401",
+        req.setSystemCode(ESystemCode.ZHPAY.getCode());
+        String jsonStr = BizConnecter.getBizData("001403",
             JsonUtils.object2Json(req));
         Gson gson = new Gson();
         List<XN001401Res> list = gson.fromJson(jsonStr,
@@ -95,14 +99,15 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         } else if (StringUtils.isBlank(area)) {
             area = city;
         }
-        XN001401Req req = new XN001401Req();
+        XN001403Req req = new XN001403Req();
         req.setProvince(province);
         req.setCity(city);
         req.setArea(area);
         req.setKind(EUserKind.Partner.getCode());
         req.setStatus(EUserStatus.NORMAL.getCode());
+        req.setSystemCode(ESystemCode.ZHPAY.getCode());
         XN001401Res result = null;
-        String jsonStr = BizConnecter.getBizData("001401",
+        String jsonStr = BizConnecter.getBizData("001403",
             JsonUtils.object2Json(req));
         Gson gson = new Gson();
         List<XN001401Res> list = gson.fromJson(jsonStr,

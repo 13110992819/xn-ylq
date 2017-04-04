@@ -46,60 +46,23 @@ public class XN001400Res {
     // 是否绑定银行卡
     private String bankcardFlag;
 
-    // 公司编号
-    private String companyCode;
-
-    // 关注数
-    private String totalFollowNum;
-
-    // 粉丝数
-    private String totalFansNum;
-
-    // 系统编号
-    private String systemCode;
-
     // 实名认证
     private String identityFlag;
 
-    public String getIdentityFlag() {
-        return identityFlag;
-    }
+    // 省
+    private String province;
 
-    public void setIdentityFlag(String identityFlag) {
-        this.identityFlag = identityFlag;
-    }
+    // 市区
+    private String city;
 
-    public String getNickname() {
-        return nickname;
-    }
+    // 区(县)
+    private String area;
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
+    // 公司编号
+    private String companyCode;
 
-    public String getIdKind() {
-        return idKind;
-    }
-
-    public void setIdKind(String idKind) {
-        this.idKind = idKind;
-    }
-
-    public String getIdNo() {
-        return idNo;
-    }
-
-    public void setIdNo(String idNo) {
-        this.idNo = idNo;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
+    // 系统编号
+    private String systemCode;
 
     public String getUserId() {
         return userId;
@@ -123,6 +86,22 @@ public class XN001400Res {
 
     public void setLoginName(String loginName) {
         this.loginName = loginName;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getPhoto() {
@@ -149,6 +128,46 @@ public class XN001400Res {
         this.level = level;
     }
 
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getUserReferee() {
+        return userReferee;
+    }
+
+    public void setUserReferee(String userReferee) {
+        this.userReferee = userReferee;
+    }
+
+    public String getIdKind() {
+        return idKind;
+    }
+
+    public void setIdKind(String idKind) {
+        this.idKind = idKind;
+    }
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
+    }
+
     public String getTradepwdFlag() {
         return tradepwdFlag;
     }
@@ -165,28 +184,36 @@ public class XN001400Res {
         this.bankcardFlag = bankcardFlag;
     }
 
-    public String getKind() {
-        return kind;
+    public String getIdentityFlag() {
+        return identityFlag;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setIdentityFlag(String identityFlag) {
+        this.identityFlag = identityFlag;
     }
 
-    public String getUserReferee() {
-        return userReferee;
+    public String getProvince() {
+        return province;
     }
 
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
-    public String getRealName() {
-        return realName;
+    public String getCity() {
+        return city;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 
     public String getCompanyCode() {
@@ -195,22 +222,6 @@ public class XN001400Res {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
-    }
-
-    public String getTotalFollowNum() {
-        return totalFollowNum;
-    }
-
-    public void setTotalFollowNum(String totalFollowNum) {
-        this.totalFollowNum = totalFollowNum;
-    }
-
-    public String getTotalFansNum() {
-        return totalFansNum;
-    }
-
-    public void setTotalFansNum(String totalFansNum) {
-        this.totalFansNum = totalFansNum;
     }
 
     public String getSystemCode() {

@@ -164,10 +164,11 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
     // 随机产生金额
     private Long doGeneralAmount(String systemCode) {
         Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
+        // 摇一摇最小可等于，最大值小于
         Double yyAmountMin = Double.valueOf(rateMap
             .get(SysConstants.YY_AMOUNT_MIN));
         Double yyAmountMax = Double.valueOf(rateMap
-            .get(SysConstants.YY_AMOUNT_MAX)) + 1;
+            .get(SysConstants.YY_AMOUNT_MAX));
         // 取随机金额
         Double randAmount = yyAmountMin + (yyAmountMax - yyAmountMin)
                 * Math.random();

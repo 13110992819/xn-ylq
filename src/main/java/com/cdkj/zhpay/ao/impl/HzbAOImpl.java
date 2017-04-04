@@ -240,7 +240,7 @@ public class HzbAOImpl implements IHzbAO {
         // 用户分成
         String cUserId = ownerUser.getUserReferee();
         if (StringUtils.isNotBlank(cUserId)) {
-            User cUser = userBO.getRemoteUser(userId);
+            User cUser = userBO.getRemoteUser(cUserId);
             boolean cHzbResult = hzbBO.isBuyHzb(cUserId);
             if (cHzbResult) {
                 userFcAmount(cUser, ownerUser, SysConstants.HZB_CUSER, price);

@@ -1,6 +1,6 @@
 package com.cdkj.zhpay.dto.req;
 
-public class XN001401Req {
+public class XN001403Req {
     // 省
     private String province;
 
@@ -15,6 +15,17 @@ public class XN001401Req {
 
     // 状态
     private String status;
+
+    // 系统编号
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
 
     public String getStatus() {
         return status;
