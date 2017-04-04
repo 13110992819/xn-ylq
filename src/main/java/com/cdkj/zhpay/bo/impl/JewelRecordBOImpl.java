@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.cdkj.zhpay.bo.IJewelRecordBO;
 import com.cdkj.zhpay.bo.IJewelRecordNumberBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
+import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Page;
 import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
@@ -42,6 +43,9 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
 
     @Autowired
     private IJewelRecordNumberBO jewelRecordNumberBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     public String saveJewelRecord(String userId, String jewelCode,
@@ -193,6 +197,12 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
         List<Jewel> dataList = jewelRecordDAO.selectMyJewelList(condition,
             page.getStart(), page.getPageSize());
         page.setList(dataList);
+        for (Jewel jewel : dataList) {
+            if(StringUtils.isNotBlank(jewel.getWinUser())){
+                User user = userBO.getRemoteUser(jewel.getWinUser());
+                jewel.setUser(user);
+            }
+        }
         return page;
     }
 
