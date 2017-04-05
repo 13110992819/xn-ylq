@@ -187,7 +187,6 @@ CREATE TABLE `tyqs_hzb_mgift` (
   PRIMARY KEY (`code`) COMMENT '定向红包'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 DROP TABLE IF EXISTS `tsys_config`;
 CREATE TABLE `tsys_config` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
