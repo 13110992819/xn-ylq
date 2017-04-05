@@ -49,8 +49,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
 
     @Override
     public String saveJewelRecord(String userId, String jewelCode,
-            Integer times, Long amount, String ip, String payGroup,
-            String systemCode) {
+            Integer times, Long amount, String ip, String systemCode) {
         String code = null;
         if (StringUtils.isNotBlank(userId)) {
             JewelRecord data = new JewelRecord();
@@ -67,13 +66,42 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             data.setStatus(EJewelRecordStatus.LOTTERY.getCode());
             data.setPayAmount(amount);
             data.setPayDatetime(DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7));
+            data.setPayGroup(null);
+
+            data.setCompanyCode(systemCode);
+            data.setSystemCode(systemCode);
+            jewelRecordDAO.insert(data);
+        }
+        return code;
+    }
+
+    @Override
+    public String saveJewelRecord(String userId, String jewelCode,
+            Integer times, Long amount, String ip, String payGroup,
+            String systemCode) {
+        String code = null;
+        if (StringUtils.isNotBlank(userId)) {
+            JewelRecord data = new JewelRecord();
+            Date now = new Date();
+            code = OrderNoGenerater.generateM(EGeneratePrefix.JEWEL_RECORD
+                .getCode());
+            data.setCode(code);
+            data.setUserId(userId);
+            data.setJewelCode(jewelCode);
+            data.setInvestDatetime(now);
+            data.setTimes(times);
+
+            data.setIp(ip);
+            data.setStatus(EJewelRecordStatus.TO_PAY.getCode());
+            data.setPayAmount(amount);
+            data.setPayDatetime(DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7));
             data.setPayGroup(payGroup);
 
             data.setCompanyCode(systemCode);
             data.setSystemCode(systemCode);
             jewelRecordDAO.insert(data);
         }
-        return payGroup;
+        return code;
     }
 
     @Override
@@ -198,7 +226,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
             page.getStart(), page.getPageSize());
         page.setList(dataList);
         for (Jewel jewel : dataList) {
-            if(StringUtils.isNotBlank(jewel.getWinUser())){
+            if (StringUtils.isNotBlank(jewel.getWinUser())) {
                 User user = userBO.getRemoteUser(jewel.getWinUser());
                 jewel.setUser(user);
             }
@@ -215,8 +243,12 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
         JewelRecordNumber condition = new JewelRecordNumber();
         condition.setJewelCode(jewelCode);
         condition.setNumber(luckyNumber);
-        JewelRecordNumber jewelRecordNumber = jewelRecordNumberBO
-            .queryJewelRecordNumberList(condition).get(0);
+        List<JewelRecordNumber> jewelRecordNumberList = jewelRecordNumberBO
+            .queryJewelRecordNumberList(condition);
+        JewelRecordNumber jewelRecordNumber = null;
+        if (CollectionUtils.isNotEmpty(jewelRecordNumberList)) {
+            jewelRecordNumber = jewelRecordNumberList.get(0);
+        }
         JewelRecord jrCondition = new JewelRecord();
         jrCondition.setCode(jewelRecordNumber.getRecordCode());
         return jewelRecordDAO.select(jrCondition);

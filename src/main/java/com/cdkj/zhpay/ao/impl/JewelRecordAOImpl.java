@@ -131,6 +131,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
             String ip) {
         // 入参业务检查
         Jewel jewel = jewelBO.getJewel(jewelCode);
+        if (ECurrency.CNY.getCode().equals(jewel.getFromCurrency())) {
+            throw new BizException("xn0000", "购买币种是人民币，请使用微信或者支付宝支付");
+        }
         if (!EJewelStatus.RUNNING.getCode().equals(jewel.getStatus())) {
             throw new BizException("xn0000", "夺宝标的不处于募集中状态，不能进行购买操作");
         }
@@ -139,7 +142,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         // 购买记录落地
         Long amount = jewel.getFromAmount() * times;// 本次购买总金额
         String jewelRecordCode = jewelRecordBO.saveJewelRecord(userId,
-            jewelCode, times, amount, ip, null, jewel.getSystemCode());
+            jewelCode, times, amount, ip, jewel.getSystemCode());
         // 号码落地
         jewelRecordNumberBO
             .saveJewelRecordNumber(jewelRecordCode, jewel, times);

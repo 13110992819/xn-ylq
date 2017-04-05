@@ -26,7 +26,7 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
     public void checkTimes(User user, Jewel jewel, Integer times);
 
     /**
-     * 保存宝贝
+     * 保存宝贝(余额支付)
      * @param userId
      * @param jewelCode
      * @param times
@@ -36,6 +36,22 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
      * @param systemCode
      * @return 
      * @create: 2017年4月4日 下午4:36:57 xieyj
+     * @history:
+     */
+    public String saveJewelRecord(String userId, String jewelCode,
+            Integer times, Long amount, String ip, String systemCode);
+
+    /**
+     * 保存宝贝(第三方支付)
+     * @param userId
+     * @param jewelCode
+     * @param times
+     * @param amount
+     * @param ip
+     * @param payGroup
+     * @param systemCode
+     * @return 
+     * @create: 2017年4月5日 下午2:33:13 xieyj
      * @history:
      */
     public String saveJewelRecord(String userId, String jewelCode,

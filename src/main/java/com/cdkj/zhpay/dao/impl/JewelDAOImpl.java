@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.dao.IJewelDAO;
 import com.cdkj.zhpay.dao.base.support.AMybatisTemplate;
 import com.cdkj.zhpay.domain.Jewel;
@@ -30,28 +29,24 @@ public class JewelDAOImpl extends AMybatisTemplate implements IJewelDAO {
 
     @Override
     public Jewel select(Jewel condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.select(NAMESPACE.concat("select_jewel"), condition,
             Jewel.class);
     }
 
     @Override
     public Long selectTotalCount(Jewel condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectTotalCount(NAMESPACE.concat("select_jewel_count"),
             condition);
     }
 
     @Override
     public List<Jewel> selectList(Jewel condition) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_jewel"), condition,
             Jewel.class);
     }
 
     @Override
     public List<Jewel> selectList(Jewel condition, int start, int count) {
-        condition.setUserDB(PropertiesUtil.Config.USER_DB);
         return super.selectList(NAMESPACE.concat("select_jewel"), start, count,
             condition, Jewel.class);
     }
