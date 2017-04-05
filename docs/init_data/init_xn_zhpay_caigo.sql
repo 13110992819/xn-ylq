@@ -25,7 +25,7 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('M','dayNumber','5','admin',now(),'红包主人每天红包数','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('M','hzbOwnerCurrency','CGB','admin',now(),'红包主人得到币种','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('M','hzbOwnerAmount','5','admin',now(),'红包主人得到金额','CD-CCG000007','CD-CCG000007');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('M','hzbReceiveCurrency','XNB','admin',now(),'红包金额币种','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('M','hzbReceiveCurrency','CGJF','admin',now(),'红包金额币种','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('M','hzbReceiveAmount','5','admin',now(),'红包金额','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('M','dayReceiveNumber','1','admin',now(),'单人每天红包领取数量','CD-CCG000007','CD-CCG000007');
 /*
