@@ -127,12 +127,12 @@ public class HzbAOImpl implements IHzbAO {
         // 产生红包
         hzbMgiftBO.generateHzbMgift(hzb, DateUtil.getTodayStart());
         // 人民币兑分润比例
-        Double cny2frRate = accountBO.getExchangeRateRemote(ECurrency.FRB);
+        Double cny2frRate = accountBO.getExchangeRateRemote(ECurrency.ZH_FRB);
         // 人民币兑分润金额
         Long frPrice = Double.valueOf(cny2frRate * hzbTemplate.getPrice())
             .longValue();
         accountBO.doTransferAmountRemote(user.getUserId(),
-            ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.FRB, frPrice,
+            ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.ZH_FRB, frPrice,
             EBizType.AJ_GMHZB, "购买汇赚宝",
             UserUtil.getUserMobile(user.getMobile()) + "购买汇赚宝");
         // 分销规则
@@ -313,7 +313,7 @@ public class HzbAOImpl implements IHzbAO {
             String toBizNote = UserUtil.getUserMobile(ownerUser.getMobile())
                     + EBizType.AJ_GMHZBFC.getValue();
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
-                fcUser.getUserId(), ECurrency.FRB, transAmount,
+                fcUser.getUserId(), ECurrency.ZH_FRB, transAmount,
                 EBizType.AJ_GMHZBFC, fromBizNote, toBizNote);
         }
     }
@@ -331,7 +331,7 @@ public class HzbAOImpl implements IHzbAO {
             String toBizNote = UserUtil.getUserMobile(ownerUser.getMobile())
                     + EBizType.AJ_GMHZBFC.getValue() + "," + remark + "合伙人分成";
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
-                areaUser.getUserId(), ECurrency.FRB, transAmount,
+                areaUser.getUserId(), ECurrency.ZH_FRB, transAmount,
                 EBizType.AJ_GMHZBFC, fromBizNote, toBizNote);
         }
     }

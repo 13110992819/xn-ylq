@@ -284,17 +284,17 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         if (ESystemCode.Caigo.getCode().equals(hzb.getSystemCode())) {
             if (ECurrency.CNY.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount1(hzb.getBackAmount1() + prize.getYyAmount());
-            } else if (ECurrency.CGB.getCode().equals(prize.getYyCurrency())) {
+            } else if (ECurrency.CG_CGB.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount2(hzb.getBackAmount2() + prize.getYyAmount());
-            } else if (ECurrency.JF.getCode().equals(prize.getYyCurrency())) {
+            } else if (ECurrency.CG_JF.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount3(hzb.getBackAmount3() + prize.getYyAmount());
             }
         } else if (ESystemCode.ZHPAY.getCode().equals(hzb.getSystemCode())) {
-            if (ECurrency.HBB.getCode().equals(prize.getYyCurrency())) {
+            if (ECurrency.ZH_HBB.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount1(hzb.getBackAmount1() + prize.getYyAmount());
-            } else if (ECurrency.QBB.getCode().equals(prize.getYyCurrency())) {
+            } else if (ECurrency.ZH_QBB.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount2(hzb.getBackAmount2() + prize.getYyAmount());
-            } else if (ECurrency.GWB.getCode().equals(prize.getYyCurrency())) {
+            } else if (ECurrency.ZH_GWB.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount3(hzb.getBackAmount3() + prize.getYyAmount());
             }
         }

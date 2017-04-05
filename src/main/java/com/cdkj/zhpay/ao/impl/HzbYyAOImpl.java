@@ -107,13 +107,13 @@ public class HzbYyAOImpl implements IHzbYyAO {
         // 3、特殊处理：正汇系统摇到红包时，将促发分销规则
         String currency = prize.getYyCurrency();
         Long ownerFcAmount = 0L;
-        if (ECurrency.HBB.getCode().equals(currency)) {
+        if (ECurrency.ZH_HBB.getCode().equals(currency)) {
             // 促发摇一摇分销规则
             ownerFcAmount = Long.valueOf(fcAmount(hzb.getUserId()));
         }
         // 4、记录摇到结果
         hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo,
-            ECurrency.HBYJ.getCode(), ownerFcAmount);
+            ECurrency.ZH_HBYJ.getCode(), ownerFcAmount);
         // 5、兑现摇的人
         ECurrency yyEurrency = ECurrency.getECurrency(currency);
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
@@ -187,8 +187,8 @@ public class HzbYyAOImpl implements IHzbYyAO {
         Long fcAmount = Double.valueOf(fc * SysConstants.AMOUNT_RADIX)
             .longValue();
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
-            refUserId, ECurrency.HBYJ, fcAmount, EBizType.AJ_YYFC, "摇一摇分成发放",
-            "摇一摇分成获得");
+            refUserId, ECurrency.ZH_HBYJ, fcAmount, EBizType.AJ_YYFC,
+            "摇一摇分成发放", "摇一摇分成获得");
     }
 
     private void areaFcAmount(Map<String, String> rateMap, User hzbUser,
@@ -203,8 +203,8 @@ public class HzbYyAOImpl implements IHzbYyAO {
                 + UserUtil.getUserMobile(areaUser.getMobile()) + "分成";
         toBizNote = toBizNote + "," + remark + "合伙人分成";
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
-            areaUser.getUserId(), ECurrency.HBYJ, fcAmount, EBizType.AJ_YYFC,
-            fromBizNote, toBizNote);
+            areaUser.getUserId(), ECurrency.ZH_HBYJ, fcAmount,
+            EBizType.AJ_YYFC, fromBizNote, toBizNote);
     }
 
     @Override

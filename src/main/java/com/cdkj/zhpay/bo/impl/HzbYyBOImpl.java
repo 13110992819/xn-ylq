@@ -140,14 +140,14 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
         }
         Long backAmount2 = hzbTemplate.getBackAmount2() - hzb.getBackAmount2();
         if (backAmount2 > 0) {
-            result.add(ECurrency.CGB.getCode());
+            result.add(ECurrency.CG_CGB.getCode());
             if (backAmount2 < randAmount) {
                 randAmount = backAmount2;
             }
         }
         Long backAmount3 = hzbTemplate.getBackAmount3() - hzb.getBackAmount3();
         if (backAmount3 > 0) {
-            result.add(ECurrency.JF.getCode());
+            result.add(ECurrency.CG_JF.getCode());
             if (backAmount3 < randAmount) {
                 randAmount = backAmount3;
             }
@@ -209,19 +209,19 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
         Double ycGwbWeight = getWeight(rateMap, SysConstants.YC_GWB);
         Double ycHbbWeight = getWeight(rateMap, SysConstants.YC_HBB);
         if (EBoolean.NO.getCode().equals(hbFlag)) {
-            currencyList.add(ECurrency.GWB.getCode());
-            currencyList.add(ECurrency.QBB.getCode());
-            currencyList.add(ECurrency.HBB.getCode());
+            currencyList.add(ECurrency.ZH_GWB.getCode());
+            currencyList.add(ECurrency.ZH_QBB.getCode());
+            currencyList.add(ECurrency.ZH_HBB.getCode());
             prizeList.add(ycGwbWeight);
             prizeList.add(ycQbbWeight);
             prizeList.add(ycHbbWeight);
         } else if (EBoolean.YES.getCode().equals(hbFlag)) {
-            currencyList.add(ECurrency.GWB.getCode());
-            currencyList.add(ECurrency.QBB.getCode());
+            currencyList.add(ECurrency.ZH_GWB.getCode());
+            currencyList.add(ECurrency.ZH_QBB.getCode());
             prizeList.add(ycGwbWeight);
             prizeList.add(ycQbbWeight);
         } else {// 前面两次都没有红包
-            currencyList.add(ECurrency.HBB.getCode());
+            currencyList.add(ECurrency.ZH_HBB.getCode());
             prizeList.add(ycHbbWeight);
         }
         int prizeIndex = PrizeUtil.getPrizeIndex(prizeList);
@@ -249,7 +249,8 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
             // 判断前面第1次，第2次是否有红包
             if (count % 3 != 0) {
                 for (HzbYy hzbYy : dataList) {
-                    if (ECurrency.HBB.getCode().equals(hzbYy.getYyCurrency())) {
+                    if (ECurrency.ZH_HBB.getCode()
+                        .equals(hzbYy.getYyCurrency())) {
                         haveHbb = "1";
                         break;
                     }
