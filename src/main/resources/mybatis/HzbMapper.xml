@@ -265,6 +265,7 @@
 		UPDATE tyqs_hzb
 		SET
 		period_rock_num = 0
+		WHERE status not in(0,92)
 	</update>
 	
 	<update id="update_yy" parameterType="hzb">
