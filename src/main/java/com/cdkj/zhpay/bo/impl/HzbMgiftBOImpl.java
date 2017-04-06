@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.cdkj.zhpay.bo.IHzbMgiftBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
+import com.cdkj.zhpay.common.AmountUtil;
 import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.core.OrderNoGenerater;
@@ -52,14 +53,13 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
             String advTitle = rateMap.get(SysConstants.ADV_TITLE);
             String hzbOwnerCurrency = rateMap
                 .get(SysConstants.HZB_OWNER_CURRENCY);
-            Long hzbOwnerAmount = Long.valueOf(rateMap
-                .get(SysConstants.HZB_OWNER_AMOUNT))
-                    * SysConstants.AMOUNT_RADIX;
+            Long hzbOwnerAmount = AmountUtil.mul(SysConstants.AMOUNT_RADIX,
+                Double.valueOf(rateMap.get(SysConstants.HZB_OWNER_AMOUNT)));
             String hzbReceiveCurrency = rateMap
                 .get(SysConstants.HZB_RECEIVE_CURRENCY);
-            Long hzbReceiveAmount = Long.valueOf(rateMap
-                .get(SysConstants.HZB_RECEIVE_AMOUNT))
-                    * SysConstants.AMOUNT_RADIX;
+            Long hzbReceiveAmount = AmountUtil.mul(SysConstants.AMOUNT_RADIX,
+                Double.valueOf(rateMap.get(SysConstants.HZB_RECEIVE_AMOUNT)));
+
             for (int i = 0; i < dayNumbers; i++) {
                 HzbMgift data = new HzbMgift();
                 data.setCode(OrderNoGenerater.generateME("HM"));

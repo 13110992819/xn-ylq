@@ -19,6 +19,7 @@ import com.cdkj.zhpay.bo.IHzbYyBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
+import com.cdkj.zhpay.common.AmountUtil;
 import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
@@ -129,8 +130,7 @@ public class HzbAOImpl implements IHzbAO {
         // 人民币兑分润比例
         Double cny2frRate = accountBO.getExchangeRateRemote(ECurrency.ZH_FRB);
         // 人民币兑分润金额
-        Long frPrice = Double.valueOf(cny2frRate * hzbTemplate.getPrice())
-            .longValue();
+        Long frPrice = AmountUtil.mul(hzbTemplate.getPrice(), cny2frRate);
         accountBO.doTransferAmountRemote(user.getUserId(),
             ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.ZH_FRB, frPrice,
             EBizType.AJ_GMHZB, "购买汇赚宝",
