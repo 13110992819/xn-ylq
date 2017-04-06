@@ -27,7 +27,7 @@
 	
 	<bean id="hzbMgiftTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
        <property name="jobDetail" ref="hzbMgiftJobDetail"/>  
-       <property name="cronExpression" value="0 10 0 * * ?"/><!-- 每天凌晨0点10分触发一次    -->
+       <property name="cronExpression" value="59 59 23 * * ?"/><!-- 每天23:59:59开始执行 -->
 	</bean>
 	
 	<bean id="hzbMgiftJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   

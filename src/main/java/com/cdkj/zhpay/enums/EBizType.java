@@ -9,9 +9,10 @@ import java.util.Map;
  * @history:
  */
 public enum EBizType {
-    AJ_GMHZB("-36", "购买汇赚宝"), AJ_GMHZBFC("37", "购买汇赚宝分成"), AJ_YYJL("38",
-            "汇赚宝摇一摇奖励"), AJ_YYFC("39", "摇一摇分成"), AJ_FSDHB("60", "发送得红包"), AJ_LQHB(
-            "61", "领取红包"), AJ_DUOBAO("-64", "参与小目标"), AJ_DUOBAO_PRIZE("65",
+
+    AJ_GMHZB("-50", "购买汇赚宝"), AJ_GMHZBFC("51", "购买汇赚宝分成"), AJ_YYJL("52",
+            "汇赚宝摇一摇奖励"), AJ_YYFC("53", "摇一摇分成"), AJ_FSDHB("60", "发送得红包"), AJ_LQHB(
+            "61", "领取红包"), AJ_DUOBAO("-70", "参与小目标"), AJ_DUOBAO_PRIZE("71",
             "小目标中奖");
 
     public static Map<String, EBizType> getBizTypeMap() {
