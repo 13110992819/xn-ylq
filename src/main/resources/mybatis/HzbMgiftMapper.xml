@@ -35,9 +35,16 @@
 			<if test="createDatetime != null and createDatetime != '' ">
 				AND t.create_datetime = #{createDatetime}
 			</if>
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
+			<choose>
+				 <when test='status == "01"'>
+				 	AND t.status in ('0','1')
+				 </when>
+				 <otherwise>
+					<if test="status != null and status != '' ">
+						AND t.status = #{status}
+					</if>
+				 </otherwise>
+			</choose>
 			<if test="receiver != null and receiver != '' ">
 				AND t.receiver = #{receiver}
 			</if>
