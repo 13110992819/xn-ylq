@@ -35,16 +35,9 @@
 			<if test="createDatetime != null and createDatetime != '' ">
 				AND t.create_datetime = #{createDatetime}
 			</if>
-			<choose>
-				 <when test='status == "01"'>
-				 	AND t.status in ('0','1')
-				 </when>
-				 <otherwise>
-					<if test="status != null and status != '' ">
-						AND t.status = #{status}
-					</if>
-				 </otherwise>
-			</choose>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
 			<if test="receiver != null and receiver != '' ">
 				AND t.receiver = #{receiver}
 			</if>
@@ -171,9 +164,9 @@
 	  <![CDATA[  
 		UPDATE tyqs_hzb_mgift
 		SET
-		status = '0'
+		status = '3'
 		,remark = '过期失效'
-		WHERE status = #{status} AND create_datetime <= #{createDatetimeEnd}
+		WHERE status in(0,1) AND create_datetime <= #{createDatetimeEnd}
 		 ]]>  
 	</update>
 </mapper>
