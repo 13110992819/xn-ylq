@@ -48,6 +48,7 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('O','iosDownUrl','www.baidu.com','admin',now(),'ios下载链接','CD-CZH000001','CD-CZH000001');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('O','androidDownUrl','www.sina.com','admin',now(),'android下载链接','CD-CZH000001','CD-CZH000001');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('O','domain','zhqb.hichengdai.com','admin',now(),'服务器域名','CD-CZH000001','CD-CZH000001');
 
 /*
 -- Query: SELECT `type`,`parent_key`,`dkey`,`dvalue`,`updater`,now() as `update_datetime`,`remark`,'CD-CZH000001' as company_code,'CD-CZH000001' as system_code FROM tsys_dict  where system_code = 'CD-CZH000001'
