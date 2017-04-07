@@ -36,7 +36,6 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
     @Override
     public void doInvalidHzbMgift(Date createDatetimeEnd) {
         HzbMgift condition = new HzbMgift();
-        condition.setStatus("01");
         condition.setCreateDatetimeEnd(createDatetimeEnd);
         hzbMgiftDAO.doInvalidHzbMgift(condition);
     }
