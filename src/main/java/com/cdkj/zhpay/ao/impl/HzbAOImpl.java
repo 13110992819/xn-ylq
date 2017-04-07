@@ -122,7 +122,7 @@ public class HzbAOImpl implements IHzbAO {
      * @history:
      */
     @Transactional
-    private Object buyHzbFRPay(User user, HzbTemplate hzbTemplate) {
+    public Object buyHzbFRPay(User user, HzbTemplate hzbTemplate) {
         // 汇赚宝购买成功
         Hzb hzb = hzbBO.saveHzb(user, hzbTemplate);
         // 产生红包
@@ -142,7 +142,7 @@ public class HzbAOImpl implements IHzbAO {
     }
 
     @Transactional
-    private Object buyHzbYEPayCG(User user, HzbTemplate hzbTemplate) {
+    public Object buyHzbYEPayCG(User user, HzbTemplate hzbTemplate) {
         // 汇赚宝购买成功
         Hzb hzb = hzbBO.saveHzb(user, hzbTemplate);
         // 产生红包
@@ -165,7 +165,7 @@ public class HzbAOImpl implements IHzbAO {
      * @history: 
      */
     @Transactional
-    private XN002500Res buyHzbWxAppPay(String userId, HzbTemplate hzbTemplate) {
+    public XN002500Res buyHzbWxAppPay(String userId, HzbTemplate hzbTemplate) {
         // 生成支付组号,落地本地系统消费记录，状态为未支付
         String payGroup = hzbBO.buyHzb(userId, hzbTemplate);
         String systemUserId = userBO.getSystemUser(hzbTemplate.getSystemCode());
@@ -185,7 +185,7 @@ public class HzbAOImpl implements IHzbAO {
      * @history: 
      */
     @Transactional
-    private XN002501Res buyHzbWxH5Pay(String userId, HzbTemplate hzbTemplate) {
+    public XN002501Res buyHzbWxH5Pay(String userId, HzbTemplate hzbTemplate) {
         User user = userBO.getRemoteUser(userId);
         // 生成支付组号,落地本地系统消费记录，状态为未支付
         String payGroup = hzbBO.buyHzb(userId, hzbTemplate);
@@ -197,7 +197,7 @@ public class HzbAOImpl implements IHzbAO {
     }
 
     @Transactional
-    private Object buyHzbZFBPay(String userId, HzbTemplate hzbTemplate) {
+    public Object buyHzbZFBPay(String userId, HzbTemplate hzbTemplate) {
         // 生成支付组号,落地本地系统消费记录，状态为未支付
         String payGroup = hzbBO.buyHzb(userId, hzbTemplate);
         String systemUserId = userBO.getSystemUser(hzbTemplate.getSystemCode());
