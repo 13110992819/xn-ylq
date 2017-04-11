@@ -39,14 +39,23 @@ public class JewelRecord extends ABaseDO {
     // 状态(0待开奖，1已中奖，2未中奖)
     private String status;
 
+    // 支付方式
+    private String payType;
+
     // 支付组号
     private String payGroup;
 
     // 支付编号
     private String payCode;
 
-    // 支付金额
+    // 支付金额(人民币)
     private Long payAmount;
+
+    // 支付虚拟币1
+    private Long payAmount1;
+
+    // 支付虚拟币2
+    private Long payAmount2;
 
     // 支付时间(格式化到毫秒)
     private String payDatetime;
@@ -196,11 +205,27 @@ public class JewelRecord extends ABaseDO {
         this.systemCode = systemCode;
     }
 
-    // ***********************db properties **************************
-    //
-    // // 我投资人次
-    // private String myInvestTimes;
-    //
-    //
+    public Long getPayAmount1() {
+        return payAmount1;
+    }
 
+    public void setPayAmount1(Long payAmount1) {
+        this.payAmount1 = payAmount1;
+    }
+
+    public Long getPayAmount2() {
+        return payAmount2;
+    }
+
+    public void setPayAmount2(Long payAmount2) {
+        this.payAmount2 = payAmount2;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
 }

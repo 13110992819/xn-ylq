@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.cdkj.zhpay.bo.IUserBO;
-import com.cdkj.zhpay.bo.base.PaginableBOImpl;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.req.XN001400Req;
 import com.cdkj.zhpay.dto.req.XN001403Req;
@@ -31,7 +30,7 @@ import com.google.gson.reflect.TypeToken;
  * @history:
  */
 @Component
-public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
+public class UserBOImpl implements IUserBO {
     static Logger logger = Logger.getLogger(UserBOImpl.class);
 
     @Override

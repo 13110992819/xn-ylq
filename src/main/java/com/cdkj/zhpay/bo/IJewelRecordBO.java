@@ -7,6 +7,7 @@ import com.cdkj.zhpay.bo.base.Paginable;
 import com.cdkj.zhpay.domain.Jewel;
 import com.cdkj.zhpay.domain.JewelRecord;
 import com.cdkj.zhpay.domain.User;
+import com.cdkj.zhpay.enums.EPayType;
 
 /**
  * @author: shan 
@@ -26,7 +27,7 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
     public void checkTimes(User user, Jewel jewel, Integer times);
 
     /**
-     * 保存宝贝(余额支付)
+     * 保存宝贝(单一币种支付)
      * @param userId
      * @param jewelCode
      * @param times
@@ -42,21 +43,39 @@ public interface IJewelRecordBO extends IPaginableBO<JewelRecord> {
             Integer times, Long amount, String ip, String systemCode);
 
     /**
+     * 保存宝贝(余额支付)
+     * @param userId
+     * @param jewelCode
+     * @param times
+     * @param payAmount1
+     * @param payAmount2
+     * @param payType
+     * @param ip
+     * @param systemCode
+     * @return 
+     * @create: 2017年4月11日 下午2:02:43 xieyj
+     * @history:
+     */
+    public String buyJewelByZHYE(String userId, String jewelCode, Integer times,
+            Long payAmount1, Long payAmount2, String ip, String systemCode);
+
+    /**
      * 保存宝贝(第三方支付)
      * @param userId
      * @param jewelCode
      * @param times
      * @param amount
+     * @param payType
      * @param ip
      * @param payGroup
      * @param systemCode
      * @return 
-     * @create: 2017年4月5日 下午2:33:13 xieyj
+     * @create: 2017年4月11日 下午2:11:39 xieyj
      * @history:
      */
-    public String saveJewelRecord(String userId, String jewelCode,
-            Integer times, Long amount, String ip, String payGroup,
-            String systemCode);
+    public String buyJewelRecordPay(String userId, String jewelCode,
+            Integer times, Long amount, EPayType payType, String ip,
+            String payGroup, String systemCode);
 
     /**
      * 更新状态

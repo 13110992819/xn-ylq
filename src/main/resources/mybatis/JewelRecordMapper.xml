@@ -11,10 +11,13 @@
 		
 		<result column="ip" property="ip" />
 		<result column="status" property="status" />
+		<result column="pay_type" property="payType" />
 		<result column="pay_group" property="payGroup" />
 		<result column="pay_code" property="payCode" />
 		<result column="pay_amount" property="payAmount" />
 		
+		<result column="pay_amount1" property="payAmount1" />
+		<result column="pay_amount2" property="payAmount2" />
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="company_code" property="companyCode" />
 		<result column="system_code" property="systemCode" />
@@ -67,6 +70,9 @@
 				  	AND 1 = 1
 				 </otherwise>
 			</choose>
+			<if test="payType != null and payType != '' ">
+				AND t.pay_type = #{payType}
+			</if>
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group = #{payGroup}
 			</if>
@@ -92,10 +98,13 @@
 		
 		,t.ip
 		,t.status
+		,t.pay_type
 		,t.pay_group
 		,t.pay_code 
 		,t.pay_amount
 		
+		,t.pay_amount1
+		,t.pay_amount2
 		,t.pay_datetime
 		,t.company_code
 		,t.system_code
@@ -169,10 +178,13 @@
 		
 		,ip
 		,status
+		,pay_type
 		,pay_group
 		,pay_code 
 		,pay_amount
 		
+		,pay_amount1
+		,pay_amount2
 		,pay_datetime
 		,company_code
 		,system_code
@@ -186,10 +198,13 @@
 		
 		,#{ip}
 		,#{status}
+		,#{payType}
 		,#{payGroup}
 		,#{payCode}
 		,#{payAmount}
 		
+		,#{payAmount1}
+		,#{payAmount2}
 		,#{payDatetime}
 		,#{companyCode}
 		,#{systemCode}

@@ -25,6 +25,7 @@ import com.cdkj.zhpay.domain.JewelRecordNumber;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EJewelRecordStatus;
+import com.cdkj.zhpay.enums.EPayType;
 import com.cdkj.zhpay.exception.BizException;
 
 /**
@@ -49,7 +50,7 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
 
     @Override
     public String saveJewelRecord(String userId, String jewelCode,
-            Integer times, Long amount, String ip, String systemCode) {
+            Integer times, Long payAmount, String ip, String systemCode) {
         String code = null;
         if (StringUtils.isNotBlank(userId)) {
             JewelRecord data = new JewelRecord();
@@ -64,7 +65,10 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
 
             data.setIp(ip);
             data.setStatus(EJewelRecordStatus.LOTTERY.getCode());
-            data.setPayAmount(amount);
+            data.setPayType(EPayType.INTEGRAL.getCode());
+            data.setPayAmount(payAmount);
+            data.setPayAmount1(0L);
+            data.setPayAmount2(0L);
             data.setPayDatetime(DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7));
             data.setPayGroup(null);
 
@@ -76,9 +80,40 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
     }
 
     @Override
-    public String saveJewelRecord(String userId, String jewelCode,
-            Integer times, Long amount, String ip, String payGroup,
-            String systemCode) {
+    public String buyJewelByZHYE(String userId, String jewelCode, Integer times,
+            Long payAmount1, Long payAmount2, String ip, String systemCode) {
+        String code = null;
+        if (StringUtils.isNotBlank(userId)) {
+            JewelRecord data = new JewelRecord();
+            Date now = new Date();
+            code = OrderNoGenerater.generateM(EGeneratePrefix.JEWEL_RECORD
+                .getCode());
+            data.setCode(code);
+            data.setUserId(userId);
+            data.setJewelCode(jewelCode);
+            data.setInvestDatetime(now);
+            data.setTimes(times);
+
+            data.setIp(ip);
+            data.setStatus(EJewelRecordStatus.LOTTERY.getCode());
+            data.setPayType(EPayType.YEFR.getCode());
+            data.setPayAmount(0L);
+            data.setPayAmount1(payAmount1);
+            data.setPayAmount2(payAmount2);
+            data.setPayDatetime(DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7));
+            data.setPayGroup(null);
+
+            data.setCompanyCode(systemCode);
+            data.setSystemCode(systemCode);
+            jewelRecordDAO.insert(data);
+        }
+        return code;
+    }
+
+    @Override
+    public String buyJewelRecordPay(String userId, String jewelCode,
+            Integer times, Long amount, EPayType payType, String ip,
+            String payGroup, String systemCode) {
         String code = null;
         if (StringUtils.isNotBlank(userId)) {
             JewelRecord data = new JewelRecord();
@@ -93,7 +128,10 @@ public class JewelRecordBOImpl extends PaginableBOImpl<JewelRecord> implements
 
             data.setIp(ip);
             data.setStatus(EJewelRecordStatus.TO_PAY.getCode());
+            data.setPayType(payType.getCode());
             data.setPayAmount(amount);
+            data.setPayAmount1(0L);
+            data.setPayAmount2(0L);
             data.setPayDatetime(DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7));
             data.setPayGroup(payGroup);
 
