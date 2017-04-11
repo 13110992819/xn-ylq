@@ -144,10 +144,10 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         jewelRecordBO.checkTimes(user, jewel, times);
 
         // 开始购买逻辑
-        Long payRmbAmount = jewel.getFromAmount() * times;// 本次购买总金额
+        Long payRmbAmount = jewel.getFromAmount() * times;// 本次购买总人民币金额
         // 余额支付(分润+贡献值)
         Long frResultAmount = 0L;// 需要支付的分润金额
-        Long gxjlResultAmount = 0L;// 需要支付的贡献值金额计算
+        Long gxjlResultAmount = 0L;// 需要支付的贡献值金额
         String buyUserId = user.getUserId();
         // 1)、贡献奖励+分润<yhAmount 余额不足
         Account gxjlAccount = accountBO.getRemoteAccount(buyUserId,
@@ -158,7 +158,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         Long frAmount = frAccount.getAmount();
         Double gxjl2cnyRate = accountBO.getExchangeRateRemote(ECurrency.ZH_GXZ);
         Double fr2cnyRate = accountBO.getExchangeRateRemote(ECurrency.ZH_FRB);
-        if (gxjlAmount / gxjl2cnyRate + frAmount / fr2cnyRate < payRmbAmount) {
+        if ((gxjlAmount / gxjl2cnyRate + frAmount / fr2cnyRate) < payRmbAmount) {
             throw new BizException("xn0000", "余额不足");
         }
         // 2)、计算frResultAmount和gxjlResultAmount
@@ -196,7 +196,7 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         }
         if (frResultAmount > 0L) {
             accountBO.doTransferAmountRemote(user.getUserId(), systemUserId,
-                ECurrency.ZH_GXZ, frResultAmount, EBizType.AJ_DUOBAO,
+                ECurrency.ZH_FRB, frResultAmount, EBizType.AJ_DUOBAO,
                 EBizType.AJ_DUOBAO.getValue(), EBizType.AJ_DUOBAO.getValue());
         }
 
