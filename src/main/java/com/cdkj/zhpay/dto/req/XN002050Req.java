@@ -1,6 +1,6 @@
 package com.cdkj.zhpay.dto.req;
 
-public class XN002000Req {
+public class XN002050Req {
 
     // 账户编号(必填)
     private String userId;

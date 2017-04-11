@@ -12,13 +12,13 @@ import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.common.JsonUtil;
 import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.domain.Account;
-import com.cdkj.zhpay.dto.req.XN002000Req;
+import com.cdkj.zhpay.dto.req.XN002050Req;
 import com.cdkj.zhpay.dto.req.XN002051Req;
 import com.cdkj.zhpay.dto.req.XN002100Req;
 import com.cdkj.zhpay.dto.req.XN002500Req;
 import com.cdkj.zhpay.dto.req.XN002501Req;
 import com.cdkj.zhpay.dto.req.XN002510Req;
-import com.cdkj.zhpay.dto.res.XN002000Res;
+import com.cdkj.zhpay.dto.res.XN002050Res;
 import com.cdkj.zhpay.dto.res.XN002051Res;
 import com.cdkj.zhpay.dto.res.XN002500Res;
 import com.cdkj.zhpay.dto.res.XN002501Res;
@@ -40,19 +40,19 @@ public class AccountBOImpl implements IAccountBO {
 
     @Override
     public Account getRemoteAccount(String userId, ECurrency currency) {
-        XN002000Req req = new XN002000Req();
+        XN002050Req req = new XN002050Req();
         req.setUserId(userId);
         req.setCurrency(currency.getCode());
-        String jsonStr = BizConnecter.getBizData("002000",
+        String jsonStr = BizConnecter.getBizData("002050",
             JsonUtils.object2Json(req));
         Gson gson = new Gson();
-        List<XN002000Res> list = gson.fromJson(jsonStr,
-            new TypeToken<List<XN002000Res>>() {
+        List<XN002050Res> list = gson.fromJson(jsonStr,
+            new TypeToken<List<XN002050Res>>() {
             }.getType());
         if (CollectionUtils.isEmpty(list)) {
             throw new BizException("xn000000", "用户[" + userId + "]账户不存在");
         }
-        XN002000Res res = list.get(0);
+        XN002050Res res = list.get(0);
         Account account = new Account();
         account.setAccountNumber(res.getAccountNumber());
         account.setUserId(res.getUserId());

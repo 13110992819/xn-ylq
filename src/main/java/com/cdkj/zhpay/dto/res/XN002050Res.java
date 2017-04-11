@@ -8,7 +8,7 @@ import java.util.Date;
  * @since: 2016年12月23日 上午10:41:45 
  * @history:
  */
-public class XN002000Res {
+public class XN002050Res {
     // 账户编号
     private String accountNumber;
 
