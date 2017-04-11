@@ -56,8 +56,12 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
     // 1、将今天之前的红包状态置换为失效
     // 2、根据有效摇钱树，生成当天红包
     @Override
+    public synchronized void doDailyHzbMgift() {
+        generateHzbMgift();
+    }
+
     @Transactional
-    public void doDailyHzbMgift() {
+    public void generateHzbMgift() {
         Date todayStart = DateUtil.getTodayStart();
         Date todayEnd = DateUtil.getTodayEnd();
         logger.info("**** 定时红包扫描开始 " + todayStart + " ****");
