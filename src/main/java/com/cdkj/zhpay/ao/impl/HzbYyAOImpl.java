@@ -130,7 +130,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
             .getConfigsMap(ESystemCode.ZHPAY.getCode());
         // C用户树主人分成
         String cAmount = rateMap.get(SysConstants.YY_CUSER);
-        userFcAmount(hzbOwner, cAmount);
+        userOwnerFcAmount(hzbOwner, cAmount);
         Long ownerfcAmount = Double.valueOf(
             Double.valueOf(cAmount) * SysConstants.AMOUNT_RADIX).longValue();
         // B用户分成
@@ -139,14 +139,14 @@ public class HzbYyAOImpl implements IHzbYyAO {
         boolean bcheck = hzbBO.isBuyHzb(bUserId);
         if (StringUtils.isNotBlank(bUserId) && bcheck) {
             String bAmount = rateMap.get(SysConstants.YY_BUSER);
-            userFcAmount(bUserId, bAmount);
+            userRefFcAmount(bUserId, bAmount);
             // A用户分成
             User bUser = userBO.getRemoteUser(bUserId);
             String aUserId = bUser.getUserReferee();
             boolean acheck = hzbBO.isBuyHzb(aUserId);
             if (StringUtils.isNotBlank(aUserId) && acheck) {
                 String aAmount = rateMap.get(SysConstants.YY_AUSER);
-                userFcAmount(aUserId, aAmount);
+                userRefFcAmount(aUserId, aAmount);
             }
         }
 
@@ -182,7 +182,14 @@ public class HzbYyAOImpl implements IHzbYyAO {
         return ownerfcAmount;
     }
 
-    private void userFcAmount(String refUserId, String configAmount) {
+    /**
+     * 树主人分成区分
+     * @param refUserId
+     * @param configAmount 
+     * @create: 2017年4月12日 下午8:08:44 xieyj
+     * @history:
+     */
+    private void userOwnerFcAmount(String refUserId, String configAmount) {
         Double fc = Double.valueOf(configAmount);
         Long fcAmount = Double.valueOf(fc * SysConstants.AMOUNT_RADIX)
             .longValue();
@@ -191,16 +198,24 @@ public class HzbYyAOImpl implements IHzbYyAO {
             "摇一摇分成发放", "摇一摇分成获得");
     }
 
+    private void userRefFcAmount(String refUserId, String configAmount) {
+        Double fc = Double.valueOf(configAmount);
+        Long fcAmount = Double.valueOf(fc * SysConstants.AMOUNT_RADIX)
+            .longValue();
+        accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
+            refUserId, ECurrency.ZH_HBYJ, fcAmount, EBizType.AJ_YYFC_REF,
+            "摇一摇分成发放", "推荐人摇一摇分成获得");
+    }
+
     private void areaFcAmount(Map<String, String> rateMap, User hzbUser,
             User areaUser, String sysConstants, String remark) {
         // 分销规则
         Double fc = Double.valueOf(rateMap.get(sysConstants));
         Long fcAmount = Double.valueOf(fc * SysConstants.AMOUNT_RADIX)
             .longValue();
-        String toBizNote = UserUtil.getUserMobile(hzbUser.getMobile()) + "的汇赚宝"
+        String toBizNote = UserUtil.getUserMobile(hzbUser.getMobile()) + "的"
                 + EBizType.AJ_YYFC.getValue();
-        String fromBizNote = toBizNote + "," + remark + "合伙人"
-                + UserUtil.getUserMobile(areaUser.getMobile()) + "分成";
+        String fromBizNote = toBizNote + "," + remark + "合伙人分成";
         toBizNote = toBizNote + "," + remark + "合伙人分成";
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
             areaUser.getUserId(), ECurrency.ZH_HBYJ, fcAmount,
