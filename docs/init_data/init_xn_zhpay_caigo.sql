@@ -4,7 +4,7 @@ LIMIT 0, 10000
 
 -- Date: 2017-03-31 15:34
 */
-INSERT INTO `tyqs_hzb_template` (`code`,`name`,`pic`,`price`,`currency`,`period_rock_num`,`total_rock_num`,`back_amount1`,`back_amount2`,`back_amount3`,`status`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('HT20170000000000001','摇钱树','6e2dc159-ff20-4d91-b8bf-8a62d95c97d7_1490601324124.jpg',100000,'CNY',1000000,100000,100000,100000,100000,'0','admin',now(),NULL,'CD-CCG000007','CD-CCG000007');
+INSERT INTO `tyqs_hzb_template` (`code`,`name`,`pic`,`price`,`currency`,`period_rock_num`,`total_rock_num`,`back_amount1`,`back_amount2`,`back_amount3`,`status`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('HT20170000000000002','摇钱树','tree_big.png',100000,'CNY',1000000,100000,100000,100000,100000,'0','admin',now(),NULL,'CD-CCG000007','CD-CCG000007');
 
 /*
 -- Query: SELECT `type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code` FROM xn_zhpay.tsys_config where system_code = 'CD-CCG000007'
