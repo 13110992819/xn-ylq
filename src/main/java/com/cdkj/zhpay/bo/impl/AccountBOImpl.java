@@ -138,9 +138,10 @@ public class AccountBOImpl implements IAccountBO {
     public XN002501Res doWeiXinH5PayRemote(String fromUserId,
             String fromOpenId, String toUserId, Long amount, EBizType bizType,
             String fromBizNote, String toBizNote, String payGroup) {
-        // 获取微信APP支付信息
+        // 获取微信H5支付信息
         XN002501Req req = new XN002501Req();
         req.setFromUserId(fromUserId);
+        req.setFromOpenId(fromOpenId);
         req.setToUserId(toUserId);
         req.setTransAmount(String.valueOf(amount));
         req.setBizType(bizType.getCode());
