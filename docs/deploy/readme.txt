@@ -23,5 +23,5 @@
   ../bin/startup.sh
   
 6. 验证程序
-  http://121.43.101.148:5602/xn-zhpay/api
+  http://118.178.124.16:5602/xn-zhpay/api
 

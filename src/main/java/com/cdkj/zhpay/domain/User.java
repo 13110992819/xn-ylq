@@ -57,6 +57,17 @@ public class User extends ABaseDO {
     // 区(县)
     private String area;
 
+    // 系统参数
+    private String systemCode;
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getOpenId() {
         return openId;
     }

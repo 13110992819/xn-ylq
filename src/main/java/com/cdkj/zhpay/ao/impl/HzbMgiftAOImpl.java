@@ -103,7 +103,7 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         if (EHzbMgiftStatus.TO_SEND.getCode().equals(hzbMgift.getStatus())
                 || EHzbMgiftStatus.SENT.getCode().equals(hzbMgift.getStatus())) {
             // 判断当前人员每天领取次数是否超限
-            hzbMgiftBO.checkMaxReceive(userId);
+            hzbMgiftBO.checkMaxReceive(userId, user.getSystemCode());
             hzbMgiftBO.doReceiveHzbMgift(hzbMgift, user);
             // 领取红包后的分销规则
             doTransferAmountForReceiveHzbMgift(hzbMgift, user);

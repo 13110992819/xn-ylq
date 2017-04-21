@@ -20,7 +20,6 @@ import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbMgift;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.enums.EHzbMgiftStatus;
-import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
 @Component
@@ -148,9 +147,8 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
     }
 
     @Override
-    public void checkMaxReceive(String userId) {
-        Map<String, String> rateMap = sysConfigBO
-            .getConfigsMap(ESystemCode.ZHPAY.getCode());
+    public void checkMaxReceive(String userId, String systemCode) {
+        Map<String, String> rateMap = sysConfigBO.getConfigsMap(systemCode);
         Long dayRecevieNumber = Long.valueOf(rateMap
             .get(SysConstants.DAY_RECEVIE_NUMBER));
         HzbMgift hmCondition = new HzbMgift();

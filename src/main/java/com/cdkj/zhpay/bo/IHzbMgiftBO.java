@@ -51,11 +51,12 @@ public interface IHzbMgiftBO extends IPaginableBO<HzbMgift> {
 
     /**
      * 判断当前人员每天领取次数是否超限
-     * @param userId 
-     * @create: 2017年3月22日 下午3:48:09 myb858
+     * @param userId
+     * @param systemCode 
+     * @create: 2017年4月21日 下午11:55:29 xieyj
      * @history:
      */
-    public void checkMaxReceive(String userId);
+    public void checkMaxReceive(String userId, String systemCode);
 
     public List<HzbMgift> queryHzbMgiftList(HzbMgift condition);
 
