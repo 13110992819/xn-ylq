@@ -3,6 +3,7 @@ package com.cdkj.zhpay.bo.impl;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -138,6 +139,9 @@ public class AccountBOImpl implements IAccountBO {
     public XN002501Res doWeiXinH5PayRemote(String fromUserId,
             String fromOpenId, String toUserId, Long amount, EBizType bizType,
             String fromBizNote, String toBizNote, String payGroup) {
+        if (StringUtils.isBlank(fromOpenId)) {
+            throw new BizException("xn0000", "请先微信登录再支付");
+        }
         // 获取微信H5支付信息
         XN002501Req req = new XN002501Req();
         req.setFromUserId(fromUserId);

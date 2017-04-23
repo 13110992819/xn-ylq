@@ -283,19 +283,14 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     public void refreshYyAmount(Hzb hzb, XN615120Res prize) {
         if (ESystemCode.Caigo.getCode().equals(hzb.getSystemCode())) {
             if (ECurrency.CNY.getCode().equals(prize.getYyCurrency())) {
-                hzb.setBackAmount1(hzb.getBackAmount1() + prize.getYyAmount());
+                hzb.setBackAmount1(hzb.getBackAmount1() + 2
+                        * prize.getYyAmount());
             } else if (ECurrency.CG_CGB.getCode().equals(prize.getYyCurrency())) {
-                hzb.setBackAmount2(hzb.getBackAmount2() + prize.getYyAmount());
+                hzb.setBackAmount2(hzb.getBackAmount2() + 2
+                        * prize.getYyAmount());
             } else if (ECurrency.CG_JF.getCode().equals(prize.getYyCurrency())) {
-                hzb.setBackAmount3(hzb.getBackAmount3() + prize.getYyAmount());
-            }
-        } else if (ESystemCode.ZHPAY.getCode().equals(hzb.getSystemCode())) {
-            if (ECurrency.ZH_HBB.getCode().equals(prize.getYyCurrency())) {
-                hzb.setBackAmount1(hzb.getBackAmount1() + prize.getYyAmount());
-            } else if (ECurrency.ZH_QBB.getCode().equals(prize.getYyCurrency())) {
-                hzb.setBackAmount2(hzb.getBackAmount2() + prize.getYyAmount());
-            } else if (ECurrency.ZH_GWB.getCode().equals(prize.getYyCurrency())) {
-                hzb.setBackAmount3(hzb.getBackAmount3() + prize.getYyAmount());
+                hzb.setBackAmount3(hzb.getBackAmount3() + 2
+                        * prize.getYyAmount());
             }
         }
         // 判断树是否“耗尽”
