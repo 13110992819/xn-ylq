@@ -12,6 +12,9 @@ public interface IHzbAO {
     public Object buyHzbOfZH(String userId, String hzbTemplateCode,
             String payType);
 
+    // 赠送汇赚宝
+    public void giveHzbOfOss(List<String> userIdList, String hzbTemplateCode);
+
     public Object buyHzbOfCG(String userId, String hzbTemplateCode,
             String payType);
 

@@ -93,6 +93,29 @@ public class HzbAOImpl implements IHzbAO {
 
     @Override
     @Transactional
+    public void giveHzbOfOss(List<String> userIdList, String hzbTemplateCode) {
+        // 验证模板是否上线
+        HzbTemplate hzbTemplate = hzbTemplateBO.getHzbTemplate(hzbTemplateCode);
+        if (!EHzbTemplateStatus.ON.getCode().equals(hzbTemplate.getStatus())) {
+            throw new BizException("xn0000", "该汇赚宝模板未上线，不可赠送");
+        }
+        for (String userId : userIdList) {
+            // 验证是否购买
+            hzbBO.checkBuy(userId);
+            // 判断用户是否实名认证
+            User user = userBO.getRemoteUser(userId);
+            // if (!EBoolean.YES.getCode().equals(user.getIdentityFlag())) {
+            // throw new BizException("xn0000", "用户未实名认证，请先实名认证");
+            // }
+            // 汇赚宝购买成功
+            Hzb hzb = hzbBO.saveHzb(user, hzbTemplate);
+            // 产生红包
+            hzbMgiftBO.generateHzbMgift(hzb, DateUtil.getTodayStart());
+        }
+    }
+
+    @Override
+    @Transactional
     public Object buyHzbOfCG(String userId, String hzbTemplateCode,
             String payType) {
         Object result = null;
