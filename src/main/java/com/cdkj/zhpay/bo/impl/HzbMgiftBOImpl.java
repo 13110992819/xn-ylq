@@ -33,6 +33,17 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
     private IHzbMgiftDAO hzbMgiftDAO;
 
     @Override
+    public void doCheckTodayGeneral() {
+        HzbMgift condition = new HzbMgift();
+        condition.setCreateDatetimeStart(DateUtil.getTodayStart());
+        condition.setCreateDatetimeEnd(DateUtil.getTodayEnd());
+        long totalCount = hzbMgiftDAO.selectTotalCount(condition);
+        if (totalCount > 0) {
+            throw new BizException("xn0000", "今天已触发定时器发送红包，无需再次操作");
+        }
+    }
+
+    @Override
     public void doInvalidHzbMgift(Date createDatetimeEnd) {
         HzbMgift condition = new HzbMgift();
         condition.setCreateDatetimeEnd(createDatetimeEnd);
@@ -60,7 +71,7 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
 
             for (int i = 0; i < dayNumbers; i++) {
                 HzbMgift data = new HzbMgift();
-                data.setCode(OrderNoGenerater.generateME("HM"));
+                data.setCode(OrderNoGenerater.generateM("HM"));
                 data.setHzbCode(hzb.getCode());
                 data.setSlogan(advTitle);
                 data.setOwner(userId);
@@ -86,7 +97,6 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
             hzbMgift.setRemark("该红包已经被发送");
             hzbMgiftDAO.doSendHzbMgift(hzbMgift);
         }
-
     }
 
     @Override
@@ -160,5 +170,4 @@ public class HzbMgiftBOImpl extends PaginableBOImpl<HzbMgift> implements
             throw new BizException("xn0000", "已超过每天最大领取次数，无法领取!");
         }
     }
-
 }

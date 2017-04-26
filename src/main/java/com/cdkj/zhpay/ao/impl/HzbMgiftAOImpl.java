@@ -60,7 +60,6 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         generateHzbMgift();
     }
 
-    @Transactional
     public void generateHzbMgift() {
         Date todayStart = DateUtil.getTodayStart();
         Date todayEnd = DateUtil.getTodayEnd();
@@ -68,6 +67,9 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         // 将今天之前的红包状态置换为失效
         Date yesterdayEnd = DateUtil.getRelativeDateOfDays(todayEnd, -1);
         hzbMgiftBO.doInvalidHzbMgift(yesterdayEnd);
+        // 查询当天摇一摇定时器是否触发
+        hzbMgiftBO.doCheckTodayGeneral();
+
         // 根据有效摇钱树，生成当天红包
         Hzb hhCondition = new Hzb();
         hhCondition.setStatus(EDiviFlag.EFFECT.getCode());
@@ -77,6 +79,7 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
             for (Hzb hzb : hzblist) {
                 hzbMgiftBO.generateHzbMgift(hzb, todayStart);
             }
+            logger.info("****今天产生红包的汇赚宝个数：" + hzblist + "");
         }
         logger.info("**** 定时红包扫描结束 " + todayStart + " ****");
     }

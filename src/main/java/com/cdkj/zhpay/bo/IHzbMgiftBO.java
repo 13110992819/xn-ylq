@@ -14,6 +14,15 @@ import com.cdkj.zhpay.domain.User;
  * @history:
  */
 public interface IHzbMgiftBO extends IPaginableBO<HzbMgift> {
+
+    /**
+     * 验证当天是否已经产生过
+     *  
+     * @create: 2017年4月26日 下午7:03:21 xieyj
+     * @history:
+     */
+    public void doCheckTodayGeneral();
+
     /**
      * 该时间前创建的红包制成“失效”
      * @param createDatetimeEnd 
