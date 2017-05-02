@@ -73,15 +73,9 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
             data.setCurrency(hzbTemplate.getCurrency());
             data.setPeriodRockNum(0);
             data.setTotalRockNum(0);
-            if (ESystemCode.Caigo.getCode().equals(hzbTemplate.getSystemCode())) {
-                data.setBackAmount1(hzbTemplate.getBackAmount1());
-                data.setBackAmount2(hzbTemplate.getBackAmount2());
-                data.setBackAmount3(hzbTemplate.getBackAmount3());
-            } else {
-                data.setBackAmount1(0L);
-                data.setBackAmount2(0L);
-                data.setBackAmount3(0L);
-            }
+            data.setBackAmount1(0L);
+            data.setBackAmount2(0L);
+            data.setBackAmount3(0L);
 
             Date date = new Date();
             data.setCreateDatetime(date);
@@ -110,15 +104,9 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
 
             data.setPeriodRockNum(0);
             data.setTotalRockNum(0);
-            if (ESystemCode.Caigo.getCode().equals(hzbTemplate.getSystemCode())) {
-                data.setBackAmount1(hzbTemplate.getBackAmount1());
-                data.setBackAmount2(hzbTemplate.getBackAmount2());
-                data.setBackAmount3(hzbTemplate.getBackAmount3());
-            } else {
-                data.setBackAmount1(0L);
-                data.setBackAmount2(0L);
-                data.setBackAmount3(0L);
-            }
+            data.setBackAmount1(0L);
+            data.setBackAmount2(0L);
+            data.setBackAmount3(0L);
 
             Date date = new Date();
             data.setCreateDatetime(date);
