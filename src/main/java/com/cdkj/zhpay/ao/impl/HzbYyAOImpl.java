@@ -16,10 +16,12 @@ import com.cdkj.zhpay.bo.IHzbYyBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.bo.base.Paginable;
+import com.cdkj.zhpay.common.AmountUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbYy;
+import com.cdkj.zhpay.domain.SYSConfig;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.XN615120Res;
 import com.cdkj.zhpay.enums.EBizType;
@@ -91,10 +93,15 @@ public class HzbYyAOImpl implements IHzbYyAO {
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
             yyUser.getUserId(), currency, prize.getYyAmount(),
             EBizType.AJ_YYJL, "摇一摇奖励发放", "摇一摇奖励获得");
+
+        SYSConfig sysConfig = sysConfigBO.getSYSConfig(SysConstants.YY_FC_RATE,
+            yyUser.getSystemCode());
+        Long fcAmount = AmountUtil.mul(prize.getYyAmount(),
+            Double.valueOf(sysConfig.getCvalue()));
         // 兑现树主人
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_CAIGO.getCode(),
-            hzb.getUserId(), currency, prize.getYyAmount(), EBizType.AJ_YYFC,
-            "摇一摇分成发放", "摇一摇分成获得");
+            hzb.getUserId(), currency, fcAmount, EBizType.AJ_YYFC, "摇一摇分成发放",
+            "摇一摇分成获得");
         return prize;
     }
 

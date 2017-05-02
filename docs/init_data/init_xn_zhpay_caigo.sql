@@ -17,6 +17,7 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('C','userDayMaxCount','5','admin',now(),'用户每天摇最大次数','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('C','deviceDayMaxCount','5','admin',now(),'设备每天摇最大次数','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('C','hzbYyDayMaxCount','900','admin',now(),'一个摇钱树每天摇最大次数','CD-CCG000007','CD-CCG000007');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('C','yyFcRate','0.1','admin',now(),'摇一摇主人分成费率','CD-CCG000007','CD-CCG000007');
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('C','yyAmountMin','1','admin',now(),'摇出金额最小值','CD-CCG000007','CD-CCG000007');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`,`company_code`,`system_code`) VALUES ('C','yyAmountMax','10','admin',now(),'摇出金额最大值','CD-CCG000007','CD-CCG000007');

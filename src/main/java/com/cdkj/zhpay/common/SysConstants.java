@@ -53,6 +53,8 @@ public class SysConstants {
 
     public static final String YY_AMOUNT_MAX = "yyAmountMax"; // 摇摇金额上限
 
+    public static final String YY_FC_RATE = "yyFcRate"; // 摇摇分成费率
+
     public static final Long AMOUNT_RADIX = 1000L; // 金额基数
 
     public static final String USER_DAY_MAX_COUNT = "userDayMaxCount"; // 用户每天摇出次数
