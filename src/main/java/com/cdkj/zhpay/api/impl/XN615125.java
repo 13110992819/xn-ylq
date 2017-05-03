@@ -39,8 +39,8 @@ public class XN615125 extends AProcessor {
 
         condition.setCreateDatetimeStart(DateUtil.getFrontDate(
             req.getDateStart(), false));
-        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(
-            req.getDateStart(), true));
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
+            true));
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IHzbYyAO.DEFAULT_ORDER_COLUMN;
