@@ -284,6 +284,8 @@
 		UPDATE tyqs_hzb
 		SET
 		status = #{status}
+		,period_rock_num = #{periodRockNum}
+		,total_rock_num = #{totalRockNum}
 		,back_amount1 = #{backAmount1}
 		,back_amount2 = #{backAmount2}
 		,back_amount3 = #{backAmount3}

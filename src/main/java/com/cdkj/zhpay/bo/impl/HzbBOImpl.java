@@ -14,12 +14,14 @@ import com.cdkj.zhpay.bo.IHzbBO;
 import com.cdkj.zhpay.bo.IHzbTemplateBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
+import com.cdkj.zhpay.common.AmountUtil;
 import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IHzbDAO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
+import com.cdkj.zhpay.domain.SYSConfig;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.XN615120Res;
 import com.cdkj.zhpay.enums.ECurrency;
@@ -276,21 +278,24 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         }
     }
 
-    /** 
-     * @see com.cdkj.zhpay.bo.IHzbBO#refreshYyAmount(com.cdkj.zhpay.domain.Hzb, com.cdkj.zhpay.dto.res.XN000001Res)
-     */
     @Override
     public void refreshYyAmount(Hzb hzb, XN615120Res prize) {
+        hzb.setPeriodRockNum(hzb.getPeriodRockNum() + 1);
+        hzb.setTotalRockNum(hzb.getTotalRockNum() + 1);
+        SYSConfig sysConfig = sysConfigBO.getSYSConfig(SysConstants.YY_FC_RATE,
+            hzb.getSystemCode());
+        if (null == sysConfig) {
+            throw new BizException("xn0000", "摇一摇分成比例未设置");
+        }
+        double fcRate = Double.valueOf(sysConfig.getCvalue());
+        Long yyTotalAmount = AmountUtil.mul(prize.getYyAmount(), 1.0 + fcRate);
         if (ESystemCode.Caigo.getCode().equals(hzb.getSystemCode())) {
             if (ECurrency.CNY.getCode().equals(prize.getYyCurrency())) {
-                hzb.setBackAmount1(hzb.getBackAmount1() + 2
-                        * prize.getYyAmount());
+                hzb.setBackAmount1(hzb.getBackAmount1() + yyTotalAmount);
             } else if (ECurrency.CG_CGB.getCode().equals(prize.getYyCurrency())) {
-                hzb.setBackAmount2(hzb.getBackAmount2() + 2
-                        * prize.getYyAmount());
+                hzb.setBackAmount2(hzb.getBackAmount2() + yyTotalAmount);
             } else if (ECurrency.CG_JF.getCode().equals(prize.getYyCurrency())) {
-                hzb.setBackAmount3(hzb.getBackAmount3() + 2
-                        * prize.getYyAmount());
+                hzb.setBackAmount3(hzb.getBackAmount3() + yyTotalAmount);
             }
         }
         // 判断树是否“耗尽”
