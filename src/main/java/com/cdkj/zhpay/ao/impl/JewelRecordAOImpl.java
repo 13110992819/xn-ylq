@@ -329,8 +329,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         // 资金划转开始--------------
         // RMB调用支付宝渠道至商家
         return accountBO.doAlipayRemote(user.getUserId(), systemUserId,
-            jewel.getFromAmount(), EBizType.AJ_DUOBAO, "参与小目标", "用户参与小目标",
-            payGroup);
+            jewel.getFromAmount() * times, EBizType.AJ_DUOBAO, "参与小目标",
+            "用户参与小目标", payGroup);
         // 资金划转结束--------------
     }
 }
