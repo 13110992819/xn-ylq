@@ -84,7 +84,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
 
         XN615120Res prize = hzbYyBO.calculatePrizeByCG(hzb);
         hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo, prize.getYyCurrency(),
-            prize.getYyAmount());
+            prize.getYyFcAmount());
         // 2、刷新对应摇钱树生命值
         hzbBO.refreshYyAmount(hzb, prize);
         // 3、平台兑现奖励
