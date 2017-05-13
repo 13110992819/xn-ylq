@@ -173,6 +173,8 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
             currency = result.get(getRandom(0, result.size()));
         } else if (result.size() == 1) {
             currency = result.get(0);
+        } else {
+            throw new BizException("xn0000", "该树返现金额已摇完，无法再摇");
         }
         // 随机数有改变，重新获取
         if (isChangeTotalAmount) {

@@ -75,7 +75,6 @@ public class HzbYyAOImpl implements IHzbYyAO {
         } else {
             throw new BizException("xn0000", "所选摇钱树不属于本系统");
         }
-
     }
 
     // 菜狗摇出币种 backAmount1=人民币 backAmount2=菜狗币 backAmount3=积分币
