@@ -15,6 +15,7 @@ import com.cdkj.zhpay.bo.IHzbTemplateBO;
 import com.cdkj.zhpay.bo.IHzbYyBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
+import com.cdkj.zhpay.common.AmountUtil;
 import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.PrizeUtil;
 import com.cdkj.zhpay.common.SysConstants;
@@ -23,6 +24,7 @@ import com.cdkj.zhpay.dao.IHzbYyDAO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
 import com.cdkj.zhpay.domain.HzbYy;
+import com.cdkj.zhpay.domain.SYSConfig;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.XN615120Res;
 import com.cdkj.zhpay.enums.EBoolean;
@@ -123,42 +125,65 @@ public class HzbYyBOImpl extends PaginableBOImpl<HzbYy> implements IHzbYyBO {
 
     @Override
     public XN615120Res calculatePrizeByCG(Hzb hzb) {
-        // 确定金额
+        // 确定摇出金额
         Long randAmount = doGeneralAmount(ESystemCode.Caigo.getCode());
+        SYSConfig sysConfig = sysConfigBO.getSYSConfig(SysConstants.YY_FC_RATE,
+            hzb.getSystemCode());
+        if (null == sysConfig) {
+            throw new BizException("xn0000", "摇一摇分成比例未设置");
+        }
+        // 摇出金额+树主人分成
+        double fcRate = Double.valueOf(sysConfig.getCvalue());
+        Long totalAmount = AmountUtil.mul(randAmount, 1.0 + fcRate);
+        // 判断随机摇出金额是否改变，改变则需要按剩余计算，默认没有改变
+        boolean isChangeTotalAmount = false;
+
         // 开始确定币种-------
         // 首先判断参与的币种种类
         String currency = null;
         List<String> result = new ArrayList<String>();
         HzbTemplate hzbTemplate = hzbTemplateBO.getHzbTemplate(hzb
             .getTemplateCode());
+        // 判断扣减之后剩余金额是否大于零
         Long backAmount1 = hzbTemplate.getBackAmount1() - hzb.getBackAmount1();
         if (backAmount1 > 0) {
             result.add(ECurrency.CNY.getCode());
-            if (backAmount1 < randAmount) {
-                randAmount = backAmount1;
+            if (backAmount1 < totalAmount) {
+                totalAmount = backAmount1;
+                isChangeTotalAmount = true;
             }
         }
         Long backAmount2 = hzbTemplate.getBackAmount2() - hzb.getBackAmount2();
         if (backAmount2 > 0) {
             result.add(ECurrency.CG_CGB.getCode());
-            if (backAmount2 < randAmount) {
-                randAmount = backAmount2;
+            if (backAmount2 < totalAmount) {
+                totalAmount = backAmount2;
+                isChangeTotalAmount = true;
             }
         }
         Long backAmount3 = hzbTemplate.getBackAmount3() - hzb.getBackAmount3();
         if (backAmount3 > 0) {
             result.add(ECurrency.CG_JF.getCode());
-            if (backAmount3 < randAmount) {
-                randAmount = backAmount3;
+            if (backAmount3 < totalAmount) {
+                totalAmount = backAmount3;
+                isChangeTotalAmount = true;
             }
         }
         if (result.size() > 1) {
             currency = result.get(getRandom(0, result.size()));
         } else if (result.size() == 1) {
             currency = result.get(0);
+        } else {
+            throw new BizException("xn0000", "该树返现金额已摇完，无法再摇");
+        }
+        // 随机数有改变，重新获取
+        if (isChangeTotalAmount) {
+            randAmount = AmountUtil.mul(totalAmount, 1.0 / (1.0 + fcRate));
+            // 如果随机数=0，随机数=总数
+            randAmount = randAmount == 0 ? totalAmount : randAmount;
         }
         // 产生随机数
-        return new XN615120Res(randAmount, currency);
+        return new XN615120Res(randAmount, totalAmount - randAmount, currency);
     }
 
     // 随机产生金额

@@ -75,7 +75,6 @@ public class HzbYyAOImpl implements IHzbYyAO {
         } else {
             throw new BizException("xn0000", "所选摇钱树不属于本系统");
         }
-
     }
 
     // 菜狗摇出币种 backAmount1=人民币 backAmount2=菜狗币 backAmount3=积分币
@@ -84,7 +83,7 @@ public class HzbYyAOImpl implements IHzbYyAO {
 
         XN615120Res prize = hzbYyBO.calculatePrizeByCG(hzb);
         hzbYyBO.saveHzbYy(prize, yyUser, hzb, deviceNo, prize.getYyCurrency(),
-            prize.getYyAmount());
+            prize.getYyFcAmount());
         // 2、刷新对应摇钱树生命值
         hzbBO.refreshYyAmount(hzb, prize);
         // 3、平台兑现奖励

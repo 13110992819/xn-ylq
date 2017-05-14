@@ -14,14 +14,12 @@ import com.cdkj.zhpay.bo.IHzbBO;
 import com.cdkj.zhpay.bo.IHzbTemplateBO;
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
-import com.cdkj.zhpay.common.AmountUtil;
 import com.cdkj.zhpay.common.PropertiesUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.dao.IHzbDAO;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbTemplate;
-import com.cdkj.zhpay.domain.SYSConfig;
 import com.cdkj.zhpay.domain.User;
 import com.cdkj.zhpay.dto.res.XN615120Res;
 import com.cdkj.zhpay.enums.ECurrency;
@@ -282,13 +280,7 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
     public void refreshYyAmount(Hzb hzb, XN615120Res prize) {
         hzb.setPeriodRockNum(hzb.getPeriodRockNum() + 1);
         hzb.setTotalRockNum(hzb.getTotalRockNum() + 1);
-        SYSConfig sysConfig = sysConfigBO.getSYSConfig(SysConstants.YY_FC_RATE,
-            hzb.getSystemCode());
-        if (null == sysConfig) {
-            throw new BizException("xn0000", "摇一摇分成比例未设置");
-        }
-        double fcRate = Double.valueOf(sysConfig.getCvalue());
-        Long yyTotalAmount = AmountUtil.mul(prize.getYyAmount(), 1.0 + fcRate);
+        Long yyTotalAmount = prize.getYyAmount() + prize.getYyFcAmount();
         if (ESystemCode.Caigo.getCode().equals(hzb.getSystemCode())) {
             if (ECurrency.CNY.getCode().equals(prize.getYyCurrency())) {
                 hzb.setBackAmount1(hzb.getBackAmount1() + yyTotalAmount);
@@ -301,9 +293,12 @@ public class HzbBOImpl extends PaginableBOImpl<Hzb> implements IHzbBO {
         // 判断树是否“耗尽”
         HzbTemplate template = hzbTemplateBO.getHzbTemplate(hzb
             .getTemplateCode());
-        if (hzb.getBackAmount1() >= template.getBackAmount1()
-                && hzb.getBackAmount2() >= template.getBackAmount2()
-                && hzb.getBackAmount3() >= template.getBackAmount3()) {
+        if (hzb.getBackAmount1().longValue() >= template.getBackAmount1()
+            .longValue()
+                && hzb.getBackAmount2().longValue() >= template
+                    .getBackAmount2().longValue()
+                && hzb.getBackAmount3().longValue() >= template
+                    .getBackAmount3().longValue()) {
             hzb.setStatus(EHzbStatus.DIED.getCode());
         }
         hzbDAO.updateYyAmount(hzb);
