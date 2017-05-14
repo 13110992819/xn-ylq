@@ -14,6 +14,15 @@ import com.cdkj.zhpay.enums.EUserKind;
 public interface IUserBO {
 
     /**
+     * 验证交易密码
+     * @param userId
+     * @param tradePwd 
+     * @create: 2017年5月14日 下午3:58:35 xieyj
+     * @history:
+     */
+    public void checkTradePwd(String userId, String tradePwd);
+
+    /**
      * 获取用户信息
      * @param userId
      * @return 
@@ -46,5 +55,4 @@ public interface IUserBO {
 
     public User getPartner(String province, String city, String area);
 
-   
 }

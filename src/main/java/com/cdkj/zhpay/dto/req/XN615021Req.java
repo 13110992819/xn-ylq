@@ -23,6 +23,17 @@ public class XN615021Req {
     // ip 地址（必填）
     private String ip;
 
+    // 交易密码（选填）
+    private String tradePwd;
+
+    public String getTradePwd() {
+        return tradePwd;
+    }
+
+    public void setTradePwd(String tradePwd) {
+        this.tradePwd = tradePwd;
+    }
+
     public String getPayType() {
         return payType;
     }

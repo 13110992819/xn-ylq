@@ -13,7 +13,7 @@ import com.cdkj.zhpay.http.JsonUtils;
 import com.cdkj.zhpay.spring.SpringContextHolder;
 
 /**
- * 参与夺宝(正汇余额支付)
+ * 参与夺宝(正汇)
  * @author: xieyj 
  * @since: 2017年1月11日 下午6:21:36 
  * @history:
@@ -33,7 +33,7 @@ public class XN615021 extends AProcessor {
         String payType = req.getPayType();
         if (EPayType.YEFR.getCode().equals(payType)) {
             boolean isManBiao = jewelRecordAO.buyJewelByZHYE(req.getUserId(),
-                req.getJewelCode(), times, req.getIp());
+                req.getJewelCode(), times, req.getIp(), req.getTradePwd());
             if (isManBiao) {
                 String jewelTemplateCode = jewelAO
                     .doManBiao(req.getJewelCode());

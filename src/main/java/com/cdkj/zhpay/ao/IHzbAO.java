@@ -10,7 +10,7 @@ public interface IHzbAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     public Object buyHzbOfZH(String userId, String hzbTemplateCode,
-            String payType);
+            String payType, String tradePwd);
 
     // 赠送汇赚宝
     public void giveHzbOfOss(List<String> userIdList, String hzbTemplateCode);

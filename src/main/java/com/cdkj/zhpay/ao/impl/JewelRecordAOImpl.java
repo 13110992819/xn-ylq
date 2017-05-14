@@ -131,8 +131,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     @Override
     @Transactional
     public boolean buyJewelByZHYE(String userId, String jewelCode,
-            Integer times, String ip) {
+            Integer times, String ip, String tradePwd) {
         // 入参业务检查
+        userBO.checkTradePwd(userId, tradePwd);
         Jewel jewel = jewelBO.getJewel(jewelCode);
         if (!ECurrency.CNY.getCode().equals(jewel.getFromCurrency())) {
             throw new BizException("xn0000", "购买币种不是人民币，不支持购买");

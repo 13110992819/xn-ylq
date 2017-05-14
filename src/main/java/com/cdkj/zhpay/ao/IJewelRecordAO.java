@@ -45,8 +45,8 @@ public interface IJewelRecordAO {
      */
     public JewelRecord getJewelRecord(String code);
 
-    public boolean buyJewelByZHYE(String userId, String jewelCode, Integer times,
-            String ip);
+    public boolean buyJewelByZHYE(String userId, String jewelCode,
+            Integer times, String ip, String tradePwd);
 
     public boolean buyJewelByDYBZ(String userId, String jewelCode,
             Integer times, String ip);

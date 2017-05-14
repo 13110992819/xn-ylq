@@ -24,6 +24,17 @@ public class XN615110Req {
     // 支付类型(必填)
     private String payType;
 
+    // 交易密码（选填）
+    private String tradePwd;
+
+    public String getTradePwd() {
+        return tradePwd;
+    }
+
+    public void setTradePwd(String tradePwd) {
+        this.tradePwd = tradePwd;
+    }
+
     public String getUserId() {
         return userId;
     }

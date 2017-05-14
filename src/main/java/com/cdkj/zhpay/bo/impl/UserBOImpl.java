@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.cdkj.zhpay.bo.IUserBO;
 import com.cdkj.zhpay.domain.User;
+import com.cdkj.zhpay.dto.req.XN001100Req;
 import com.cdkj.zhpay.dto.req.XN001400Req;
 import com.cdkj.zhpay.dto.req.XN001403Req;
 import com.cdkj.zhpay.dto.res.XN001400Res;
@@ -32,6 +33,19 @@ import com.google.gson.reflect.TypeToken;
 @Component
 public class UserBOImpl implements IUserBO {
     static Logger logger = Logger.getLogger(UserBOImpl.class);
+
+    @Override
+    public void checkTradePwd(String userId, String tradePwd) {
+        if (StringUtils.isBlank(tradePwd)) {
+            throw new BizException("XN000000", "请输入交易密码");
+        }
+        XN001100Req req = new XN001100Req();
+        req.setTokenId(userId);
+        req.setUserId(userId);
+        req.setTradePwd(tradePwd);
+        BizConnecter.getBizData("001100", JsonUtils.object2Json(req),
+            Object.class);
+    }
 
     @Override
     public User getRemoteUser(String userId) {

@@ -68,7 +68,7 @@ public class HzbAOImpl implements IHzbAO {
     @Override
     @Transactional
     public Object buyHzbOfZH(String userId, String hzbTemplateCode,
-            String payType) {
+            String payType, String tradePwd) {
         Object result = null;
         hzbBO.checkBuy(userId);
         HzbTemplate hzbTemplate = hzbTemplateBO.getHzbTemplate(hzbTemplateCode);
@@ -82,7 +82,7 @@ public class HzbAOImpl implements IHzbAO {
         }
         // 购买摇钱树
         if (EPayType.YEFR.getCode().equals(payType)) {
-            result = buyHzbFRPay(user, hzbTemplate);
+            result = buyHzbFRPay(user, hzbTemplate, tradePwd);
         } else if (EPayType.WEIXIN_APP.getCode().equals(payType)) {
             result = buyHzbWxAppPay(userId, hzbTemplate);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {
@@ -145,7 +145,10 @@ public class HzbAOImpl implements IHzbAO {
      * @history:
      */
     @Transactional
-    public Object buyHzbFRPay(User user, HzbTemplate hzbTemplate) {
+    public Object buyHzbFRPay(User user, HzbTemplate hzbTemplate,
+            String tradePwd) {
+        // 验证交易密码
+        userBO.checkTradePwd(user.getUserId(), tradePwd);
         // 汇赚宝购买成功
         Hzb hzb = hzbBO.saveHzb(user, hzbTemplate);
         // 产生红包

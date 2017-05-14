@@ -26,7 +26,7 @@ public class XN615110 extends AProcessor {
     @Override
     public synchronized Object doBusiness() throws BizException {
         return hzbAO.buyHzbOfZH(req.getUserId(), req.getHzbTemplateCode(),
-            req.getPayType());
+            req.getPayType(), req.getTradePwd());
     }
 
     /** 
