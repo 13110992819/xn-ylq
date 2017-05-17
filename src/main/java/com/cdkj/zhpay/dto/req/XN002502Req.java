@@ -9,12 +9,12 @@
 package com.cdkj.zhpay.dto.req;
 
 /** 
- * 微信APP支付请求接口，返回预付单信息
+ * 微信公众号支付请求接口，返回预付单信息
  * @author: haiqingzheng 
  * @since: 2016年12月23日 上午9:25:46 
  * @history:
  */
-public class XN002500Req {
+public class XN002502Req {
 
     // 发起人(必填)
     private String applyUser;
@@ -103,5 +103,4 @@ public class XN002500Req {
     public void setBackUrl(String backUrl) {
         this.backUrl = backUrl;
     }
-
 }

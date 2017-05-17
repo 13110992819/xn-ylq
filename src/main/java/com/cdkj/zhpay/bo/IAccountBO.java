@@ -41,62 +41,24 @@ public interface IAccountBO {
      * @param amount
      * @param bizType
      * @param fromBizNote
-     * @param toBizNote 
-     * @create: 2017年3月23日 下午12:19:42 myb858
+     * @param toBizNote
+     * @param refNo 
+     * @create: 2017年5月17日 上午10:46:30 xieyj
      * @history:
      */
     public void doTransferAmountRemote(String fromUserId, String toUserId,
             ECurrency currency, Long amount, EBizType bizType,
-            String fromBizNote, String toBizNote);
+            String fromBizNote, String toBizNote, String refNo);
 
-    /**
-     * 微信app支付
-     * @param fromUserId
-     * @param toUserId
-     * @param amount
-     * @param bizType
-     * @param fromBizNote
-     * @param toBizNote
-     * @param payGroup
-     * @return 
-     * @create: 2017年3月23日 下午8:34:24 xieyj
-     * @history:
-     */
-    public XN002500Res doWeiXinAppPayRemote(String fromUserId, String toUserId,
-            Long amount, EBizType bizType, String fromBizNote,
-            String toBizNote, String payGroup);
+    public XN002500Res doWeiXinPayRemote(String applyUser, String toUser,
+            String payGroup, String refNo, EBizType bizType, String bizNote,
+            Long amount);
 
-    /**
-     * 微信h5支付
-     * @param fromUserId
-     * @param fromOpenId
-     * @param toUserId
-     * @param amount
-     * @param bizType
-     * @param fromBizNote
-     * @param toBizNote
-     * @param payGroup 
-     * @create: 2017年3月31日 下午11:18:57 xieyj
-     * @history:
-     */
-    public XN002501Res doWeiXinH5PayRemote(String fromUserId,
-            String fromOpenId, String toUserId, Long amount, EBizType bizType,
-            String fromBizNote, String toBizNote, String payGroup);
+    public XN002501Res doWeiXinH5PayRemote(String applyUser, String openId,
+            String toUser, String payGroup, String refNo, EBizType bizType,
+            String bizNote, Long amount);
 
-    /**
-     * 支付宝支付
-     * @param fromUserId
-     * @param toUserId
-     * @param amount
-     * @param bizType
-     * @param fromBizNote
-     * @param toBizNote
-     * @param payGroup
-     * @return 
-     * @create: 2017年4月1日 上午11:48:35 xieyj
-     * @history:
-     */
-    public XN002510Res doAlipayRemote(String fromUserId, String toUserId,
-            Long amount, EBizType bizType, String fromBizNote,
-            String toBizNote, String payGroup);
+    public XN002510Res doAlipayRemote(String applyUser, String toUser,
+            String payGroup, String refNo, EBizType bizType, String bizNote,
+            Long amount);
 }

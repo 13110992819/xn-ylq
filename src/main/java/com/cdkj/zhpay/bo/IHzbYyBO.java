@@ -32,7 +32,6 @@ public interface IHzbYyBO extends IPaginableBO<HzbYy> {
      * @create: 2017年3月22日 下午8:10:39 myb858
      * @history:
      */
-
     public String saveHzbYy(XN615120Res prize, User yyUser, Hzb hzb,
             String deviceNo, String ownerFcCurrency, Long ownerFcAmount);
 

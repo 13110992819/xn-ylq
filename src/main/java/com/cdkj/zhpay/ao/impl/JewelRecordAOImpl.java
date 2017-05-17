@@ -193,12 +193,14 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         if (gxjlResultAmount > 0L) {// 贡献值是给平台的，贡献值等值的(1:1)分润有平台给商家
             accountBO.doTransferAmountRemote(user.getUserId(), systemUserId,
                 ECurrency.ZH_GXZ, gxjlResultAmount, EBizType.AJ_DUOBAO,
-                EBizType.AJ_DUOBAO.getValue(), EBizType.AJ_DUOBAO.getValue());
+                EBizType.AJ_DUOBAO.getValue(), EBizType.AJ_DUOBAO.getValue(),
+                jewelRecordCode);
         }
         if (frResultAmount > 0L) {
             accountBO.doTransferAmountRemote(user.getUserId(), systemUserId,
                 ECurrency.ZH_FRB, frResultAmount, EBizType.AJ_DUOBAO,
-                EBizType.AJ_DUOBAO.getValue(), EBizType.AJ_DUOBAO.getValue());
+                EBizType.AJ_DUOBAO.getValue(), EBizType.AJ_DUOBAO.getValue(),
+                jewelRecordCode);
         }
 
         // 是否可以开奖，开奖自动开始下一期
@@ -234,7 +236,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         String systemUserId = userBO.getSystemUser(jewel.getSystemCode());
         accountBO.doTransferAmountRemote(user.getUserId(), systemUserId,
             currency, amount, EBizType.AJ_DUOBAO,
-            EBizType.AJ_DUOBAO.getValue(), EBizType.AJ_DUOBAO.getValue());
+            EBizType.AJ_DUOBAO.getValue(), EBizType.AJ_DUOBAO.getValue(),
+            jewelRecordCode);
         // 是否可以开奖，开奖自动开始下一期
         if (investNum >= jewel.getTotalNum()) {
             return true;
@@ -261,13 +264,13 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
         // 落地小目标购买记录
-        jewelRecordBO.buyJewelRecordPay(userId, jewel.getCode(), times,
-            jewel.getFromAmount() * times, EPayType.WEIXIN_APP, ip, payGroup,
-            jewel.getSystemCode());
+        String jewelRecordCode = jewelRecordBO.buyJewelRecordPay(userId,
+            jewel.getCode(), times, jewel.getFromAmount() * times,
+            EPayType.WEIXIN_APP, ip, payGroup, jewel.getSystemCode());
         String systemUserId = userBO.getSystemUser(jewel.getSystemCode());
-        XN002500Res res = accountBO.doWeiXinAppPayRemote(userId, systemUserId,
-            jewel.getFromAmount() * times, EBizType.AJ_DUOBAO, "参与小目标",
-            "用户参与小目标", payGroup);
+        XN002500Res res = accountBO.doWeiXinPayRemote(userId, systemUserId,
+            payGroup, jewelRecordCode, EBizType.AJ_DUOBAO, "用户参与小目标",
+            jewel.getFromAmount() * times);
         return res;
     }
 
@@ -290,13 +293,14 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
         // 落地小目标购买记录
-        jewelRecordBO.buyJewelRecordPay(userId, jewel.getCode(), times,
-            jewel.getFromAmount() * times, EPayType.WEIXIN_H5, ip, payGroup,
-            jewel.getSystemCode());
+        String jewelRecordCode = jewelRecordBO.buyJewelRecordPay(userId,
+            jewel.getCode(), times, jewel.getFromAmount() * times,
+            EPayType.WEIXIN_H5, ip, payGroup, jewel.getSystemCode());
         String systemUserId = userBO.getSystemUser(jewel.getSystemCode());
+        // RMB调用微信渠道至平台
         XN002501Res res = accountBO.doWeiXinH5PayRemote(user.getUserId(),
-            user.getOpenId(), systemUserId, jewel.getFromAmount() * times,
-            EBizType.AJ_DUOBAO, "参与夺宝", "用户参与夺宝", payGroup);
+            user.getOpenId(), systemUserId, payGroup, jewelRecordCode,
+            EBizType.AJ_DUOBAO, "用户参与夺宝", jewel.getFromAmount() * times);
         return res;
     }
 
@@ -319,16 +323,16 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
         // 落地小目标购买记录
-        jewelRecordBO.buyJewelRecordPay(userId, jewel.getCode(), times,
-            jewel.getFromAmount() * times, EPayType.ALIPAY, ip, payGroup,
-            jewel.getSystemCode());
+        String jewelRecordCode = jewelRecordBO.buyJewelRecordPay(userId,
+            jewel.getCode(), times, jewel.getFromAmount() * times,
+            EPayType.ALIPAY, ip, payGroup, jewel.getSystemCode());
         String systemUserId = userBO.getSystemUser(jewel.getSystemCode());
 
         // 资金划转开始--------------
         // RMB调用支付宝渠道至商家
         return accountBO.doAlipayRemote(user.getUserId(), systemUserId,
-            jewel.getFromAmount() * times, EBizType.AJ_DUOBAO, "参与小目标",
-            "用户参与小目标", payGroup);
+            payGroup, jewelRecordCode, EBizType.AJ_DUOBAO, "用户参与小目标",
+            jewel.getFromAmount() * times);
         // 资金划转结束--------------
     }
 }

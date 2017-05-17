@@ -127,7 +127,7 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         String systemUserId = userBO.getSystemUser(hzbMgift.getSystemCode());
         accountBO.doTransferAmountRemote(systemUserId, hzbMgift.getOwner(),
             currency, hzbMgift.getOwnerAmount(), EBizType.AJ_FSDHB,
-            ownerFromBizNote, ownerToBizNote);
+            ownerFromBizNote, ownerToBizNote, hzbMgift.getCode());
         // 领取用户
         String reToBizNote = EBizType.AJ_LQHB.getValue();
         String reFromBizNote = UserUtil.getUserMobile(user.getMobile())
@@ -135,7 +135,7 @@ public class HzbMgiftAOImpl implements IHzbMgiftAO {
         currency = ECurrency.getECurrency(hzbMgift.getReceiveCurrency());
         accountBO.doTransferAmountRemote(systemUserId, user.getUserId(),
             currency, hzbMgift.getReceiveAmount(), EBizType.AJ_LQHB,
-            reFromBizNote, reToBizNote);
+            reFromBizNote, reToBizNote, hzbMgift.getCode());
 
     }
 

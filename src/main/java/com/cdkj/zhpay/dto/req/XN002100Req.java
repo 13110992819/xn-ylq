@@ -11,23 +11,29 @@ public class XN002100Req {
     // 来方用户编号(必填)
     private String fromUserId;
 
+    // 来方币种(必填)
+    private String fromCurrency;
+
     // 接收方用户编号(必填)
     private String toUserId;
 
-    // 币种
-    private String currency;
+    // 去方币种(必填)
+    private String toCurrency;
 
     // 划转资金(必填)
     private String transAmount;
 
-    // 业务类型
+    // 业务类型(必填)
     private String bizType;
 
-    // 来方业务说明
+    // 来方业务说明(必填)
     private String fromBizNote;
 
-    // 去方业务说明
+    // 去方业务说明(必填)
     private String toBizNote;
+
+    // 参考订单号(必填)
+    private String refNo;
 
     public String getFromUserId() {
         return fromUserId;
@@ -35,6 +41,14 @@ public class XN002100Req {
 
     public void setFromUserId(String fromUserId) {
         this.fromUserId = fromUserId;
+    }
+
+    public String getFromCurrency() {
+        return fromCurrency;
+    }
+
+    public void setFromCurrency(String fromCurrency) {
+        this.fromCurrency = fromCurrency;
     }
 
     public String getToUserId() {
@@ -45,12 +59,12 @@ public class XN002100Req {
         this.toUserId = toUserId;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getToCurrency() {
+        return toCurrency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setToCurrency(String toCurrency) {
+        this.toCurrency = toCurrency;
     }
 
     public String getTransAmount() {
@@ -83,5 +97,13 @@ public class XN002100Req {
 
     public void setToBizNote(String toBizNote) {
         this.toBizNote = toBizNote;
+    }
+
+    public String getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
     }
 }

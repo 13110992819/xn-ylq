@@ -127,7 +127,7 @@ public class JewelAOImpl implements IJewelAO {
         String systemUserId = userBO.getSystemUser(jewel.getSystemCode());
         accountBO.doTransferAmountRemote(systemUserId, userId, currency,
             jewel.getToAmount(), EBizType.AJ_DUOBAO_PRIZE, fromBizNote,
-            toBizNote);
+            toBizNote, jewelCode);
         return jewel.getTemplateCode();
     }
 }

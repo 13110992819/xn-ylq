@@ -23,6 +23,7 @@ import com.cdkj.zhpay.common.AmountUtil;
 import com.cdkj.zhpay.common.DateUtil;
 import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.common.UserUtil;
+import com.cdkj.zhpay.core.OrderNoGenerater;
 import com.cdkj.zhpay.domain.Hzb;
 import com.cdkj.zhpay.domain.HzbMgift;
 import com.cdkj.zhpay.domain.HzbTemplate;
@@ -34,6 +35,7 @@ import com.cdkj.zhpay.dto.res.XN615119Res;
 import com.cdkj.zhpay.enums.EBizType;
 import com.cdkj.zhpay.enums.EBoolean;
 import com.cdkj.zhpay.enums.ECurrency;
+import com.cdkj.zhpay.enums.EGeneratePrefix;
 import com.cdkj.zhpay.enums.EHzbStatus;
 import com.cdkj.zhpay.enums.EHzbTemplateStatus;
 import com.cdkj.zhpay.enums.EPayType;
@@ -160,10 +162,10 @@ public class HzbAOImpl implements IHzbAO {
         accountBO.doTransferAmountRemote(user.getUserId(),
             ESysUser.SYS_USER_ZHPAY.getCode(), ECurrency.ZH_FRB, frPrice,
             EBizType.AJ_GMHZB, "购买汇赚宝",
-            UserUtil.getUserMobile(user.getMobile()) + "购买汇赚宝");
+            UserUtil.getUserMobile(user.getMobile()) + "购买汇赚宝", hzb.getCode());
         // 分销规则
         distributeAmount(hzbTemplate.getSystemCode(), user.getUserId(),
-            hzbTemplate.getPrice());
+            hzbTemplate.getPrice(), hzb.getCode());
         return new BooleanRes(true);
     }
 
@@ -177,7 +179,7 @@ public class HzbAOImpl implements IHzbAO {
         accountBO.doTransferAmountRemote(user.getUserId(),
             ESysUser.SYS_USER_CAIGO.getCode(), ECurrency.CNY,
             hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买摇钱树",
-            UserUtil.getUserMobile(user.getMobile()) + "购买摇钱树");
+            UserUtil.getUserMobile(user.getMobile()) + "购买摇钱树", hzb.getCode());
         return new BooleanRes(true);
     }
 
@@ -193,11 +195,13 @@ public class HzbAOImpl implements IHzbAO {
     @Transactional
     public XN002500Res buyHzbWxAppPay(String userId, HzbTemplate hzbTemplate) {
         // 生成支付组号,落地本地系统消费记录，状态为未支付
-        String payGroup = hzbBO.buyHzb(userId, hzbTemplate);
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        String code = hzbBO.buyHzb(userId, hzbTemplate, payGroup);
         String systemUserId = userBO.getSystemUser(hzbTemplate.getSystemCode());
-        XN002500Res res = accountBO.doWeiXinAppPayRemote(userId, systemUserId,
-            hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买汇赚宝", "用户购买汇赚宝",
-            payGroup);
+        XN002500Res res = accountBO.doWeiXinPayRemote(userId, systemUserId,
+            payGroup, code, EBizType.AJ_GMHZB, "用户购买汇赚宝",
+            hzbTemplate.getPrice());
         return res;
     }
 
@@ -214,24 +218,27 @@ public class HzbAOImpl implements IHzbAO {
     public XN002501Res buyHzbWxH5Pay(String userId, HzbTemplate hzbTemplate) {
         User user = userBO.getRemoteUser(userId);
         // 生成支付组号,落地本地系统消费记录，状态为未支付
-        String payGroup = hzbBO.buyHzb(userId, hzbTemplate);
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        String code = hzbBO.buyHzb(userId, hzbTemplate, payGroup);
         String systemUserId = userBO.getSystemUser(hzbTemplate.getSystemCode());
         XN002501Res res = accountBO.doWeiXinH5PayRemote(userId,
-            user.getOpenId(), systemUserId, hzbTemplate.getPrice(),
-            EBizType.AJ_GMHZB, "购买汇赚宝", "用户购买汇赚宝", payGroup);
+            user.getOpenId(), systemUserId, payGroup, code, EBizType.AJ_GMHZB,
+            "用户购买摇钱树", hzbTemplate.getPrice());
         return res;
     }
 
     @Transactional
     public Object buyHzbZFBPay(String userId, HzbTemplate hzbTemplate) {
         // 生成支付组号,落地本地系统消费记录，状态为未支付
-        String payGroup = hzbBO.buyHzb(userId, hzbTemplate);
+        String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
+            .getCode());
+        String code = hzbBO.buyHzb(userId, hzbTemplate, payGroup);
         String systemUserId = userBO.getSystemUser(hzbTemplate.getSystemCode());
         // 资金划转开始--------------
         // RMB调用支付宝渠道至系统
-        return accountBO.doAlipayRemote(userId, systemUserId,
-            hzbTemplate.getPrice(), EBizType.AJ_GMHZB, "购买汇赚宝支付宝支付",
-            "购买汇赚宝支付宝支付", payGroup);
+        return accountBO.doAlipayRemote(userId, systemUserId, payGroup, code,
+            EBizType.AJ_GMHZB, "购买汇赚宝支付宝支付", hzbTemplate.getPrice());
         // 资金划转结束--------------
     }
 
@@ -257,7 +264,7 @@ public class HzbAOImpl implements IHzbAO {
         // 正汇才有分配分成
         if (ESystemCode.ZHPAY.getCode().equals(hzb.getSystemCode())) {
             distributeAmount(hzb.getSystemCode(), hzb.getUserId(),
-                hzb.getPrice());
+                hzb.getPrice(), hzb.getCode());
         }
         // 产生红包
         hzbMgiftBO.generateHzbMgift(hzb, DateUtil.getTodayStart());
@@ -265,7 +272,8 @@ public class HzbAOImpl implements IHzbAO {
 
     // 汇赚宝分成:
     // 分成对象:购买用户_已购买汇赚宝的一级二级三级推荐人和所在辖区用户
-    private void distributeAmount(String systemCode, String userId, Long price) {
+    private void distributeAmount(String systemCode, String userId, Long price,
+            String hzbCode) {
         User ownerUser = userBO.getRemoteUser(userId);
         // C用户分成
         String cUserId = ownerUser.getUserReferee();
@@ -273,7 +281,8 @@ public class HzbAOImpl implements IHzbAO {
             User cUser = userBO.getRemoteUser(cUserId);
             boolean cHzbResult = hzbBO.isBuyHzb(cUserId);
             if (cHzbResult) {
-                userFcAmount(cUser, ownerUser, SysConstants.HZB_CUSER, price);
+                userFcAmount(cUser, ownerUser, SysConstants.HZB_CUSER, price,
+                    hzbCode);
             }
             // B用户分成
             String bUserId = cUser.getUserReferee();
@@ -282,7 +291,7 @@ public class HzbAOImpl implements IHzbAO {
                 boolean bHzbResult = hzbBO.isBuyHzb(bUserId);
                 if (bHzbResult) {
                     userFcAmount(bUser, ownerUser, SysConstants.HZB_BUSER,
-                        price);
+                        price, hzbCode);
                 }
                 // A用户分成
                 String aUserId = bUser.getUserReferee();
@@ -291,7 +300,7 @@ public class HzbAOImpl implements IHzbAO {
                     boolean aHzbResult = hzbBO.isBuyHzb(aUserId);
                     if (aHzbResult) {
                         userFcAmount(aUser, ownerUser, SysConstants.HZB_AUSER,
-                            price);
+                            price, hzbCode);
                     }
                 }
             }
@@ -303,7 +312,7 @@ public class HzbAOImpl implements IHzbAO {
                 null, null);
             if (provinceUser != null) {
                 areaFcAmount(provinceUser, ownerUser,
-                    SysConstants.HZB_PROVINCE, price, "省");
+                    SysConstants.HZB_PROVINCE, price, "省", hzbCode);
             }
             if (StringUtils.isNotBlank(ownerUser.getCity())) {
                 // 市合伙人
@@ -311,7 +320,7 @@ public class HzbAOImpl implements IHzbAO {
                     ownerUser.getCity(), null);
                 if (cityUser != null) {
                     areaFcAmount(cityUser, ownerUser, SysConstants.HZB_CITY,
-                        price, "市");
+                        price, "市", hzbCode);
                 }
                 if (StringUtils.isNotBlank(ownerUser.getArea())) {
                     // 县合伙人
@@ -319,7 +328,7 @@ public class HzbAOImpl implements IHzbAO {
                         ownerUser.getCity(), ownerUser.getArea());
                     if (areaUser != null) {
                         areaFcAmount(areaUser, ownerUser,
-                            SysConstants.HZB_AREA, price, "县");
+                            SysConstants.HZB_AREA, price, "县", hzbCode);
                     }
                 }
             }
@@ -327,7 +336,7 @@ public class HzbAOImpl implements IHzbAO {
     }
 
     private void userFcAmount(User fcUser, User ownerUser, String sysConstants,
-            Long price) {
+            Long price, String hzbCode) {
         Map<String, String> rateMap = sysConfigBO
             .getConfigsMap(ESystemCode.ZHPAY.getCode());
         Double hzbUserRate = Double.valueOf(rateMap.get(sysConstants));
@@ -340,12 +349,12 @@ public class HzbAOImpl implements IHzbAO {
                     + EBizType.AJ_GMHZBFC.getValue();
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
                 fcUser.getUserId(), ECurrency.ZH_FRB, transAmount,
-                EBizType.AJ_GMHZBFC, fromBizNote, toBizNote);
+                EBizType.AJ_GMHZBFC, fromBizNote, toBizNote, hzbCode);
         }
     }
 
     private void areaFcAmount(User areaUser, User ownerUser,
-            String sysConstants, Long price, String remark) {
+            String sysConstants, Long price, String remark, String hzbCode) {
         Map<String, String> rateMap = sysConfigBO
             .getConfigsMap(ESystemCode.ZHPAY.getCode());
         Double rate = Double.valueOf(rateMap.get(sysConstants));
@@ -358,7 +367,7 @@ public class HzbAOImpl implements IHzbAO {
                     + EBizType.AJ_GMHZBFC.getValue() + "," + remark + "合伙人分成";
             accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
                 areaUser.getUserId(), ECurrency.ZH_FRB, transAmount,
-                EBizType.AJ_GMHZBFC, fromBizNote, toBizNote);
+                EBizType.AJ_GMHZBFC, fromBizNote, toBizNote, hzbCode);
         }
     }
 
