@@ -130,8 +130,10 @@ public class HzbYyAOImpl implements IHzbYyAO {
         accountBO.doTransferAmountRemote(ESysUser.SYS_USER_ZHPAY.getCode(),
             yyUser.getUserId(), yyEurrency, prize.getYyAmount(),
             EBizType.AJ_YYJL, "摇一摇奖励发放", "摇一摇奖励获得", yyCode);
-        // 分销
-        fcAmount(hzb.getUserId(), rateMap, ownerFcAmount, yyCode);
+        // 6、摇到红包币分销
+        if (ECurrency.ZH_HBB.getCode().equals(currency)) {
+            fcAmount(hzb.getUserId(), rateMap, ownerFcAmount, yyCode);
+        }
         return prize;
     }
 

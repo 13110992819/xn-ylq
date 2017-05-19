@@ -37,7 +37,7 @@ public class UserBOImpl implements IUserBO {
     @Override
     public void checkTradePwd(String userId, String tradePwd) {
         if (StringUtils.isBlank(tradePwd)) {
-            throw new BizException("XN000000", "请输入交易密码");
+            throw new BizException("XN000000", "请输入支付密码");
         }
         XN001100Req req = new XN001100Req();
         req.setTokenId(userId);
