@@ -35,12 +35,12 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
-			<!-- <if test='userList != null and userList.size() > 0'>
+			<if test='userList != null and userList.size() > 0'>
 				AND t.user_id in 
                 <foreach item="item" index="index" collection="userList" open="(" separator="," close=")">
 	            	#{item}
                 </foreach> 
-			</if> -->
+			</if>
 			<if test="templateCode != null and templateCode != '' ">
 				AND t.template_code = #{templateCode}
 			</if>
