@@ -12,8 +12,12 @@ import org.springframework.stereotype.Component;
 
 import com.cdkj.zhpay.bo.ISYSConfigBO;
 import com.cdkj.zhpay.bo.base.PaginableBOImpl;
+import com.cdkj.zhpay.common.SysConstants;
 import com.cdkj.zhpay.dao.ISYSConfigDAO;
 import com.cdkj.zhpay.domain.SYSConfig;
+import com.cdkj.zhpay.enums.EBoolean;
+import com.cdkj.zhpay.enums.EPayType;
+import com.cdkj.zhpay.enums.ESystemCode;
 import com.cdkj.zhpay.exception.BizException;
 
 /**
@@ -94,6 +98,26 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
     @Override
     public SYSConfig getSYSConfig(String key, String systemCode) {
         return getSYSConfig(key, systemCode, systemCode);
+    }
+
+    /** 
+     * 验证支付渠道是否开通 
+     * @create: 2017年6月5日 上午11:23:16 xieyj
+     * @history: 
+     */
+    @Override
+    public void doCheckPayOpen(EPayType payType) {
+        String payOpen = null;
+        if (EPayType.ALIPAY.getCode().equals(payType.getCode())) {
+            payOpen = SysConstants.ZFB_PAY_OPEN;
+        } else if (EPayType.WEIXIN_APP.getCode().equals(payType.getCode())) {
+            payOpen = SysConstants.WX_PAY_OPEN;
+        }
+        SYSConfig sysConfig = getSYSConfig(payOpen, ESystemCode.ZHPAY.getCode());
+        if (null != sysConfig
+                && EBoolean.NO.getCode().equals(sysConfig.getCvalue())) {
+            throw new BizException("xn0000", "支付通道维护中，请使用余额支付。");
+        }
     }
 
 }

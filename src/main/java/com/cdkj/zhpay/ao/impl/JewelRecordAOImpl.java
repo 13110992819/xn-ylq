@@ -249,6 +249,9 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     @Transactional
     public Object buyJewelByWxApp(String userId, String jewelCode,
             Integer times, String ip) {
+        // 验证支付渠道是否开通
+        sysConfigBO.doCheckPayOpen(EPayType.WEIXIN_APP);
+
         // 入参业务检查
         Jewel jewel = jewelBO.getJewel(jewelCode);
         if (!EJewelStatus.RUNNING.getCode().equals(jewel.getStatus())) {
@@ -308,6 +311,8 @@ public class JewelRecordAOImpl implements IJewelRecordAO {
     @Transactional
     public Object buyJewelByZFB(String userId, String jewelCode, Integer times,
             String ip) {
+        // 验证支付渠道是否开通
+        sysConfigBO.doCheckPayOpen(EPayType.ALIPAY);
         // 入参业务检查
         Jewel jewel = jewelBO.getJewel(jewelCode);
         if (!EJewelStatus.RUNNING.getCode().equals(jewel.getStatus())) {

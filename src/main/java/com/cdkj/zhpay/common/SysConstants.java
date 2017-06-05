@@ -79,6 +79,10 @@ public class SysConstants {
 
     public static final String DAY_RECEVIE_NUMBER = "dayReceiveNumber"; // 单人每天红包领取数量
 
+    public static final String WX_PAY_OPEN = "wxPayOpen"; // 是否开启微信支付
+
+    public static final String ZFB_PAY_OPEN = "zfbPayOpen"; // 是否开启支付宝支付
+
     // ***********************************caigo***********************************
 
     public static final String CG_HB_MIN = "yyAmountMin"; // 菜狗摇一摇最小值

@@ -194,6 +194,8 @@ public class HzbAOImpl implements IHzbAO {
      */
     @Transactional
     public XN002500Res buyHzbWxAppPay(String userId, HzbTemplate hzbTemplate) {
+        // 验证支付渠道是否开通
+        sysConfigBO.doCheckPayOpen(EPayType.WEIXIN_APP);
         // 生成支付组号,落地本地系统消费记录，状态为未支付
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());
@@ -230,6 +232,8 @@ public class HzbAOImpl implements IHzbAO {
 
     @Transactional
     public Object buyHzbZFBPay(String userId, HzbTemplate hzbTemplate) {
+        // 验证支付渠道是否开通
+        sysConfigBO.doCheckPayOpen(EPayType.ALIPAY);
         // 生成支付组号,落地本地系统消费记录，状态为未支付
         String payGroup = OrderNoGenerater.generateM(EGeneratePrefix.PAY_GROUP
             .getCode());

@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.cdkj.zhpay.bo.base.IPaginableBO;
 import com.cdkj.zhpay.domain.SYSConfig;
+import com.cdkj.zhpay.enums.EPayType;
 
 /** 
  * @author: haiqingzheng 
@@ -47,4 +48,5 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
     public SYSConfig getSYSConfig(String key, String companyCode,
             String systemCode);
 
+    public void doCheckPayOpen(EPayType payType);
 }
